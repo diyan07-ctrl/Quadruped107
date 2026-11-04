@@ -1,6 +1,6 @@
-# Quadruped107 Quadruped Robot with Computer Vision
+# Quadruped107
 
-This repository documents and contains the files for a real quadruped robot built around an Arduino UNO Q. The project combines mechanical design, 3D printed parts, embedded motion control, a Python control layer, a web-based operator interface, and computer vision routines using OpenCV and Edge Impulse.
+An Arduino UNO Q quadruped platform combining 3D printable mechanical design, eight-servo motion control, a browser-based interface, and computer vision with OpenCV and Edge Impulse.
 
 The robot has four legs with two degrees of freedom per leg. Eight MG996R servomotors are driven by a PCA9685 PWM controller, while the Arduino UNO Q separates high-level processing on its Linux side from low-level servo execution on its microcontroller side.
 
@@ -17,8 +17,6 @@ Web UI / ROG Ally
   -> PCA9685 over I2C
   -> 8x MG996R servomotors
 ```
-
-![Built quadruped robot](docs/images/physical-build-1.png)
 
 ## Features
 
@@ -40,12 +38,19 @@ Rigid parts were fabricated mainly in PLA. The feet were printed in TPU to impro
 
 The full mechanical design is also included for download and modification:
 
-- `Design/Quadruped107.f3z`: editable Fusion 360 archive.
-- `Design/Quadruped107.step`: neutral CAD export for other CAD tools.
+- [Fusion 360 archive](Design/Quadruped107.f3z): editable mechanical design.
+- [STEP model](Design/Quadruped107.step): neutral CAD export for other CAD tools.
+- [Printable STL files](Design/STL/): individual mechanical parts.
 
-![completed robot assembly in Fusion 360](docs/images/mechanical-complete-design.png)
+### CAD Assembly
+
+![Complete robot CAD assembly in Fusion 360](docs/images/mechanical-complete-design.png)
+
+### Exploded View
 
 ![Exploded robot assembly in Fusion 360](docs/images/mechanical-exploded-view.png)
+
+[Watch the exploded assembly animation](docs/Quadruped107_exploded.mp4)
 
 ## Electrical and Electronic Design
 
@@ -103,14 +108,7 @@ Main software tools and libraries:
 
 The web app is the main operator interface. It provides manual movement controls, keyboard input, touch input, connection state, last executed action, camera feedback, and access to the OpenCV and Edge Impulse modes.
 
-## Desktop
-![Robot web control interface](docs/images/web-control-interface.png)
-![Robot web control interface fullscreen](docs/images/fullscreen.png)
-
-## Mobile
-![Robot web control interface fullscreen](docs/images/mobilapp.jpeg)
-
-Common controls:
+### Controls
 
 | Input | Action |
 | --- | --- |
@@ -147,19 +145,19 @@ The camera is also used for live video feedback during manual operation.
 2. Open the main Arduino App Lab project:
 
    ```text
-   Dev/uno-q-control-station
+   Dev/Quadruped107-connect
    ```
 
 3. Install or verify the sketch dependencies listed in:
 
    ```text
-   Dev/uno-q-control-station/sketch/sketch.yaml
+   Dev/Quadruped107-connect/sketch/sketch.yaml
    ```
 
 4. Install Python dependencies:
 
    ```bash
-   pip install -r Dev/uno-q-control-station/python/requirements.txt
+   pip install -r Dev/Quadruped107-connect/python/requirements.txt
    ```
 
 5. Calibrate the servos if needed using:
@@ -192,39 +190,27 @@ Recommended startup sequence:
 6. Test forward, backward, turn, and greeting routines.
 7. Test OpenCV and Edge Impulse modes only after manual motion is stable.
 
-![Built quadruped robot alternate view](docs/images/physical-build-2.png)
-
 ## Project Structure
 
 ```text
 .
-+-- Assets/
-|   +-- Fusion_design.png
-|   +-- Quadruped107-schematic.png
-|   +-- Physical1.png
-|   +-- Physical2.png
-|   +-- Quadruped107_exploded.mp4
 +-- Design/
 |   +-- Quadruped107.f3z
 |   +-- Quadruped107.step
-|   +-- STL/
-|       +-- Base.stl
-|       +-- Case.stl
-|       +-- Camera_base.stl
-|       +-- Leg*.stl
-|       +-- Shoulder*.stl
-|       +-- Foot*.stl
+|   +-- STL/                              # Printable parts
 +-- Dev/
-|   +-- uno-q-control-station/
+|   +-- Quadruped107-connect/              # Main control app
 |   |   +-- assets/
 |   |   +-- python/
 |   |   +-- sketch/
 |   |   +-- app.yaml
-|   +-- uno-q-keyboard-motion/
 |   +-- Tools/
-|       +-- uno-q-servo-calibrator/
+|       +-- uno-q-servo-calibrator/        # Servo calibration app
+|       +-- uno-q-control-station(deprecated)/
 +-- docs/
 |   +-- images/
+|   +-- Quadruped107_exploded.mp4
++-- LICENSE
 +-- README.md
 ```
 
@@ -237,7 +223,7 @@ Recommended startup sequence:
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0.
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Modification notice
 
