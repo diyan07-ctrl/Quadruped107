@@ -1,230 +1,209 @@
 # Quadruped107
 
-An Arduino UNO Q quadruped platform combining 3D printable mechanical design, eight-servo motion control, a browser-based interface, and computer vision with OpenCV and Edge Impulse.
+A Raspberry Pi 4 and Arduino Uno R3 quadruped with a Pi CSI camera, browser controls, and computer vision. The Pi handles video and high-level decisions; the Uno drives eight MG996R servos through a PCA9685.
 
-The robot has four legs with two degrees of freedom per leg. Eight MG996R servomotors are driven by a PCA9685 PWM controller, while the Arduino UNO Q separates high-level processing on its Linux side from low-level servo execution on its microcontroller side.
+## Architecture
 
-## Overview
-
-The goal of the project is to build a functional robotics platform that can walk, turn, return to calibrated poses, show a greeting motion, stream camera video, track a blue ball, and respond to hand gestures.
-
-```text
-Web UI / ROG Ally
-  -> Arduino App Lab on UNO Q Linux
-  -> Python application
-  -> Arduino Bridge
-  -> UNO Q microcontroller sketch
-  -> PCA9685 over I2C
-  -> 8x MG996R servomotors
+```mermaid
+flowchart LR
+    Browser["Browser / phone / ROG Ally"] <-->|"Wi-Fi: HTTP + MJPEG, port 7000"| Pi["Raspberry Pi 4\nPython + OpenCV + web app"]
+    Cam["Pi Camera Module"] -->|"CSI ribbon / Picamera2"| Pi
+    Pi <-->|"USB serial, 115200 baud"| Uno["Arduino Uno R3\nGaits + watchdog"]
+    Uno -->|"A4 SDA / A5 SCL"| PWM["PCA9685, 0x40, 50 Hz"]
+    Uno -->|"D8 → OE"| PWM
+    PWM -->|"Channels 0–7"| Servos["8 × MG996R"]
 ```
+
+- **Raspberry Pi 4:** serves the interface and API, captures the CSI camera with Picamera2, runs blue-ball tracking, and sends one motion step at a time over USB.
+- **Arduino Uno R3 (ATmega328P):** executes the existing calibrated gait sequences and handles servo pulses, STOP commands, and heartbeat loss.
+- **PCA9685:** generates the eight servo PWM signals. Servo power comes from a separate regulated supply.
+
+The active app runs directly on Raspberry Pi OS. Arduino App Lab and Arduino Bridge are no longer required. See [architecture and serial protocol](docs/architecture.md) for the command flow and failure behavior.
 
 ## Features
 
-- Eight-servo quadruped platform with two degrees of freedom per leg.
-- Manual Wi-Fi control through a browser-based web app.
-- Live USB camera feedback for remote operation.
-- OpenCV blue ball tracking mode.
-- Edge Impulse hand gesture control mode.
-- Motion routines for initial pose, stand, forward, backward, turns, and greeting.
-- Smooth servo transitions using calibrated PCA9685 pulse values.
-- 3D printed mechanical structure with printable STL files included in the repository.
-- Separate power paths for logic and actuator stages.
+- Keyboard and touch controls, including hold-to-walk and release-to-stand.
+- Initial, stand, greeting, tail-wag, forward, backward, and turning routines.
+- Pi camera snapshots and MJPEG streaming on the same web port.
+- OpenCV blue-ball tracking with bounded motion steps and fresh-frame checks.
+- Optional MediaPipe hand gestures with a separately installed model.
+- Explicit servo enable, STOP button / `X` key, browser heartbeat, and Uno watchdog.
+- Individual servo calibration through the Pi API.
+- Fusion 360, STEP, and printable STL design files.
 
 ## Mechanical Design
 
-The mechanical structure was designed in Fusion 360 using the real dimensions of the main components: Arduino UNO Q, PCA9685 module, servomotors, battery, power bank, USB hub, camera, and internal wiring space. The design uses a central body, top case, base cover, camera mount, shoulders, legs, and feet.
-
-Rigid parts were fabricated mainly in PLA. The feet were printed in TPU to improve floor contact and reduce slipping during gait tests. The repository includes STL files under `Design/STL/`, ready to slice and print.
-
-The full mechanical design is also included for download and modification:
-
-- [Fusion 360 archive](Design/Quadruped107.f3z): editable mechanical design.
-- [STEP model](Design/Quadruped107.step): neutral CAD export for other CAD tools.
-- [Printable STL files](Design/STL/): individual mechanical parts.
+The CAD assets retain the supplied robot geometry. The original mounting arrangement was sized around an UNO Q; **Pi 4 and Uno R3 mounting positions, camera mounting, cooling, and cable clearance need mechanical adaptation**. The code port does not change these CAD models.
 
 ### CAD Assembly
 
-![Complete robot CAD assembly in Fusion 360](docs/images/mechanical-complete-design.png)
+![Complete robot CAD assembly](docs/images/mechanical-complete-design.png)
 
 ### Exploded View
 
-![Exploded robot assembly in Fusion 360](docs/images/mechanical-exploded-view.png)
+![Exploded robot CAD assembly](docs/images/mechanical-exploded-view.png)
 
-[Watch the exploded assembly animation](docs/Quadruped107_exploded.mp4)
+[Exploded assembly animation](docs/Quadruped107_exploded.mp4) · [Fusion 360 archive](Design/Quadruped107.f3z) · [STEP model](Design/Quadruped107.step) · [Printable STL parts](Design/STL/)
 
-## Electrical and Electronic Design
+## Hardware and Wiring
 
-The robot uses an Arduino UNO Q as the main controller and a PCA9685 module to generate PWM signals for the eight MG996R servomotors. The PCA9685 communicates with the UNO Q through I2C and drives channels `0-7`.
+| Component | Connection / purpose |
+| --- | --- |
+| Raspberry Pi 4 | Raspberry Pi OS, dedicated suitable USB-C supply |
+| Pi Camera Module | Pi 4 CSI camera connector via the correct ribbon cable |
+| Arduino Uno R3 | USB cable from a Pi USB port; logic power and serial communication |
+| PCA9685 VCC | Uno 5V, for controller logic only |
+| PCA9685 SDA / SCL | Uno A4 / A5 |
+| PCA9685 OE | Uno D8, plus a **10 kΩ pull-up to Uno 5V**; HIGH disables outputs |
+| PCA9685 V+ | Separate regulated servo supply, sized for eight servo stall currents |
+| PCA9685 GND | Uno GND and servo supply negative; common ground |
+| Eight MG996R servos | PCA9685 outputs 0–7 |
+| Mechanical parts | PLA structure, TPU feet, fasteners and adapted board mounts |
 
-The power design separates logic and actuator supply. The servo stage is powered from a 12 V Li-ion battery through a buck converter adjusted for the MG996R operating voltage. The logic/peripheral stage uses a 5 V power bank. A common ground must be shared between the UNO Q, PCA9685, and servo power supply.
+Use the servo manufacturer's voltage rating; the supplied design uses a battery and buck converter for the servo rail. A raw 12 V battery must not connect to servo V+. Never supply the servos from the Pi, the Uno 5V pin, or the USB cable. Use a servo power disconnect when testing. Connect the CSI ribbon with the Pi powered off. USB is the only Pi–Uno data connection; no 5 V UART signal connects to Pi GPIO.
 
-![Electrical/electronic diagram](docs/images/electrical-diagram.png)
+| PCA9685 channel | Joint |
+| --- | --- |
+| 0 / 1 | Front-left shoulder / leg |
+| 2 / 3 | Front-right shoulder / leg |
+| 4 / 5 | Back-left shoulder / leg |
+| 6 / 7 | Back-right shoulder / leg |
 
-Important electrical notes:
+## Setup
 
-- Do not power the MG996R servos directly from the UNO Q.
-- Verify buck converter output before connecting the servos.
-- Keep grounds common across control and power stages.
-- Use wiring sized appropriately for the current demanded by the servos.
-- Keep a physical power switch or battery disconnect available during testing.
+Use a current **64-bit Raspberry Pi OS** with the modern camera stack and Python 3.11 or later. Setup commands run on the Pi unless specified otherwise.
 
-## Bill of Materials
+### 1. Clone and install the Pi dependencies
 
-| Component | Type | Operating Voltage | Signal / Control | Purpose |
-| --- | --- | --- | --- | --- |
-| 8x MG996R servomotors | Actuator | 4.8-7.2 V | PWM | High-torque joints for legs |
-| PCA9685 module | PWM controller | 3.3-5 V logic | I2C | 16-channel, 12-bit PWM generation |
-| 12 V Li-ion battery | Power source | 12 V | Power | Main actuator supply |
-| Buck converter | Regulator | 12 V input / adjustable output | DC-DC | Servo voltage regulation |
-| ON/OFF switch | Switch | According to supply | Mechanical switching | Main power control |
-| 5 V power bank | Auxiliary power source | 5 V | USB | Logic and peripheral supply |
-| Arduino UNO Q | Control board | 5 V input / 3.3 V logic | Digital / I2C / Bridge | Main control and processing unit |
-| Anker USB-C hub | USB hub | 5 V / USB-C PD | USB | Camera and peripheral connection |
-| Steren COM-122 webcam | Visual sensor | 5 V USB | USB video | Camera input for live view and vision modes |
-| 3D printed PLA parts | Mechanical structure | N/A | N/A | Body, cover, shoulders, legs, and camera mount |
-| TPU feet | Contact parts | N/A | N/A | Traction and floor contact |
+```bash
+cd ~
+git clone https://github.com/diyan07-ctrl/Quadruped107.git
+cd Quadruped107
+sudo apt update
+sudo apt install -y python3-venv python3-picamera2 python3-opencv python3-numpy python3-serial rpicam-apps
+python3 -m venv --system-site-packages .venv
+.venv/bin/python -m pip install -r Dev/Quadruped107-connect/python/requirements.txt
+```
 
-## Software
+Picamera2 and libcamera must come from Raspberry Pi OS packages. Keep `--system-site-packages` so the environment can import them; do not install a separate OpenCV/NumPy wheel into this Pi environment.
 
-The software is split into two layers:
+### 2. Check the camera
 
-- **Microcontroller layer**: the Arduino sketch receives motion commands and executes calibrated servo routines through the PCA9685.
-- **Linux/Python layer**: the Python app serves the web interface, handles camera capture, runs OpenCV logic, receives Edge Impulse results, and sends high-level commands through Arduino Bridge.
+```bash
+rpicam-hello --list-cameras
+rpicam-still --nopreview -o /tmp/quadruped-camera.jpg
+```
 
-The repository also includes a dedicated servo calibration web app in `Dev/Tools/uno-q-servo-calibrator`. This tool is used to test individual servos and adjust pulse values before running the full quadruped motion routines.
+If no camera is listed, resolve the CSI cable / camera configuration before starting the app. Do not enable the legacy camera stack.
 
-Main software tools and libraries:
+### 3. Flash the Uno R3
 
-- Arduino App Lab
-- Arduino Bridge / RPC
-- `Wire.h`
-- `Adafruit_PWMServoDriver.h`
-- Python
-- OpenCV
-- Edge Impulse
-- HTML, CSS, and JavaScript
+Using Arduino IDE on a computer, open `Dev/Quadruped107-connect/sketch/sketch.ino`. Select **Arduino Uno**, install **Adafruit PWM Servo Driver Library 3.0.2** and **Adafruit BusIO 1.17.4**, and upload over USB. Then close Serial Monitor and connect the Uno to the Pi.
 
-## Web App
+Alternatively, with [Arduino CLI](https://arduino.github.io/arduino-cli/) installed:
 
-The web app is the main operator interface. It provides manual movement controls, keyboard input, touch input, connection state, last executed action, camera feedback, and access to the OpenCV and Edge Impulse modes.
+```bash
+arduino-cli compile --profile uno Dev/Quadruped107-connect/sketch
+arduino-cli board list
+# Replace /dev/ttyACM0 with the Uno port shown above.
+arduino-cli upload --profile uno --port /dev/ttyACM0 Dev/Quadruped107-connect/sketch
+```
 
-### Controls
+For serial access on the Pi:
+
+```bash
+sudo usermod -aG dialout "$USER"
+```
+
+Log out and back in after changing group membership. Only this app should open the Uno serial port.
+
+### 4. Start the controller
+
+```bash
+.venv/bin/python Dev/Quadruped107-connect/python/main.py
+```
+
+Open `http://<PI_IP>:7000` from a browser on the same trusted network. Both snapshots and MJPEG use this port. No port 7001 service is needed.
+
+The app auto-selects a single recognized Arduino / USB serial adapter. If detection is ambiguous, use a stable device path:
+
+```bash
+ls -l /dev/serial/by-id/
+.venv/bin/python Dev/Quadruped107-connect/python/main.py \
+  --serial-port /dev/serial/by-id/<your-uno-device>
+```
+
+The app opens USB serial, waits for the Uno bootloader, verifies the firmware identity, and leaves servo outputs disabled. It never automatically replays a previous command after reconnecting.
+
+### 5. First movement
+
+Start with servo power disconnected. Confirm the web app, camera, and Uno connection. Support the robot, verify the wiring and OE pull-up, then connect servo power. Select **Enable servos**, then test one pose at a time.
+
+The inherited pulse values are a starting point, not calibration for your assembly. Verify joint direction and mechanical clearance before walking. See [calibration and API examples](Dev/Quadruped107-connect/README.md).
+
+## Controls
 
 | Input | Action |
 | --- | --- |
-| Arrow Down | Initial position |
-| Arrow Up | Stand |
-| W | Move forward |
-| S | Move backward |
-| A | Turn left |
-| D | Turn right |
-| Arrow Right | Greeting |
-| Space | Manual mode |
-| Page Down | OpenCV mode |
-| F4 | Hand gesture mode |
-| Escape | Focus/camera view |
+| Enable servos | Arm outputs; does not issue a pose |
+| STOP / X | Abort motion and disable servo outputs; enable again to resume |
+| W / S | Forward / backward while held |
+| A / D | Turn left / right while held |
+| Release movement input | Finish the current gait step, then stand |
+| Arrow Down / Up | Initial / stand |
+| Arrow Right / Left | Greeting / tail wag |
+| Space / Page Down | Manual / blue-ball tracking |
+| F4 | Hand gestures, when a supported model is configured |
+| Escape | Toggle fullscreen view |
 
-## Computer Vision
+Closing, hiding, or leaving the control page disables outputs. A missing browser heartbeat also disables outputs, including in vision modes. Keep one control browser active. The web server has no login and is intended for a trusted local network, not direct Internet exposure.
 
-The project includes two vision-based modes:
+## Optional Hand Gestures
 
-- **OpenCV mode**: detects a blue ball using color masking and shape filtering. The robot can search, correct its orientation, and move forward depending on the ball position.
-- **Edge Impulse mode**: recognizes hand gestures and maps them to movement commands such as forward, backward, turn, stand, or greeting.
+The previous UNO Q / Edge Impulse brick and its `.eim` model are not used on the Pi. A standard MediaPipe Tasks Gesture Recognizer can be enabled with a compatible `.task` model. See [optional gesture setup](Dev/Quadruped107-connect/README.md#optional-hand-gestures). Without it, manual control, Pi camera video, and blue-ball tracking still work; the gesture button is disabled.
 
-The camera is also used for live video feedback during manual operation.
+## Run at Login / Boot
 
-## Installation
+An optional [systemd user service](deploy/quadruped107.service) is provided for a checkout at `~/Quadruped107`:
 
-1. Clone the repository.
-
-   ```bash
-   git clone https://github.com/diyan07-ctrl/Quadruped107.git
-   cd Quadruped107
-   ```
-
-2. Open the main Arduino App Lab project:
-
-   ```text
-   Dev/Quadruped107-connect
-   ```
-
-3. Install or verify the sketch dependencies listed in:
-
-   ```text
-   Dev/Quadruped107-connect/sketch/sketch.yaml
-   ```
-
-4. Install Python dependencies:
-
-   ```bash
-   pip install -r Dev/Quadruped107-connect/python/requirements.txt
-   ```
-
-5. Calibrate the servos if needed using:
-
-   ```text
-   Dev/Tools/uno-q-servo-calibrator
-   ```
-
-6. Connect the UNO Q, PCA9685, servos, camera, power bank, battery, buck converter, and common ground.
-
-7. Start the app from Arduino App Lab.
-
-8. Open the control interface:
-
-   ```text
-   http://<UNO_Q_IP>:7000
-   ```
-
-## Usage
-
-Before running gait routines, test the robot with the servo power disconnected and verify that the web app loads correctly. Then power the servos with the robot lifted off the table and test initial and stand positions first.
-
-Recommended startup sequence:
-
-1. Check wiring, polarity, and buck converter voltage.
-2. Power the logic side and start the App Lab project.
-3. Confirm the web app and camera feed work.
-4. Connect servo power with the robot lifted.
-5. Run `initial` and `stand`.
-6. Test forward, backward, turn, and greeting routines.
-7. Test OpenCV and Edge Impulse modes only after manual motion is stable.
-
-## Project Structure
-
-```text
-.
-+-- Design/
-|   +-- Quadruped107.f3z
-|   +-- Quadruped107.step
-|   +-- STL/                              # Printable parts
-+-- Dev/
-|   +-- Quadruped107-connect/              # Main control app
-|   |   +-- assets/
-|   |   +-- python/
-|   |   +-- sketch/
-|   |   +-- app.yaml
-|   +-- Tools/
-|       +-- uno-q-servo-calibrator/        # Servo calibration app
-|       +-- uno-q-control-station(deprecated)/
-+-- docs/
-|   +-- images/
-|   +-- Quadruped107_exploded.mp4
-+-- LICENSE
-+-- README.md
+```bash
+mkdir -p ~/.config/systemd/user
+cp deploy/quadruped107.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now quadruped107
+journalctl --user -u quadruped107 -f
 ```
 
-## Notes
+For startup without an interactive login, enable lingering with `sudo loginctl enable-linger "$USER"`. Edit the service paths if your checkout lives elsewhere. Automatic service restarts still leave servo outputs disabled.
 
-- The STL files in `Design/STL/` are included as printable mechanical parts. The editable Fusion 360 archive and STEP export are available in `Design/`.
-- Servo pulse values depend on physical assembly and calibration. Recalibrate if servos, mounts, or linkages are changed.
-- If additional external CAD files, trained models, or third-party assets are added later, their source and license should be documented in this README.
-- The repository focuses on the complete robot implementation: electronics, firmware, Python software, web interface, mechanical integration, printable files, and documentation.
+## Development and Validation
 
-## License
+Hardware-free simulation works on a computer with Python 3.11+:
 
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
+```bash
+python -m venv .venv
+# Windows: use .venv\Scripts\python.exe for the commands below.
+.venv/bin/python -m pip install -r Dev/Quadruped107-connect/python/requirements-dev.txt
+.venv/bin/python Dev/Quadruped107-connect/python/main.py --simulate --host 127.0.0.1
+.venv/bin/python -m unittest discover -s tests -v
+```
 
-## Modification notice
+Simulation displays a synthetic camera feed and never opens a serial port. See [validation results and hardware checklist](docs/validation.md). A successful compile or simulation does not establish that the assembled robot is calibrated or camera capture works on your Pi.
 
-Rebranded by diyan07-ctrl on 2026-11-04. Project names, filenames, UI labels, and readable archive metadata were updated. The original robot implementation and GPL-3.0 license are retained.
+## Project Layout
+
+```text
+Design/                              Fusion, STEP and STL design assets
+Dev/Quadruped107-connect/
+  assets/                            Browser interface
+  python/                            Pi camera, vision, serial transport and API
+  sketch/                            Uno R3 firmware and existing gait tables
+Dev/Tools/                           Legacy UNO Q tools; not part of the Pi runtime
+deploy/                              Optional systemd user service
+docs/                                Architecture, validation and CAD images
+tests/                               Hardware-free behavior tests
+```
+
+## License and Changes
+
+Licensed under [GNU GPL v3.0](LICENSE). Rebranded by diyan07-ctrl on 2026-11-04. The Pi 4 / Uno R3 port replaces the UNO Q runtime, camera pipeline and bridge transport while retaining the supplied servo channel map, gait targets, and design assets.

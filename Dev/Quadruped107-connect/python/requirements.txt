@@ -1,1 +1,3 @@
-opencv-python-headless
+# Pi OS: install Picamera2, OpenCV and NumPy through apt; see README.
+Flask==3.1.2
+pyserial==3.5

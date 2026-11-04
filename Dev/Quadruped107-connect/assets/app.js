@@ -8,6 +8,8 @@ const state = {
   desiredMotion: "stand",
   currentMotion: "none",
   busy: false,
+  enabled: false,
+  heartbeatPending: false,
   activeInputs: new Map(),
   activeMovementMode: null,
 };
@@ -36,6 +38,8 @@ const elements = {
   appModeButtons: document.querySelectorAll("[data-app-mode]"),
   driveButtons: document.querySelectorAll("[data-drive-mode]"),
   poseButtons: document.querySelectorAll("[data-pose-mode]"),
+  armButton: document.querySelector("#armButton"),
+  stopButton: document.querySelector("#stopButton"),
 };
 
 const movementKeyToMode = {
@@ -200,7 +204,14 @@ async function loadState() {
     setCameraStatus(data.camera?.status);
     applyMotionState(data.motion);
     updateVisionStatus(data.vision);
-    setConnectionStatus("Connected", "status-success");
+    state.enabled = Boolean(data.motion?.enabled && data.link?.armed);
+    if (!state.enabled) releaseAllMovement("disabled", false);
+    elements.armButton.disabled = !data.link?.connected || state.enabled;
+    [...elements.driveButtons, ...elements.poseButtons, ...elements.appModeButtons].forEach((button) => {
+      button.disabled = !state.enabled || (button.dataset.appMode === "hand_gesture" && !data.features?.handGesture);
+    });
+    setConnectionStatus(data.simulation ? "Simulation" : (state.enabled ? "Enabled" : (data.link?.connected ? "Disabled" : "Uno disconnected")),
+      state.enabled ? "status-success" : "status-warning");
   } catch (error) {
     setResult(`Connection failed: ${error.message}`);
     setConnectionStatus("Disconnected", "status-danger");
@@ -208,12 +219,12 @@ async function loadState() {
 }
 
 async function setMode(mode, source = "ui") {
+  if (!state.enabled) { setResult("Enable servos first"); return; }
   const commandId = ++state.commandId;
   setConnectionStatus("Sending", "status-warning");
   setResult(`set_mode("${mode}") from ${source}`);
   try {
-    const modePath = mode.replaceAll("_", "-");
-    const data = await fetchJson(`/api/mode/${encodeURIComponent(modePath)}?commandId=${commandId}`);
+    const data = await fetchJson("/api/mode", { method: "POST", body: JSON.stringify({ mode }) });
     if (commandId !== state.commandId && data.generation < state.latestAcceptedGeneration) return;
     applyMotionState(data.state);
     setConnectionStatus("Connected", "status-success");
@@ -256,7 +267,7 @@ function startStateRefresh() {
 function toggleStreamMode() {
   state.mjpegMode = !state.mjpegMode;
   if (state.mjpegMode) {
-    elements.cameraImage.src = `http://${window.location.hostname}:7001/video-feed`;
+    elements.cameraImage.src = "/video-feed";
     elements.cameraFallback.classList.add("hidden");
     setCameraStatus("MJPEG stream");
     elements.toggleStreamButton.textContent = "Snapshots";
@@ -328,6 +339,7 @@ function updateMovementMode(source) {
 }
 
 function activateMovement(token, mode, source) {
+  if (!state.enabled) return;
   const previous = state.activeInputs.get(token);
   if (previous?.mode === mode) return;
   state.activeInputs.set(token, { mode, time: performance.now() });
@@ -392,6 +404,7 @@ elements.driveButtons.forEach((button) => {
 
 window.addEventListener("keydown", (event) => {
   if (shouldIgnoreKeyboardEvent(event)) return;
+  if (event.key.toLowerCase() === "x" && !event.repeat) { stopRobot(); return; }
   const poseMode = poseKeyToMode[event.key];
   if (poseMode && !event.repeat) {
     event.preventDefault();
@@ -425,9 +438,12 @@ window.addEventListener("keyup", (event) => {
   releaseMovement(`key:${key}`, "keyboard");
 });
 
-window.addEventListener("blur", () => releaseAllMovement("window-blur"));
+window.addEventListener("blur", stopRobot);
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) releaseAllMovement("page-hidden");
+  if (document.hidden) stopRobot();
+});
+window.addEventListener("pagehide", () => {
+  navigator.sendBeacon("/api/stop", new Blob(["{}"], { type: "application/json" }));
 });
 document.addEventListener("fullscreenchange", () => {
   if (!fullscreenElement() && document.body.classList.contains("focus-mode")) {
@@ -448,6 +464,31 @@ window.addEventListener("resize", sizeCameraFrame);
 if ("ResizeObserver" in window) {
   new ResizeObserver(sizeCameraFrame).observe(elements.cameraStage);
 }
+
+async function stopRobot() {
+  state.enabled = false;
+  releaseAllMovement("stop", false);
+  try { await fetchJson("/api/stop", { method: "POST", body: "{}" }); }
+  catch (error) { setResult(`Stop request failed: ${error.message}`); }
+  await loadState();
+}
+
+elements.armButton.addEventListener("click", async () => {
+  releaseAllMovement("arm", false);
+  try { await fetchJson("/api/arm", { method: "POST", body: "{}" }); }
+  catch (error) { setResult(error.message); }
+  await loadState();
+});
+elements.stopButton.addEventListener("click", stopRobot);
+window.setInterval(async () => {
+  if (document.hidden || state.heartbeatPending) return;
+  state.heartbeatPending = true;
+  try {
+    await fetchJson("/api/heartbeat", { method: "POST",
+      body: JSON.stringify({ motion: state.activeMovementMode }) });
+  } catch (_error) { /* The server lease expires if contact is lost. */ }
+  finally { state.heartbeatPending = false; }
+}, 250);
 
 loadState();
 startStateRefresh();

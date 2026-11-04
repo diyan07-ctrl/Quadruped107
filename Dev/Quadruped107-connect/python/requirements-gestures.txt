@@ -1,0 +1,2 @@
+# Optional; use a MediaPipe-supported Python/OS combination and a .task model.
+mediapipe>=0.10.21,<0.11

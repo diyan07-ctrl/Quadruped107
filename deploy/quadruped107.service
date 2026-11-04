@@ -1,0 +1,17 @@
+[Unit]
+Description=Quadruped107 Pi camera and Uno controller
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Quadruped107
+ExecStart=%h/Quadruped107/.venv/bin/python %h/Quadruped107/Dev/Quadruped107-connect/python/main.py
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/quadruped107.env
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=12
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=default.target

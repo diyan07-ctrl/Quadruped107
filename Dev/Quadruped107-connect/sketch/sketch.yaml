@@ -1,13 +1,9 @@
 profiles:
-  uno-q:
-    fqbn:
+  uno:
+    fqbn: arduino:avr:uno
     platforms:
-      - platform: arduino:zephyr
+      - platform: arduino:avr (1.8.8)
     libraries:
-      - Arduino_RouterBridge (0.4.1)
-      - Arduino_RPClite (0.2.1)
-      - MsgPack (0.4.2)
       - Adafruit PWM Servo Driver Library (3.0.2)
       - Adafruit BusIO (1.17.4)
-
-default_profile: uno-q
+default_profile: uno
