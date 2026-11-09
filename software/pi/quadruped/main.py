@@ -15,6 +15,8 @@ from flask import Flask, Response, jsonify, request, send_from_directory
 from werkzeug.serving import make_server
 
 from .camera import Camera
+from .autonomy import Behavior, VisionSettings
+from .diagnostics import ProcessStats
 from .controller import CONTINUOUS, MODES, MOTIONS, MotionController
 from .serial_link import SerialLink, SimulatedLink
 from .vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame
@@ -23,10 +25,22 @@ APP_DIR = Path(__file__).resolve().parent
 
 
 class Runtime:
-    def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None):
+    def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
+                 camera_backend=None, camera_device=None, width=640, height=480, fps=8,
+                 actuator_backend=None, vision_config=None, virtual_speed=1.0):
         self.simulate = simulate
-        self.link = link or (SimulatedLink() if simulate else SerialLink(port))
-        self.camera = Camera(simulate, camera_index)
+        self.actuators_simulated = simulate or actuator_backend == "virtual"
+        if link is not None: self.link = link
+        elif actuator_backend == "virtual":
+            from .virtual_uno import VirtualLink
+            self.link = VirtualLink(speed=virtual_speed)
+        else: self.link = SimulatedLink() if simulate else SerialLink(port)
+        self.camera = Camera(simulate, camera_index, backend=camera_backend, device=camera_device,
+                             width=width, height=height, fps=fps)
+        self.vision_settings = VisionSettings.load(vision_config)
+        self.behavior = Behavior(self.vision_settings)
+        self.obstacle_blocked = False
+        self.stats = ProcessStats()
         self.motion = MotionController(self.link)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
@@ -88,8 +102,7 @@ class Runtime:
     def frame(self):
         _, jpeg, _, _ = self.camera.latest()
         with self.lock:
-            if (self.motion.snapshot()["appMode"] != "manual" and
-                    time.monotonic() - self.preview_at < 0.8 and jpeg):
+            if (time.monotonic() - self.preview_at < 0.8 and jpeg):
                 return self.preview or jpeg
         return jpeg
 
@@ -97,73 +110,87 @@ class Runtime:
         _, jpeg, _, status = self.camera.latest()
         with self.lock:
             vision = {**self.vision}
-        return dict(ok=True, simulation=self.simulate, motion=self.motion.snapshot(),
+        return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
+                    system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked, motion=self.motion.snapshot(),
                     link=self.link.snapshot(), controlModes=sorted(MODES), motionModes=sorted(MOTIONS),
                     features=dict(handGesture=self.detector is not None), vision=vision,
-                    camera=dict(available=jpeg is not None, status=status,
+                    camera=dict(**self.camera.diagnostics(),
                                 snapshotEndpoint="/api/camera-frame", mjpegEndpoint="/video-feed"))
 
     def _vision_loop(self):
-        last_sequence = 0
-        last_action_at = 0.0
-        candidate = None
-        stable = 0
-        previous_mode = "manual"
-        previous_session = None
-        issued_gesture = None
-        while not self.stop_event.wait(0.06):
-            state = self.motion.snapshot()
-            mode = state["appMode"]
-            if mode != previous_mode or state["session"] != previous_session:
-                candidate, stable, issued_gesture = None, 0, None
-                previous_mode = mode
-                previous_session = state["session"]
-            if mode == "manual" or not state["enabled"]: continue
-            frame, _, sequence, _, published_at = self.camera.latest(with_timestamp=True)
+        last_sequence=0
+        context=None
+        count=0
+        measured_at=time.monotonic()
+        while not self.stop_event.wait(.02):
+            state=self.motion.snapshot()
+            mode=state["appMode"]
+            new_context=(mode,state["session"])
+            if new_context!=context:
+                self.behavior.reset(time.monotonic())
+                context=new_context
+            frame,_,sequence,_,published_at=self.camera.latest(with_timestamp=True)
+            autonomous=state["enabled"] and mode!="manual"
             if frame is None:
-                self.motion.stop("Camera frame expired during vision control", expected_generation=state["generation"])
+                decision=self.behavior.step(None,time.monotonic(),enabled=autonomous,
+                    manual=state["enabled"] and mode=="manual",stopped=not state["enabled"] and state["session"]>0)
+                with self.lock:
+                    self.vision["behavior"]=decision.state
+                    self.preview=None
+                if autonomous:
+                    self.motion.stop("Camera frame expired during vision control",expected_generation=state["generation"])
                 continue
-            if sequence == last_sequence: continue
-            last_sequence = sequence
+            if sequence==last_sequence: continue
+            last_sequence=sequence
+            started=time.monotonic()
             try:
-                if mode == "opencv":
-                    detection = detect_blue_ball(frame)
-                    if not self._fresh_observation(state, published_at): continue
-                    action, motion = choose_blue_ball_motion(detection)
-                    motion = "stand" if motion == "hold" else motion
-                    key = action
-                    preview = encode_vision_frame(frame, detection, action, motion)
-                    if not self._fresh_observation(state, published_at): continue
-                    with self.lock:
-                        self.preview, self.preview_at = preview, published_at
-                        self.vision["opencv"] = f"{action}: {motion}"
-                        self.vision["blueBall"] = {k: v for k, v in detection.items() if k != "mask"}
-                        self.vision["blueBall"].update(action=action, motion=motion)
+                settings=self.vision_settings
+                if settings.hsv_lower==(95,70,30) and settings.hsv_upper==(140,255,255):
+                    detection=detect_blue_ball(frame)
                 else:
-                    if self.detector is None: raise RuntimeError("Hand gesture model unavailable")
-                    gesture = self.detector.detect(frame)
-                    if not self._fresh_observation(state, published_at): continue
-                    with self.lock:
-                        self.vision["hand"] = ({"detected": True, **gesture} if gesture else
-                                               dict(detected=False, gesture="none", motion="hold"))
-                    if not gesture:
-                        candidate, stable, issued_gesture = None, 0, None
-                        continue
-                    key, motion = gesture["gesture"], gesture["motion"]
-                if not self._fresh_observation(state, published_at):
+                    detection=detect_blue_ball(frame,lower=settings.hsv_lower,upper=settings.hsv_upper)
+                now=time.monotonic()
+                observation={k:v for k,v in detection.items() if k!="mask"}
+                observation.update(observed_at=published_at,frameAge=now-published_at)
+                if autonomous and not self._fresh_observation(state,published_at): continue
+                if now-published_at>settings.max_age: continue
+                decision=self.behavior.step(observation,now,enabled=autonomous,
+                    manual=state["enabled"] and mode=="manual",stopped=not state["enabled"] and state["session"]>0,
+                    obstacle=self.obstacle_blocked)
+                preview=encode_vision_frame(frame,detection,decision.state,decision.motion or "hold")
+                if autonomous and not self._fresh_observation(state,published_at): continue
+                count+=1
+                elapsed=time.monotonic()-measured_at
+                with self.lock:
+                    if elapsed>=.5:
+                        self.vision["processingFps"]=round(count/elapsed,2)
+                        count,measured_at=0,time.monotonic()
+                    self.preview,self.preview_at=preview,published_at
+                    self.vision["blueBall"]=observation
+                    self.vision["behavior"]=decision.state
+                    self.vision["opencv"]=decision.reason or decision.state
+                    self.vision["processingMs"]=round((time.monotonic()-started)*1000,2)
+                    self.vision["transitions"]=list(self.behavior.transitions)
+                if not autonomous: continue
+                if not self.actuators_simulated:
+                    self.motion.stop("Physical autonomous motion is inhibited",expected_generation=state["generation"])
                     continue
-                stable = stable + 1 if key == candidate else 1
-                candidate = key
-                if (stable >= 2 and time.monotonic() - last_action_at >= 1.5 and
-                        (mode != "hand_gesture" or key != issued_gesture)):
-                    before = self.motion.snapshot()["generation"]
-                    self.motion.autonomous(mode, motion, expected_generation=state["generation"])
-                    if self.motion.snapshot()["generation"] != before:
-                        last_action_at = time.monotonic()
-                        issued_gesture = key
+                if decision.inhibit:
+                    self.motion.stop(decision.reason,expected_generation=state["generation"])
+                    continue
+                if mode=="hand_gesture":
+                    if self.detector is None: raise RuntimeError("Hand gesture model unavailable")
+                    gesture=self.detector.detect(frame)
+                    if not self._fresh_observation(state,published_at): continue
+                    motion=gesture["motion"] if gesture else None
+                else: motion=decision.motion
+                if motion and self.motion.autonomous(mode,motion,expected_generation=state["generation"]):
+                    self.behavior.accepted(motion,time.monotonic())
             except Exception as error:
                 logging.exception("Vision failed")
-                self.motion.stop(f"Vision failed: {error}", expected_generation=state["generation"])
+                with self.lock: self.vision["opencv"]=str(error)
+                if autonomous:
+                    self.motion.stop(f"Vision failed: {error}",expected_generation=state["generation"])
 
     def _fresh_observation(self, state, published_at):
         if time.monotonic() - published_at > .5:
@@ -247,6 +274,9 @@ def create_app(runtime):
     @app.post("/api/arm")
     def arm():
         body()
+        if not runtime.actuators_simulated:
+            raise RuntimeError("Physical actuation is prohibited; explicitly select virtual actuators")
+        if runtime.obstacle_blocked: raise RuntimeError("Clear the virtual obstacle before enabling")
         generation = runtime.motion.snapshot()["generation"]
         token, claim = runtime.claim_control(request.cookies.get("quadruped_control"))
         try: runtime.motion.arm(expected_generation=generation)
@@ -272,6 +302,15 @@ def create_app(runtime):
         data = body()
         runtime.motion.servo(data.get("channel"), data.get("pulse"), expected_generation=generation)
         return jsonify(ok=True)
+
+    @app.post("/api/simulation/obstacle")
+    def obstacle():
+        if not runtime.actuators_simulated: raise RuntimeError("Virtual sensor endpoint only")
+        data = body()
+        if type(data.get("blocked")) is not bool: raise ValueError("blocked must be boolean")
+        runtime.obstacle_blocked = data["blocked"]
+        if runtime.obstacle_blocked: runtime.motion.stop("Virtual obstacle blocked")
+        return jsonify(ok=True, virtual=True, blocked=runtime.obstacle_blocked)
 
     @app.get("/api/camera-frame")
     def camera_frame():
@@ -309,13 +348,30 @@ def main():
     parser.add_argument("--serial-port", default=os.getenv("QUADRUPED_SERIAL_PORT", "auto"))
     parser.add_argument("--camera-index", type=int, default=int(os.getenv("QUADRUPED_CAMERA_INDEX", "0")))
     parser.add_argument("--gesture-model", default=os.getenv("QUADRUPED_GESTURE_MODEL", ""))
+    parser.add_argument("--camera-backend", choices=("usb", "picamera2", "synthetic", "file"))
+    parser.add_argument("--camera-device", default=os.getenv("QUADRUPED_CAMERA_DEVICE", "0"))
+    parser.add_argument("--width", type=int, default=640)
+    parser.add_argument("--height", type=int, default=480)
+    parser.add_argument("--fps", type=float, default=8)
+    parser.add_argument("--actuator-backend", choices=("virtual", "serial-monitor"), default=None)
+    parser.add_argument("--virtual-speed", type=float, default=1.0)
+    parser.add_argument("--vision-config")
     args = parser.parse_args()
+    if args.simulate and args.camera_backend not in (None, "synthetic"):
+        parser.error("--simulate means synthetic camera; use --camera-backend usb --actuator-backend virtual for mixed mode")
+    if args.simulate and args.actuator_backend not in (None, "virtual"):
+        parser.error("--simulate cannot select a physical serial backend")
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
     def terminate(_signal, _frame):
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, terminate)
     runtime = Runtime(simulate=args.simulate, port=args.serial_port,
-                      camera_index=args.camera_index, gesture_model=args.gesture_model)
+                      camera_index=args.camera_index, gesture_model=args.gesture_model,
+                      camera_backend=args.camera_backend or ("synthetic" if args.simulate else "usb"),
+                      camera_device=int(args.camera_device) if args.camera_device.isdecimal() else args.camera_device,
+                      width=args.width, height=args.height, fps=args.fps,
+                      actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
+                      vision_config=args.vision_config, virtual_speed=args.virtual_speed)
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

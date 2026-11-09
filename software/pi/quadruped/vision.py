@@ -17,12 +17,12 @@ BLUE_CENTER_DEADZONE_RATIO = 0.32
 BLUE_STABLE_DETECTIONS_REQUIRED = 2
 
 
-def detect_blue_ball(frame: Any) -> dict[str, Any]:
+def detect_blue_ball(frame: Any, *, lower=BLUE_HSV_LOWER, upper=BLUE_HSV_UPPER) -> dict[str, Any]:
     height, width = frame.shape[:2]
     blurred_frame = cv2.GaussianBlur(frame, (5, 5), 0)
     hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
 
-    mask = cv2.inRange(hsv, BLUE_HSV_LOWER, BLUE_HSV_UPPER)
+    mask = cv2.inRange(hsv, lower, upper)
 
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
 
@@ -45,6 +45,8 @@ def detect_blue_ball(frame: Any) -> dict[str, Any]:
         "circularity": 0,
         "fillRatio": 0,
         "rejectReason": "no_blue_mask",
+        "bbox": None,
+        "area": 0,
         "frameWidth": width,
         "frameHeight": height,
         "mask": mask,
@@ -89,6 +91,7 @@ def detect_blue_ball(frame: Any) -> dict[str, Any]:
             {
                 "x": x,
                 "y": y,
+                "bbox": list(cv2.boundingRect(contour)),
                 "radius": radius,
                 "contourArea": int(contour_area),
                 "circleArea": int(circle_area),
@@ -117,6 +120,8 @@ def detect_blue_ball(frame: Any) -> dict[str, Any]:
             "circularity": candidate["circularity"],
             "fillRatio": candidate["fillRatio"],
             "rejectReason": None,
+            "bbox": candidate["bbox"],
+            "area": candidate["contourArea"],
         }
     )
     return detection
@@ -155,6 +160,9 @@ def encode_vision_frame(frame: Any, detection: dict[str, Any], action: str, moti
         center = (int(detection["x"]), int(detection["y"]))
         radius = int(detection["radius"])
         cv2.circle(annotated, center, radius, (255, 0, 0), 3)
+        if detection.get("bbox"):
+            bx, by, bw, bh = detection["bbox"]
+            cv2.rectangle(annotated, (bx, by), (bx+bw, by+bh), (0, 255, 255), 2)
         cv2.circle(annotated, center, 3, (0, 255, 255), -1)
 
     label = f"OpenCV blue ball: {action} -> {motion}"

@@ -17,6 +17,7 @@ jobs:
       - run: python -m pip check
       - run: python -m compileall -q software/pi/quadruped tests tools
       - run: python -m unittest discover -s tests -v
+      - run: python tools/generate-motion-data.py --check
       - run: python hardware/Power/power_budget.py --check
       - run: python hardware/Power/power_budget.py --json
       - run: python -m pip wheel --no-deps software/pi -w build/wheels

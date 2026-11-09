@@ -32,7 +32,7 @@ class HttpSmokeTests(unittest.TestCase):
             while True:
                 try:
                     state = call("/api/state")
-                    if state["camera"]["available"]: break
+                    if state["camera"]["available"] and state["link"]["connected"]: break
                 except OSError: pass
                 if time.monotonic() > deadline: self.fail("Simulation server did not become ready")
                 time.sleep(0.05)

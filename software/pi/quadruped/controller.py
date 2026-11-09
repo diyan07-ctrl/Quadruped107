@@ -157,11 +157,14 @@ class MotionController:
             raise ValueError("Invalid autonomous owner or motion")
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation: return
-            if not self.enabled or self.app_mode != owner or self.busy: return
-            if self.generation != self.executed: return
+            if not self.enabled or self.app_mode != owner: return
+            if self.busy and not (motion == "stand" and self.active is not None and self.active.verb == "MOVE"): return
+            if motion == "stand" and self.desired == "stand": return
+            if self.generation != self.executed and motion != "stand": return
             self.generation += 1
             self.desired, self.desired_at = motion, time.monotonic()
         self.wake.set()
+        return True
 
     def servo(self, channel, pulse, expected_generation=None):
         if type(channel) is not int or type(pulse) is not int or not 0 <= channel <= 7 or not 50 <= pulse <= 600:
