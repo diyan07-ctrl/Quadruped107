@@ -22,8 +22,9 @@ let data={
 };
 const calls=[];
 w.fetch=async(url,options={})=>{
-  calls.push([url,options.method||'GET']);
-  return {ok:true,status:200,json:async()=>url==='/api/state'?data:url==='/api/camera-frame'?{available:false,status:'Fixture'}:{ok:true,state:data.motion}};
+  const pathname=new URL(String(url),'http://127.0.0.1:7000').pathname;
+  calls.push([pathname,options.method||'GET']);
+  return {ok:true,status:200,json:async()=>pathname==='/api/state'?data:pathname==='/api/camera-frame'?{available:false,status:'Fixture'}:{ok:true,state:data.motion}};
 };
 w.setInterval=()=>0;
 w.requestAnimationFrame=()=>0;

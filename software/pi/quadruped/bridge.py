@@ -219,6 +219,7 @@ class TraceClient:
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
                 if peer!=self.address: continue
+                now=time.monotonic()  # receipt time, including time blocked in recvfrom
                 try:
                     data=decode(raw)
                     if data.get("type")=="challenge":
