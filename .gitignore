@@ -10,3 +10,8 @@ Escuela/
 build/
 *.pyc
 *.task
+*.egg-info/
+dist/
+.env
+.env.*
+!.env.example

@@ -14,9 +14,10 @@ class HttpSmokeTests(unittest.TestCase):
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             port = probe.getsockname()[1]
-        main = Path(__file__).resolve().parents[1] / "Dev/Quadruped107-connect/python/main.py"
+        app_dir = Path(__file__).resolve().parents[1] / "software/pi"
         process = subprocess.Popen(
-            [sys.executable, str(main), "--simulate", "--host", "127.0.0.1", "--port", str(port)],
+            [sys.executable, "-m", "quadruped.main", "--simulate", "--host", "127.0.0.1", "--port", str(port)],
+            cwd=app_dir,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         base = f"http://127.0.0.1:{port}"
         def call(path, data=None):

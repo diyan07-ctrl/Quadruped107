@@ -1,3 +1,5 @@
+> Historical UNO Q application. Not supported on Raspberry Pi / Uno R3. See [archive status](../README.md).
+
 # UNO Q Control Station
 
 Nueva app independiente para controlar el robot cuadrúpedo UNO Q sin reemplazar `uno-q-keyboard-motion`.

@@ -13,12 +13,12 @@ from urllib.parse import urlsplit
 from flask import Flask, Response, jsonify, request, send_from_directory
 from werkzeug.serving import make_server
 
-from camera import Camera
-from controller import CONTINUOUS, MODES, MOTIONS, MotionController
-from serial_link import SerialLink, SimulatedLink
-from vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame
+from .camera import Camera
+from .controller import CONTINUOUS, MODES, MOTIONS, MotionController
+from .serial_link import SerialLink, SimulatedLink
+from .vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame
 
-APP_DIR = Path(__file__).resolve().parent.parent
+APP_DIR = Path(__file__).resolve().parent
 
 
 class Runtime:
@@ -36,7 +36,7 @@ class Runtime:
         self.detector = None
         if gesture_model:
             try:
-                from gestures import GestureDetector
+                from .gestures import GestureDetector
                 self.detector = GestureDetector(gesture_model)
                 self.vision["handGesture"] = "Ready"
             except Exception as error:
@@ -150,10 +150,10 @@ def create_app(runtime):
     def unavailable(error): return jsonify(ok=False, error=str(error)), 409
 
     @app.get("/")
-    def index(): return send_from_directory(APP_DIR / "assets", "index.html")
+    def index(): return send_from_directory(APP_DIR / "web", "index.html")
 
     @app.get("/<path:name>")
-    def asset(name): return send_from_directory(APP_DIR / "assets", name)
+    def asset(name): return send_from_directory(APP_DIR / "web", name)
 
     @app.get("/api/state")
     def state(): return jsonify(runtime.state())

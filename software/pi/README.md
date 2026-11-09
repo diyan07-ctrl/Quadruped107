@@ -1,6 +1,6 @@
 # Quadruped107 Connect — Pi 4 + Uno R3
 
-The active runtime uses **Raspberry Pi OS + Picamera2 + Flask + USB serial**. Flash `sketch/sketch.ino` to an **Arduino Uno R3**, and run `python/main.py` on the Pi 4. Follow the [main setup guide](../../README.md) and [wiring / architecture](../../docs/architecture.md).
+The active runtime uses **Raspberry Pi OS + Picamera2 + Flask + USB serial**. Flash `firmware/uno/sketch/sketch.ino` to an **Arduino Uno R3**, and run `python -m quadruped.main` on the Pi 4. Follow the [main setup guide](../../README.md) and [wiring / architecture](../../docs/ARCHITECTURE.md).
 
 ## Configuration
 
@@ -33,7 +33,7 @@ The browser sends a heartbeat every 250 ms. Outputs are disabled after one secon
 
 ## Calibration
 
-The Uno uses the existing channel mapping and pulse tables in [motion.h](sketch/motion.h). The Pi does not generate servo PWM. Pulse values are PCA9685 ticks at 50 Hz, **not angles or microseconds**; each tick is approximately 4.88 μs. The firmware's broad 50–600 bounds do not establish the mechanical travel limits of a particular joint.
+The Uno uses the existing channel mapping and pulse tables in [motion.h](../../firmware/uno/sketch/motion.h). The Pi does not generate servo PWM. Pulse values are PCA9685 ticks at 50 Hz, **not angles or microseconds**; each tick is approximately 4.88 μs. The firmware's broad 50–600 bounds do not establish the mechanical travel limits of a particular joint.
 
 Use an isolated, supported joint. Keep a browser heartbeat active by leaving the control page open, enable servos, and wait for any pose to finish. Then, from a terminal on the Pi:
 
@@ -45,20 +45,20 @@ curl -X POST http://127.0.0.1:7000/api/stop \
   -H 'Content-Type: application/json' -d '{}'
 ```
 
-The calibration API makes a temporary adjustment. Persist verified gait / pose targets by editing `motion.h` and flashing the Uno again. It does not silently rewrite firmware or apply the same calibration to all eight joints. The files under `Dev/Tools/` are historical UNO Q tools and are not compatible with this serial firmware.
+The calibration API makes a temporary adjustment. Persist verified gait / pose targets by editing `motion.h` and flashing the Uno again. It does not silently rewrite firmware or apply the same calibration to all eight joints. The files under `archive/uno-q/` are historical UNO Q tools and are not compatible with this serial firmware.
 
 ## Optional Hand Gestures
 
 The app uses [MediaPipe Tasks Gesture Recognizer](https://ai.google.dev/edge/mediapipe/solutions/vision/gesture_recognizer/python), replacing the UNO Q-specific Edge Impulse integration. Install only on a Python / Raspberry Pi OS combination supported by MediaPipe:
 
 ```bash
-.venv/bin/python -m pip install -r Dev/Quadruped107-connect/python/requirements-gestures.txt
+.venv/bin/python -m pip install -r software/pi/requirements-gestures.txt
 ```
 
 Obtain a compatible `gesture_recognizer.task` model from the official MediaPipe guide and keep its license with your deployment. The repository does not include or automatically download a model. Start with:
 
 ```bash
-.venv/bin/python Dev/Quadruped107-connect/python/main.py \
+.venv/bin/python -m quadruped.main \
   --gesture-model /absolute/path/to/gesture_recognizer.task
 ```
 

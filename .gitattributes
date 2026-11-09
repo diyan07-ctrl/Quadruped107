@@ -1,0 +1,20 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ino text eol=lf
+*.h text eol=lf
+*.stl binary
+*.step -text
+*.f3z binary
+*.xlsx binary
+*.zip binary
+*.png binary
+*.webp binary
+*.jpeg binary
+*.mp4 binary
+# Preserve original source/assets exactly when moving them between directories.
+firmware/uno/sketch/* -text
+software/pi/quadruped/web/** -text
+archive/uno-q/** -text

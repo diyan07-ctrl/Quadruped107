@@ -1,3 +1,5 @@
+> Historical UNO Q application. Not supported on Raspberry Pi / Uno R3. See [archive status](../README.md).
+
 # UNO Q Servo Calibrator
 
 Web-based calibration tool for the quadruped robot servos using Arduino UNO Q,
@@ -19,8 +21,6 @@ Browser over Wi-Fi
 The USB camera is read from the Linux side with OpenCV. Servo commands do not use
 USB serial; they use the UNO Q Bridge API.
 
-![Servo calibration UI placeholder](docs/servo-calibrator-ui.png)
-![Robot camera feed placeholder](docs/camera-feed.png)
 
 ## Project Structure
 
