@@ -111,6 +111,7 @@ class Scene:
         self.last_batch=None
         self.next_batch=0.0
         self.proxy_contacts=0
+        self.proxy_pose=[0.,0.,0.]
         self.trace=deque(maxlen=256)
         self.ultrasonic={k:SimulatedUltrasonicSensor(k,world,UltrasonicSettings(
             **dict(dict(rate_hz=config.rate_hz,min_m=config.min_m,max_m=config.max_m,latency=latency,noise_m=noise),**profiles.get(k,{}))),seed=seed+i) for i,k in enumerate(RANGE_IDS)}
@@ -180,13 +181,14 @@ class Scene:
             motion=frame.get("activeMotion")
             velocity=.06 if motion=="forward" else -.04 if motion=="backward" else 0
             turn=.35 if motion=="turn_left" else -.35 if motion=="turn_right" else 0
-            x=position[0]+velocity*math.cos(yaw)*dt
-            y=position[1]+velocity*math.sin(yaw)*dt
+            x=self.proxy_pose[0]+velocity*math.cos(self.proxy_pose[2])*dt
+            y=self.proxy_pose[1]+velocity*math.sin(self.proxy_pose[2])*dt
             if not self.clear_circle(x,y):
                 self.proxy_contacts+=1
                 return False
-            yaw+=turn*dt
-            p.resetBasePositionAndOrientation(self.world.robot,[x,y,position[2]],p.getQuaternionFromEuler([0,0,yaw]),physicsClientId=self.world.client)
+            yaw=self.proxy_pose[2]+turn*dt
+            self.proxy_pose=[x,y,yaw]
+            self.world.set_fixture_pose([x,y,self.world.parameters["initial_height_m"]],p.getQuaternionFromEuler([0,0,yaw]))
         if self.world.frames%24==0:
             actual=[self.world.p.getJointState(self.world.robot,i,physicsClientId=self.world.client)[0] for i in self.world.joints]
             pose=self.world.p.getBasePositionAndOrientation(self.world.robot,physicsClientId=self.world.client)[0]

@@ -62,7 +62,7 @@ class Runtime:
             from .navigation import Navigation, NavigationSettings, motion_inhibition
             self.sensors = SensorManager(SensorConfig.load(sensor_config))
             self.navigation = Navigation(NavigationSettings.load(navigation_config),self.vision_settings)
-            self.motion.safety_check = lambda motion: motion_inhibition(self.sensors.snapshot(),motion,self.navigation.settings)
+            self.motion.safety_check = self._sensor_inhibition
         self.bridge = None
         if simulator_host:
             if not self.actuators_simulated or not hasattr(self.link, "engine"):
@@ -255,6 +255,18 @@ class Runtime:
     def navigation_state(self):
         with self.nav_lock:
             return self.navigation.snapshot() if self.navigation else None
+
+    def _sensor_inhibition(self,motion):
+        from .navigation import motion_inhibition
+        sensors=self.sensors.snapshot()
+        reason=motion_inhibition(sensors,motion,self.navigation.settings)
+        if reason: return reason
+        state=self.motion.snapshot()
+        if (state["appMode"] in {"opencv","explore"} and motion in CONTINUOUS
+            and sensors["front_m"]<=self.navigation.settings.caution_m
+            and self.navigation_state()["state"]!="RECOVERY"):
+            return "Obstacle override preempts autonomous motion"
+        return None
 
     def _sensor_update(self,batch,**metadata):
         if not self.sensors: return

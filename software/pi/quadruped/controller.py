@@ -143,7 +143,11 @@ class MotionController:
                 stopped_generation,ticket=self.generation,self.stop_ticket
             else: stopped_generation,ticket=None,None
         if stopped_generation is not None:
-            if ticket is not None: self.link.wait(ticket)
+            if ticket is not None:
+                try: self.link.wait(ticket)
+                finally:
+                    with self.lock:
+                        if self.stop_ticket is ticket: self.stop_ticket=None
             return stopped_generation
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation:

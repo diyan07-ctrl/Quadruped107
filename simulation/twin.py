@@ -63,6 +63,16 @@ class World:
                 p.changeDynamics(self.robot,index,mass=mass,localInertiaDiagonal=inertia,
                                  lateralFriction=self.parameters["friction"],
                                  maxJointVelocity=self.parameters["max_velocity_rad_s"],physicsClientId=self.client)
+            self.fixture_constraint=None
+            self.fixture_position=[0,0,self.parameters["initial_height_m"]]
+            self.fixture_orientation=[0,0,0,1]
+            if self.fixed:
+                # Explicit external fixture: changing link dynamics must not let the
+                # nominally fixed base drift. This is not additional servo torque.
+                self.fixture_constraint=p.createConstraint(self.robot,-1,-1,-1,p.JOINT_FIXED,[0,0,0],
+                    [0,0,0],self.fixture_position,physicsClientId=self.client)
+                p.changeConstraint(self.fixture_constraint,self.fixture_position,
+                    jointChildFrameOrientation=self.fixture_orientation,maxForce=500,physicsClientId=self.client)
             self.targets=[0.0]*8
             self.active_mask=0
             self.apply(dict(virtual=True,armed=False,activeMask=0,targets=[300]*8))
@@ -71,6 +81,15 @@ class World:
         except Exception:
             p.disconnect(self.client)
             raise
+
+    def set_fixture_pose(self,position,orientation):
+        if self.fixture_constraint is None: raise ValueError("Only an explicitly fixed fixture can be repositioned")
+        self.fixture_position=list(position)
+        self.fixture_orientation=list(orientation)
+        self.p.changeConstraint(self.fixture_constraint,self.fixture_position,
+            jointChildFrameOrientation=self.fixture_orientation,maxForce=500,physicsClientId=self.client)
+        self.p.resetBasePositionAndOrientation(self.robot,position,orientation,physicsClientId=self.client)
+        self.p.resetBaseVelocity(self.robot,[0,0,0],[0,0,0],physicsClientId=self.client)
 
     def angle(self,channel,tick):
         item=self.parameters["channels"][channel]
@@ -140,7 +159,10 @@ class World:
                     activeJointRmsErrorRad=math.sqrt(self.active_error_squared/self.active_error_samples) if self.active_error_samples else None,
                     maxAppliedMotorTorqueNm=self.max_torque,
                     currentJointPositions=[self.p.getJointState(self.robot,i,physicsClientId=self.client)[0] for i in self.joints],
-                    currentJointTargets=list(self.targets),activeMask=self.active_mask)
+                    currentJointTargets=list(self.targets),activeMask=self.active_mask,
+                    baseMassKg=self.p.getDynamicsInfo(self.robot,-1,physicsClientId=self.client)[0],
+                    fixtureConstraint=self.fixture_constraint is not None,
+                    fixturePositionErrorM=math.dist(position,self.fixture_position) if self.fixed else None)
 
     def capture(self,path):
         import cv2

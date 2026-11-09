@@ -319,10 +319,11 @@ class RuntimeNavigationTests(unittest.TestCase):
         self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="forward")
         self.backend.touches={"head":True}
         self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="greeting")
+        deadline=self.runtime.navigation_state()["deadline"]
         self.backend.touches={}
         self.pump(lambda:not self.runtime.motion.snapshot()["enabled"],timeout=3)
         self.pump(lambda:not self.runtime.link.engine.snapshot()["armed"])
-        self.assertLessEqual(self.runtime.navigation.snapshot()["deadline"],time.monotonic())
+        self.assertLessEqual(deadline,time.monotonic())
 
     def test_sensor_disconnect_preempts_without_camera_dependency(self):
         self.api.post("/api/arm",json={})
@@ -444,3 +445,49 @@ class NetworkNavigationTests(unittest.TestCase):
             left.mode="no_echo"
             self.assertFalse(left.sample(1)["valid"])
         finally: world.close()
+
+
+class TrackingIntegrationTests(unittest.TestCase):
+    def test_blue_camera_tracking_obstacle_and_manual_takeover(self):
+        import cv2
+        import numpy as np
+        from quadruped.camera import Camera
+        class BlueCamera(Camera):
+            def _run(self):
+                while not self.stop_event.wait(.1):
+                    frame=np.zeros((480,640,3),dtype=np.uint8)
+                    cv2.circle(frame,(90,240),35,(255,0,0),-1)
+                    _,jpeg=cv2.imencode(".jpg",frame)
+                    with self.lock:
+                        self.frame,self.jpeg=frame,jpeg.tobytes()
+                        self.timestamp=time.monotonic()
+                        self.sequence+=1
+                        self.status="Synthetic blue-target integration fixture"
+        backend=ExplicitBackend()
+        runtime=Runtime(camera_backend="synthetic",actuator_backend="virtual",virtual_sensors=True,sensor_backend=backend)
+        runtime.camera=BlueCamera(simulate=True)
+        runtime.start()
+        api=create_app(runtime).test_client()
+        def pump(predicate,timeout=4):
+            deadline=time.monotonic()+timeout
+            while time.monotonic()<deadline:
+                api.post("/api/heartbeat",json={})
+                if predicate(): return
+                time.sleep(.03)
+            self.fail(json.dumps(runtime.state()))
+        try:
+            pump(lambda:runtime.link.snapshot()["connected"] and runtime.camera.latest()[0] is not None and not runtime.sensors.snapshot()["fault"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            self.assertEqual(api.post("/api/mode",json={"mode":"opencv"}).status_code,200)
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="turn_left")
+            self.assertEqual(api.post("/api/mode",json={"mode":"manual"}).status_code,200)
+            self.assertFalse(runtime.link.engine.snapshot()["armed"])
+            pump(lambda:not runtime.motion.snapshot()["busy"] and not runtime.motion.snapshot()["stopping"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            self.assertEqual(api.post("/api/mode",json={"mode":"opencv"}).status_code,200)
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="turn_left")
+            backend.distance=.2
+            pump(lambda:not runtime.motion.snapshot()["enabled"])
+            pump(lambda:not runtime.link.engine.snapshot()["activeMask"])
+            self.assertFalse(any(line.startswith("MOVE") and line.endswith("forward") for line in runtime.link.engine.snapshot()["history"]))
+        finally: runtime.close()
