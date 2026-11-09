@@ -9,6 +9,14 @@ Phase 2 starts from verified unmerged Phase 1 head a15c39775a4063b396c3cd844f663
 - [Push 42681826866](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681826866) and [PR 42681837310](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681837310), 0ae7b21: **117 tests and every CI check passed** after those repairs.
 - [Measured model study](MODEL_STUDY.md) and [machine-readable evidence](evidence/PHASE2_MODEL_STUDY.json) preserve the source commit/run for simulated results. [Push 42682345230](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42682345230) and PR 42682357154 at 9e44cff passed **120 tests (44.947 s in push)**, all checks and twelve model experiments. Later scene-reset, stronger obstacle assertions and DOM additions are verified by the final PR checks.
 
+## Final implementation validation
+
+[Push 42683896441](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683896441) and [PR 42683905992](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683905992), source c0a083af91d5a97112dbb2dbed9ba56b40650711, passed **122 tests in 44.277 s** in push. This preserves all 75 Phase 1 tests and adds 47 Phase 2 tests. Both jobs passed, including dependencies, syntax, all eight scenarios, UDP/application integration, reset/reconnect, prerecorded camera, touch-after-enable, eight-routine articulation, twelve model experiments, installed package/assets, seven Mermaid diagrams, dashboard DOM checks and a clean checkout.
+
+Production Uno: **10,198 bytes flash / 998 bytes globals**, 1,050 bytes remain for locals/stack. Separate virtual build: **6,756 / 831**, 1,217 bytes remain. Neither firmware was uploaded or tested on a board. The documentation-only freeze commit records these completed implementation checks; its own PR checks are also verified before review.
+
+The full twenty-case scope matrix and deliberately untested physical/GUI categories below remain authoritative. The initial DOM failure was a test fetch fixture treating URL objects as strings; it was corrected without changing production behavior or removing an assertion.
+
 ## Complete acceptance checkpoint
 
 [Push 42683505923](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683505923) at 9dc2180 passed **121 tests in 45.032 s**, all twelve model experiments, installed sensor/navigation imports/assets, both firmware builds, seven Mermaid diagrams, dashboard DOM checks and the clean-checkout guard. The DOM fixture was corrected to accept URL objects like browser fetch; its earlier failure did not indicate a backend test pass.
