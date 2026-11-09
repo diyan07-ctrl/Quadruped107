@@ -174,15 +174,17 @@ class VirtualSerial:
         while not self.closed.wait(.01):
             if self.overflow:
                 with self.engine.lock: self.engine.disarm(silent=True)
+                self.closed.set()
                 break
             self.engine.advance()
 
     def write(self,data):
-        if self.closed.is_set(): raise OSError("Virtual serial disconnected")
+        if self.closed.is_set() or self.overflow: raise OSError("Virtual serial disconnected or output queue overflowed")
         self.engine.feed(data)
         return len(data)
 
     def readline(self,*args):
+        if self.closed.is_set() or self.overflow: raise OSError("Virtual serial disconnected or output queue overflowed")
         try: return self.incoming.get(timeout=.02)
         except queue.Empty: return b""
 

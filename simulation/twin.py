@@ -35,6 +35,7 @@ class World:
             p.resetSimulation(physicsClientId=self.client)
             p.setGravity(0,0,-9.81,physicsClientId=self.client)
             p.setTimeStep(1/240,physicsClientId=self.client)
+            p.setPhysicsEngineParameter(numSolverIterations=100,numSubSteps=4,physicsClientId=self.client)
             plane=p.createCollisionShape(p.GEOM_PLANE,physicsClientId=self.client)
             p.createMultiBody(0,plane,physicsClientId=self.client)
             self.robot=p.loadURDF(str(MODEL/"robot.urdf"),[0,0,self.parameters["initial_height_m"]],
@@ -53,7 +54,8 @@ class World:
                 inertia=[value*mass/old[0] for value in old[2]] if old[0]>0 else old[2]
                 if index==-1 and self.fixed: mass=0
                 p.changeDynamics(self.robot,index,mass=mass,localInertiaDiagonal=inertia,
-                                 lateralFriction=self.parameters["friction"],physicsClientId=self.client)
+                                 lateralFriction=self.parameters["friction"],
+                                 maxJointVelocity=self.parameters["max_velocity_rad_s"],physicsClientId=self.client)
             self.targets=[0.0]*8
             self.active_mask=0
             self.apply(dict(virtual=True,armed=False,activeMask=0,targets=[300]*8))
@@ -117,7 +119,8 @@ class World:
                     jointNames=[item["joint"] for item in self.parameters["channels"]],
                     maxJointErrorRad=self.max_joint_error,maxContactCount=self.contact_count,
                     maxSelfCollisionContacts=self.self_contacts,fault=self.fault,
-                    physicalLocomotionValidated=False)
+                    physicalLocomotionValidated=False,solverIterations=100,subSteps=4,
+                    modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"])
 
     def capture(self,path):
         import cv2

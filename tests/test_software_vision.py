@@ -197,6 +197,19 @@ class VirtualProtocolTests(unittest.TestCase):
         self.assertIn("ERR 0 line_too_long",self.lines)
         self.assertEqual(self.lines[-1],"DONE 7 stopped")
 
+    def test_virtual_output_overflow_disarms_and_disconnects(self):
+        device=VirtualSerial()
+        try:
+            device.engine.feed(b"ARM 1\n")
+            for _ in range(300): device.engine.feed(b"PING\n")
+            deadline=time.monotonic()+1
+            while not device.closed.is_set() and time.monotonic()<deadline: time.sleep(.01)
+            self.assertTrue(device.closed.is_set())
+            self.assertFalse(device.engine.snapshot()["armed"])
+            with self.assertRaises(OSError): device.write(b"ARM 2\n")
+            with self.assertRaises(OSError): device.readline()
+        finally: device.close()
+
     def test_virtual_serial_disconnect_is_explicit(self):
         device=VirtualSerial()
         device.close()

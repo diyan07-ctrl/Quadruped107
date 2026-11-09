@@ -58,3 +58,5 @@ The receiver handles at most eight datagrams per poll, retaining only the latest
 6. Record actual Pi CPU/RSS, camera FPS/frame age and observed host response times from `/api/state`. No numbers from CI qualify Pi or electrical performance.
 
 Automated synthetic integration, UDP contracts and DIRECT model checks live in [tests](../tests/test_simulation.py). Physical webcam/Pi validation is blocked by SSH access in this development environment; see [validation](../docs/VALIDATION.md).
+
+The numerical fixture uses a 240 Hz step with four substeps, 100 solver iterations and an explicitly modeled 3 rad/s joint velocity cap, including passive joints. These stabilize provisional joint hard stops; they are not measured servo dynamics. The >1.3 rad excursion failure remains active.
