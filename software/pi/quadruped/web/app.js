@@ -188,7 +188,7 @@ function formatHandStatus(hand, fallback = "Reserved") {
 
 function updateVisionStatus(vision = {}) {
   if (state.appMode === "opencv") {
-    elements.visionStatus.textContent = formatBlueBallStatus(vision.blueBall);
+    elements.visionStatus.textContent = `${vision.targetColor === "yellow" ? "Yellow" : "Blue"}: ${formatBlueBallStatus(vision.blueBall)}`;
     return;
   }
   if (state.appMode === "hand_gesture") {
@@ -205,6 +205,8 @@ async function loadState() {
     renderDiagnostics(data);
     applyMotionState(data.motion);
     updateVisionStatus(data.vision);
+    const targetButton = document.querySelector('[data-app-mode="opencv"]');
+    if (targetButton) targetButton.textContent = `${data.vision?.targetColor === "yellow" ? "Yellow tennis-ball" : "Blue target"} tracking`;
     state.enabled = Boolean(data.motion?.enabled && data.link?.armed);
     if (!state.enabled) releaseAllMovement("disabled", false);
     elements.armButton.disabled = !data.simulation || !data.link?.connected || state.enabled;
