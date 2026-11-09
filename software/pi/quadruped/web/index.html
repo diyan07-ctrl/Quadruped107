@@ -38,7 +38,10 @@
             <div class="section-label">Mode</div>
             <div class="mode-strip" aria-label="Control mode selector">
               <button class="mode-button is-active" type="button" data-app-mode="manual">Manual</button>
-              <button class="mode-button" type="button" data-app-mode="opencv">OpenCV</button>
+              <button class="mode-button" type="button" data-app-mode="opencv">Blue target tracking</button>
+              <button class="mode-button" type="button" data-app-mode="explore" hidden>Virtual exploration</button>
+              <button class="mode-button" type="button" data-app-mode="sensor_test" hidden>Virtual sensor test</button>
+              <button class="mode-button" type="button" data-app-mode="idle">Idle</button>
               <button class="mode-button" type="button" data-app-mode="hand_gesture">Hand Gesture</button>
             </div>
           </div>
@@ -111,6 +114,18 @@
             </div>
           </div>
 
+          <section id="virtualAutonomy" class="virtual-autonomy" hidden aria-label="Virtual autonomy diagnostics">
+            <h2>Virtual autonomy / simulated sensors</h2>
+            <div class="diagnostic-grid" aria-live="polite">
+              <div class="diagnostic-card"><span>Mode / autonomy state</span><strong id="navState">IDLE</strong></div>
+              <div class="diagnostic-card"><span>Front range / obstacle</span><strong id="navRange">Unknown</strong></div>
+              <div class="diagnostic-card"><span>Sensor freshness / health</span><strong id="navHealth">Unavailable</strong></div>
+              <div class="diagnostic-card"><span>Debounced touch / stuck inputs</span><strong id="navTouch">Unknown</strong></div>
+              <div class="diagnostic-card"><span>Last decision / requested motion</span><strong id="navDecision">None</strong></div>
+              <div class="diagnostic-card"><span>Safety override / simulator</span><strong id="navOverride">Disarmed</strong></div>
+            </div>
+            <p>Virtual sensing only. Swept-clearance evidence belongs to the simulator. No physical stopping or walking qualification.</p>
+          </section>
           <div class="diagnostic-grid" aria-live="polite">
             <div class="diagnostic-card"><span>Camera</span><strong id="cameraReadout">Starting</strong></div>
             <div class="diagnostic-card"><span>Vision</span><strong id="visionStatus">Reserved</strong></div>

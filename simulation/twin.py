@@ -15,9 +15,12 @@ class SimulationFault(RuntimeError): pass
 
 
 class World:
-    def __init__(self,*,gui=False,free_base=False,parameters=None):
+    def __init__(self,*,gui=False,free_base=False,parameters=None,position_gain=.1):
         try: import pybullet as p
         except ImportError as error: raise RuntimeError("Install simulation/requirements.txt on the laptop") from error
+        if not isinstance(position_gain,(float,int)) or isinstance(position_gain,bool) or not math.isfinite(position_gain) or not .01<=position_gain<=1:
+            raise ValueError("Position gain must be .01..1 (simulation only)")
+        self.position_gain=position_gain
         self.p=p
         self.client=p.connect(p.GUI if gui else p.DIRECT)
         self.fixed=not free_base
@@ -92,7 +95,7 @@ class World:
         self.active_mask=mask if frame["armed"] else 0
         for channel,index in enumerate(self.joints):
             self.p.setJointMotorControl2(self.robot,index,self.p.POSITION_CONTROL,
-                targetPosition=self.targets[channel],force=self.parameters["force_nm"] if self.active_mask&(1<<channel) else 0,
+                targetPosition=self.targets[channel],positionGain=self.position_gain,force=self.parameters["force_nm"] if self.active_mask&(1<<channel) else 0,
                 maxVelocity=self.parameters["max_velocity_rad_s"],physicsClientId=self.client)
 
     def step(self):
@@ -132,7 +135,7 @@ class World:
                     maxJointErrorRad=self.max_joint_error,maxContactCount=self.contact_count,
                     maxSelfCollisionContacts=self.self_contacts,fault=self.fault,
                     physicalLocomotionValidated=False,solverIterations=100,subSteps=4,
-                    modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"],
+                    modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"],positionGain=self.position_gain,
                     maxActiveJointErrorRad=self.max_active_error,
                     activeJointRmsErrorRad=math.sqrt(self.active_error_squared/self.active_error_samples) if self.active_error_samples else None,
                     maxAppliedMotorTorqueNm=self.max_torque,
@@ -166,6 +169,8 @@ def main():
     parser.add_argument("--show-rays",action="store_true")
     parser.add_argument("--sensor-noise",type=float,default=0.0)
     parser.add_argument("--sensor-latency",type=float,default=.02)
+    parser.add_argument("--sensor-config")
+    parser.add_argument("--ultrasonic-profiles",help="JSON with per-sensor origin/yaw/range/rate/noise/latency")
     parser.add_argument("--report")
     parser.add_argument("--capture")
     parser.add_argument("--demo",choices=("stand","initial","forward","backward","turn_left","turn_right","greeting","tail_wag"))
@@ -182,7 +187,10 @@ def main():
     try:
         if args.scenario:
             from .environment import Scene
-            scene=Scene(world,args.scenario,proxy=args.navigation_proxy,show_rays=args.show_rays,noise=args.sensor_noise,latency=args.sensor_latency)
+            from quadruped.sensors import SensorConfig
+            profiles=json.loads(Path(args.ultrasonic_profiles).read_text()) if args.ultrasonic_profiles else None
+            scene=Scene(world,args.scenario,proxy=args.navigation_proxy,show_rays=args.show_rays,
+                        noise=args.sensor_noise,latency=args.sensor_latency,sensor_config=SensorConfig.load(args.sensor_config),profiles=profiles)
         if args.demo:
             engine=VirtualUno()
             engine.feed(b"HELLO\nARM 1\n")

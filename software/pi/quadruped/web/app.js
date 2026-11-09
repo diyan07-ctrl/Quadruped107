@@ -210,7 +210,9 @@ async function loadState() {
     elements.armButton.disabled = !data.simulation || !data.link?.connected || state.enabled;
     elements.armButton.textContent = data.simulation ? "Enable virtual actuators" : "Physical actuation inhibited";
     [...elements.driveButtons, ...elements.poseButtons, ...elements.appModeButtons].forEach((button) => {
-      button.disabled = !state.enabled || (button.dataset.appMode === "hand_gesture" && !data.features?.handGesture);
+      const mode = button.dataset.appMode;
+      if (mode) button.hidden = !data.controlModes?.includes(mode) || (mode === "hand_gesture" && !data.features?.handGesture);
+      button.disabled = !state.enabled || (mode && !data.controlModes?.includes(mode));
     });
     setConnectionStatus(data.simulation ? "Simulation" : (state.enabled ? "Enabled" : (data.link?.connected ? "Disabled" : "Uno disconnected")),
       state.enabled ? "status-success" : "status-warning");
@@ -510,5 +512,19 @@ function renderDiagnostics(data) {
   show("behaviorDiagnostics", `${vision.behavior || "IDLE"} / ${target.detected ? "x error " + Number(target.offset).toFixed(2) + " / area " + target.area : "no target"}`);
   show("actuatorDiagnostics", `${link.kind || (data.simulation ? "unit stub" : "serial monitor")} / ${data.bridge ? (data.bridge.connected ? "simulator connected" : "simulator unavailable") : "local only"}`);
   show("safetyDiagnostics", data.motion?.enabled ? "VIRTUAL ENABLED — physical outputs prohibited" : (data.motion?.fault || "STOPPED"));
+  const section = document.getElementById("virtualAutonomy");
+  if (section) section.hidden = !data.features?.virtualSensors;
+  if (data.sensors && data.autonomy) {
+    const sensors = data.sensors;
+    const nav = data.autonomy;
+    const observations = Object.values(sensors.observations || {});
+    const oldest = observations.length ? Math.max(...observations.map(value => value.age)) : null;
+    show("navState", (data.motion?.appMode || "idle") + " / " + nav.state);
+    show("navRange", (sensors.front_m == null ? "Unknown" : sensors.front_m.toFixed(3) + " m") + " / " + nav.obstacle);
+    show("navHealth", (sensors.fault || "OK") + " / " + (oldest == null ? "missing" : Math.round(oldest * 1000) + " ms maximum age"));
+    show("navTouch", Object.entries(sensors.touches || {}).map(([key, value]) => key + ": " + (value.stuck ? "STUCK" : !value.valid ? "INVALID" : value.pressed ? "pressed" : "released")).join(" / "));
+    show("navDecision", nav.reason + " / " + (nav.lastRequestedMotion || "none"));
+    show("navOverride", (data.motion?.fault || sensors.fault || "none") + " / " + (data.bridge?.connected ? "simulator connected" : "no simulator"));
+  }
   show("traceDiagnostics", link.targets ? link.targets.join(" / ") + " | active mask " + link.activeMask : "No protocol trace (legacy unit stub or inhibited serial monitor)");
 }

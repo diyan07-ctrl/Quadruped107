@@ -136,7 +136,7 @@ class MotionController:
             self.stop("Idle selected",expected_generation=expected_generation)
             with self.lock: self.app_mode = "idle"
             return self.generation
-        if mode == "manual" and self.snapshot()["appMode"] != "manual":
+        if mode in MOTIONS | {"manual"} and self.snapshot()["appMode"] not in {"manual","idle"}:
             self.stop("Manual takeover; explicit enable required",expected_generation=expected_generation)
             return self.generation
         with self.lock:

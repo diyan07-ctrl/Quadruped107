@@ -28,7 +28,7 @@ class Runtime:
     def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
                  camera_backend=None, camera_device=None, width=640, height=480, fps=8,
                  actuator_backend=None, vision_config=None, virtual_speed=1.0,
-                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None):
+                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None, sensor_config=None):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
         if link is not None:
@@ -58,9 +58,9 @@ class Runtime:
                 raise ValueError("Virtual sensing requires explicit protocol virtual actuators")
             if not simulator_host and sensor_backend is None:
                 raise ValueError("Virtual sensing requires simulator telemetry or an explicit test backend")
-            from .sensors import SensorManager
+            from .sensors import SensorManager, SensorConfig
             from .navigation import Navigation, NavigationSettings, motion_inhibition
-            self.sensors = SensorManager()
+            self.sensors = SensorManager(SensorConfig.load(sensor_config))
             self.navigation = Navigation(NavigationSettings.load(navigation_config),self.vision_settings)
             self.motion.safety_check = lambda motion: motion_inhibition(self.sensors.snapshot(),motion,self.navigation.settings)
         self.bridge = None
@@ -68,7 +68,7 @@ class Runtime:
             if not self.actuators_simulated or not hasattr(self.link, "engine"):
                 raise ValueError("Network bridge requires explicitly selected protocol virtual actuators")
             from .bridge import TraceClient
-            self.bridge = TraceClient(simulator_host, simulator_port, self.link.engine.snapshot,
+            self.bridge = TraceClient(simulator_host, simulator_port, self._trace_state,
                                       on_sensors=self._sensor_update if self.sensors else None)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
@@ -244,6 +244,14 @@ class Runtime:
                 if autonomous:
                     self.motion.stop(f"Vision failed: {error}",expected_generation=state["generation"])
 
+    def _trace_state(self):
+        state=self.link.engine.snapshot()
+        if self.navigation:
+            state["behavior"]=self.navigation_state()["state"]
+        else:
+            with self.lock: state["behavior"]=self.vision.get("behavior","IDLE")
+        return state
+
     def navigation_state(self):
         with self.nav_lock:
             return self.navigation.snapshot() if self.navigation else None
@@ -385,6 +393,8 @@ def create_app(runtime):
             raise RuntimeError("Physical actuation is prohibited; explicitly select virtual actuators")
         if runtime.obstacle_blocked: raise RuntimeError("Clear the virtual obstacle before enabling")
         if runtime.sensors and runtime.sensors.snapshot()["fault"]: raise RuntimeError(runtime.sensors.snapshot()["fault"])
+        if runtime.sensors and any(t["pressed"] for t in runtime.sensors.snapshot()["touches"].values()):
+            raise RuntimeError("Release virtual touch inputs before explicit enable")
         generation = runtime.motion.snapshot()["generation"]
         token, claim = runtime.claim_control(request.cookies.get("quadruped_control"))
         bridge_epoch = None
@@ -474,6 +484,7 @@ def main():
     parser.add_argument("--simulator-port", type=int, default=7002)
     parser.add_argument("--virtual-sensors", action="store_true", help="Explicit Phase 2 virtual autonomy; simulator telemetry required")
     parser.add_argument("--navigation-config")
+    parser.add_argument("--sensor-config")
     args = parser.parse_args()
     if args.simulate and args.camera_backend not in (None, "synthetic"):
         parser.error("--simulate means synthetic camera; use --camera-backend usb --actuator-backend virtual for mixed mode")
@@ -491,7 +502,7 @@ def main():
                       actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
                       vision_config=args.vision_config, virtual_speed=args.virtual_speed,
                       simulator_host=args.simulator, simulator_port=args.simulator_port,
-                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config)
+                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config,sensor_config=args.sensor_config)
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

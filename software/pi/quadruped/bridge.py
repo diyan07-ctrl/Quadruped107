@@ -20,7 +20,8 @@ def encode(data):
 
 def decode(raw):
     if len(raw)>MAX_PACKET: raise ValueError("Simulation packet too large")
-    data=json.loads(raw)
+    try: data=json.loads(raw)
+    except RecursionError as error: raise ValueError("Nested simulation packet exceeds parser budget") from error
     if not isinstance(data,dict) or type(data.get("v")) is not int or data["v"]!=1:
         raise ValueError("Invalid simulation protocol version")
     return data
@@ -99,6 +100,8 @@ class TraceReceiver:
             active=data.get("activeMotion")
             if active is not None and active not in ("initial","stand","forward","backward","turn_left","turn_right","greeting","tail_wag"):
                 raise ValueError("Invalid active motion")
+            behavior=data.get("behavior")
+            if behavior is not None and (not isinstance(behavior,str) or len(behavior)>40): raise ValueError("Invalid behavior label")
             self.last_seq=seq
             self.last_frame=self.clock()
             if not armed: self.requires_disarmed=False
@@ -107,7 +110,7 @@ class TraceReceiver:
                 self.state["activeMask"]=0
                 self.reason="Disarmed frame required before fresh ARM"
             else:
-                self.state=dict(virtual=True,armed=armed,activeMask=mask if armed else 0,targets=targets,activeMotion=active if armed else None)
+                self.state=dict(virtual=True,armed=armed,activeMask=mask if armed else 0,targets=targets,activeMotion=active if armed else None,behavior=behavior)
                 self.reason=None
             return encode(dict(v=1,type="ack",server=self.session,nonce=nonce,seq=seq,
                                ready=not self.requires_disarmed,fault=self.reason))
@@ -228,7 +231,7 @@ class TraceClient:
                         state=self.source()
                         message=dict(v=1,type="trace",client=self.client,server=server,nonce=nonce,seq=self.seq,
                                      virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"],
-                                     activeMotion=state.get("activeMotion"))
+                                     activeMotion=state.get("activeMotion"),behavior=state.get("behavior"))
                         self.pending=(nonce,self.seq,now)
                         sock.sendto(encode(message),self.address)
                     elif data.get("type")=="ack" and self.pending:

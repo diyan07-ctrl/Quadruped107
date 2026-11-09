@@ -348,3 +348,75 @@ class EnvironmentTests(unittest.TestCase):
             with self.assertRaises(ValueError): scene.advance(dict(armed=False),dt=1)
             with self.assertRaises(ValueError): UltrasonicSettings(noise_m=-1)
         finally: world.close()
+
+
+class NetworkNavigationTests(unittest.TestCase):
+    def test_pybullet_rays_udp_controller_proxy_obstacle_stop(self):
+        from simulation.twin import World
+        from simulation.environment import Scene
+        world=World()
+        scene=Scene(world,"single_obstacle",latency=0,proxy=True)
+        server=TraceServer(port=0,sensors=scene.telemetry)
+        runtime=Runtime(camera_backend="synthetic",actuator_backend="virtual",virtual_sensors=True,
+                        simulator_host=server.address[0],simulator_port=server.address[1])
+        runtime.start()
+        api=create_app(runtime).test_client()
+        def pump(predicate,timeout=5):
+            deadline=time.monotonic()+timeout
+            heartbeat=0
+            while time.monotonic()<deadline:
+                frame=server.poll()
+                self.assertTrue(scene.advance(frame))
+                world.apply(frame)
+                world.step()
+                if time.monotonic()-heartbeat>.15:
+                    api.post("/api/heartbeat",json={})
+                    heartbeat=time.monotonic()
+                if predicate(): return
+                time.sleep(.003)
+            self.fail(json.dumps(runtime.state()))
+        try:
+            pump(lambda:runtime.link.snapshot()["connected"] and runtime.bridge.snapshot()["readyToArm"] and runtime.sensors.snapshot()["fault"] is None)
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            self.assertEqual(api.post("/api/mode",json={"mode":"explore"}).status_code,200)
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
+            pump(lambda:not runtime.motion.snapshot()["enabled"],timeout=6)
+            pump(lambda:not server.receiver.state["armed"],timeout=1)
+            self.assertEqual(scene.proxy_contacts,0)
+            self.assertGreater(world.diagnostics()["basePosition"][0],0)
+            self.assertFalse(runtime.motion.snapshot()["enabled"])
+        finally:
+            runtime.close()
+            server.close()
+            world.close()
+
+    def test_stale_duplicate_and_unexpected_sender_telemetry(self):
+        receiver=TraceReceiver()
+        peer=("127.0.0.1",10000)
+        client="ab"*16
+        challenge=decode(receiver.handle(encode(dict(v=1,type="hello",client=client)),peer))
+        frame=dict(v=1,type="trace",client=client,server=challenge["server"],nonce=challenge["nonce"],
+                   seq=1,virtual=True,armed=False,activeMask=0,targets=[300]*8)
+        self.assertIsNone(receiver.handle(encode(frame),("127.0.0.1",10001)))
+        self.assertIsNotNone(receiver.handle(encode(frame),peer))
+        self.assertIsNone(receiver.handle(encode(frame),peer))
+        self.assertIsNone(receiver.handle(b"["*1000+b"]"*1000,peer))
+        self.assertIsNone(receiver.handle(b"x"*2049,peer))
+
+    def test_three_touch_configuration(self):
+        manager=SensorManager(SensorConfig(touch_count=3))
+        self.assertTrue(manager.ingest(fixture_batch(touch_count=3)))
+        self.assertIsNone(manager.snapshot()["fault"])
+        self.assertEqual(len(manager.snapshot()["touches"]),3)
+
+    def test_noise_is_seeded_and_no_echo_is_invalid(self):
+        from simulation.twin import World
+        from simulation.environment import SimulatedUltrasonicSensor, UltrasonicSettings
+        world=World()
+        try:
+            left=SimulatedUltrasonicSensor("urm37",world,UltrasonicSettings(noise_m=.01,latency=0),seed=7)
+            right=SimulatedUltrasonicSensor("urm37",world,UltrasonicSettings(noise_m=.01,latency=0),seed=7)
+            self.assertEqual(left.sample(0)["value"],right.sample(0)["value"])
+            left.mode="no_echo"
+            self.assertFalse(left.sample(1)["valid"])
+        finally: world.close()

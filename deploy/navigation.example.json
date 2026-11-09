@@ -1,0 +1,10 @@
+{
+  "blocked_m": 0.35,
+  "caution_m": 0.6,
+  "hysteresis_m": 0.05,
+  "command_period": 1.25,
+  "recovery_seconds": 0.6,
+  "max_recovery_attempts": 2,
+  "touch_seconds": 2,
+  "exploration_seconds": 30
+}

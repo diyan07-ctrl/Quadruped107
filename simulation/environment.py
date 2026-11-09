@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import math
 import random
 import time
-from quadruped.sensors import RANGE_IDS, TOUCH_IDS, CLEARANCE_IDS, number
+from quadruped.sensors import RANGE_IDS, TOUCH_IDS, CLEARANCE_IDS, number, SensorConfig
 
 SCENARIOS=("empty","single_obstacle","multiple_obstacles","narrow_passage","dead_end","target","sensor_failure","touch")
 LAYOUTS={
@@ -95,9 +95,12 @@ class SimulatedTouchSensor:
 
 class Scene:
     """Sensor rays use PyBullet. Swept-clearance is extra simulator geometry evidence."""
-    def __init__(self,world,scenario="empty",*,seed=0,clock=time.monotonic,latency=.02,noise=0.0,proxy=False,show_rays=False):
+    def __init__(self,world,scenario="empty",*,seed=0,clock=time.monotonic,latency=.02,noise=0.0,proxy=False,show_rays=False,sensor_config=None,profiles=None):
         if scenario not in SCENARIOS: raise ValueError("Unknown scenario")
         if proxy and not world.fixed: raise ValueError("Navigation proxy requires the fixed-base articulated fixture")
+        config=sensor_config or SensorConfig()
+        profiles=profiles or {}
+        if not isinstance(profiles,dict) or set(profiles)-set(RANGE_IDS): raise ValueError("Invalid ultrasonic profiles")
         self.world,self.scenario,self.clock=world,scenario,clock
         self.proxy,self.show_rays=proxy,show_rays
         self.boxes=[]
@@ -110,8 +113,8 @@ class Scene:
         self.proxy_contacts=0
         self.trace=deque(maxlen=256)
         self.ultrasonic={k:SimulatedUltrasonicSensor(k,world,UltrasonicSettings(
-            rate_hz=5 if k=="urm37" else 10,latency=latency,noise_m=noise),seed=seed+i) for i,k in enumerate(RANGE_IDS)}
-        self.touches={k:SimulatedTouchSensor(k) for k in TOUCH_IDS}
+            **dict(dict(rate_hz=config.rate_hz,min_m=config.min_m,max_m=config.max_m,latency=latency,noise_m=noise),**profiles.get(k,{}))),seed=seed+i) for i,k in enumerate(RANGE_IDS)}
+        self.touches={k:SimulatedTouchSensor(k) for k in TOUCH_IDS[:config.touch_count]}
         # Walls are finite known static geometry; robot self-collision remains enabled.
         for box in [(3,0,.08,2),(0,2,3,.08),(0,-2,3,.08),(-1,0,.08,2)]+LAYOUTS[scenario]:
             self.add_box(*box)
@@ -189,7 +192,7 @@ class Scene:
             pose=self.world.p.getBasePositionAndOrientation(self.world.robot,physicsClientId=self.world.client)[0]
             self.trace.append(dict(step=self.world.frames,pose=list(pose),targets=list(frame["targets"]),
                                    actual=actual,errors=[a-b for a,b in zip(actual,self.world.targets)],
-                                   motion=frame.get("activeMotion"),armed=frame["armed"]))
+                                   motion=frame.get("activeMotion"),behavior=frame.get("behavior"),armed=frame["armed"]))
         return True
 
     def diagnostics(self):

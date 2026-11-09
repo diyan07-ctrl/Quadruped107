@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, asdict
 import math
+import json
 import threading
 import time
 from typing import Protocol
@@ -35,6 +36,11 @@ class SensorConfig:
             raise ValueError("Invalid sensor limits")
         if type(self.touch_count) is not int or not 3<=self.touch_count<=5:
             raise ValueError("Require three to five virtual touches")
+
+    @classmethod
+    def load(cls,path):
+        if not path: return cls()
+        with open(path,encoding="utf-8") as stream: return cls(**json.load(stream))
 
 
 @dataclass(frozen=True)
@@ -176,16 +182,16 @@ class SensorManager:
                 fault="Conflicting front range observations"
             if not all(t["valid"] for t in touches.values()): fault=fault or "Missing, stale or stuck touch input"
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
-            return dict(virtual=True,session=self.session,seq=self.seq,observations=records,touches=touches,
+            return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
                         fault=fault,rejected=self.rejected,
                         receivedAge=None if self.last_received is None else now-self.last_received)
 
 
-def fixture_batch(seq=0,*,distance=2.0,touches=None,clearance=True,age=0.0):
+def fixture_batch(seq=0,*,distance=2.0,touches=None,clearance=True,age=0.0,touch_count=5):
     """Deterministic explicit virtual fixture; never selected as a missing-device fallback."""
     touches=touches or {}
     records=[dict(id=k,kind="range",value=distance,valid=True,age=age) for k in RANGE_IDS]
-    records += [dict(id="touch_"+k,kind="touch",value=bool(touches.get(k,False)),valid=True,age=age) for k in TOUCH_IDS]
+    records += [dict(id="touch_"+k,kind="touch",value=bool(touches.get(k,False)),valid=True,age=age) for k in TOUCH_IDS[:touch_count]]
     records += [dict(id=k,kind="clearance",value=clearance,valid=True,age=age) for k in CLEARANCE_IDS]
     return dict(schema=1,seq=seq,observations=records)
