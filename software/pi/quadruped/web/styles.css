@@ -206,3 +206,5 @@ body.focus-mode.focus-side-rails .pose-preview { height: clamp(58px, 8vh, 74px);
 :root { --stop-red: #ff6262; }
 .stop-button { color: var(--stop-red) !important; border-color: var(--stop-red) !important; font-weight: 800; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.diagnostic-card strong { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }

@@ -27,7 +27,8 @@ APP_DIR = Path(__file__).resolve().parent
 class Runtime:
     def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
                  camera_backend=None, camera_device=None, width=640, height=480, fps=8,
-                 actuator_backend=None, vision_config=None, virtual_speed=1.0):
+                 actuator_backend=None, vision_config=None, virtual_speed=1.0,
+                 simulator_host=None, simulator_port=7002):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
         if link is not None: self.link = link
@@ -42,6 +43,12 @@ class Runtime:
         self.obstacle_blocked = False
         self.stats = ProcessStats()
         self.motion = MotionController(self.link)
+        self.bridge = None
+        if simulator_host:
+            if not self.actuators_simulated or not hasattr(self.link, "engine"):
+                raise ValueError("Network bridge requires explicitly selected protocol virtual actuators")
+            from .bridge import TraceClient
+            self.bridge = TraceClient(simulator_host, simulator_port, self.link.engine.snapshot)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
         self.owner_lock = threading.Lock()
@@ -63,9 +70,11 @@ class Runtime:
                 self.vision["handGesture"] = f"Unavailable: {error}"
                 logging.warning("Hand gestures: %s", error)
         self.worker = threading.Thread(target=self._vision_loop, name="vision", daemon=True)
+        self.bridge_guard = threading.Thread(target=self._bridge_guard, name="bridge-safety", daemon=True)
 
     def start(self):
         self.link.start(); self.camera.start(); self.motion.start(); self.worker.start()
+        if self.bridge: self.bridge.start(); self.bridge_guard.start()
 
     def claim_control(self, token):
         with self.owner_lock:
@@ -111,7 +120,8 @@ class Runtime:
         with self.lock:
             vision = {**self.vision}
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
-                    system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked, motion=self.motion.snapshot(),
+                    system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
+                    bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
                     link=self.link.snapshot(), controlModes=sorted(MODES), motionModes=sorted(MOTIONS),
                     features=dict(handGesture=self.detector is not None), vision=vision,
                     camera=dict(**self.camera.diagnostics(),
@@ -192,6 +202,12 @@ class Runtime:
                 if autonomous:
                     self.motion.stop(f"Vision failed: {error}",expected_generation=state["generation"])
 
+    def _bridge_guard(self):
+        while not self.stop_event.wait(.05):
+            health=self.bridge.snapshot()
+            if self.motion.snapshot()["enabled"] and (not health["connected"] or health["fault"]):
+                self.motion.stop(health["fault"] or "Simulator disconnected; explicit enable required")
+
     def _fresh_observation(self, state, published_at):
         if time.monotonic() - published_at > .5:
             self.motion.stop("Stale vision result", expected_generation=state["generation"])
@@ -201,6 +217,8 @@ class Runtime:
     def close(self):
         self.stop_event.set()
         self.motion.close()
+        if self.bridge: self.bridge.close()
+        if self.bridge_guard.is_alive(): self.bridge_guard.join(1)
         self.link.close()
         self.camera.close()
         if self.worker.is_alive(): self.worker.join(3)
@@ -279,7 +297,13 @@ def create_app(runtime):
         if runtime.obstacle_blocked: raise RuntimeError("Clear the virtual obstacle before enabling")
         generation = runtime.motion.snapshot()["generation"]
         token, claim = runtime.claim_control(request.cookies.get("quadruped_control"))
-        try: runtime.motion.arm(expected_generation=generation)
+        bridge_epoch = None
+        try:
+            if runtime.bridge: bridge_epoch = runtime.bridge.prepare_arm()
+            runtime.motion.arm(expected_generation=generation)
+            if runtime.bridge and (runtime.bridge.snapshot()["epoch"] != bridge_epoch or not runtime.bridge.snapshot()["connected"]):
+                runtime.motion.stop("Simulator changed during enable")
+                raise RuntimeError("Simulator changed during enable")
         except Exception:
             runtime.release_control(token, claim)
             raise
@@ -356,6 +380,8 @@ def main():
     parser.add_argument("--actuator-backend", choices=("virtual", "serial-monitor"), default=None)
     parser.add_argument("--virtual-speed", type=float, default=1.0)
     parser.add_argument("--vision-config")
+    parser.add_argument("--simulator", help="Trusted simulator host; enables mandatory network lease")
+    parser.add_argument("--simulator-port", type=int, default=7002)
     args = parser.parse_args()
     if args.simulate and args.camera_backend not in (None, "synthetic"):
         parser.error("--simulate means synthetic camera; use --camera-backend usb --actuator-backend virtual for mixed mode")
@@ -371,7 +397,8 @@ def main():
                       camera_device=int(args.camera_device) if args.camera_device.isdecimal() else args.camera_device,
                       width=args.width, height=args.height, fps=args.fps,
                       actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
-                      vision_config=args.vision_config, virtual_speed=args.virtual_speed)
+                      vision_config=args.vision_config, virtual_speed=args.virtual_speed,
+                      simulator_host=args.simulator, simulator_port=args.simulator_port)
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

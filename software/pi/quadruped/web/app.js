@@ -202,11 +202,13 @@ async function loadState() {
   try {
     const data = await fetchJson("/api/state");
     setCameraStatus(data.camera?.status);
+    renderDiagnostics(data);
     applyMotionState(data.motion);
     updateVisionStatus(data.vision);
     state.enabled = Boolean(data.motion?.enabled && data.link?.armed);
     if (!state.enabled) releaseAllMovement("disabled", false);
-    elements.armButton.disabled = !data.link?.connected || state.enabled;
+    elements.armButton.disabled = !data.simulation || !data.link?.connected || state.enabled;
+    elements.armButton.textContent = data.simulation ? "Enable virtual actuators" : "Physical actuation inhibited";
     [...elements.driveButtons, ...elements.poseButtons, ...elements.appModeButtons].forEach((button) => {
       button.disabled = !state.enabled || (button.dataset.appMode === "hand_gesture" && !data.features?.handGesture);
     });
@@ -494,3 +496,19 @@ loadState();
 startStateRefresh();
 startCameraRefresh();
 window.requestAnimationFrame(sizeCameraFrame);
+
+function renderDiagnostics(data) {
+  const show = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+  const camera = data.camera || {};
+  const vision = data.vision || {};
+  const system = data.system || {};
+  const link = data.link || {};
+  const target = vision.blueBall || {};
+  show("backendDiagnostics", `${camera.backend || "unknown"} / ${camera.actualFps || 0} FPS${camera.lastError ? " / " + camera.lastError : ""}`);
+  show("visionDiagnostics", `${vision.processingFps || 0} FPS / ${camera.frameAge == null ? "no frame" : Math.round(camera.frameAge * 1000) + " ms"}`);
+  show("resourceDiagnostics", `${system.processCpuPercent ?? "?"}% / ${system.rssBytes == null ? "RAM unavailable" : (system.rssBytes / 1048576).toFixed(1) + " MiB"}`);
+  show("behaviorDiagnostics", `${vision.behavior || "IDLE"} / ${target.detected ? "x error " + Number(target.offset).toFixed(2) + " / area " + target.area : "no target"}`);
+  show("actuatorDiagnostics", `${link.kind || (data.simulation ? "unit stub" : "serial monitor")} / ${data.bridge ? (data.bridge.connected ? "simulator connected" : "simulator unavailable") : "local only"}`);
+  show("safetyDiagnostics", data.motion?.enabled ? "VIRTUAL ENABLED — physical outputs prohibited" : (data.motion?.fault || "STOPPED"));
+  show("traceDiagnostics", link.targets ? link.targets.join(" / ") + " | active mask " + link.activeMask : "No protocol trace (legacy unit stub or inhibited serial monitor)");
+}
