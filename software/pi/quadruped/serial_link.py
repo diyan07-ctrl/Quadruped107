@@ -29,6 +29,8 @@ class Pending:
 
 class SerialLink:
     def __init__(self, port="auto", *, factory=serial.Serial, discover=None):
+        from .telemetry import TelemetryStream
+        self.telemetry=TelemetryStream()
         self.port = port
         self.factory = factory
         self.discover = discover or list_ports.comports
@@ -55,7 +57,7 @@ class SerialLink:
         with self.lock:
             return dict(connected=self.connected, armed=self.armed, error=self.error,
                         stopping=self.stop_pending is not None, epoch=self.epoch,
-                        queued=self.outgoing.qsize(), port=self.selected_port)
+                        queued=self.outgoing.qsize(), port=self.selected_port,telemetry=self.telemetry.snapshot())
 
     def _find_port(self):
         if self.port != "auto":
@@ -146,6 +148,9 @@ class SerialLink:
             self.urgent = self.stop_pending = None
 
     def _receive(self, line):
+        if line.startswith("TEL "):
+            self.telemetry.ingest(line)
+            return
         fields = line.split(maxsplit=2)
         if line.startswith("FAULT ") or line.startswith("READY "):
             raise RuntimeError(line)
@@ -207,6 +212,7 @@ class SerialLink:
                 while connection.readline().strip() != b"READY Quadruped107 1":
                     if time.monotonic() > deadline or self.stop_event.is_set():
                         raise RuntimeError("Quadruped107 firmware handshake failed")
+                self.telemetry.reset()
                 with self.lock:
                     self.selected_port = selected
                     self.connected = True

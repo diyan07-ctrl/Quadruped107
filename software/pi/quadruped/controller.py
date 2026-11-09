@@ -5,7 +5,7 @@ import time
 
 MOTIONS = {"initial", "stand", "greeting", "tail_wag", "forward", "backward", "turn_left", "turn_right"}
 CONTINUOUS = {"forward", "backward", "turn_left", "turn_right"}
-MODES = {"manual", "opencv", "hand_gesture", "explore", "sensor_test", "idle"}
+MODES = {"manual", "opencv", "hand_gesture", "explore", "sensor_test", "idle", "interaction"}
 LEASE_SECONDS = 1.0
 INTENT_TTL = 0.5
 
@@ -166,7 +166,7 @@ class MotionController:
                 raise RuntimeError("Wait for the current step before changing control mode; STOP inhibits immediately")
             self.generation += 1
             if mode in MODES:
-                self.app_mode, self.desired = mode, "none" if mode in {"explore", "sensor_test"} or mode=="opencv" and self.safety_check else "stand"
+                self.app_mode, self.desired = mode, "none" if mode in {"explore", "sensor_test", "interaction"} or mode=="opencv" and self.safety_check else "stand"
                 self.vision_seen = time.monotonic()
             else:
                 self.app_mode, self.desired = "manual", mode
@@ -178,7 +178,7 @@ class MotionController:
         return generation
 
     def autonomous(self, owner, motion, expected_generation=None):
-        if owner not in {"opencv", "hand_gesture", "explore"} or motion not in MOTIONS:
+        if owner not in {"opencv", "hand_gesture", "explore", "interaction"} or motion not in MOTIONS:
             raise ValueError("Invalid autonomous owner or motion")
         with self.lock:
             self.events.record("motion_request",motion=motion,status="requested",generation=expected_generation)

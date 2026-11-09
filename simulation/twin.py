@@ -15,11 +15,14 @@ class SimulationFault(RuntimeError): pass
 
 
 class World:
-    def __init__(self,*,gui=False,free_base=False,parameters=None,position_gain=.1):
+    def __init__(self,*,gui=False,free_base=False,parameters=None,position_gain=.1,target_rate=0.0):
         try: import pybullet as p
         except ImportError as error: raise RuntimeError("Install simulation/requirements.txt on the laptop") from error
         if not isinstance(position_gain,(float,int)) or isinstance(position_gain,bool) or not math.isfinite(position_gain) or not .01<=position_gain<=1:
             raise ValueError("Position gain must be .01..1 (simulation only)")
+        if type(target_rate) not in (int,float) or not math.isfinite(target_rate) or not 0<=target_rate<=3:
+            raise ValueError("Simulation smoothing rate must be 0..3 rad/s")
+        self.target_rate=target_rate
         self.position_gain=position_gain
         self.p=p
         self.client=p.connect(p.GUI if gui else p.DIRECT)
@@ -31,6 +34,8 @@ class World:
         self.active_error_squared=0.0
         self.active_error_samples=0
         self.max_torque=0.0
+        self.max_raw_jump=self.max_motor_jump=0.0
+        self.contact_pairs={}
         self.measurement_start_step=0
         self.contact_count=0
         self.self_contacts=0
@@ -75,6 +80,7 @@ class World:
                 p.changeConstraint(self.fixture_constraint,self.fixture_position,
                     jointChildFrameOrientation=self.fixture_orientation,maxForce=500,physicsClientId=self.client)
             self.targets=[0.0]*8
+            self.motor_targets=[0.0]*8
             self.active_mask=0
             self.apply(dict(virtual=True,armed=False,activeMask=0,targets=[300]*8))
             if gui:
@@ -90,6 +96,8 @@ class World:
         self.max_torque=0.0
         self.contact_count=self.self_contacts=0
         self.measurement_start_step=self.frames
+        self.max_raw_jump=self.max_motor_jump=0.0
+        self.contact_pairs={}
 
     def set_fixture_pose(self,position,orientation):
         if self.fixture_constraint is None: raise ValueError("Only an explicitly fixed fixture can be repositioned")
@@ -119,14 +127,43 @@ class World:
         mask=frame.get("activeMask")
         if not isinstance(ticks,list) or len(ticks)!=8 or type(mask) is not int or not 0<=mask<=255:
             raise ValueError("Invalid eight-joint trace")
-        self.targets=[self.angle(i,tick) for i,tick in enumerate(ticks)]
+        incoming=[self.angle(i,tick) for i,tick in enumerate(ticks)]
+        old_mask=self.active_mask
+        for channel,index in enumerate(self.joints):
+            actual=self.p.getJointState(self.robot,index,physicsClientId=self.client)[0]
+            active=bool(frame["armed"] and mask&(1<<channel))
+            if active:
+                previous=self.targets[channel] if old_mask&(1<<channel) else actual
+                self.max_raw_jump=max(self.max_raw_jump,abs(incoming[channel]-previous))
+                if self.target_rate:
+                    if not old_mask&(1<<channel): self.motor_targets[channel]=actual
+                else:
+                    previous_motor=self.motor_targets[channel] if old_mask&(1<<channel) else actual
+                    self.max_motor_jump=max(self.max_motor_jump,abs(incoming[channel]-previous_motor))
+                    self.motor_targets[channel]=incoming[channel]
+            else:
+                # STOP removes force immediately and discards the interpolation residual.
+                self.motor_targets[channel]=actual
+        self.targets=incoming
         self.active_mask=mask if frame["armed"] else 0
+        self._drive()
+
+    def _drive(self):
         for channel,index in enumerate(self.joints):
             self.p.setJointMotorControl2(self.robot,index,self.p.POSITION_CONTROL,
-                targetPosition=self.targets[channel],positionGain=self.position_gain,force=self.parameters["force_nm"] if self.active_mask&(1<<channel) else 0,
+                targetPosition=self.motor_targets[channel],positionGain=self.position_gain,
+                force=self.parameters["force_nm"] if self.active_mask&(1<<channel) else 0,
                 maxVelocity=self.parameters["max_velocity_rad_s"],physicsClientId=self.client)
 
     def step(self):
+        if self.target_rate and self.active_mask:
+            limit=self.target_rate/240
+            for channel in range(8):
+                if self.active_mask&(1<<channel):
+                    delta=max(-limit,min(limit,self.targets[channel]-self.motor_targets[channel]))
+                    self.max_motor_jump=max(self.max_motor_jump,abs(delta))
+                    self.motor_targets[channel]+=delta
+            self._drive()
         self.p.stepSimulation(physicsClientId=self.client)
         self.frames+=1
         position,orientation=self.p.getBasePositionAndOrientation(self.robot,physicsClientId=self.client)
@@ -140,6 +177,15 @@ class World:
         contacts=self.p.getContactPoints(bodyA=self.robot,physicsClientId=self.client)
         self.contact_count=max(self.contact_count,len(contacts))
         self.self_contacts=max(self.self_contacts,sum(c[1]==self.robot and c[2]==self.robot for c in contacts))
+        for contact in contacts:
+            if contact[1]!=self.robot or contact[2]!=self.robot: continue
+            links=[]
+            for index in sorted((contact[3],contact[4])):
+                links.append("chassis" if index==-1 else self.p.getJointInfo(self.robot,index,physicsClientId=self.client)[12].decode())
+            key=" / ".join(links)
+            item=self.contact_pairs.setdefault(key,dict(samples=0,maxPenetrationM=0.0))
+            item["samples"]+=1
+            item["maxPenetrationM"]=max(item["maxPenetrationM"],max(0,-contact[8]))
         self.max_joint_error=max(self.max_joint_error,max(abs(a-b) for a,b in zip(joints,self.targets)))
         for channel,index in enumerate(self.joints):
             if self.active_mask&(1<<channel):
@@ -169,6 +215,9 @@ class World:
                     maxAppliedMotorTorqueNm=self.max_torque,
                     currentJointPositions=[self.p.getJointState(self.robot,i,physicsClientId=self.client)[0] for i in self.joints],
                     currentJointTargets=list(self.targets),activeMask=self.active_mask,
+                    smoothingRateRadS=self.target_rate,motorTargets=list(self.motor_targets),
+                    maxRawTargetJumpRad=self.max_raw_jump,maxMotorTargetJumpRad=self.max_motor_jump,
+                    selfContactPairs=dict(self.contact_pairs),
                     baseMassKg=self.p.getDynamicsInfo(self.robot,-1,physicsClientId=self.client)[0],
                     fixtureConstraint=self.fixture_constraint is not None,
                     fixturePositionErrorM=math.dist(position,self.fixture_position) if self.fixed else None)
@@ -199,6 +248,7 @@ def main():
     parser.add_argument("--port",type=int,default=7002)
     parser.add_argument("--steps",type=int,default=0)
     parser.add_argument("--parameters")
+    parser.add_argument("--smoothing-rate",type=float,default=0.0,help="Explicit simulation-only target rate; 0 disables")
     parser.add_argument("--scenario",choices=("empty","single_obstacle","multiple_obstacles","narrow_passage","dead_end","target","sensor_failure","touch"))
     parser.add_argument("--navigation-proxy",action="store_true",help="Explicit kinematic proxy; never inferred walking physics")
     parser.add_argument("--show-rays",action="store_true")
@@ -216,7 +266,7 @@ def main():
     if args.steps<0: parser.error("steps must be nonnegative")
     if args.record and not 1<=args.steps<=7200: parser.error("--record requires --steps 1..7200 (max 30 simulated seconds)")
     if args.navigation_proxy and (not args.scenario or args.free_base): parser.error("Proxy requires an explicit scenario and fixed-base fixture")
-    world=World(gui=not args.headless,free_base=args.free_base,parameters=args.parameters)
+    world=World(gui=not args.headless,free_base=args.free_base,parameters=args.parameters,target_rate=args.smoothing_rate)
     server=None
     scene=None
     engine=None

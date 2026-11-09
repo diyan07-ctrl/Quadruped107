@@ -79,6 +79,14 @@ class Navigation:
         self.action_sent=False
         self.started=0.0
         self.last_event=0
+        self.pending_interaction=None
+
+    def request_interaction(self,name,session,generation):
+        actions={"attention":"stand","greeting":"greeting","tail_wag":"tail_wag","neutral":"initial"}
+        if not isinstance(name,str) or name not in actions: raise ValueError("Unsupported interaction")
+        if self.pending_interaction is not None or self.deadline is not None:
+            raise RuntimeError("Interaction already pending or active")
+        self.pending_interaction=(session,generation,actions[name])
 
     def _result(self,state,now,motion=None,stop=False,reason=""):
         if state!=self.state:
@@ -97,7 +105,7 @@ class Navigation:
                     lastRequestedMotion=self.last_motion,recoveryAttempts=self.attempts,
                     deadline=self.deadline,transitions=list(self.transitions))
 
-    def step(self,mode,enabled,session,sensors,observation,now,*,busy=False,communication_ok=True):
+    def step(self,mode,enabled,session,sensors,observation,now,*,busy=False,communication_ok=True,generation=None):
         context=(mode,session)
         if context!=self.context:
             self.context=context
@@ -108,6 +116,8 @@ class Navigation:
             self.last_motion=None
             self.last_event=max((e["seq"] for e in sensors["events"]),default=self.last_event)
             self.tracker.reset(now)
+        if self.pending_interaction and (mode!="interaction" or not enabled or self.pending_interaction[:2]!=(session,generation)):
+            self.pending_interaction=None
         if not enabled:
             return self._result("IDLE" if mode=="idle" else "EMERGENCY_STOP",now,reason="Disarmed; explicit enable required")
         if not communication_ok: return self._result("EMERGENCY_STOP",now,stop=True,reason="Simulator communication fault")
@@ -141,6 +151,13 @@ class Navigation:
             return self._result("OBSTACLE_BLOCKED",now,stop=True,reason="Blocked; no qualified recovery evidence or budget")
         if self.obstacle=="CAUTION":
             return self._result("OBSTACLE_CAUTION",now,stop=True,reason="Conservative caution policy inhibits navigation")
+        if mode=="interaction":
+            if self.pending_interaction:
+                _,_,self.action=self.pending_interaction
+                self.pending_interaction=None
+                self.deadline=now+self.settings.touch_seconds
+                return self._result("PERSONALITY",now,self.action,reason="Explicit bounded virtual interaction")
+            return self._result("READY",now,reason="Choose one explicit interaction")
         for event in sensors["events"]:
             if event["seq"]<=self.last_event: continue
             self.last_event=event["seq"]

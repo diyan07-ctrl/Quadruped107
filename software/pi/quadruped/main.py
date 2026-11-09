@@ -148,14 +148,19 @@ class Runtime:
 
     def state(self):
         _, jpeg, _, status = self.camera.latest()
-        with self.lock:
+        with self.settings_lock,self.lock:
             vision = {**self.vision}
+            config=self.vision_configuration()
+            vision["targetColor"]=self.vision_settings.target_color
+            observed=vision.get("blueBall",{}).get("observed_at")
+            vision["observationAge"]=time.monotonic()-observed if observed is not None else None
+            vision["targetFresh"]=observed is not None and 0<=vision["observationAge"]<=self.vision_settings.max_age
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
-                    autonomy=self.navigation_state(),visionConfig=self.vision_configuration(),
+                    autonomy=self.navigation_state(),visionConfig=config,
                     decisionHistory=self.motion.events.snapshot(),
                     features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None), vision=vision,
                     camera=dict(**self.camera.diagnostics(),
@@ -359,7 +364,7 @@ class Runtime:
                 with self.nav_lock:
                     decision=self.navigation.step(state["appMode"],state["enabled"],state["session"],
                         self.sensors.snapshot(),observation,time.monotonic(),busy=state["busy"],
-                        communication_ok=not health or health["connected"] and not health["fault"])
+                        communication_ok=not health or health["connected"] and not health["fault"],generation=state["generation"])
                 with self.lock:
                     self.vision["behavior"]=decision.state
                     self.vision["opencv"]=decision.reason or decision.state
@@ -413,11 +418,15 @@ def create_app(runtime):
                 return jsonify(ok=False, error="Use application/json"), 415
 
     @app.errorhandler(ValueError)
-    def invalid(error): return jsonify(ok=False, error=str(error)), 400
+    def invalid(error):
+        runtime.motion.events.record("api_rejection",status="rejected",reason=request.path+": "+str(error))
+        return jsonify(ok=False, error=str(error)), 400
 
     @app.errorhandler(RuntimeError)
     @app.errorhandler(TimeoutError)
-    def unavailable(error): return jsonify(ok=False, error=str(error)), 409
+    def unavailable(error):
+        runtime.motion.events.record("api_rejection",status="rejected",reason=request.path+": "+str(error))
+        return jsonify(ok=False, error=str(error)), 409
 
     @app.get("/")
     def index(): return send_from_directory(APP_DIR / "web", "index.html")
@@ -444,7 +453,7 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
-        if mode in {"explore","sensor_test"} and runtime.sensors is None:
+        if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
         if mode == "hand_gesture" and runtime.sensors:
             raise RuntimeError("Phase 2 supports blue tracking; optional gesture control remains Phase 1 only")
@@ -508,6 +517,23 @@ def create_app(runtime):
         body(); runtime.motion.stop()
         runtime.release_control(token, claim)
         return jsonify(ok=True, state=runtime.motion.snapshot())
+
+    @app.post("/api/interaction")
+    def interaction():
+        data=body()
+        generation=runtime.require_control(request.cookies.get("quadruped_control"))
+        state=runtime.motion.snapshot()
+        if not runtime.sensors or not runtime.actuators_simulated or state["appMode"]!="interaction" or not state["enabled"]:
+            raise RuntimeError("Select virtual Interactions after explicit enable")
+        if state["busy"] or state["stopping"]: raise RuntimeError("Motion or STOP pending")
+        sensor=runtime.sensors.snapshot()
+        if sensor["fault"] or sensor["front_m"]<=runtime.navigation.settings.caution_m:
+            raise RuntimeError(sensor["fault"] or "Interaction obstacle clearance insufficient")
+        with runtime.nav_lock:
+            runtime.navigation.request_interaction(data.get("name"),state["session"],generation)
+        runtime.nav_wake.set()
+        runtime.motion.events.record("interaction",status="requested",reason=str(data.get("name")),generation=generation)
+        return jsonify(ok=True,status="queued_intent",physical=False)
 
     @app.post("/api/servo")
     def servo():

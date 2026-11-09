@@ -6,14 +6,14 @@ from .twin import World, MODEL
 from quadruped.virtual_uno import VirtualUno
 
 
-def experiment(motion,gain=.1,inertia_scale=1.0,*,warm_start=False):
+def experiment(motion,gain=.1,inertia_scale=1.0,*,warm_start=False,target_rate=0.0):
     params=json.loads((MODEL/"parameters.json").read_text())
     # Diagnostic sensitivity only. No canonical masses or physical calibration change.
     for key in ("base_mass_kg","upper_mass_kg","lower_and_foot_mass_kg"): params[key]*=inertia_scale
     with tempfile.TemporaryDirectory() as directory:
         path=Path(directory)/"parameters.json"
         path.write_text(json.dumps(params))
-        world=World(parameters=path,position_gain=gain)
+        world=World(parameters=path,position_gain=gain,target_rate=target_rate)
         clock=[0.]
         engine=VirtualUno(clock=lambda:clock[0])
         try:
@@ -62,6 +62,8 @@ def main():
         for gain in (.05,.1,.2): reports.append(experiment(motion,gain))
     for scale in (.5,2.): reports.append(experiment("forward",inertia_scale=scale))
     reports.append(experiment("forward",warm_start=True))
+    for rate in (2.0,3.0): reports.append(experiment("forward",warm_start=True,target_rate=rate))
+    reports.append(experiment("stand",target_rate=2.0))
     evidence=dict(classification="UNQUALIFIED MODEL SENSITIVITY",collisionsEnabled=True,torqueIncreased=False,
                   canonicalGeometryAndGaitsUnchanged=True,experiments=reports)
     path=Path("build/simulation/model-study.json")
