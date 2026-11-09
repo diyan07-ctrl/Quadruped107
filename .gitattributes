@@ -18,7 +18,7 @@
 firmware/uno/sketch/* -text
 software/pi/quadruped/web/** -text
 archive/uno-q/** -text
-software/pi/quadruped/vision.py -text
+software/pi/quadruped/vision.py -text whitespace=cr-at-eol
 
 # Foreground Linux launch scripts must retain LF on Windows checkouts.
 *.sh text eol=lf
