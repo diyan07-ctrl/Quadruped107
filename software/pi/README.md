@@ -35,15 +35,7 @@ The browser sends a heartbeat every 250 ms. Outputs are disabled after one secon
 
 The Uno uses the existing channel mapping and pulse tables in [motion.h](../../firmware/uno/sketch/motion.h). The Pi does not generate servo PWM. Pulse values are PCA9685 ticks at 50 Hz, **not angles or microseconds**; each tick is approximately 4.88 μs. The firmware's broad 50–600 bounds do not establish the mechanical travel limits of a particular joint.
 
-Use an isolated, supported joint. Keep a browser heartbeat active by leaving the control page open, enable servos, and wait for any pose to finish. Then, from a terminal on the Pi:
-
-```bash
-# Example only: verify the assembled joint's safe limits first.
-curl -X POST http://127.0.0.1:7000/api/servo \
-  -H 'Content-Type: application/json' -d '{"channel":0,"pulse":278}'
-curl -X POST http://127.0.0.1:7000/api/stop \
-  -H 'Content-Type: application/json' -d '{}'
-```
+Use an isolated, supported joint and a qualified limited-energy supply. A calibration client must first ARM, retain the returned ownership cookie, and maintain a 250 ms heartbeat independently while issuing one adjustment at a time. A separate terminal and browser are separate owners; STOP/release before changing clients. Do not bypass the owner check or leave an unattended heartbeat running. No unqualified full-range sweep is approved.
 
 The calibration API makes a temporary adjustment. Persist verified gait / pose targets by editing `motion.h` and flashing the Uno again. It does not silently rewrite firmware or apply the same calibration to all eight joints. The files under `archive/uno-q/` are historical UNO Q tools and are not compatible with this serial firmware.
 
@@ -81,3 +73,7 @@ Detections require confidence ≥ 0.65 and two consecutive frames. A held gestur
 - **Servos do not move:** confirm external servo power and D8/OE wiring; then verify safe pulse targets one joint at a time.
 
 Changes made on 2026-11-04 for the Pi 4 / Uno R3 port. GPL-3.0.
+
+## Phase 0.1 changes
+
+HTTP request bodies are unchanged, but custom clients must persist the ARM ownership cookie. Non-owner movement/heartbeat is rejected; STOP remains available. See [protocol](../../docs/PROTOCOL.md), [calibration contract](../../docs/CALIBRATION.md), [power study](../../hardware/Power/README.md) and [hardware checklist](../../docs/HARDWARE_VERIFICATION.md). The new profile validator is offline and does not apply joint limits to live commands.

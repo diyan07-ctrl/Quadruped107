@@ -2,7 +2,7 @@
 
 An 8-DOF quadruped for ENR107 Digital Electronics, using Raspberry Pi 4 for vision and control and Arduino Uno R3 for motion.
 
-The assembled robot has two servos per leg. The existing software provides browser controls, CSI camera video, blue-ball tracking, optional hand gestures, and explicit servo enable/stop controls. Phase 0 establishes the repository and architecture; physical calibration and autonomous obstacle avoidance remain pending.
+The assembled robot has two servos per leg. The existing software provides browser controls, CSI camera video, blue-ball tracking, optional hand gestures, and explicit servo enable/stop controls with one operator owner. Phase 0.1 hardens command arbitration and freezes a conditional power design; physical calibration and autonomous obstacle avoidance remain pending.
 
 ## Architecture
 
@@ -49,7 +49,7 @@ Open `http://127.0.0.1:7000`. Simulation opens no hardware. For actual Pi instal
 
 ## Documentation and status
 
-[Project](docs/PROJECT.md) · [Architecture](docs/ARCHITECTURE.md) · [Hardware](docs/HARDWARE.md) · [Wiring](docs/WIRING.md) · [Software](docs/SOFTWARE.md) · [Protocol](docs/PROTOCOL.md) · [Safety](docs/SAFETY.md) · [Roadmap](docs/ROADMAP.md) · [Validation](docs/VALIDATION.md) · [Audit](docs/AUDIT.md)
+[Power engineering](hardware/Power/README.md) · [Design decisions](docs/DECISIONS.md) · [Hardware verification](docs/HARDWARE_VERIFICATION.md) · [Project](docs/PROJECT.md) · [Architecture](docs/ARCHITECTURE.md) · [Hardware](docs/HARDWARE.md) · [Wiring](docs/WIRING.md) · [Software](docs/SOFTWARE.md) · [Protocol](docs/PROTOCOL.md) · [Safety](docs/SAFETY.md) · [Roadmap](docs/ROADMAP.md) · [Validation](docs/VALIDATION.md) · [Audit](docs/AUDIT.md)
 
 Existing vision features are retained implementations, not evidence that later phases have passed. Local sensing, sensor telemetry, a hardware watchdog, and physical stop integration are not implemented. See validation for actual checks and remaining hardware work.
 

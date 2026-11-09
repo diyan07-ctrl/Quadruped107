@@ -35,3 +35,5 @@ The robot has no verified odometry, localization, balance feedback, or joint-pos
 - Complete each phase using its [roadmap](ROADMAP.md) acceptance tests; record evidence and limitations in [validation](VALIDATION.md).
 
 Phase 0 succeeds when documentation, repository organization, automated validation, attribution, and branch/PR publication are complete. Physical tests are separately marked pending; no hardware measurement is invented.
+
+Phase 0.1 adds tested host arbitration, a reproducible [power study](../hardware/Power/README.md), and explicit [design decisions](DECISIONS.md). No physical motion calibration or autonomous feature phase is completed by those changes.

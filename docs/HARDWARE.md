@@ -33,12 +33,16 @@ Uno R3 uses 5 V logic; Pi GPIO uses 3.3 V logic. Pi–Uno communication is USB o
 
 Prefer URM37 pulse-trigger sensing after verifying its revision, interface mode, labels, supply, and output levels. HC-SR04 is an optional alternative/additional range sensor, with independent trigger scheduling to avoid crosstalk. Touch sensors connect to reserved Uno GPIO after output type and polarity checks. Sensors do not currently have drivers.
 
-SSD1306 OLED may share Uno I2C only after address/pull-up/logic compatibility checks. A 128 × 64 monochrome framebuffer alone consumes 1024 bytes, significant on Uno's 2 KiB SRAM; the display must not compromise safety memory. It is not a required dependency.
+Optional SSD1306 OLED now belongs to Pi I2C1 with a verified 3.3 V-compatible interface. A 128 × 64 framebuffer consumes 1024 bytes and is rejected on Uno given its 1050-byte baseline stack/local headroom. It is not a core dependency.
 
 ## Hardware-dependent facts
 
-Verify servo make/revision and rated voltage; stall/load current; battery cell count, protection, discharge rating and charger; regulator continuous/transient ratings; switch/fuse/wire ratings; USB power-bank capability; camera model and cable; touch module voltage/polarity; URM37 and HC-SR04 revisions; actual OE breakout circuitry; joint endpoints/directions; and mechanical clearances.
+All unresolved specimen-specific facts are recorded once in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md), including battery/BMS, module revision, limits and supply qualification.
 
 Nominal 7.4 V and 1800 mAh describe the supplied packs, not usable peak current or runtime. Do not connect the three packs together in series or parallel without a specifically engineered battery system.
 
 Sources: [Uno R3](https://docs.arduino.cc/hardware/uno-rev3/), [PCA9685 wiring](https://learn.adafruit.com/16-channel-pwm-servo-driver/hooking-it-up), [URM37 manufacturer guide](https://wiki.dfrobot.com/sen0001/docs/21984). Module-specific documentation takes precedence over family-level examples.
+
+## Phase 0.1 power and calibration freeze
+
+[Power](../hardware/Power/README.md) selects independent logic and regulated-servo domains conditionally: existing-pack Option A first, qualified 3S servo Option D if needed. No installed power component is approved without evidence. Use external motor distribution rather than assuming PCA terminal/trace capacity. [Calibration](CALIBRATION.md) defines versioned per-joint limits/rates without applying unverified targets. [Extensions](EXTENSIONS.md) reserves A0/A1 monitoring and Pi-side OLED; all proposed sensor wiring remains unverified.

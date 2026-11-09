@@ -19,8 +19,9 @@
 | Uno D6, D7, D9, D10, D11 | Touch inputs 1–5; populate available 3–5 | HARDWARE-DEPENDENT |
 | Uno D12 | Future physical-stop status input | PROPOSED; no driver |
 | Uno D13 | Built-in status LED; no external assignment | PROPOSED reservation |
-| Uno A0–A3 | Spare; analog use possible after allocation review | PROPOSED reservation |
-| Uno A4/A5 | Optional SSD1306, shared bus | HARDWARE-DEPENDENT |
+| Uno A0 / A1 | Pack / servo-rail monitoring through qualified divider and protection | HARDWARE-DEPENDENT |
+| Uno A2 / A3 | Spare | PROPOSED reservation |
+| Pi GPIO2 / GPIO3 (physical 3/5) | Optional SSD1306 on Pi I2C1, 3.3 V-compatible only | HARDWARE-DEPENDENT |
 
 PCA channels 0–7 follow the [joint map](HARDWARE.md); channel 8 is reserved for camera pan. Current firmware only addresses 0–7; connecting a pan servo does not enable software support. Leave 9–15 unassigned.
 
@@ -32,7 +33,7 @@ Power sensors only at their verified rating, with compatible logic levels. A typ
 
 Touch inputs require verified active polarity, output type, and supply. Use INPUT_PULLUP only for a dry contact/open-drain interface that supports it; push-pull touch modules require suitable input wiring. Record placement and debounce after inspection.
 
-For OLED, verify its controller, address, pull-up voltage, and whether its breakout tolerates 5 V. A level shifter may be needed. Uno owns all I2C traffic; do not attach Pi I2C to this bus.
+OLED is Pi-owned: use Pi I2C1 physical 3 SDA / 5 SCL, physical 1 3.3 V and physical 6 GND only after module/pull-up compatibility verification. No 5 V I2C pull-up may reach Pi GPIO. Uno owns its separate A4/A5 servo/sensor bus; do not bridge these buses.
 
 ## Power and stop proposal
 
@@ -54,3 +55,11 @@ Never feed raw 2S voltage to 6 V-rated servos, or servo current through Pi/Uno p
 Route high-current returns to the power distribution point; retain a solid logic reference and local decoupling. Prevent servo current from flowing through thin logic-ground wiring. Verify polarity and unloaded regulation before attaching servos.
 
 D8 HIGH inhibits PWM. Confirm breakout OE behavior and pull-up against its schematic; some boards contain a pull-down that must be accommodated. A future physical stop should disconnect servo power independently of software; D12 is status only and must not be represented as a working stop. Verify switch/DC interrupt ratings and safe restart behavior before use.
+
+## Phase 0.1 distribution amendment
+
+Use the [final architecture diagram](ARCHITECTURE.md) and [Power distribution](../hardware/Power/DISTRIBUTION.md). A single servo rail is the minimum-cost candidate; a split positive-rail variant must not join branches via PCA V+ headers. Prefer external positive/return motor distribution and PWM-only connections. All hardware remains proposed.
+
+A0/A1 are reserved for pack/rail sense; no raw battery connection is permitted. Divider ratio, ADC reference, maximum fault voltage, leakage/clamps and logic-absent behavior require HV13 qualification. The independent power-good/UV/OV latch must inhibit OE and require explicit restart after servo-rail restoration. D12 is stop status only; it does not provide the independent power disconnect.
+
+A pull-up to Uno 5V is insufficient proof of safety when logic is absent and servo power remains. Verify breakout partial-power behavior and a qualified fail-safe buffer/supervisor circuit. [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md) is the single unresolved-hardware register.

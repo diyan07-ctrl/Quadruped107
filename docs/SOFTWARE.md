@@ -71,3 +71,13 @@ journalctl --user -u quadruped107 -f
 The [service](../deploy/quadruped107.service) uses the checkout virtual environment and python -m quadruped.main. Edit paths if installation differs. Optional configuration is ~/.config/quadruped107.env (KEY=value; never commit credentials). For boot without login, sudo loginctl enable-linger "$USER". Restarts reconnect disarmed. Confirm camera permissions for the chosen user session and stop any manually started duplicate process.
 
 Pi 5 portability requires OS/camera/power qualification, not a new messaging layer. The optional OLED and pan servo introduce no required Pi dependencies.
+
+## Phase 0.1 concurrency and ownership
+
+The same Flask/MJPEG stack remains. ARM sets a same-site HttpOnly control cookie; API clients must persist cookies. Only the owner may send modes, servo adjustments or lease heartbeats; STOP is available to other same-origin clients. Ownership generations prevent delayed requests from acting after STOP/re-arm. This is local arbitration, not Internet authentication.
+
+Serial submit/wait separates queue admission from acknowledgment waiting. Up to four ordinary requests are bounded by 250 ms dispatch freshness; a separate coalesced STOP slot cancels older work. Controller reservations and generations prevent concurrent ARM/MOVE/SERVO races; no state lock is held through an acknowledgment timeout. Late old acknowledgments cannot re-enable motion. The existing OS write timeout can still delay dispatch; physical stop time is unmeasured.
+
+Picamera2 uses queue=False and no extra real-camera wait. Native capture and inference can still block; safety has independent threads and Uno timeout. Startup cleanup now covers server creation/start failures; shutdown inhibits motion before camera teardown. Detector teardown is skipped if inference has not returned by the join deadline. Resource/recovery targets and unbounded HTTP/native-call limits are explicit in [ARCHITECTURE](ARCHITECTURE.md).
+
+[Calibration profiles](CALIBRATION.md) are validated offline only. [Telemetry/accessory contracts](EXTENSIONS.md) are not activated. Pi-side OLED is optional and does not share Uno I2C. See [Power](../hardware/Power/README.md) and [physical qualification](HARDWARE_VERIFICATION.md) before a hardware deployment.

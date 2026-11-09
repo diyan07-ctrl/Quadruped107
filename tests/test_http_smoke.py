@@ -6,7 +6,8 @@ import sys
 import time
 import unittest
 from pathlib import Path
-from urllib.request import Request, urlopen
+from http.cookiejar import CookieJar
+from urllib.request import Request, urlopen, build_opener, HTTPCookieProcessor
 
 
 class HttpSmokeTests(unittest.TestCase):
@@ -20,10 +21,11 @@ class HttpSmokeTests(unittest.TestCase):
             cwd=app_dir,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         base = f"http://127.0.0.1:{port}"
+        opener = build_opener(HTTPCookieProcessor(CookieJar()))
         def call(path, data=None):
             request = Request(base + path, data=json.dumps(data).encode() if data is not None else None,
                               headers={"Content-Type": "application/json"})
-            with urlopen(request, timeout=2) as response:
+            with opener.open(request, timeout=2) as response:
                 return json.load(response)
         try:
             deadline = time.monotonic() + 10

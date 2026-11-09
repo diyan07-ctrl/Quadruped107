@@ -1,3 +1,5 @@
+> Phase 0 evidence below is historical. Phase 0.1 results are recorded separately at the end. No physical testing was performed.
+
 # Validation
 
 Phase 0 inspection began from fb5bacc on 2026-11-09. No Raspberry Pi, CSI camera, Uno, PCA9685, sensors, or robot was accessed. Hardware results remain pending.
@@ -68,3 +70,21 @@ Simulation generates synthetic video and command completions without opening har
 10. Check Pi/Uno mounting, cooling, cable strain relief, balance, pinch points and a contained demonstration surface.
 
 See [SAFETY](SAFETY.md) for the required supported-test sequence. Pending hardware qualification is a Phase 1 dependency, not an unperformed successful Phase 0 test.
+
+## Phase 0.1 validation status
+
+Branch phase0.1/architecture-power starts from unmerged PR #1 head 6ce7fcb. Host changes add priority STOP, queue cancellation/capacity/freshness, controller generation barriers, single-browser ownership, camera queue configuration and offline calibration contracts. The standard-library Power calculator adds deterministic engineering scenarios and table checks.
+
+Local Python/Arduino remain unavailable; software and firmware validation will use GitHub Actions. Local repository links/paths/preserved blobs, JavaScript/tool syntax and whitespace checks pass at preparation. New concurrency, power, calibration, installed-wheel and Mermaid checks are pending the Phase 0.1 CI run. This statement is intentionally not a successful test claim.
+
+Reproduce additional checks with:
+
+```bash
+python hardware/Power/power_budget.py --check
+python hardware/Power/power_budget.py --json
+python -m unittest discover -s tests -v
+npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
+node tools/check-mermaid.mjs
+```
+
+Power runtime/current outputs are estimates only. All electrical/mechanical, battery, load, watchdog, partial-power, resource and stop-timing measurements remain pending in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md).

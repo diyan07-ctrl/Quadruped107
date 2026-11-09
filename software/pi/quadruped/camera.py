@@ -35,7 +35,7 @@ class Camera:
                     camera = Picamera2(self.index)
                     config = camera.create_video_configuration(
                         main={"size": (640, 480), "format": "RGB888"},
-                        controls={"FrameRate": 20}, buffer_count=4)
+                        controls={"FrameRate": 20}, buffer_count=4, queue=False)
                     camera.configure(config)
                     camera.start()
                 while not self.stop_event.is_set():
@@ -53,7 +53,7 @@ class Camera:
                         self.timestamp = time.monotonic()
                         self.sequence += 1
                         self.status = "Simulated camera" if self.simulate else "Pi CSI camera connected"
-                    self.stop_event.wait(0.05)
+                    if self.simulate: self.stop_event.wait(0.05)
             except Exception as error:
                 logging.warning("Pi camera: %s", error)
                 with self.lock:

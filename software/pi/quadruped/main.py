@@ -5,6 +5,7 @@ import base64
 import logging
 import os
 import signal
+import secrets
 import threading
 import time
 from pathlib import Path
@@ -29,6 +30,11 @@ class Runtime:
         self.motion = MotionController(self.link)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
+        self.owner_lock = threading.Lock()
+        self.owner_token = None
+        self.owner_seen = 0.0
+        self.owner_generation = 0
+        self.arming_claim = False
         self.vision = dict(opencv="Idle", handGesture="Not configured",
                            blueBall={}, hand={})
         self.preview = None
@@ -46,6 +52,38 @@ class Runtime:
 
     def start(self):
         self.link.start(); self.camera.start(); self.motion.start(); self.worker.start()
+
+    def claim_control(self, token):
+        with self.owner_lock:
+            state = self.motion.snapshot()
+            if self.arming_claim or state["busy"] or state["stopping"] or state["enabled"]:
+                raise RuntimeError("Control is enabled or an operation is pending; STOP before takeover")
+            if self.owner_token is not None and token != self.owner_token and (
+                    state["enabled"] or state["busy"] or state["stopping"] or
+                    time.monotonic() - self.owner_seen < 1.0):
+                raise RuntimeError("Another browser holds control; STOP is available to everyone")
+            token = token if isinstance(token, str) and 20 <= len(token) <= 128 else secrets.token_urlsafe(24)
+            self.owner_token, self.owner_seen = token, time.monotonic()
+            self.owner_generation += 1
+            self.arming_claim = True
+            return token, self.owner_generation
+
+    def require_control(self, token):
+        with self.owner_lock:
+            if self.owner_token is None or token != self.owner_token:
+                raise RuntimeError("Enable servos in this browser to acquire control")
+            self.owner_seen = time.monotonic()
+            return self.motion.snapshot()["generation"]
+
+    def release_control(self, token, generation):
+        with self.owner_lock:
+            if token == self.owner_token and generation == self.owner_generation:
+                self.owner_token = None
+                self.arming_claim = False
+
+    def finish_claim(self, generation):
+        with self.owner_lock:
+            if generation == self.owner_generation: self.arming_claim = False
 
     def frame(self):
         _, jpeg, _, _ = self.camera.latest()
@@ -126,7 +164,8 @@ class Runtime:
         self.link.close()
         self.camera.close()
         if self.worker.is_alive(): self.worker.join(3)
-        if self.detector: self.detector.close()
+        if self.detector and not self.worker.is_alive(): self.detector.close()
+        elif self.worker.is_alive(): logging.warning("Vision worker still running after shutdown deadline")
 
 
 def create_app(runtime):
@@ -171,7 +210,8 @@ def create_app(runtime):
             raise RuntimeError(runtime.vision["handGesture"])
         if mode in {"opencv", "hand_gesture"} and runtime.camera.latest()[0] is None:
             raise RuntimeError("A fresh Pi camera frame is required for vision control")
-        generation = runtime.motion.set_mode(mode)
+        generation = runtime.require_control(request.cookies.get("quadruped_control"))
+        generation = runtime.motion.set_mode(mode, expected_generation=generation)
         return jsonify(ok=True, acceptedMode=mode, generation=generation, state=runtime.motion.snapshot())
 
     @app.post("/api/heartbeat")
@@ -180,27 +220,44 @@ def create_app(runtime):
         motion = data.get("motion")
         if motion is not None and (not isinstance(motion, str) or motion not in CONTINUOUS):
             raise ValueError("Invalid held motion")
-        runtime.motion.heartbeat()
+        with runtime.owner_lock:
+            unclaimed = runtime.owner_token is None
+        if unclaimed: return jsonify(ok=True)
+        generation = runtime.require_control(request.cookies.get("quadruped_control"))
+        runtime.motion.heartbeat(motion, expected_generation=generation)
         state = runtime.motion.snapshot()
         if (state["enabled"] and state["appMode"] == "manual" and
                 state["desiredMotion"] in CONTINUOUS and motion != state["desiredMotion"]):
-            runtime.motion.set_mode("stand")
+            runtime.motion.set_mode("stand", expected_generation=generation)
         return jsonify(ok=True)
 
     @app.post("/api/arm")
     def arm():
-        body(); runtime.motion.arm()
-        return jsonify(ok=True, state=runtime.motion.snapshot())
+        body()
+        generation = runtime.motion.snapshot()["generation"]
+        token, claim = runtime.claim_control(request.cookies.get("quadruped_control"))
+        try: runtime.motion.arm(expected_generation=generation)
+        except Exception:
+            runtime.release_control(token, claim)
+            raise
+        finally: runtime.finish_claim(claim)
+        response = jsonify(ok=True, state=runtime.motion.snapshot())
+        response.set_cookie("quadruped_control", token, httponly=True, samesite="Strict")
+        return response
 
     @app.post("/api/stop")
     def stop():
+        with runtime.owner_lock:
+            token, claim = runtime.owner_token, runtime.owner_generation
         body(); runtime.motion.stop()
+        runtime.release_control(token, claim)
         return jsonify(ok=True, state=runtime.motion.snapshot())
 
     @app.post("/api/servo")
     def servo():
+        generation = runtime.require_control(request.cookies.get("quadruped_control"))
         data = body()
-        runtime.motion.servo(data.get("channel"), data.get("pulse"))
+        runtime.motion.servo(data.get("channel"), data.get("pulse"), expected_generation=generation)
         return jsonify(ok=True)
 
     @app.get("/api/camera-frame")
@@ -246,16 +303,17 @@ def main():
     signal.signal(signal.SIGTERM, terminate)
     runtime = Runtime(simulate=args.simulate, port=args.serial_port,
                       camera_index=args.camera_index, gesture_model=args.gesture_model)
-    server = make_server(args.host, args.port, create_app(runtime), threaded=True)
-    runtime.start()
+    server = None
     try:
+        server = make_server(args.host, args.port, create_app(runtime), threaded=True)
+        runtime.start()
         logging.info("Quadruped107%s: http://%s:%s", " SIMULATION" if args.simulate else "", args.host, args.port)
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
-        server.server_close()
         runtime.close()
+        if server is not None: server.server_close()
 
 
 if __name__ == "__main__": main()

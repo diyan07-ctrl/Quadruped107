@@ -1,5 +1,7 @@
 # Hardware assets
 
+[Power engineering](Power/README.md) contains the component loads, battery/converter study, protection and reproducible calculator. All power components remain NOT YET QUALIFIED.
+
 - [cad](cad/): original Fusion 360 F3Z archive and STEP assembly.
 - [stl](stl/): 24 original part files plus the supplied STL_Final.zip.
 - [calibration](calibration/): original servo table and controller key-binding spreadsheets.
