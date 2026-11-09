@@ -1,14 +1,53 @@
 {
   "schema": 1,
-  "sourceCommit": "80a48df5af5c54316c2afc65ad1457729e7d2211",
-  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675186244",
-  "classification": "SIMULATED FIXED-BASE ARTICULATION; NOT PHYSICAL VALIDATION",
+  "sourceCommit": "5238cc42230e072dda032e9bcc7020a7fb6853ff",
+  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675542675",
+  "classification": "SIMULATED ARTICULATION / PROVISIONAL FREE-BASE PROBE; NOT PHYSICAL VALIDATION",
   "host": "Ubuntu GitHub Actions",
   "tests": {
     "passed": 74,
-    "seconds": 21.519
+    "seconds": 21.574
   },
   "physicalValidation": false,
+  "stabilityProbe": {
+    "classification": "PROVISIONAL FREE-BASE GRAVITY PROBE",
+    "diagnostics": {
+      "baseEuler": [
+        -3.954393623801884e-7,
+        -8.324220384626727e-7,
+        0.010136590379348985
+      ],
+      "basePosition": [
+        -0.017072298490160117,
+        0.0005144193851896459,
+        0.22906124926755464
+      ],
+      "fault": null,
+      "fixedBase": false,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 12,
+      "maxJointErrorRad": 0.5534302136357001,
+      "maxSelfCollisionContacts": 0,
+      "modeledVelocityLimitRadS": 3,
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 720,
+      "subSteps": 4
+    },
+    "outcome": "No configured fall/tilt/divergence fault in three virtual seconds",
+    "physicalLocomotionValidated": false
+  },
   "routines": [
     {
       "baseEuler": [

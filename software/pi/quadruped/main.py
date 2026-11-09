@@ -31,7 +31,12 @@ class Runtime:
                  simulator_host=None, simulator_port=7002):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
-        if link is not None: self.link = link
+        if link is not None:
+            if self.actuators_simulated and not isinstance(link, SimulatedLink):
+                from .virtual_uno import VirtualLink
+                if not isinstance(link, VirtualLink):
+                    raise ValueError("Simulation configuration cannot wrap a physical or unknown actuator link")
+            self.link = link
         elif actuator_backend == "virtual":
             from .virtual_uno import VirtualLink
             self.link = VirtualLink(speed=virtual_speed)

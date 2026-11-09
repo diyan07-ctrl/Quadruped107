@@ -217,6 +217,10 @@ class VirtualProtocolTests(unittest.TestCase):
 
 
 class OperatingModeTests(unittest.TestCase):
+    def test_simulation_flag_cannot_relabel_a_physical_link(self):
+        from quadruped.serial_link import SerialLink
+        with self.assertRaises(ValueError): Runtime(simulate=True,link=SerialLink())
+
     def test_physical_monitor_cannot_arm(self):
         runtime=Runtime()
         client=create_app(runtime).test_client()
