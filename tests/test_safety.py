@@ -223,4 +223,99 @@ class OwnerTests(unittest.TestCase):
         runtime.finish_claim(generation)
 
 
+
+class RecoveryAndVisionTests(unittest.TestCase):
+    def test_real_worker_reconnects_without_replaying_motion(self):
+        first, second = FakeSerial(), FakeSerial()
+        devices = iter((first, second))
+        link = SerialLink("fake", factory=lambda **kwargs: next(devices))
+        link.start()
+        errors = []
+        try:
+            wait_for(lambda: link.snapshot()["connected"], 4)
+            link.command("ARM")
+            old_epoch = link.snapshot()["epoch"]
+            def move():
+                try: link.command("MOVE", "forward")
+                except RuntimeError as error: errors.append(str(error))
+            mover = threading.Thread(target=move)
+            mover.start()
+            wait_for(lambda: first.active is not None)
+            first.incoming.put(b"READY Quadruped107 1\n")
+            mover.join(2)
+            self.assertFalse(mover.is_alive())
+            self.assertTrue(errors)
+            wait_for(lambda: link.snapshot()["connected"] and link.snapshot()["epoch"] != old_epoch, 7)
+            self.assertFalse(link.snapshot()["armed"])
+            self.assertNotIn(b"MOVE", [message.split()[0] for message in second.sent])
+            with self.assertRaisesRegex(RuntimeError, "disarmed"): link.command("MOVE", "forward")
+            link.command("ARM")
+            self.assertTrue(link.snapshot()["armed"])
+        finally: link.close()
+
+    def test_old_inference_generation_does_not_enter_new_session(self):
+        link = GateLink()
+        controller = MotionController(link)
+        controller.arm()
+        controller.set_mode("opencv")
+        old = controller.snapshot()["generation"]
+        controller.stop()
+        controller.arm()
+        controller.set_mode("opencv")
+        controller.executed = controller.generation
+        generation = controller.generation
+        controller.autonomous("opencv", "forward", expected_generation=old)
+        self.assertEqual(controller.generation, generation)
+
+    def test_blocked_vision_is_stopped_by_independent_guard(self):
+        from unittest.mock import patch
+        entered, release = threading.Event(), threading.Event()
+        runtime = Runtime(simulate=True)
+        def blocked(frame):
+            entered.set()
+            release.wait(3)
+            return {"detected": False}
+        # Block detection before it can construct a result. A separate heartbeat
+        # keeps the operator lease alive so only the vision guard can stop it.
+        with patch("quadruped.main.detect_blue_ball", side_effect=blocked):
+            runtime.start()
+            try:
+                wait_for(lambda: runtime.camera.latest()[0] is not None)
+                runtime.motion.arm()
+                runtime.motion.set_mode("opencv")
+                self.assertTrue(entered.wait(1))
+                deadline = time.monotonic() + 1.8
+                while runtime.motion.snapshot()["enabled"] and time.monotonic() < deadline:
+                    runtime.motion.heartbeat()
+                    time.sleep(.03)
+                self.assertFalse(runtime.motion.snapshot()["enabled"])
+                self.assertEqual(runtime.motion.snapshot()["fault"], "Vision observation expired")
+            finally:
+                release.set()
+                runtime.close()
+
+    def test_real_camera_configuration_requests_no_saved_frame(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import numpy as np
+        from quadruped.camera import Camera
+        camera = Camera()
+        configurations = []
+        class StubCamera:
+            def create_video_configuration(self, **kwargs):
+                configurations.append(kwargs)
+                return kwargs
+            def configure(self, value): pass
+            def start(self): pass
+            def capture_array(self, name):
+                camera.stop_event.set()
+                return np.zeros((480, 640, 3), dtype=np.uint8)
+            def stop(self): pass
+            def close(self): pass
+        with patch.dict(sys.modules, {"picamera2": SimpleNamespace(Picamera2=lambda index: StubCamera())}):
+            camera._run()
+        self.assertFalse(configurations[0]["queue"])
+        self.assertIsNotNone(camera.latest()[1])
+
+
 if __name__ == "__main__": unittest.main()

@@ -75,7 +75,9 @@ See [SAFETY](SAFETY.md) for the required supported-test sequence. Pending hardwa
 
 Branch phase0.1/architecture-power starts from unmerged PR #1 head 6ce7fcb. Host changes add priority STOP, queue cancellation/capacity/freshness, controller generation barriers, single-browser ownership, camera queue configuration and offline calibration contracts. The standard-library Power calculator adds deterministic engineering scenarios and table checks.
 
-Local Python/Arduino remain unavailable; software and firmware validation will use GitHub Actions. Local repository links/paths/preserved blobs, JavaScript/tool syntax and whitespace checks pass at preparation. New concurrency, power, calibration, installed-wheel and Mermaid checks are pending the Phase 0.1 CI run. This statement is intentionally not a successful test claim.
+Local Python/Arduino remain unavailable; software and firmware validation will use GitHub Actions. Local repository links/paths/preserved blobs, JavaScript/tool syntax and whitespace checks pass at preparation. Initial [push CI 42582299428](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42582299428) and [PR CI 42582307102](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42582307102) passed at 58e40dd: 42 tests (3.704 s in push), package/wheel import and assets, dependency consistency, Python compilation, calculator-generated tables, repository integrity and four Mermaid diagrams. Uno compiled unchanged at 10,198 bytes flash / 998 bytes globals. Canonical Power tables were copied from the actual calculator output.
+
+Follow-up code adds generation/session-safe inference, a separate 0.8 s observation guard, first-fault latching, and tests using the real serial worker through reconnection and a blocked vision worker. Those follow-up tests and final table-consistency checks await the next CI run; prior success is not represented as their result.
 
 Reproduce additional checks with:
 

@@ -109,35 +109,40 @@ class Runtime:
         candidate = None
         stable = 0
         previous_mode = "manual"
+        previous_session = None
         issued_gesture = None
         while not self.stop_event.wait(0.06):
             state = self.motion.snapshot()
             mode = state["appMode"]
-            if mode != previous_mode:
+            if mode != previous_mode or state["session"] != previous_session:
                 candidate, stable, issued_gesture = None, 0, None
                 previous_mode = mode
+                previous_session = state["session"]
             if mode == "manual" or not state["enabled"]: continue
-            frame, _, sequence, _ = self.camera.latest()
+            frame, _, sequence, _, published_at = self.camera.latest(with_timestamp=True)
             if frame is None:
-                self.motion.stop("Camera frame expired during vision control")
+                self.motion.stop("Camera frame expired during vision control", expected_generation=state["generation"])
                 continue
             if sequence == last_sequence: continue
             last_sequence = sequence
             try:
                 if mode == "opencv":
                     detection = detect_blue_ball(frame)
+                    if not self._fresh_observation(state, published_at): continue
                     action, motion = choose_blue_ball_motion(detection)
                     motion = "stand" if motion == "hold" else motion
                     key = action
                     preview = encode_vision_frame(frame, detection, action, motion)
+                    if not self._fresh_observation(state, published_at): continue
                     with self.lock:
-                        self.preview, self.preview_at = preview, time.monotonic()
+                        self.preview, self.preview_at = preview, published_at
                         self.vision["opencv"] = f"{action}: {motion}"
                         self.vision["blueBall"] = {k: v for k, v in detection.items() if k != "mask"}
                         self.vision["blueBall"].update(action=action, motion=motion)
                 else:
                     if self.detector is None: raise RuntimeError("Hand gesture model unavailable")
                     gesture = self.detector.detect(frame)
+                    if not self._fresh_observation(state, published_at): continue
                     with self.lock:
                         self.vision["hand"] = ({"detected": True, **gesture} if gesture else
                                                dict(detected=False, gesture="none", motion="hold"))
@@ -145,18 +150,26 @@ class Runtime:
                         candidate, stable, issued_gesture = None, 0, None
                         continue
                     key, motion = gesture["gesture"], gesture["motion"]
+                if not self._fresh_observation(state, published_at):
+                    continue
                 stable = stable + 1 if key == candidate else 1
                 candidate = key
                 if (stable >= 2 and time.monotonic() - last_action_at >= 1.5 and
                         (mode != "hand_gesture" or key != issued_gesture)):
                     before = self.motion.snapshot()["generation"]
-                    self.motion.autonomous(mode, motion)
+                    self.motion.autonomous(mode, motion, expected_generation=state["generation"])
                     if self.motion.snapshot()["generation"] != before:
                         last_action_at = time.monotonic()
                         issued_gesture = key
             except Exception as error:
                 logging.exception("Vision failed")
-                self.motion.stop(f"Vision failed: {error}")
+                self.motion.stop(f"Vision failed: {error}", expected_generation=state["generation"])
+
+    def _fresh_observation(self, state, published_at):
+        if time.monotonic() - published_at > .5:
+            self.motion.stop("Stale vision result", expected_generation=state["generation"])
+            return False
+        return self.motion.vision_heartbeat(state["appMode"], state["generation"], published_at)
 
     def close(self):
         self.stop_event.set()

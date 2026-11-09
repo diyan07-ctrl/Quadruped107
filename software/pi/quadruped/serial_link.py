@@ -236,7 +236,8 @@ class SerialLink:
                 if connection:
                     try: connection.write(b"\nSTOP 0\n")
                     except Exception: pass
-                    connection.close()
+                    try: connection.close()
+                    except Exception: pass  # failure state/queue cleanup below must still run
                 self._fail("Serial disconnected" if self.stop_event.is_set() else self.error or "Reconnecting")
             self.stop_event.wait(2.0)
 

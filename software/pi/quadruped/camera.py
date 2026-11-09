@@ -20,11 +20,12 @@ class Camera:
 
     def start(self): self.thread.start()
 
-    def latest(self):
+    def latest(self, *, with_timestamp=False):
         with self.lock:
             fresh = time.monotonic() - self.timestamp < 0.8
-            return (self.frame.copy() if fresh and self.frame is not None else None,
-                    self.jpeg if fresh else None, self.sequence, self.status)
+            snapshot = (self.frame.copy() if fresh and self.frame is not None else None,
+                        self.jpeg if fresh else None, self.sequence, self.status)
+            return snapshot + (self.timestamp,) if with_timestamp else snapshot
 
     def _run(self):
         while not self.stop_event.is_set():

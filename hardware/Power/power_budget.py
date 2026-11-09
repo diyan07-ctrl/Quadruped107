@@ -10,7 +10,7 @@ from pathlib import Path
 SERVO_V = 6.0
 PACK_V, PACK_AH = 7.4, 1.8
 NEW_PACK_V, NEW_PACK_AH = 11.1, 2.2
-STALL_A = {"MG996R_manufacturer": 1.4, "MG996R_legacy_sheet": 2.5}
+LOW_STALL_A, HIGH_STALL_A = 1.4, 2.5
 CONVERTER_CONT_A = 10.0
 HEADROOM_FACTOR = 1.25
 FIXED_INPUT_ALLOWANCE_W = 0.1  # additional reserve, not a measured quiescent current
@@ -53,12 +53,12 @@ SERVO_CASES = {
     "walking mixed support": [(4, .70, 1), (4, .35, 1)],
     "turning mixed support": [(4, .90, 1), (4, .50, 1)],
     "high-load assumption": [(8, .90, 1)],
-    "simultaneous acceleration allowance": [(8, 1.40, 1)],
-    "three stalls lower / five moving": [(3, 1.40, 1), (5, .70, 1)],
-    "three stalls upper / five moving": [(3, 2.50, 1), (5, .70, 1)],
-    "eight stall lower bound scenario": [(8, 1.40, 1)],
-    "eight stall upper bound scenario": [(8, 2.50, 1)],
-    "nine stall upper bound scenario": [(9, 2.50, 1)],
+    "simultaneous acceleration allowance": [(8, LOW_STALL_A, 1)],
+    "three stalls lower / five moving": [(3, LOW_STALL_A, 1), (5, .70, 1)],
+    "three stalls upper / five moving": [(3, HIGH_STALL_A, 1), (5, .70, 1)],
+    "eight stall lower bound scenario": [(8, LOW_STALL_A, 1)],
+    "eight stall upper bound scenario": [(8, HIGH_STALL_A, 1)],
+    "nine stall upper bound scenario": [(9, HIGH_STALL_A, 1)],
 }
 
 
@@ -149,6 +149,11 @@ def runtimes(name, bound):
 
 
 def report():
+    upper_w = power(SERVO_V, aggregate(SERVO_CASES["eight stall upper bound scenario"]))
+    high_a = aggregate(SERVO_CASES["high-load assumption"])
+    high_w = power(SERVO_V, high_a)
+    peak_logic_w = sum(v * count * peak for name, rail, v, count, idle, active, peak, accepted, source, confidence
+                       in COMPONENTS if rail == "logic")
     return {
         "status": "ESTIMATES ONLY; installed parts and batteries NOT YET QUALIFIED",
         "nominal_pack_wh": energy(PACK_V, PACK_AH),
@@ -158,11 +163,13 @@ def report():
                         for name, groups in SERVO_CASES.items()},
         "scenarios": {name: {**scenario(name), "runtimes": {bound: runtimes(name, bound) for bound in BOUNDS}}
                       for name in SCENARIOS},
-        "upper_fault": {"input_a_at_6v_85pct": input_current(120, 6, .85, .1),
-                        "input_a_at_9v_85pct": input_current(120, 9, .85, .1)},
-        "high_load": {"converter_loss_w_85pct": converter_loss(43.2, .85, .1),
-                      "continuous_target_a_with_headroom": 7.2 * HEADROOM_FACTOR,
-                      "candidate_10a_reserve_pct": (CONVERTER_CONT_A / 7.2 - 1) * 100},
+        "peak_output": {"servo_w": upper_w, "logic_allowance_w": peak_logic_w,
+                        "combined_w": upper_w + peak_logic_w},
+        "upper_fault": {"input_a_at_6v_85pct": input_current(upper_w, 6, .85, FIXED_INPUT_ALLOWANCE_W),
+                        "input_a_at_9v_85pct": input_current(upper_w, 9, .85, FIXED_INPUT_ALLOWANCE_W)},
+        "high_load": {"converter_loss_w_85pct": converter_loss(high_w, .85, FIXED_INPUT_ALLOWANCE_W),
+                      "continuous_target_a_with_headroom": high_a * HEADROOM_FACTOR,
+                      "candidate_10a_reserve_pct": (CONVERTER_CONT_A / high_a - 1) * 100},
         "distribution": {"20a_drop_v_at_20mohm": 20 * ROUND_TRIP_OHM,
                          "20a_wire_loss_w": wire_loss(20, ROUND_TRIP_OHM),
                          "10a_2ms_250mv_capacitance_f": capacitor_f(10, .002, .25)},
@@ -232,7 +239,7 @@ def main():
               "ESTIMATES ONLY — no qualified hardware ratings\n" +
               "\n\n".join(name + "\n" + value for name, value in generated_tables().items()) +
               "\n\nEngineering quantities:\n" + json.dumps({k:v for k,v in report().items() if k in
-                  {"nominal_pack_wh","replacement_3S_wh","upper_fault","high_load","distribution"}}, indent=2, sort_keys=True))
+                  {"nominal_pack_wh","replacement_3S_wh","peak_output","upper_fault","high_load","distribution"}}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

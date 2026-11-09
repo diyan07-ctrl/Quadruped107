@@ -41,12 +41,13 @@ class PowerTests(unittest.TestCase):
         self.assertAlmostEqual(p.capacitor_f(10, .002, .25), .08)
         self.assertAlmostEqual(p.report()["high_load"]["continuous_target_a_with_headroom"], 9)
         self.assertAlmostEqual(p.report()["upper_fault"]["input_a_at_6v_85pct"], (120/.85+.1)/6)
+        self.assertAlmostEqual(p.report()["peak_output"]["combined_w"], 133.475)
 
     def test_invalid_inputs(self):
         for bad in (0, -1, math.nan, math.inf, True, "5"):
-            for function in (lambda: p.energy(bad, 1), lambda: p.power(bad, 1),
+            for function in (lambda: p.energy(bad, 1), lambda: p.energy(1, bad), lambda: p.power(bad, 1),
                              lambda: p.runtime_hours(1, 1, bad), lambda: p.input_current(1, bad, .9),
-                             lambda: p.input_power(1, bad)):
+                             lambda: p.input_power(1, bad), lambda: p.runtime_hours(1, bad, 1)):
                 with self.assertRaises(ValueError): function()
         for efficiency in (1.01, 2):
             with self.assertRaises(ValueError): p.input_power(1, efficiency)

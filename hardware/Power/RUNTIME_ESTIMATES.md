@@ -15,6 +15,27 @@ These are sensitivity scenarios, not confidence intervals or warranties. Every c
 The first table is **Option A servo-battery runtime only**. The second table compares B balanced independent branches, C shared new 3S battery, D new 3S servo battery, and the independent bank's normalized requirement. All second-table values use nominal assumptions.
 
 <!-- POWER_TABLE_START -->
+| Scenario | A optimistic min | A nominal min | A conservative min |
+| --- | --- | --- | --- |
+| disabled_streaming | 1347.3 | 946.4 | 595.0 |
+| standing | 47.7 | 31.9 | 19.3 |
+| slow_walking | 31.9 | 21.3 | 12.9 |
+| turning | 23.9 | 16.0 | 9.7 |
+| exploration | 27.3 | 18.3 | 11.1 |
+| vision_standing | 47.7 | 31.9 | 19.3 |
+| pan_oled_exploration | 26.3 | 17.6 | 10.6 |
+| high_load | 18.6 | 12.5 | 7.5 |
+
+| Scenario | B balanced servo min | C shared 3S min | D 3S servo min | Bank min per delivered Wh |
+| --- | --- | --- | --- | --- |
+| disabled_streaming | 1634.7 | 147.3 | 1735.1 | 9.9 |
+| standing | 63.5 | 42.9 | 58.6 | 9.9 |
+| slow_walking | 42.5 | 31.0 | 39.1 | 9.1 |
+| turning | 31.9 | 24.2 | 29.4 | 8.5 |
+| exploration | 36.5 | 26.3 | 33.5 | 7.4 |
+| vision_standing | 63.5 | 39.4 | 58.6 | 7.4 |
+| pan_oled_exploration | 35.1 | 25.4 | 32.2 | 7.3 |
+| high_load | 24.9 | 19.2 | 22.8 | 7.4 |
 <!-- POWER_TABLE_END -->
 
 ## Architecture limits

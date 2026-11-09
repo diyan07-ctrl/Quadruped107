@@ -55,7 +55,7 @@ stateDiagram-v2
     Disabled --> Disabled: reconnect or rail fault; no replay
 ```
 
-Busy control-mode switches reject rather than waiting behind a long routine. Latest pose/direction selection may replace unsent intent during MOVE; stand remains the release intent. Old action intent expires after 500 ms; held direction is renewed only by the owner's matching heartbeat. A failed active MOVE latches a stop even if a newer desired direction exists. Explicit re-arm clears a fault only after the STOP barrier/previous operation retires.
+Busy control-mode switches reject rather than waiting behind a long routine. Latest pose/direction selection may replace unsent intent during MOVE; stand remains the release intent. Old action intent expires after 500 ms; held direction is renewed only by the owner's matching heartbeat. Inference submissions are tied to the captured control generation and arming session; delayed results cannot cross a STOP/re-arm. A failed active MOVE latches a stop even if a newer desired direction exists. Explicit re-arm clears a fault only after the STOP barrier/previous operation retires.
 
 ## Timing, blocking and resource gates
 
@@ -63,7 +63,7 @@ Busy control-mode switches reject rather than waiting behind a long routine. Lat
 | --- | --- |
 | Camera | One capture owner, queue=False, latest frame only, requested 640×480 at 20 fps; actual target ≥10 fresh fps |
 | Frame age | 0.8 s publication expiry implemented; exposure timestamp/clock-domain age still requires HV14 measurement |
-| Vision | Separate worker, 60 ms wait, two stable observations and 1.5 s action cooldown; inference may block, never owns serial |
+| Vision | Separate worker, 60 ms wait, two stable observations and 1.5 s cooldown; completed result must be ≤500 ms old from publication; independent 0.8 s observation guard inhibits a blocked worker |
 | Browser | 250 ms heartbeat, 1 s lease and 50 ms guard; background timers can throttle and therefore disarm |
 | Serial | One I/O owner, four ordinary pending max, one coalesced urgent STOP, 250 ms ordinary queue TTL; no replay |
 | I/O blocking | Serial reads 50 ms, writes up to configured 500 ms; STOP cannot retract a write already started |

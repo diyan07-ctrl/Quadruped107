@@ -17,11 +17,13 @@ class MotionController:
         self.stop_event = threading.Event()
         self.wake = threading.Event()
         self.generation = self.executed = 0
+        self.session = 0
         self.app_mode = "manual"
         self.desired = self.current = "none"
         self.busy = self.enabled = False
         self.active = self.stop_ticket = None
         self.last_heartbeat = self.desired_at = 0.0
+        self.vision_seen = 0.0
         self.result = "Connect the Uno, then enable servos"
         self.error = None
         self.fault = "Startup; explicit enable required"
@@ -38,6 +40,7 @@ class MotionController:
             return dict(appMode=self.app_mode, desiredMotion=self.desired,
                         currentMotion=self.current, generation=self.generation,
                         executedGeneration=self.executed, busy=self.busy,
+                        session=self.session,
                         enabled=self.enabled, stopping=self.stop_ticket is not None,
                         fault=self.fault, lastResult=self.result, lastError=self.error)
 
@@ -54,6 +57,13 @@ class MotionController:
             if self.active is ticket:
                 self.active = None
                 self.busy = False
+
+    def vision_heartbeat(self, owner, generation, published_at):
+        with self.lock:
+            if not self.enabled or self.app_mode != owner or self.generation != generation:
+                return False
+            self.vision_seen = published_at
+            return True
 
     def arm(self, expected_generation=None):
         with self.lock:
@@ -74,6 +84,7 @@ class MotionController:
                 if generation != self.generation or self.stop_ticket is not None or not link["armed"] or link["epoch"] != epoch:
                     raise RuntimeError("Arming cancelled by stop or link change")
                 self.enabled = True
+                self.session += 1
                 self.epoch = epoch
                 self.executed = generation
                 self.app_mode = "manual"
@@ -87,17 +98,20 @@ class MotionController:
         finally:
             self._retire(ticket)
 
-    def stop(self, reason="Stopped; servos disabled"):
+    def stop(self, reason="Stopped; servos disabled", expected_generation=None):
         # Invalidate first, submit while holding only the state/transaction locks,
         # then release those locks before waiting. ARM/SERVO cannot delay STOP by
         # holding a lock for their acknowledgment timeout.
         with self.lock:
+            if expected_generation is not None and expected_generation != self.generation:
+                return
             self.enabled = False
             self.generation += 1
             self.executed = self.generation
             self.app_mode = "manual"
             self.desired = self.current = "none"
-            self.result = self.fault = reason
+            self.result = reason
+            if self.fault is None: self.fault = reason
             ticket = None
             if self.link.snapshot()["connected"]:
                 try:
@@ -129,6 +143,7 @@ class MotionController:
             self.generation += 1
             if mode in MODES:
                 self.app_mode, self.desired = mode, "stand"
+                self.vision_seen = time.monotonic()
             else:
                 self.app_mode, self.desired = "manual", mode
             self.last_heartbeat = self.desired_at = time.monotonic()
@@ -137,10 +152,11 @@ class MotionController:
         self.wake.set()
         return generation
 
-    def autonomous(self, owner, motion):
+    def autonomous(self, owner, motion, expected_generation=None):
         if owner not in {"opencv", "hand_gesture"} or motion not in MOTIONS:
             raise ValueError("Invalid autonomous owner or motion")
         with self.lock:
+            if expected_generation is not None and expected_generation != self.generation: return
             if not self.enabled or self.app_mode != owner or self.busy: return
             if self.generation != self.executed: return
             self.generation += 1
@@ -175,8 +191,13 @@ class MotionController:
                 link = self.link.snapshot()
                 stale = self.enabled and time.monotonic() - self.last_heartbeat > LEASE_SECONDS
                 reset = self.enabled and (not link["connected"] or not link["armed"] or link["epoch"] != self.epoch)
-            if stale or reset:
-                self.stop("Control heartbeat expired" if stale else "Arduino disconnected or reset; enable again")
+                vision_stale = self.enabled and self.app_mode in {"opencv", "hand_gesture"} and time.monotonic() - self.vision_seen > .8
+                generation = self.generation
+            if stale or reset or vision_stale:
+                reason = ("Control heartbeat expired" if stale else
+                          "Arduino disconnected or reset; enable again" if reset else "Vision observation expired")
+                self.stop(reason,
+                          expected_generation=generation)
 
     def _run(self):
         while not self.stop_event.is_set():
@@ -197,7 +218,7 @@ class MotionController:
                         except Exception as error:
                             self.error = str(error)
             if stale:
-                self.stop("Stale motion intent")
+                self.stop("Stale motion intent", expected_generation=generation)
                 continue
             if not run:
                 self.wake.wait(0.05)

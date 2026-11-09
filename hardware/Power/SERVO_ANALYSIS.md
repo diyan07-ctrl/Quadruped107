@@ -9,6 +9,20 @@ Soldered's MG995 sheet states 4.8–6.6 V but gives no idle, running or stall cu
 `P = V × I`; `I_total = Σ(count × current_per_servo × duty_fraction)`. Groups explicitly identify support/moving/stalled servos; this avoids hiding every load behind one concurrency factor. A group duty of 1 means its already-assumed average current applies continuously during that scenario.
 
 <!-- POWER_TABLE_START -->
+| Scenario at 6V distribution output | A | W |
+| --- | --- | --- |
+| powered idle / PWM disabled allowance | 0.08 | 0.48 |
+| no-load MG996R reference | 1.36 | 8.16 |
+| standing assumption | 2.80 | 16.80 |
+| walking mixed support | 4.20 | 25.20 |
+| turning mixed support | 5.60 | 33.60 |
+| high-load assumption | 7.20 | 43.20 |
+| simultaneous acceleration allowance | 11.20 | 67.20 |
+| three stalls lower / five moving | 7.70 | 46.20 |
+| three stalls upper / five moving | 11.00 | 66.00 |
+| eight stall lower bound scenario | 11.20 | 67.20 |
+| eight stall upper bound scenario | 20.00 | 120.00 |
+| nine stall upper bound scenario | 22.50 | 135.00 |
 <!-- POWER_TABLE_END -->
 
 ## Engineering interpretation
