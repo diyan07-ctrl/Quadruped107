@@ -46,7 +46,7 @@ The inherited validation document reported a 2026-11-04 Uno compile at 10,198 by
 | Uno compile | Passed; AVR core 1.8.8, PWM library 3.0.2, BusIO 1.17.4 |
 | Firmware size | 10,198 bytes flash / 32,256; 998 bytes global SRAM / 2,048; 1,050 bytes remain for stack/locals |
 
-The final tooling commit updates checkout/setup-python to verified Node 24 releases and adds pip check. Arduino's latest setup action remains v2.0.0, declared for Node 20; the hosted runner executes it on Node 24 successfully but reports an upstream deprecation warning. This warning does not indicate a firmware compile failure. Final-head CI must pass before the PR is marked ready.
+The final tooling commit updates checkout/setup-python to verified Node 24 releases and adds pip check. Arduino's latest setup action remains v2.0.0, declared for Node 20; the hosted runner executes it on Node 24 successfully but reports an upstream deprecation warning. This warning does not indicate a firmware compile failure. The tooling commit 50d776f47dcdb1854961de1d741a52fd7af09cf8 passed both Python and Uno jobs in [push run 42575330234](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42575330234), including pip check. The final documentation-only commit records this result; its PR checks are verified before marking ready.
 
 ## Coverage and limits
 

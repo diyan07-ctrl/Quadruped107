@@ -13,6 +13,7 @@ Audit baseline: fb5bacc011ee3c99ed0cc3078a8081b49bfce029, the main branch at ins
 | Tests / CI / deployment | Existing serial/controller/API/vision and HTTP subprocess tests; repair module launch and paths, add repository/install checks |
 | Fusion / STEP / 24 STL / ZIP | Preserve all blobs under hardware; no mechanical redesign |
 | Images / animation | Preserve all original blobs; electrical diagram remains historical |
+| Unused constants | BLUE_STABLE_DETECTIONS_REQUIRED is defined while the worker uses literal 2; FirstServoChannel is unused in active firmware. Retain these harmless inherited constants to preserve source during the structural refactor; reconcile configuration in the relevant feature phase |
 | Two spreadsheets | Preserve original data and filenames; values unverified for current assembly |
 | UNO Q calibration / deprecated station | Archive source, metadata and READMEs; useful JSON-export workflow and historical calibration differences, incompatible Bridge dependencies and incomplete board profiles |
 | License / notices | Preserve GPL license and source notices; no evidenced additional named upstream author found |
