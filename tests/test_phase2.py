@@ -354,6 +354,26 @@ class EnvironmentTests(unittest.TestCase):
                     self.assertFalse(next(r for r in batch["observations"] if r["id"]=="urm37")["valid"])
             finally: world.close()
 
+    def test_scene_reset_is_seeded_disarmed_and_changes_epoch(self):
+        from simulation.twin import World
+        from simulation.environment import Scene
+        world=World()
+        receiver=TraceReceiver()
+        try:
+            scene=Scene(world,"single_obstacle",latency=0,noise=.001)
+            first=scene.telemetry()["observations"][0]["value"]
+            old=receiver.session
+            scene.add_box(.5,0,.05,.1)
+            scene.touches["head"].pressed=True
+            scene.reset(receiver)
+            self.assertNotEqual(receiver.session,old)
+            self.assertFalse(receiver.state["armed"])
+            self.assertFalse(world.active_mask)
+            self.assertFalse(scene.touches["head"].pressed)
+            self.assertEqual(scene.telemetry()["observations"][0]["value"],first)
+            self.assertEqual(world.diagnostics()["fixturePositionErrorM"],0)
+        finally: world.close()
+
     def test_noise_latency_failure_and_bounded_proxy(self):
         from simulation.twin import World
         from simulation.environment import Scene, UltrasonicSettings
@@ -410,7 +430,14 @@ class NetworkNavigationTests(unittest.TestCase):
             pump(lambda:not server.receiver.state["armed"],timeout=1)
             self.assertEqual(scene.proxy_contacts,0)
             self.assertGreater(world.diagnostics()["basePosition"][0],0)
+            self.assertLessEqual(runtime.sensors.snapshot()["front_m"],.6)
+            self.assertFalse(world.active_mask)
             self.assertFalse(runtime.motion.snapshot()["enabled"])
+            print("NAVIGATION_SCENARIO_JSON="+json.dumps(dict(classification="SIMULATED UDP INTEGRATION",
+                scenario="single_obstacle",physicalValidation=False,
+                proxyPose=world.diagnostics()["basePosition"],frontM=runtime.sensors.snapshot()["front_m"],
+                proxyContacts=scene.proxy_contacts,activeMask=world.active_mask,
+                fault=runtime.motion.snapshot()["fault"],steps=world.frames)))
         finally:
             runtime.close()
             server.close()

@@ -64,3 +64,7 @@ Use a clear scenario, then select Blue target tracking. The prerecorded target m
 ```
 
 The fixture runs at 240 Hz with four substeps and 100 solver iterations. CLI wall-clock pacing does not enlarge dt after a slow frame. Reports include pose, actual/target joints, active errors, contacts, range/touch observations, behavior labels and actual virtual motion. Scene history is capped at 256 records; state/transition logs are bounded. No Pi resource or physical performance claim follows from these checks.
+
+In GUI network scenarios, press **R** to reset geometry, seed, touches, joint state and the fixture pose. It creates a new receiver epoch and disables output; the application must observe the reset and be explicitly re-enabled. Programmatic Scene.reset(receiver) uses the same path. No reset automatically arms or replays a gait.
+
+For repeatable articulation comparisons, explicitly select **Stand**, wait for completion plus 0.5 seconds of virtual settling, then choose exploration. This uses an existing command after enable; ARM itself never sends a pose. The measured improvement is documented in MODEL_STUDY and does not qualify physical initialization.

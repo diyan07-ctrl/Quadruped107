@@ -102,6 +102,7 @@ class Scene:
         profiles=profiles or {}
         if not isinstance(profiles,dict) or set(profiles)-set(RANGE_IDS): raise ValueError("Invalid ultrasonic profiles")
         self.world,self.scenario,self.clock=world,scenario,clock
+        self.reset_options=dict(seed=seed,clock=clock,latency=latency,noise=noise,proxy=proxy,show_rays=show_rays,sensor_config=config,profiles=profiles)
         self.proxy,self.show_rays=proxy,show_rays
         self.boxes=[]
         self.bodies=[]
@@ -128,6 +129,23 @@ class Scene:
             self.bodies.append(self.target)
             self.boxes.append((1.5,0,.08,.08))
         if scenario=="sensor_failure": self.ultrasonic["urm37"].mode="disconnected"
+
+    def reset(self,receiver):
+        """Owner-thread reset: new transport epoch, disarmed output, identical seeded scene."""
+        receiver.reset()
+        world=self.world
+        for body in self.bodies: world.p.removeBody(body,physicsClientId=world.client)
+        position=[0,0,world.parameters["initial_height_m"]]
+        if world.fixed: world.set_fixture_pose(position,[0,0,0,1])
+        else:
+            world.p.resetBasePositionAndOrientation(world.robot,position,[0,0,0,1],physicsClientId=world.client)
+            world.p.resetBaseVelocity(world.robot,[0,0,0],[0,0,0],physicsClientId=world.client)
+        for index in world.joints: world.p.resetJointState(world.robot,index,0,0,physicsClientId=world.client)
+        world.apply(dict(virtual=True,armed=False,activeMask=0,targets=[300]*8))
+        world.fault=None
+        world.start_measurement()
+        scenario,options=self.scenario,self.reset_options
+        self.__init__(world,scenario,**options)
 
     def add_box(self,x,y,hx,hy):
         p=self.world.p

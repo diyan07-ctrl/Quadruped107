@@ -229,6 +229,9 @@ def main():
         else: server=TraceServer(args.host,args.port,sensors=scene.telemetry if scene else None)
         started=time.monotonic()
         while not args.steps or world.frames<args.steps:
+            if not args.headless and scene and server:
+                events=world.p.getKeyboardEvents(physicsClientId=world.client)
+                if events.get(ord("r"),0)&world.p.KEY_WAS_TRIGGERED: scene.reset(server.receiver)
             if engine:
                 engine.feed(b"PING\n")
                 engine.advance()

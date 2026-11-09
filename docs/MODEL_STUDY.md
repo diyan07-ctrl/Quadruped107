@@ -20,7 +20,7 @@ Measured CI results and source commit references are added to [validation](VALID
 
 ## Measured sensitivity checkpoint
 
-[PR CI 42681202362](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681202362), source 9ede1b3, passed 117 tests and the controlled study. Its [machine-readable measurements](evidence/PHASE2_MODEL_STUDY.json) preserve all eleven experiments. A later study adds an explicitly segmented stand/settle warm-start case; final evidence is recorded after execution.
+[Push CI 42682345230](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42682345230), source 9e44cff, passed 120 tests and the controlled study. Its [machine-readable measurements](evidence/PHASE2_MODEL_STUDY.json) preserve all twelve experiments, including an explicitly segmented stand/settle warm start.
 
 | Routine / setting | Active RMS error (rad) | Settled max error (rad) | Max applied torque (Nm) | Max self-contact count |
 | --- | ---: | ---: | ---: | ---: |
@@ -34,3 +34,9 @@ Measured CI results and source commit references are added to [validation](VALID
 The active transient maximum stayed near 0.5075 rad for forward/turns. Low settled error and almost unchanged inertia sensitivity do not establish correct physical dynamics; they point toward startup target/pose disagreement and rapid command transitions as important contributors. The emulator begins with an unmeasured 300-tick estimate while simulated joints begin at neutral. Filtering inactive channels alone therefore cannot remove the activation transient.
 
 A higher gain slightly reduces gait RMS but worsens stand RMS; default 0.1 is retained. Gaits reach the provisional torque cap and retain self-contact, so their transient saturation/contact effects remain unresolved. The anchored fixture position error was below 5.2e-8 m in these experiments. This confirms support behavior in the numerical fixture, not physical robot stability. Unknown axes, transforms, masses, friction and calibration cannot be corrected by scalar gain fitting.
+
+## Startup-coherence experiment
+
+Using the original stand command and a 0.5-second settling interval before forward, then starting a separately labeled measurement segment, reduced forward active maximum from **0.507500 to 0.171078 rad** and active RMS from **0.057844 to 0.027441 rad**. Torque still reached 0.5 Nm and maximum self-contact remained four. The warm-up results are preserved in the report instead of being discarded. No servo target or mass changed.
+
+This supports using an **explicit virtual Stand followed by settling** for reproducible digital-twin demonstrations. ARM still commands no pose. It does not make a blind physical initialization safe, and no physical startup/calibration procedure is approved. Residual error, saturation and contacts remain visible rather than tuned away.

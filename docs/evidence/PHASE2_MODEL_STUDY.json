@@ -1,6 +1,6 @@
 {
-  "sourceCommit": "9ede1b36214ba02943e7e45f61c10d72e1494f9d",
-  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681202362",
+  "sourceCommit": "9e44cffbaad0b7e60239163ab87d71933d191abb",
+  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42682345230",
   "canonicalGeometryAndGaitsUnchanged": true,
   "classification": "UNQUALIFIED MODEL SENSITIVITY",
   "collisionsEnabled": true,
@@ -61,6 +61,7 @@
       "maxContactCount": 0,
       "maxJointErrorRad": 0.5548657187619548,
       "maxSelfCollisionContacts": 0,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "stand",
       "physicalLocomotionValidated": false,
@@ -71,7 +72,9 @@
       "solverIterations": 100,
       "steps": 407,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.059679621352081366,
@@ -129,6 +132,7 @@
       "maxContactCount": 0,
       "maxJointErrorRad": 0.5554266068798756,
       "maxSelfCollisionContacts": 0,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "stand",
       "physicalLocomotionValidated": false,
@@ -139,7 +143,9 @@
       "solverIterations": 100,
       "steps": 407,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.0617603247248242,
@@ -197,6 +203,7 @@
       "maxContactCount": 0,
       "maxJointErrorRad": 0.5609451036631079,
       "maxSelfCollisionContacts": 0,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "stand",
       "physicalLocomotionValidated": false,
@@ -207,7 +214,9 @@
       "solverIterations": 100,
       "steps": 407,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.06045916062283444,
@@ -265,6 +274,7 @@
       "maxContactCount": 4,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "forward",
       "physicalLocomotionValidated": false,
@@ -275,7 +285,9 @@
       "solverIterations": 100,
       "steps": 392,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05784438586125856,
@@ -333,6 +345,7 @@
       "maxContactCount": 4,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "forward",
       "physicalLocomotionValidated": false,
@@ -343,7 +356,9 @@
       "solverIterations": 100,
       "steps": 392,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05705090978710297,
@@ -401,6 +416,7 @@
       "maxContactCount": 4,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "forward",
       "physicalLocomotionValidated": false,
@@ -411,7 +427,9 @@
       "solverIterations": 100,
       "steps": 392,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05978950175960777,
@@ -469,6 +487,7 @@
       "maxContactCount": 2,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 2,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "turn_left",
       "physicalLocomotionValidated": false,
@@ -479,7 +498,9 @@
       "solverIterations": 100,
       "steps": 383,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05697455821963418,
@@ -537,6 +558,7 @@
       "maxContactCount": 2,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 2,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "turn_left",
       "physicalLocomotionValidated": false,
@@ -547,7 +569,9 @@
       "solverIterations": 100,
       "steps": 383,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.056158872831739,
@@ -605,6 +629,7 @@
       "maxContactCount": 2,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 2,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "turn_left",
       "physicalLocomotionValidated": false,
@@ -615,7 +640,9 @@
       "solverIterations": 100,
       "steps": 383,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05784557339427551,
@@ -673,6 +700,7 @@
       "maxContactCount": 4,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "forward",
       "physicalLocomotionValidated": false,
@@ -683,7 +711,9 @@
       "solverIterations": 100,
       "steps": 392,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
     },
     {
       "activeJointRmsErrorRad": 0.05784346540249377,
@@ -741,6 +771,7 @@
       "maxContactCount": 4,
       "maxJointErrorRad": 0.5075000000000001,
       "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 0,
       "modeledVelocityLimitRadS": 3,
       "motion": "forward",
       "physicalLocomotionValidated": false,
@@ -751,7 +782,142 @@
       "solverIterations": 100,
       "steps": 392,
       "subSteps": 4,
-      "torqueCapNm": 0.5
+      "torqueCapNm": 0.5,
+      "warmStart": false,
+      "warmup": null
+    },
+    {
+      "activeJointRmsErrorRad": 0.02744104063648217,
+      "activeMask": 255,
+      "baseEuler": [
+        7.482202238504956e-8,
+        1.9819940911337109e-7,
+        -5.2389412073580726e-8
+      ],
+      "baseMassKg": 0.08,
+      "basePosition": [
+        -3.4317838406607265e-8,
+        -1.43097109492783e-8,
+        0.24157126498825948
+      ],
+      "currentJointPositions": [
+        0.1900621118012421,
+        0.000003452102751056211,
+        -0.24604609509796008,
+        0.000003648990344189654,
+        0.21639018697603374,
+        0.0000010621612185924806,
+        -0.278111777910431,
+        0.000006564064209512625
+      ],
+      "currentJointTargets": [
+        0.19006211180124222,
+        0,
+        -0.2460431654676259,
+        0,
+        0.21639344262295082,
+        0,
+        -0.2781115879828326,
+        0
+      ],
+      "errorAtCompletionRad": 0.06768294350077389,
+      "fault": null,
+      "fixedBase": true,
+      "fixtureConstraint": true,
+      "fixturePositionErrorM": 3.731019992320268e-8,
+      "inertiaScale": 1,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxActiveJointErrorRad": 0.17107791323230487,
+      "maxAppliedMotorTorqueNm": 0.5,
+      "maxContactCount": 4,
+      "maxJointErrorRad": 0.17107791323230487,
+      "maxSelfCollisionContacts": 4,
+      "measurementStartStep": 407,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "forward",
+      "physicalLocomotionValidated": false,
+      "physicalValidation": false,
+      "positionGain": 0.1,
+      "provisional": true,
+      "settledErrorRad": 0.000006564064209512625,
+      "solverIterations": 100,
+      "steps": 739,
+      "subSteps": 4,
+      "torqueCapNm": 0.5,
+      "warmStart": true,
+      "warmup": {
+        "activeJointRmsErrorRad": 0.059679621352081366,
+        "activeMask": 255,
+        "baseEuler": [
+          1.344502732815176e-28,
+          -4.2290890866799065e-15,
+          1.170944468674408e-16
+        ],
+        "baseMassKg": 0.08,
+        "basePosition": [
+          5.060716544688256e-16,
+          -5.378606384174306e-29,
+          0.24157126808166499
+        ],
+        "currentJointPositions": [
+          -8.497633428009063e-27,
+          -1.20201802498446e-13,
+          7.793610202260444e-14,
+          -1.6943961618887153e-13,
+          7.848483955233033e-14,
+          -3.433061548882643e-14,
+          1.1221959019396683e-14,
+          -1.4514644475521853e-13
+        ],
+        "currentJointTargets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "fault": null,
+        "fixedBase": true,
+        "fixtureConstraint": true,
+        "fixturePositionErrorM": 5.091070686681084e-16,
+        "jointCount": 8,
+        "jointNames": [
+          "shoulder_fl",
+          "leg_fl",
+          "shoulder_fr",
+          "leg_fr",
+          "shoulder_bl",
+          "leg_bl",
+          "shoulder_br",
+          "leg_br"
+        ],
+        "maxActiveJointErrorRad": 0.5075490250430145,
+        "maxAppliedMotorTorqueNm": 0.11758783772427867,
+        "maxContactCount": 0,
+        "maxJointErrorRad": 0.5554266068798756,
+        "maxSelfCollisionContacts": 0,
+        "measurementStartStep": 0,
+        "modeledVelocityLimitRadS": 3,
+        "physicalLocomotionValidated": false,
+        "positionGain": 0.1,
+        "provisional": true,
+        "solverIterations": 100,
+        "steps": 407,
+        "subSteps": 4
+      }
     }
   ],
   "torqueIncreased": false

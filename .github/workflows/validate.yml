@@ -33,6 +33,7 @@ jobs:
       - run: node tools/check-repository.mjs
       - run: npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
       - run: node tools/check-mermaid.mjs
+      - run: node tools/check-dashboard.mjs
       - run: git diff --exit-code
   uno:
     runs-on: ubuntu-latest
