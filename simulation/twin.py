@@ -173,15 +173,19 @@ class World:
                     fixtureConstraint=self.fixture_constraint is not None,
                     fixturePositionErrorM=math.dist(position,self.fixture_position) if self.fixed else None)
 
-    def capture(self,path):
+    def render_bgr(self):
         import cv2
         import numpy as np
         view=self.p.computeViewMatrixFromYawPitchRoll([0,0,.12],.65,45,-25,0,2)
         projection=self.p.computeProjectionMatrixFOV(50,4/3,.01,10)
         _,_,rgba,_,_=self.p.getCameraImage(640,480,view,projection,renderer=self.p.ER_TINY_RENDERER,physicsClientId=self.client)
         image=np.array(rgba,dtype=np.uint8).reshape(480,640,4)
+        return cv2.cvtColor(image,cv2.COLOR_RGBA2BGR)
+
+    def capture(self,path):
+        import cv2
         Path(path).parent.mkdir(parents=True,exist_ok=True)
-        if not cv2.imwrite(str(path),cv2.cvtColor(image,cv2.COLOR_RGBA2BGR)): raise RuntimeError("Capture write failed")
+        if not cv2.imwrite(str(path),self.render_bgr()): raise RuntimeError("Capture write failed")
 
     def close(self):
         if self.p.isConnected(self.client): self.p.disconnect(self.client)
@@ -204,18 +208,28 @@ def main():
     parser.add_argument("--ultrasonic-profiles",help="JSON with per-sensor origin/yaw/range/rate/noise/latency")
     parser.add_argument("--report")
     parser.add_argument("--capture")
+    parser.add_argument("--record",help="Bounded 640x480 30 FPS offline simulation AVI (requires --steps)")
     parser.add_argument("--demo",choices=("stand","initial","forward","backward","turn_left","turn_right","greeting","tail_wag"))
     parser.add_argument("--arm-demo",action="store_true",help="Explicitly arm only the offline virtual demo")
     args=parser.parse_args()
     if args.demo and not args.arm_demo: parser.error("Offline demo requires explicit --arm-demo")
     if args.steps<0: parser.error("steps must be nonnegative")
+    if args.record and not 1<=args.steps<=7200: parser.error("--record requires --steps 1..7200 (max 30 simulated seconds)")
     if args.navigation_proxy and (not args.scenario or args.free_base): parser.error("Proxy requires an explicit scenario and fixed-base fixture")
     world=World(gui=not args.headless,free_base=args.free_base,parameters=args.parameters)
     server=None
     scene=None
     engine=None
     failed=False
+    writer=None
     try:
+        if args.record:
+            import cv2
+            path=Path(args.record)
+            if path.suffix.lower() != ".avi": raise ValueError("--record requires .avi output")
+            path.parent.mkdir(parents=True,exist_ok=True)
+            writer=cv2.VideoWriter(str(path),cv2.VideoWriter_fourcc(*"MJPG"),30,(640,480))
+            if not writer.isOpened(): raise RuntimeError("Simulation video writer could not open")
         if args.scenario:
             from .environment import Scene
             from quadruped.sensors import SensorConfig
@@ -240,6 +254,7 @@ def main():
             if scene and not scene.advance(frame): raise SimulationFault("Navigation proxy collision guard")
             world.apply(frame)
             world.step()
+            if writer and world.frames%8==0: writer.write(world.render_bgr())
             if not args.headless and world.frames%24==0:
                 for i,index in enumerate(world.joints):
                     point=world.p.getLinkState(world.robot,index,physicsClientId=world.client)[0]
@@ -249,7 +264,9 @@ def main():
     except SimulationFault:
         failed=True
     finally:
+        if writer: writer.release()
         evidence=world.diagnostics()
+        if args.record: evidence["recording"]={"file":str(args.record),"format":"AVI MJPEG","fps":30,"frames":world.frames//8,"source":"PyBullet TinyRenderer; simulated only"}
         if scene: evidence["environment"]=scene.diagnostics()
         if server: evidence["bridge"]=server.receiver.snapshot(); server.close()
         if engine: evidence["virtualUno"]=engine.snapshot()
