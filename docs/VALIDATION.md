@@ -90,3 +90,9 @@ node tools/check-mermaid.mjs
 ```
 
 Power runtime/current outputs are estimates only. All electrical/mechanical, battery, load, watchdog, partial-power, resource and stop-timing measurements remain pending in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md).
+
+### Complete Phase 0.1 software verification
+
+The attribute fix at c769bd2 passed [push run 42583604285](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42583604285) and [PR run 42583611037](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42583611037), including the clean-tree guard. Evidence covers 46 tests, Python syntax, dependency consistency, priority/cancellation/races, timeout/reconnect/no replay, blocked-vision guard, camera configuration stub, power/calibration validation, deterministic Markdown tables, wheel imports/assets, four Mermaid diagrams, and Uno compilation. Firmware remains 10,198 bytes flash / 998 bytes globals; hardware/resource/timing measurements remain pending.
+
+The final documentation/deployment freeze clarifies external distribution, independent overvoltage power-cut requirements, A/B/C/D cost/mass tradeoffs and a 20 s service shutdown grace. Its final-head workflows are checked before PR readiness. No previously failed check is hidden or treated as a successful full run. No power source, regulator, current waveform, stopping latency, physical watchdog or assembled-robot test is claimed verified.

@@ -10,7 +10,7 @@ Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=-%h/.config/quadruped107.env
 Restart=on-failure
 RestartSec=3
-TimeoutStopSec=12
+TimeoutStopSec=20
 KillSignal=SIGTERM
 
 [Install]

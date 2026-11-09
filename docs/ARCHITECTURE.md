@@ -16,7 +16,7 @@ flowchart TB
     Monitor["Proposed A0 pack / A1 rail sensing"] -.-> Uno
     Pi -.->|Separate 3.3V I2C1| OLED["Optional OLED: Pi-owned"]
     PCA -.->|Reserved PWM channel 8| Pan["Optional pan servo"]
-    Battery["A: qualified existing pack OR D: qualified 3S pack"] --> Fuse["Fuse / DC-rated physical disconnect"]
+    Battery["A: qualified existing pack OR D: qualified 3S pack"] --> Fuse["Fuse / DC disconnect / proposed power switch"]
     Stop["Independent physical STOP: proposed"] -.-> Fuse
     Fuse --> Converter["Qualified servo converter: 6V candidate"]
     Converter --> PDB["External protected motor distribution"]
@@ -24,6 +24,7 @@ flowchart TB
     PDB -.-> Pan
     PDB -.-> Supervisor["Proposed rail power-good / UV / OV latch"]
     Supervisor -.->|Fault dominates enable| OE
+    Supervisor -.->|OV: proposed independent power cut| Fuse
     Ground["Common control reference / controlled high-current returns"] --- Uno
     Ground --- PCA
     Ground --- PDB
@@ -74,7 +75,7 @@ Busy control-mode switches reject rather than waiting behind a long routine. Lat
 | Uno | Current 998 bytes globals; future ≤1300 bytes globals, ≥400 bytes measured stack margin, ≤28 KiB flash target |
 | Pi 4 | Target app RSS <1 GiB, process CPU <200%, capture-to-display <250 ms with one viewer; all unmeasured |
 | Recovery | Target reconnect/identity within 8 s after a device becomes available; explicit ARM required |
-| Shutdown | Stop motion/link before camera teardown; joins are bounded attempts, not proof native capture/inference terminated |
+| Shutdown | Stop motion/link before camera teardown; joins are bounded attempts; systemd allows 20 s before forced termination, not proof native calls terminated |
 
 Hidden waits remain: Picamera2 capture, JPEG encoding, inference, HTTP streaming socket writes, serial OS writes, repeated I2C transactions and thread joins. Uno cooperative delays service serial, but a bus/MCU freeze still needs independent watchdog/hardware protection. A 1 s hardware-watchdog candidate and progress/brownout design are in [SAFETY](SAFETY.md). Driver buffers/threads and viewer count require load qualification; no bounded HTTP-worker claim is made.
 

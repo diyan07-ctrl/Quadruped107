@@ -12,8 +12,9 @@ flowchart LR
     Camera["CSI camera / Picamera2"] --> Pi
     Pi <-->|USB serial, 115200 baud| Uno["Uno R3: gait execution / communication watchdog"]
     Uno -->|I2C and OE| PWM["PCA9685"]
-    Supply["Regulated servo supply"] --> PWM
-    PWM --> Servos["8 leg servos; channel 8 reserved for pan"]
+    PWM -->|PWM signals| Servos["8 leg servos; channel 8 reserved for pan"]
+    Supply["Qualified battery / fuse / disconnect / regulator"] --> Distribution["External servo power distribution"]
+    Distribution --> Servos
 ```
 
 Servo power is separate from logic power, with common ground. Never connect raw 2S Li-ion voltage to 6 V-rated servos. STOP disables PWM and can remove holding torque; retain a physical servo-power disconnect.

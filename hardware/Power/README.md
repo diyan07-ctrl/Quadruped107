@@ -28,3 +28,7 @@ python -m unittest discover -s tests -v
 ```
 
 The calculator is standard-library-only. Editable assumptions are at its top. Four marked Markdown tables are generated from those assumptions; --write-tables updates them and --check rejects drift. Calculated limits do not substitute for [physical verification](../../docs/HARDWARE_VERIFICATION.md).
+
+## Cost, mass and responsiveness tradeoff
+
+A keeps one existing pack and one converter/harness, so it is the least-parts starting candidate if ratings pass. B can extend balanced runtime but carries two packs, duplicated conversion/protection and more return-path complexity; added mass can increase servo load and invalidate that gain. C can consolidate sources but couples motor faults to logic survival. D keeps independent logic power and gains buck headroom with one documented servo pack, avoiding the duplicated B converter path. Its new-part cost, actual mass and mount must be compared before purchase; no installed mass or price has been assumed. Current capability and stable dynamic voltage take priority over nominal Ah.

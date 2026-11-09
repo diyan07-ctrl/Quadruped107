@@ -12,7 +12,7 @@
 | Uno 5V | PCA9685 VCC logic only | PROPOSED |
 | Uno D8 | PCA9685 OE; external 10 kΩ pull-up to Uno 5V | VERIFIED-IN-SOURCE pin; PROPOSED circuit |
 | Uno GND | PCA GND, regulator negative, sensor ground | PROPOSED |
-| Regulated servo positive | PCA9685 V+ / appropriate servo distribution | HARDWARE-DEPENDENT ratings |
+| Regulated servo positive | External fused servo distribution; do not use PCA V+ as motor trunk unless qualified | HARDWARE-DEPENDENT ratings |
 | Uno D0/D1 | Reserve for USB UART; no sensors | PROPOSED reservation |
 | Uno D4 / D2 | URM37 trigger output / pulse input | HARDWARE-DEPENDENT |
 | Uno D5 / D3 | Optional HC-SR04 trigger / echo | HARDWARE-DEPENDENT |
