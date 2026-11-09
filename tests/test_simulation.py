@@ -196,11 +196,20 @@ class DigitalTwinTests(unittest.TestCase):
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
             self.assertEqual(api.post("/api/mode",json={"mode":"opencv"}).status_code,200)
             pump(lambda:any(line.endswith("turn_left") and line.startswith("MOVE") for line in runtime.link.engine.snapshot()["history"]))
+            target["x"]=560
+            pump(lambda:any(line.endswith("turn_right") and line.startswith("MOVE") for line in runtime.link.engine.snapshot()["history"]))
             target["x"]=320
             pump(lambda:runtime.vision.get("behavior")=="TARGET_CENTER")
             target["x"]=None
             pump(lambda:not runtime.motion.snapshot()["enabled"],timeout=2)
             pump(lambda:not server.receiver.state["armed"],timeout=1)
+            pump(lambda:not runtime.motion.snapshot()["stopping"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            self.assertEqual(api.post("/api/mode",json={"mode":"forward"}).status_code,200)
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
+            self.assertEqual(api.post("/api/stop",json={}).status_code,200)
+            self.assertFalse(runtime.link.engine.snapshot()["armed"])
+            self.assertFalse(runtime.link.engine.snapshot()["activeMask"])
             self.assertGreater(len(signatures),3)
             self.assertFalse(world.diagnostics()["physicalLocomotionValidated"])
             self.assertEqual(world.diagnostics()["jointCount"],8)

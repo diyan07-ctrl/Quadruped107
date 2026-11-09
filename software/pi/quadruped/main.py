@@ -135,6 +135,7 @@ class Runtime:
         held_gesture=None
         gesture_count=0
         gesture_last_request=0.0
+        last_gesture_sent=None
         while not self.stop_event.wait(.02):
             state=self.motion.snapshot()
             mode=state["appMode"]
@@ -145,6 +146,7 @@ class Runtime:
                 held_gesture=None
                 gesture_count=0
                 gesture_last_request=0.0
+                last_gesture_sent=None
             frame,_,sequence,_,published_at=self.camera.latest(with_timestamp=True)
             autonomous=state["enabled"] and mode!="manual"
             if frame is None:
@@ -179,7 +181,8 @@ class Runtime:
                     label=gesture.get("motion") if gesture else None
                     gesture_count=gesture_count+1 if label==held_gesture else 1
                     held_gesture=label
-                    action=label if label and gesture_count>=settings.min_frames and now-gesture_last_request>=settings.command_period else None
+                    if label is None: last_gesture_sent=None
+                    action=label if label and label!=last_gesture_sent and gesture_count>=settings.min_frames and now-gesture_last_request>=settings.command_period else None
                     decision=Decision("MANUAL_OVERRIDE" if not autonomous else "GESTURE_CONTROL",
                                       action if label else "stand",False,"Optional gesture control")
                     with self.lock: self.vision["hand"]=gesture or {}
@@ -207,7 +210,9 @@ class Runtime:
                 motion=decision.motion
                 if motion and self.motion.autonomous(mode,motion,expected_generation=state["generation"]):
                     self.behavior.accepted(motion,time.monotonic())
-                    if mode=="hand_gesture": gesture_last_request=time.monotonic()
+                    if mode=="hand_gesture":
+                        gesture_last_request=time.monotonic()
+                        last_gesture_sent=motion if held_gesture else None
             except Exception as error:
                 logging.exception("Vision failed")
                 with self.lock: self.vision["opencv"]=str(error)

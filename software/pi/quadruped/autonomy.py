@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 from collections import deque
 import json
+import logging
 import math
 
 
@@ -65,6 +66,7 @@ class Behavior:
 
     def _result(self,state,now,motion=None,inhibit=False,reason=""):
         if state!=self.state:
+            logging.info("Visual behavior %s -> %s: %s",self.state,state,reason)
             self.transitions.append(dict(at=now,previous=self.state,state=state,reason=reason))
             self.state=state
         if motion is not None and now-self.last_request<self.settings.command_period:
