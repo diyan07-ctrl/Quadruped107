@@ -132,13 +132,19 @@ class MotionController:
     def set_mode(self, mode, expected_generation=None):
         mode = mode.strip().lower().replace("-", "_")
         if mode not in MOTIONS | MODES: raise ValueError("Unknown mode")
-        if mode == "idle":
-            self.stop("Idle selected",expected_generation=expected_generation)
-            with self.lock: self.app_mode = "idle"
-            return self.generation
-        if mode in MOTIONS | {"manual"} and self.snapshot()["appMode"] not in {"manual","idle"}:
-            self.stop("Manual takeover; explicit enable required",expected_generation=expected_generation)
-            return self.generation
+        with self.lock:
+            takeover = mode in MOTIONS | {"manual"} and self.app_mode not in {"manual","idle"}
+            if mode == "idle" or takeover:
+                if expected_generation is not None and expected_generation != self.generation:
+                    raise RuntimeError("Stale mode request")
+                self.stop("Idle selected" if mode=="idle" else "Manual takeover; explicit enable required",
+                          expected_generation=expected_generation,wait=False)
+                if mode=="idle": self.app_mode="idle"
+                stopped_generation,ticket=self.generation,self.stop_ticket
+            else: stopped_generation,ticket=None,None
+        if stopped_generation is not None:
+            if ticket is not None: self.link.wait(ticket)
+            return stopped_generation
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation:
                 raise RuntimeError("Stale mode request")

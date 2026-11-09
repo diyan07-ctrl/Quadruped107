@@ -173,21 +173,25 @@ class TraceClient:
         self.epoch=0
         self.fault=None
         self.ready=False
+        self.disarmed_stop_epoch=None
         self.errors=0
         self.thread=threading.Thread(target=self._run,name="simulation-bridge",daemon=True)
 
     def start(self): self.thread.start()
 
     def snapshot(self):
+        source=self.source()
         with self.lock:
             age=time.monotonic()-self.last_ack if self.last_ack else None
             return dict(connected=age is not None and age<=LEASE,ackAge=age,
-                        readyToArm=self.ready,fault=self.fault,epoch=self.epoch,errors=self.errors,
+                        readyToArm=self.ready and not source["armed"] and source.get("stopEpoch")==self.disarmed_stop_epoch,fault=self.fault,epoch=self.epoch,errors=self.errors,
                         transport="UDP challenge/lease",physical=False)
 
     def prepare_arm(self):
+        source=self.source()
         with self.lock:
-            if not self.last_ack or time.monotonic()-self.last_ack>LEASE or not self.ready:
+            if (not self.last_ack or time.monotonic()-self.last_ack>LEASE or not self.ready
+                or source["armed"] or source.get("stopEpoch")!=self.disarmed_stop_epoch):
                 raise RuntimeError("Simulator unavailable or awaiting disarmed handshake")
             self.fault=None
             return self.epoch
@@ -204,6 +208,7 @@ class TraceClient:
                 state=self.source()
                 armed=bool(state["armed"])
                 if was_armed and not armed and self.session:
+                    with self.lock: self.ready=False
                     self.seq+=1
                     sock.sendto(encode(dict(v=1,type="stop",client=self.client,server=self.session,seq=self.seq)),self.address)
                 was_armed=armed
@@ -232,17 +237,18 @@ class TraceClient:
                         message=dict(v=1,type="trace",client=self.client,server=server,nonce=nonce,seq=self.seq,
                                      virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"],
                                      activeMotion=state.get("activeMotion"),behavior=state.get("behavior"))
-                        self.pending=(nonce,self.seq,now)
+                        self.pending=(nonce,self.seq,now,bool(state["armed"]),state.get("stopEpoch"))
                         sock.sendto(encode(message),self.address)
                     elif data.get("type")=="ack" and self.pending:
-                        nonce,seq,born=self.pending
+                        nonce,seq,born,sent_armed,sent_stop_epoch=self.pending
                         if data.get("server")!=self.session or data.get("nonce")!=nonce or data.get("seq")!=seq or now-born>LEASE:
                             raise ValueError("Stale acknowledgment")
                         if self.on_sensors and "sensors" in data:
                             self.on_sensors(data["sensors"],session=self.session,transport_age=max(0,now-born))
                         with self.lock:
                             self.last_ack=now
-                            self.ready=data.get("ready") is True
+                            self.ready=data.get("ready") is True and not sent_armed
+                            if self.ready: self.disarmed_stop_epoch=sent_stop_epoch
                             if data.get("fault"): self.fault=str(data["fault"])[:160]
                         self.pending=None
                         awaiting=False

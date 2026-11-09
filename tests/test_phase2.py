@@ -197,7 +197,8 @@ class NavigationTests(unittest.TestCase):
         self.assertTrue(self.step(communication_ok=False).stop)
 
     def test_manual_takeover_has_no_autonomous_motion(self):
-        self.step()
+        target=dict(detected=True,offset=-.8,observed_at=0.)
+        self.step(mode="opencv",observation=target)
         self.assertEqual(self.step(mode="manual").state,"MANUAL_OVERRIDE")
         self.assertIsNone(self.step(mode="manual").motion)
 
@@ -249,10 +250,11 @@ class ExplicitBackend:
         self.seq=0
         self.distance=2.
         self.disconnected=False
+        self.touches={}
 
     def sample(self,now):
         self.seq+=1
-        return fixture_batch(self.seq,distance=-1 if self.disconnected else self.distance)
+        return fixture_batch(self.seq,distance=-1 if self.disconnected else self.distance,touches=self.touches)
 
 
 class RuntimeNavigationTests(unittest.TestCase):
@@ -299,6 +301,28 @@ class RuntimeNavigationTests(unittest.TestCase):
         self.assertEqual(self.api.post("/api/arm",json={}).status_code,200)
         self.assertEqual(self.api.post("/api/mode",json={"mode":"idle"}).status_code,200)
         self.assertFalse(self.runtime.motion.snapshot()["enabled"])
+
+    def test_stop_during_recovery_cancels_queued_turn(self):
+        self.backend.distance=.2
+        self.pump(lambda:self.runtime.sensors.snapshot()["front_m"]==.2)
+        self.assertEqual(self.api.post("/api/arm",json={}).status_code,200)
+        self.assertEqual(self.api.post("/api/mode",json={"mode":"explore"}).status_code,200)
+        self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="turn_left")
+        self.assertEqual(self.api.post("/api/stop",json={}).status_code,200)
+        self.assertFalse(self.runtime.link.engine.snapshot()["armed"])
+        time.sleep(.1)
+        self.assertFalse(self.runtime.link.engine.snapshot()["activeMask"])
+
+    def test_touch_executes_existing_greeting_and_expires(self):
+        self.api.post("/api/arm",json={})
+        self.api.post("/api/mode",json={"mode":"explore"})
+        self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="forward")
+        self.backend.touches={"head":True}
+        self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="greeting")
+        self.backend.touches={}
+        self.pump(lambda:not self.runtime.motion.snapshot()["enabled"],timeout=3)
+        self.pump(lambda:not self.runtime.link.engine.snapshot()["armed"])
+        self.assertLessEqual(self.runtime.navigation.snapshot()["deadline"],time.monotonic())
 
     def test_sensor_disconnect_preempts_without_camera_dependency(self):
         self.api.post("/api/arm",json={})
@@ -374,7 +398,7 @@ class NetworkNavigationTests(unittest.TestCase):
                     heartbeat=time.monotonic()
                 if predicate(): return
                 time.sleep(.003)
-            self.fail(json.dumps(runtime.state()))
+            self.fail(json.dumps(dict(runtime=runtime.state(),world=world.diagnostics(),clearance=scene.clearance(),rays=[(a,b,h[:4]) for a,b,h in scene.ultrasonic["urm37"].last_rays])))
         try:
             pump(lambda:runtime.link.snapshot()["connected"] and runtime.bridge.snapshot()["readyToArm"] and runtime.sensors.snapshot()["fault"] is None)
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)

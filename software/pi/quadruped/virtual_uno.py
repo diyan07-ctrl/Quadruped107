@@ -24,6 +24,7 @@ class VirtualUno:
 
     def reset(self):
         with self.lock:
+            self.stop_epoch = getattr(self,"stop_epoch",0)+1
             self.armed = False
             self.targets = [300]*8  # commanded estimate, NEVER measured shaft position
             self.active_mask = 0
@@ -36,11 +37,12 @@ class VirtualUno:
 
     def snapshot(self):
         with self.lock:
-            return dict(virtual=True, armed=self.armed, targets=list(self.targets),
+            return dict(virtual=True, armed=self.armed, targets=list(self.targets),stopEpoch=self.stop_epoch,
                         activeMask=self.active_mask, activeMotion=self.active[1] if self.active else None,
                         fault=self.fault, samples=len(self.trace), history=list(self.history))
 
     def disarm(self, silent=False):
+        self.stop_epoch+=1
         self.armed = False
         self.active_mask = 0
         self.frames.clear()

@@ -203,7 +203,7 @@ class DigitalTwinTests(unittest.TestCase):
             target["x"]=None
             pump(lambda:not runtime.motion.snapshot()["enabled"],timeout=2)
             pump(lambda:not server.receiver.state["armed"],timeout=1)
-            pump(lambda:not runtime.motion.snapshot()["stopping"])
+            pump(lambda:not runtime.motion.snapshot()["stopping"] and runtime.bridge.snapshot()["readyToArm"])
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
             self.assertEqual(api.post("/api/mode",json={"mode":"forward"}).status_code,200)
             pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward",held_motion="forward")
