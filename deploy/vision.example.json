@@ -16,5 +16,6 @@
   "max_age": 0.5,
   "command_period": 0.6,
   "search_enabled": false,
-  "search_seconds": 2
+  "search_seconds": 2,
+  "target_color": "blue"
 }
