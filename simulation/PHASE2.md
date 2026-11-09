@@ -29,11 +29,11 @@ Open http://127.0.0.1:7000. Wait for valid sensors and simulator health, explici
 | dead_end | Enclosure; no assumed escape direction |
 | target | Blue sphere; visible obstacle geometry |
 | sensor_failure | Disconnected virtual URM37 |
-| touch | One scheduled head press between 1.0–1.2 seconds after scene creation |
+| touch | One head press 1.0–1.2 seconds after each explicit virtual enable |
 
 Select --scenario NAME. Restart both processes for a deterministic new scene/session. Seeded noise defaults to zero; --sensor-noise and --sensor-latency change assumptions. --ultrasonic-profiles FILE accepts a JSON object keyed by urm37/hcsr04, overriding origin (three metres), yaw (radians), min_m/max_m, rate_hz, latency and noise_m. Settings are simulation-only and do not claim hardware equivalence. Programmatic sensors expose normal, missing, invalid, disconnected, no_echo, timeout and out_of_range failure modes. Touch fixtures support arbitrary simultaneous/held/disconnected inputs.
 
-The scheduled touch scenario is clocked from scene creation and may occur before a person enables control. It is primarily a deterministic test fixture; startup presses are not replayed. Automated interaction tests inject events only after explicit enable.
+The scheduled touch scenario starts its clock when the receiver first observes explicit virtual enable. It emits one bounded head press per enable session; startup/reconnect cannot replay a press. Select exploration soon after enabling to observe its priority over locomotion. Sensor-test mode remains observation-only. Automated interaction tests also inject events after explicit enable.
 
 ## Navigation proxy and physics limits
 

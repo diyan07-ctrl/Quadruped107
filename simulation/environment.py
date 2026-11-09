@@ -113,6 +113,8 @@ class Scene:
         self.next_batch=0.0
         self.proxy_contacts=0
         self.proxy_pose=[0.,0.,0.]
+        self.armed_at=None
+        self.was_armed=False
         self.trace=deque(maxlen=256)
         self.ultrasonic={k:SimulatedUltrasonicSensor(k,world,UltrasonicSettings(
             **dict(dict(rate_hz=config.rate_hz,min_m=config.min_m,max_m=config.max_m,latency=latency,noise_m=noise),**profiles.get(k,{}))),seed=seed+i) for i,k in enumerate(RANGE_IDS)}
@@ -177,7 +179,8 @@ class Scene:
         if now>=self.next_batch:
             self.next_batch=now+.05
             self.seq+=1
-            if self.scenario=="touch": self.touches["head"].pressed=1.0<=now-self.created<1.2
+            if self.scenario=="touch":
+                self.touches["head"].pressed=self.armed_at is not None and 1.0<=now-self.armed_at<1.2
             records=[record for sensor in self.ultrasonic.values() if (record:=sensor.sample(now)) is not None]
             records += [sensor.sample(now) for sensor in self.touches.values()]
             records += [dict(id=k,kind="clearance",value=value,valid=True,age=0.0) for k,value in self.clearance().items()]
@@ -192,6 +195,10 @@ class Scene:
 
     def advance(self,frame,dt=1/240):
         if not number(dt,.0001,.02): raise ValueError("Bounded simulation step required")
+        armed=bool(frame.get("armed"))
+        if armed and not self.was_armed: self.armed_at=self.clock()
+        elif not armed: self.armed_at=None
+        self.was_armed=armed
         if self.proxy and frame.get("armed") and frame.get("activeMask"):
             p=self.world.p
             position,orientation=p.getBasePositionAndOrientation(self.world.robot,physicsClientId=self.world.client)

@@ -9,6 +9,14 @@ Phase 2 starts from verified unmerged Phase 1 head a15c39775a4063b396c3cd844f663
 - [Push 42681826866](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681826866) and [PR 42681837310](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681837310), 0ae7b21: **117 tests and every CI check passed** after those repairs.
 - [Measured model study](MODEL_STUDY.md) and [machine-readable evidence](evidence/PHASE2_MODEL_STUDY.json) preserve the source commit/run for simulated results. [Push 42682345230](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42682345230) and PR 42682357154 at 9e44cff passed **120 tests (44.947 s in push)**, all checks and twelve model experiments. Later scene-reset, stronger obstacle assertions and DOM additions are verified by the final PR checks.
 
+## Complete acceptance checkpoint
+
+[Push 42683505923](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683505923) at 9dc2180 passed **121 tests in 45.032 s**, all twelve model experiments, installed sensor/navigation imports/assets, both firmware builds, seven Mermaid diagrams, dashboard DOM checks and the clean-checkout guard. The DOM fixture was corrected to accept URL objects like browser fetch; its earlier failure did not indicate a backend test pass.
+
+[Network scenario evidence](evidence/PHASE2_NAVIGATION.json) records approximately 0.05850 m proxy advance, 0.59325 m front range at observed disarm, zero proxy contacts and activeMask=0. This is a simulated integration snapshot, **not a physical stopping-distance measurement**. The final touch-scene regression clocks its scheduled event from explicit enable rather than scene startup; final head checks are linked on PR #4.
+
+Local repository validation verifies 53 protected historical blobs, four intentionally identical STL groups and no matched credential patterns. A direct Phase 1 comparison confirms hardware, production firmware, calibration, LICENSE and AUTHORS unchanged. Git integrity and whitespace checks pass; generated videos/reports/caches remain ignored.
+
 ## Scenario coverage
 
 Tests live in [test_phase2.py](../tests/test_phase2.py), with the preserved 75-test Phase 1 suite in the other test files. Tests use deterministic clocks/fixtures unless explicitly classified as threaded or UDP integration.

@@ -354,6 +354,26 @@ class EnvironmentTests(unittest.TestCase):
                     self.assertFalse(next(r for r in batch["observations"] if r["id"]=="urm37")["valid"])
             finally: world.close()
 
+    def test_touch_scenario_waits_for_explicit_enable(self):
+        from simulation.twin import World
+        from simulation.environment import Scene
+        clock=[0.]
+        world=World()
+        try:
+            scene=Scene(world,"touch",clock=lambda:clock[0],latency=0)
+            clock[0]=10.
+            scene.telemetry()
+            self.assertFalse(scene.touches["head"].pressed)
+            scene.advance(dict(armed=True,activeMask=0,targets=[300]*8))
+            clock[0]=11.05
+            scene.telemetry()
+            self.assertTrue(scene.touches["head"].pressed)
+            scene.advance(dict(armed=False,activeMask=0,targets=[300]*8))
+            clock[0]=11.21
+            scene.telemetry()
+            self.assertFalse(scene.touches["head"].pressed)
+        finally: world.close()
+
     def test_scene_reset_is_seeded_disarmed_and_changes_epoch(self):
         from simulation.twin import World
         from simulation.environment import Scene
