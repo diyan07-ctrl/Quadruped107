@@ -177,7 +177,7 @@ class DigitalTwinTests(unittest.TestCase):
         runtime.start()
         api=create_app(runtime).test_client()
         signatures=set()
-        def pump(predicate,timeout=5,heartbeat=True):
+        def pump(predicate,timeout=5,heartbeat=True,held_motion=None):
             deadline=time.monotonic()+timeout
             last_heartbeat=0
             while time.monotonic()<deadline:
@@ -186,11 +186,11 @@ class DigitalTwinTests(unittest.TestCase):
                 world.apply(frame)
                 world.step()
                 if heartbeat and time.monotonic()-last_heartbeat>.15:
-                    api.post("/api/heartbeat",json={"motion":None})
+                    api.post("/api/heartbeat",json={"motion":held_motion})
                     last_heartbeat=time.monotonic()
                 if predicate(): return
                 time.sleep(.005)
-            self.fail("Integrated pipeline condition timed out")
+            self.fail("Integrated pipeline timed out: "+json.dumps(dict(motion=runtime.motion.snapshot(),bridge=runtime.bridge.snapshot(),uno=runtime.link.engine.snapshot())))
         try:
             pump(lambda:runtime.link.snapshot()["connected"] and runtime.bridge.snapshot()["readyToArm"])
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
@@ -206,7 +206,7 @@ class DigitalTwinTests(unittest.TestCase):
             pump(lambda:not runtime.motion.snapshot()["stopping"])
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
             self.assertEqual(api.post("/api/mode",json={"mode":"forward"}).status_code,200)
-            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward",held_motion="forward")
             self.assertEqual(api.post("/api/stop",json={}).status_code,200)
             self.assertFalse(runtime.link.engine.snapshot()["armed"])
             self.assertFalse(runtime.link.engine.snapshot()["activeMask"])

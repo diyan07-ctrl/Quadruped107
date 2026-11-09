@@ -1,3 +1,62 @@
+# Software integration validation
+
+These results concern branch phase1/software-vision-digital-twin, based on verified Phase 0.1 head a629397e3cce82819e5d8a52db8938aa93af840c. PRs #1 and #2 were unmerged when inspected. [PR #3](https://github.com/diyan07-ctrl/Quadruped107/pull/3) targets the Phase 0.1 branch; no merge is authorized or performed.
+
+## Evidence and classification
+
+| Scope | Classification | Evidence / limitation |
+| --- | --- | --- |
+| First USB/vision/virtual-Uno checkpoint | PASS | [Run 42670685320](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42670685320), d926f29: 64 tests in 13.859 s, package/dependency/firmware checks |
+| Initial bridge and model checkpoint | FAIL, repaired in subsequent commits | [Run 42673376451](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42673376451): 73 tests; one assertion read virtual output before STOP acknowledgment. It now waits separately for local inhibition and output-off |
+| Production and virtual firmware | PASS (compile only) | [PR run 42673388763](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42673388763): 10,198 bytes flash / 998 bytes globals production; 6,756 / 831 virtual; no board uploaded |
+| Extended bidirectional integration | FAIL, model correction added | [Run 42674667131](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42674667131): passive joint exceeded provisional limit after STOP. Solver substeps/iterations and modeled velocity cap added; strict excursion guard retained |
+| Optional artifact-upload initialization | FAIL, optional dependency removed | Runs 42674092245/42674428014 did not create a Python job; firmware was separate. Standard job logs now carry JSON evidence; no checks are skipped to publish |
+| Real Pi/webcam deployment | BLOCKED — NETWORK ACCESS DENIED | SSH port 22 Permission denied before authentication for both reported IP/hostname; no Pi command ran |
+| Physical Uno, PCA, servo, sensor or electrical testing | BLOCKED — HARDWARE UNAVAILABLE / PROHIBITED | Uno disconnected, damaged PCA isolated, servos unpowered, no uploads or power switching |
+| CSI camera / actual optional gesture model | NOT TESTED | CSI reported faulty; no compatible gesture model supplied |
+| Physical gait feasibility / realistic dynamics | NOT TESTED | CAD surfaces reused; axes, pivots, masses, collision proxies and angle conversion remain provisional |
+
+Final regression evidence is recorded below when available. Unit fixtures, simulated integration, compile results and real hardware observations are separate categories.
+
+## Reproduction
+
+On a laptop or CI with Python 3.11:
+
+```bash
+python -m pip install -r software/pi/requirements-dev.txt -r simulation/requirements.txt -e software/pi
+python -m pip check
+python -m compileall -q software/pi/quadruped tests tools simulation
+python simulation/build_model.py --check
+python -m unittest discover -s tests -v
+python -m simulation.validate
+python tools/generate-motion-data.py --check
+python hardware/Power/power_budget.py --check
+python -m pip wheel --no-deps software/pi -w build/wheels
+python -m pip install --no-deps --force-reinstall build/wheels/*.whl
+python tools/check-installed.py
+node --check software/pi/quadruped/web/app.js
+node tools/check-repository.mjs
+npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
+node tools/check-mermaid.mjs
+arduino-cli core update-index
+arduino-cli compile --profile uno firmware/uno/sketch
+python tools/generate-virtual-firmware.py
+arduino-cli compile --profile uno build/virtual/sketch
+git diff --check
+```
+
+CI runs these on Ubuntu, including installed wheel imports/assets and packaged gait JSON outside the checkout. Local Python is unavailable (saved interpreter removed, replacement download blocked); Arduino CLI is unavailable locally. Local Node syntax, links/preserved-asset/credential-pattern checks and staged whitespace checks execute on Windows. No test execution is inferred from writing code.
+
+The simulation evidence runner writes build/simulation/articulation.json and a TinyRenderer stand.png, then prints its JSON. These are generated, ignored outputs, not physical photographs or certified mechanical parameters. The strict headless integration uses a synthetic blue target, actual controller/serial worker/emulator, real UDP loopback and PyBullet DIRECT. It covers both turns, centered hold, target-loss disarm, explicit re-enable and manual STOP. Other tests cover malformed/stale/duplicate traces, network loss, camera open/read/freeze/recovery, ownership and queue/timeout/reset behavior.
+
+Pi resource targets are in [SOFTWARE](SOFTWARE.md); none are measured here. Production Uno leaves 1,050 bytes static headroom for locals/stack; virtual build leaves 1,217 bytes. Compile accounting does not measure peak stack/interrupt use. No full OLED framebuffer or new production sensor allocation was added.
+
+See [baseline diagnostics](evidence/ENVIRONMENT_BASELINE.md), [simulation acceptance procedure](../simulation/README.md), [deploy instructions](../deploy/README.md) and [physical verification](HARDWARE_VERIFICATION.md). No physical stop time, power measurement, live Pi FPS or locomotion qualification is claimed.
+
+---
+
+## Historical Phase 0 / 0.1 record
+
 > Phase 0 evidence below is historical. Phase 0.1 results are recorded separately at the end. No physical testing was performed.
 
 # Validation
