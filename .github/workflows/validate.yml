@@ -1,17 +1,20 @@
 name: Validate Pi and Uno runtime
 on: [push, pull_request]
+permissions:
+  contents: read
 
 jobs:
   python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.11'
       - run: python -m pip install -r software/pi/requirements-dev.txt -e software/pi
+      - run: python -m pip check
       - run: python -m compileall -q software/pi/quadruped tests tools
       - run: python -m unittest discover -s tests -v
       - run: python -m pip wheel --no-deps software/pi -w build/wheels
@@ -22,7 +25,7 @@ jobs:
   uno:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: arduino/setup-arduino-cli@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: arduino/setup-arduino-cli@v2.0.0
       - run: arduino-cli core update-index
       - run: arduino-cli compile --profile uno firmware/uno/sketch

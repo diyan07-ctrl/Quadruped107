@@ -25,10 +25,28 @@ The CI Python job also builds and installs a wheel before checking imports and b
 - uv discovery found no usable interpreter. A workspace-local Python installation attempt failed because outbound network access was restricted.
 - Arduino CLI was not found on PATH or in the inspected installation locations; no local firmware compilation was performed.
 - Local JavaScript syntax, repository links/paths, credential-pattern review, and Git staged whitespace checks passed. The repository check verified 56 preserved baseline blobs and classified four intentional identical-STL groups.
-- Python tests, dependency installation, installed-package checks and Uno compilation await remote CI; local unavailability is not a successful result.
-- No dependencies were installed locally. A passing CI dependency-install step must establish the remote test environment separately.
+- Remote CI completed Python tests, dependency installation, installed-package checks and Uno compilation successfully; see the evidence below. These were not local runs.
+- No dependencies were installed locally. CI successfully installed the development dependencies in Ubuntu 24.04 with Python 3.11.18.
 
 The inherited validation document reported a 2026-11-04 Uno compile at 10,198 bytes flash and 998 bytes global SRAM, plus software tests. These are historical reported results, not reruns and not physical validation. Current firmware source is preserved; new CI results take precedence once available.
+
+## Phase 0 CI evidence
+
+[Push run 42574997426](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42574997426) and [PR run 42575045535](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42575045535) both passed for commit ef997ce8b4f7c886697faf63b00219bf3db0e432 on 2026-11-09.
+
+| Check | Result |
+| --- | --- |
+| Dependency installation and editable package | Passed; Flask 3.1.2, pySerial 3.5, OpenCV headless 4.11.0.86, NumPy 2.4.6 |
+| Python compileall | Passed for active application, tests and tools |
+| unittest discovery | 18 tests passed in 4.297 s in the push run |
+| HTTP simulation | Real subprocess CLI, synthetic camera, controls, JPEG/MJPEG and stop passed |
+| Wheel build, replacement install, imports/assets outside checkout | Passed; no real hardware opened |
+| Browser JavaScript syntax | Passed |
+| Repository validator | 111 files; 56 preserved baseline blobs; four intentional identical-STL groups |
+| Uno compile | Passed; AVR core 1.8.8, PWM library 3.0.2, BusIO 1.17.4 |
+| Firmware size | 10,198 bytes flash / 32,256; 998 bytes global SRAM / 2,048; 1,050 bytes remain for stack/locals |
+
+The final tooling commit updates checkout/setup-python to verified Node 24 releases and adds pip check. Arduino's latest setup action remains v2.0.0, declared for Node 20; the hosted runner executes it on Node 24 successfully but reports an upstream deprecation warning. This warning does not indicate a firmware compile failure. Final-head CI must pass before the PR is marked ready.
 
 ## Coverage and limits
 
