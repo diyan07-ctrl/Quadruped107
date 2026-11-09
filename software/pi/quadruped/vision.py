@@ -144,7 +144,7 @@ def choose_blue_ball_motion(detection: dict[str, Any]) -> tuple[str, str]:
 
 
 
-def encode_vision_frame(frame: Any, detection: dict[str, Any], action: str, motion: str) -> bytes | None:
+def encode_vision_frame(frame: Any, detection: dict[str, Any], action: str, motion: str, *, target_name: str = "blue") -> bytes | None:
     annotated = frame.copy()
     height, width = annotated.shape[:2]
     center_x = width // 2
@@ -165,7 +165,7 @@ def encode_vision_frame(frame: Any, detection: dict[str, Any], action: str, moti
             cv2.rectangle(annotated, (bx, by), (bx+bw, by+bh), (0, 255, 255), 2)
         cv2.circle(annotated, center, 3, (0, 255, 255), -1)
 
-    label = f"OpenCV blue ball: {action} -> {motion}"
+    label = f"OpenCV {target_name} ball: {action} -> {motion}"
     cv2.rectangle(annotated, (8, height - 42), (min(width - 8, 470), height - 8), (0, 0, 0), -1)
     cv2.putText(annotated, label, (18, height - 19), cv2.FONT_HERSHEY_SIMPLEX, 0.62, (255, 255, 255), 2)
 
