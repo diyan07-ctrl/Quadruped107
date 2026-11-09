@@ -18,3 +18,4 @@
 firmware/uno/sketch/* -text
 software/pi/quadruped/web/** -text
 archive/uno-q/** -text
+software/pi/quadruped/vision.py -text
