@@ -16,7 +16,11 @@ These results concern branch phase1/software-vision-digital-twin, based on verif
 | CSI camera / actual optional gesture model | NOT TESTED | CSI reported faulty; no compatible gesture model supplied |
 | Physical gait feasibility / realistic dynamics | NOT TESTED | CAD surfaces reused; axes, pivots, masses, collision proxies and angle conversion remain provisional |
 
-Final regression evidence is recorded below when available. Unit fixtures, simulated integration, compile results and real hardware observations are separate categories.
+[Run 42675186244](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675186244) at 80a48df passed all **74 tests in 21.519 s**, dependencies, compileall, canonical model/gait/power checks, eight-routine headless articulation, wheel installation/imports/assets, shell/JavaScript syntax, links/protected blobs, five Mermaid diagrams, clean checkout and both Uno builds. [Machine-readable simulation evidence](evidence/SIMULATION_CI.json) records the actual run.
+
+The earlier passive-joint excursion was corrected with solver substeps/iterations and a modeled velocity cap, without widening the excursion guard. The next test failure was a fixture sending a missing-key heartbeat during requested forward motion; it correctly triggered the release safeguard and was corrected to match browser behavior. Output queue overflow additionally has a fail-closed regression.
+
+Fixed-base maximum transient joint error was approximately 0.51–0.65 rad. Maximum self-contact counts were initial 2, forward 4, turn_left 2, turn_right 2 and greeting 2; stand/backward/tail_wag reported zero. These are contacts between provisional collision proxies and expose unresolved geometry/gait assumptions. No fixed-base finite-state fault occurred, but this is not collision-free or mechanically qualified walking. The separate free-base probe added afterward records its gravity/fall result explicitly; no successful probe can qualify unknown physical parameters. Unit fixtures, simulated integration, compile results and real hardware observations are separate categories.
 
 ## Reproduction
 

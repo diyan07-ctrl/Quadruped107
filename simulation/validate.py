@@ -35,7 +35,28 @@ def main():
             if world.active_mask: raise RuntimeError("STOP left virtual motors enabled")
             reports.append(evidence)
         finally: world.close()
-    data=dict(host="GitHub Actions when run by CI; not Raspberry Pi",physicalValidation=False,routines=reports)
+    # Exploratory stability probe: failure is an explicit model outcome, not a
+    # locomotion acceptance pass. Production hardware is never involved.
+    clock=[0.0]
+    engine=VirtualUno(clock=lambda:clock[0])
+    world=World(free_base=True)
+    stability=dict(classification="PROVISIONAL FREE-BASE GRAVITY PROBE",outcome="NOT TESTED")
+    try:
+        engine.feed(b"HELLO\nARM 1\nMOVE 2 stand\n")
+        try:
+            for _ in range(720):
+                clock[0]+=1/240
+                engine.feed(b"PING\n")
+                engine.advance()
+                world.apply(engine.snapshot())
+                world.step()
+            stability["outcome"]="No configured fall/tilt/divergence fault in three virtual seconds"
+        except SimulationFault as error:
+            stability["outcome"]="MODEL FAULT: "+str(error)
+        stability["diagnostics"]=world.diagnostics()
+        stability["physicalLocomotionValidated"]=False
+    finally: world.close()
+    data=dict(stabilityProbe=stability,host="GitHub Actions when run by CI; not Raspberry Pi",physicalValidation=False,routines=reports)
     (output/"articulation.json").write_text(json.dumps(data,indent=2)+"\n")
     print(json.dumps(data,sort_keys=True))
 if __name__=="__main__": main()

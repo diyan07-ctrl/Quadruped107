@@ -60,3 +60,5 @@ The receiver handles at most eight datagrams per poll, retaining only the latest
 Automated synthetic integration, UDP contracts and DIRECT model checks live in [tests](../tests/test_simulation.py). Physical webcam/Pi validation is blocked by SSH access in this development environment; see [validation](../docs/VALIDATION.md).
 
 The numerical fixture uses a 240 Hz step with four substeps, 100 solver iterations and an explicitly modeled 3 rad/s joint velocity cap, including passive joints. These stabilize provisional joint hard stops; they are not measured servo dynamics. The >1.3 rad excursion failure remains active.
+
+Measured CI fixed-base results are preserved in [SIMULATION_CI.json](../docs/evidence/SIMULATION_CI.json). Several inherited routines produce provisional self-contact; transient tracking errors are approximately 0.51–0.65 rad. These are unresolved model/gait issues. The evidence runner also records a separate three-second free-base stand/gravity probe, explicitly reporting any fall/tilt/divergence fault; this exploratory outcome cannot qualify physical balance.
