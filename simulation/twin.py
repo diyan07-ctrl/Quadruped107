@@ -31,6 +31,7 @@ class World:
         self.active_error_squared=0.0
         self.active_error_samples=0
         self.max_torque=0.0
+        self.measurement_start_step=0
         self.contact_count=0
         self.self_contacts=0
         self.fault=None
@@ -81,6 +82,14 @@ class World:
         except Exception:
             p.disconnect(self.client)
             raise
+
+    def start_measurement(self):
+        """Begin an explicitly labeled experiment segment; preserve pose and gait state."""
+        self.max_joint_error=self.max_active_error=self.active_error_squared=0.0
+        self.active_error_samples=0
+        self.max_torque=0.0
+        self.contact_count=self.self_contacts=0
+        self.measurement_start_step=self.frames
 
     def set_fixture_pose(self,position,orientation):
         if self.fixture_constraint is None: raise ValueError("Only an explicitly fixed fixture can be repositioned")
@@ -155,7 +164,7 @@ class World:
                     maxSelfCollisionContacts=self.self_contacts,fault=self.fault,
                     physicalLocomotionValidated=False,solverIterations=100,subSteps=4,
                     modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"],positionGain=self.position_gain,
-                    maxActiveJointErrorRad=self.max_active_error,
+                    maxActiveJointErrorRad=self.max_active_error,measurementStartStep=self.measurement_start_step,
                     activeJointRmsErrorRad=math.sqrt(self.active_error_squared/self.active_error_samples) if self.active_error_samples else None,
                     maxAppliedMotorTorqueNm=self.max_torque,
                     currentJointPositions=[self.p.getJointState(self.robot,i,physicsClientId=self.client)[0] for i in self.joints],

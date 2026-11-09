@@ -1,5 +1,12 @@
 # Protocol v1 and reserved telemetry extension
 
+## Phase 2 additive sensor telemetry
+
+See [SENSORS](SENSORS.md) for the complete bounded schema. Correlated v1 simulation ACKs may contain sensors={schema:1,seq,observations:[...]}; range unit is metres and source age is preserved plus a conservative round-trip allowance. Duplicate/out-of-order or stale telemetry cannot renew sensing. activeMotion and behavior are bounded additive trace metadata for diagnostics and the explicit proxy.
+
+A host virtual-Uno stopEpoch prevents stale ready flags from permitting ARM after STOP. The bridge must acknowledge a fresh disarmed trace for the current stop epoch. This is host simulation metadata, not a change to serial v1 or physical firmware. Reserved TEL1 remains unimplemented; future adapters must convert millimetres explicitly. All physical protocols and fail-closed production behavior remain unchanged.
+
+
 ## Explicit virtual execution and trace extension
 
 Production serial v1 syntax/baud/ACK semantics below are retained. The host [VirtualUno](../software/pi/quadruped/virtual_uno.py) is an in-memory emulator behind the actual SerialLink worker, selected only with --actuator-backend virtual. It models safe startup, ARM without pose replay, original gait target ticks, ACCEPT/DONE, busy/invalid errors, priority STOP, 1.5 s communication watchdog and reset/reconnect disarming. Eight targets are commanded estimates; activeMask identifies channels actually driven in the model.

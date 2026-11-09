@@ -6,7 +6,7 @@ from .twin import World, MODEL
 from quadruped.virtual_uno import VirtualUno
 
 
-def experiment(motion,gain=.1,inertia_scale=1.0):
+def experiment(motion,gain=.1,inertia_scale=1.0,*,warm_start=False):
     params=json.loads((MODEL/"parameters.json").read_text())
     # Diagnostic sensitivity only. No canonical masses or physical calibration change.
     for key in ("base_mass_kg","upper_mass_kg","lower_and_foot_mass_kg"): params[key]*=inertia_scale
@@ -18,6 +18,21 @@ def experiment(motion,gain=.1,inertia_scale=1.0):
         engine=VirtualUno(clock=lambda:clock[0])
         try:
             engine.feed(b"HELLO\nARM 1\n")
+            warmup=None
+            if warm_start:
+                engine.feed(b"MOVE 0 stand\n")
+                finished=None
+                for _ in range(1000):
+                    clock[0]+=1/240
+                    engine.feed(b"PING\n")
+                    engine.advance()
+                    world.apply(engine.snapshot())
+                    world.step()
+                    if engine.snapshot()["activeMotion"] is None and finished is None: finished=clock[0]
+                    if finished is not None and clock[0]-finished>=.5: break
+                if finished is None: raise RuntimeError("Warm-up did not complete")
+                warmup=world.diagnostics()
+                world.start_measurement()
             engine.feed(("MOVE 2 "+motion+"\n").encode())
             completion=None
             for step in range(3000):
@@ -36,7 +51,7 @@ def experiment(motion,gain=.1,inertia_scale=1.0):
             report=world.diagnostics()
             report.update(motion=motion,inertiaScale=inertia_scale,torqueCapNm=params["force_nm"],
                           errorAtCompletionRad=error_at_completion,settledErrorRad=max(active,default=0.),
-                          physicalValidation=False)
+                          physicalValidation=False,warmStart=warm_start,warmup=warmup)
             return report
         finally: world.close()
 
@@ -46,6 +61,7 @@ def main():
     for motion in ("stand","forward","turn_left"):
         for gain in (.05,.1,.2): reports.append(experiment(motion,gain))
     for scale in (.5,2.): reports.append(experiment("forward",inertia_scale=scale))
+    reports.append(experiment("forward",warm_start=True))
     evidence=dict(classification="UNQUALIFIED MODEL SENSITIVITY",collisionsEnabled=True,torqueIncreased=False,
                   canonicalGeometryAndGaitsUnchanged=True,experiments=reports)
     path=Path("build/simulation/model-study.json")

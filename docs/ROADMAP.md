@@ -1,5 +1,12 @@
 # Roadmap
 
+## Phase 2 software checkpoint and Phase 3 candidates
+
+Phase 2 implements virtual sensing, conservative exploration, touch fragments, tracking priority, bidirectional simulation telemetry and deterministic scenario tests. These are SIMULATED / AUTOMATED TESTED when supported by CI; they do not complete physical obstacle avoidance or interaction acceptance.
+
+Suggested Phase 3: improve repeatable demonstration scenarios and interaction semantics within current safety bounds; recover CAD joint constraints and qualified model parameters; investigate self-contact and command/ramp timing; design the future Uno TEL1 adapter and local safety driver tests. Actual Pi deployment and hardware commissioning remain separate, explicitly authorized work after qualification.
+
+
 ## Software-integration branch checkpoint
 
 Software development has advanced ahead of physical Phase 1 qualification: USB camera backend, deterministic blue-target behavior, virtual Uno, bounded trace bridge and CAD-visual PyBullet integration are implemented with hardware-free tests. These are not completed physical Phases 2–5.

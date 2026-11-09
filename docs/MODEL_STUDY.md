@@ -17,3 +17,20 @@ The 0.5 Nm modeled servo cap, collisions, original targets and canonical masses 
 These experiments investigate controller lag, transient targets, torque saturation and inertial sensitivity. They cannot identify correct axes/transforms or actual motor properties. No gain is adopted merely because it lowers a scalar error in an unqualified model. Model geometry and self-contact require actual CAD constraint recovery and mechanical evidence.
 
 Measured CI results and source commit references are added to [validation](VALIDATION.md) after execution. Results are SIMULATED and AUTOMATED TESTED, never PHYSICAL HARDWARE TESTED.
+
+## Measured sensitivity checkpoint
+
+[PR CI 42681202362](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681202362), source 9ede1b3, passed 117 tests and the controlled study. Its [machine-readable measurements](evidence/PHASE2_MODEL_STUDY.json) preserve all eleven experiments. A later study adds an explicitly segmented stand/settle warm-start case; final evidence is recorded after execution.
+
+| Routine / setting | Active RMS error (rad) | Settled max error (rad) | Max applied torque (Nm) | Max self-contact count |
+| --- | ---: | ---: | ---: | ---: |
+| stand / gain 0.1 | 0.059680 | 1.69e-13 | 0.117588 | 0 |
+| forward / gain 0.1 | 0.057844 | 6.56e-6 | 0.500000 | 4 |
+| forward / gain 0.2 | 0.057051 | 3.28e-6 | 0.500000 | 4 |
+| turn_left / gain 0.1 | 0.056975 | 7.35e-6 | 0.500000 | 2 |
+| forward / half inertia scale | 0.057846 | 6.85e-6 | 0.500000 | 4 |
+| forward / double inertia scale | 0.057843 | 6.30e-6 | 0.500000 | 4 |
+
+The active transient maximum stayed near 0.5075 rad for forward/turns. Low settled error and almost unchanged inertia sensitivity do not establish correct physical dynamics; they point toward startup target/pose disagreement and rapid command transitions as important contributors. The emulator begins with an unmeasured 300-tick estimate while simulated joints begin at neutral. Filtering inactive channels alone therefore cannot remove the activation transient.
+
+A higher gain slightly reduces gait RMS but worsens stand RMS; default 0.1 is retained. Gaits reach the provisional torque cap and retain self-contact, so their transient saturation/contact effects remain unresolved. The anchored fixture position error was below 5.2e-8 m in these experiments. This confirms support behavior in the numerical fixture, not physical robot stability. Unknown axes, transforms, masses, friction and calibration cannot be corrected by scalar gain fitting.

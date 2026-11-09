@@ -1,5 +1,14 @@
 # Safety and test procedure
 
+## Phase 2 virtual safety policy
+
+No Pi access or physical hardware test is attempted in this phase. Physical ARM remains rejected; simulated sensors require explicit virtual outputs. Missing/invalid/conflicting/stale range or touch inputs inhibit, never imply clearance. A front range alone cannot authorize turns/reverse: separate fresh simulator swept-clearance evidence is required.
+
+STOP/fault/communication/critical sensing outrank manual takeover, obstacle policy, touch and selected tracking/exploration. Manual motion also passes clearance gates. Recovery and touch fragments have finite deadlines and end in disarm. Reconnection, fresh telemetry or target return cannot re-arm automatically.
+
+The planar navigation proxy and externally constrained articulation fixture are test tools. They do not validate locomotion, actual sensor electronics, motor torque, stopping distance or a physical stop circuit. The [model investigation](MODEL_STUDY.md) records unresolved contacts and provisional parameters. Existing [power](../hardware/Power/README.md), [calibration](CALIBRATION.md) and [hardware verification](HARDWARE_VERIFICATION.md) gates remain.
+
+
 ## Software-only development restriction
 
 Physical ARM is explicitly rejected by the web API on this branch. A real camera requires explicit virtual-actuator selection; failures never switch from virtual to physical serial or vice versa. Keep the Uno disconnected, all servos unpowered and suspected damaged HW-170 disconnected. No command here authorizes physical movement, firmware upload or power switching.

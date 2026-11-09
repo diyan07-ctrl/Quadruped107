@@ -492,3 +492,86 @@ class TrackingIntegrationTests(unittest.TestCase):
             pump(lambda:not runtime.link.engine.snapshot()["activeMask"])
             self.assertFalse(any(line.startswith("MOVE") and line.endswith("forward") for line in runtime.link.engine.snapshot()["history"]))
         finally: runtime.close()
+
+
+class LifecycleRegressionTests(unittest.TestCase):
+    def test_idle_rejects_stale_generation_without_overwriting_mode(self):
+        from quadruped.controller import MotionController
+        from quadruped.serial_link import SimulatedLink
+        controller=MotionController(SimulatedLink())
+        controller.arm()
+        old=controller.snapshot()["generation"]
+        controller.set_mode("explore")
+        with self.assertRaises(RuntimeError): controller.set_mode("idle",expected_generation=old)
+        self.assertEqual(controller.snapshot()["appMode"],"explore")
+        controller.close()
+
+    def test_prerecorded_blue_fixture_through_file_camera(self):
+        import runpy
+        import tempfile
+        from quadruped.camera import Camera
+        from quadruped.vision import detect_blue_ball
+        with tempfile.TemporaryDirectory() as directory:
+            video=runpy.run_path(str(ROOT/"tools/generate-blue-video.py"))["generate"](Path(directory)/"blue.avi")
+            camera=Camera(backend="file",device=str(video))
+            camera.start()
+            try:
+                wait_for(lambda:camera.latest()[0] is not None)
+                observation=detect_blue_ball(camera.latest()[0])
+                self.assertTrue(observation["detected"])
+                self.assertLess(observation["offset"],-.5)
+            finally: camera.close()
+
+    def test_reset_disconnect_and_reconnect_never_rearm(self):
+        import threading
+        sequence=[0]
+        def provider():
+            sequence[0]+=1
+            return fixture_batch(sequence[0])
+        server=TraceServer(port=0,sensors=provider)
+        address=server.address
+        quit_server=threading.Event()
+        def serve():
+            while not quit_server.wait(.005): server.poll()
+        thread=threading.Thread(target=serve)
+        thread.start()
+        runtime=Runtime(camera_backend="synthetic",actuator_backend="virtual",virtual_sensors=True,
+                        simulator_host=address[0],simulator_port=address[1])
+        runtime.start()
+        api=create_app(runtime).test_client()
+        def pump(predicate,timeout=4):
+            deadline=time.monotonic()+timeout
+            while time.monotonic()<deadline:
+                api.post("/api/heartbeat",json={})
+                if predicate(): return
+                time.sleep(.02)
+            self.fail(json.dumps(runtime.state()))
+        try:
+            pump(lambda:runtime.link.snapshot()["connected"] and runtime.bridge.snapshot()["readyToArm"] and not runtime.sensors.snapshot()["fault"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            api.post("/api/mode",json={"mode":"explore"})
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
+            server.receiver.reset()
+            pump(lambda:not runtime.motion.snapshot()["enabled"])
+            pump(lambda:not runtime.link.engine.snapshot()["armed"] and runtime.bridge.snapshot()["readyToArm"])
+            self.assertFalse(runtime.motion.snapshot()["enabled"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            api.post("/api/mode",json={"mode":"explore"})
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
+            quit_server.set()
+            thread.join(1)
+            server.close()
+            pump(lambda:not runtime.motion.snapshot()["enabled"])
+            pump(lambda:not runtime.link.engine.snapshot()["armed"])
+            server=TraceServer(*address,sensors=provider)
+            quit_server.clear()
+            thread=threading.Thread(target=serve)
+            thread.start()
+            pump(lambda:runtime.bridge.snapshot()["readyToArm"])
+            self.assertFalse(runtime.motion.snapshot()["enabled"])
+            self.assertFalse(runtime.link.engine.snapshot()["activeMask"])
+        finally:
+            runtime.close()
+            quit_server.set()
+            thread.join(1)
+            if server.socket.fileno()!=-1: server.close()

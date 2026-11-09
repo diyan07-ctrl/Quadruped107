@@ -1,5 +1,14 @@
 # Software and development
 
+## Current Phase 2 development configuration
+
+Use the [local laptop instructions](../simulation/PHASE2.md). Add --virtual-sensors with explicit virtual actuators and a simulator endpoint; --navigation-config / --sensor-config select reviewed JSON assumptions. Flask, camera, serial and ownership remain; no new dependency is introduced.
+
+The bounded virtual-autonomy worker is independent of camera capture/vision. Sensor ingress can submit asynchronous priority STOP; the controller guard and admission checks repeat safety validation. One sensor manager owns freshness/debounce; there is no competing motor controller. The dashboard exposes only supported modes and labels all sensor states simulated.
+
+**Pi deployment is postponed.** No SSH, OS, service or network changes are performed in Phase 2. Pi commands below are retained Phase 1 installation references, not tasks executed or prerequisites for these simulations. Actual Pi CPU/RAM/camera measurements remain unperformed.
+
+
 ## Active configuration
 
 Use Python 3, Flask/HTTP/MJPEG, OpenCV/NumPy and pySerial. Preserve Arduino C++/Adafruit PCA9685 for the future mandatory Uno. No framework migration, ROS, broker or cloud dependency is needed. Pi 4 (2 GB, user-reported Raspberry Pi OS 64-bit Trixie) is primary; PyBullet runs on a development laptop.

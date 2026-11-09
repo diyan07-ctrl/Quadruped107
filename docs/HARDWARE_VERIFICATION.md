@@ -1,5 +1,12 @@
 # HARDWARE_VERIFICATION — sole physical qualification checklist
 
+## Phase 2 deferral
+
+PHYSICAL HARDWARE TESTED: none. Pi deployment, SSH access, real sensors, Uno/PCA connection, power switching and servo movement are deliberately postponed; no connection is attempted.
+
+Before later physical sensing: identify exact URM37/HC-SR04 revisions and interfaces, voltage levels, safe pinout and acoustic scheduling; qualify touch polarity, placement, debounce and roles. Implement and test Uno local safety plus negotiated telemetry separately. Simulated swept-volume flags have no physical equivalent until additional qualified sensing provides it. Existing power, damaged-PCA isolation, calibration, watchdog/OE and independent disconnect requirements remain unchanged.
+
+
 ## Current assignment gate: no physical actuation
 
 All physical checks below remain pending unless separately supported by existing evidence. This session performed no power, servo, sensor or Pi measurements. SSH to both the reported IP and hostname failed with port-22 Permission denied before authentication. No credentials or Telegram configuration were read.

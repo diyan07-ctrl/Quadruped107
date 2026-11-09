@@ -1,5 +1,12 @@
 # Architecture freeze — Phase 0.1
 
+## Current Phase 2 virtual architecture
+
+[Phase 2](PHASE2.md) adds one SensorManager, a deterministic Navigation policy and additive UDP sensor acknowledgments to the existing controller/serial architecture. [Sensor contracts](SENSORS.md) define validity, freshness, touch debounce and extra simulated swept-clearance evidence. Exploration has no camera dependency; tracking retains the existing detector and stale-frame protections.
+
+Independent sensor callbacks/admission/guard checks preempt motion; manual takeover, Idle, STOP and faults cancel generations and disarm. Fresh disarmed acknowledgment is required before reconnect/re-arm. The [scenario guide](../simulation/PHASE2.md) labels the optional planar proxy separately from walking physics. No physical firmware or hardware interface is activated. Earlier Phase 1 sections below describe the retained baseline.
+
+
 ## Active software-integration architecture
 
 This branch builds on Phase 0.1 commit a629397. PRs #1/#2 remain unmerged; PR #3 is stacked on Phase 0.1. Physical ARM is prohibited even when a serial device exists. The diagram separates the active virtual path from future electrical connections:
