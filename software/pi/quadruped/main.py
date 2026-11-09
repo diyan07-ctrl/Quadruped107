@@ -15,7 +15,7 @@ from flask import Flask, Response, jsonify, request, send_from_directory
 from werkzeug.serving import make_server
 
 from .camera import Camera
-from .autonomy import Behavior, VisionSettings
+from .autonomy import Behavior, VisionSettings, Decision
 from .diagnostics import ProcessStats
 from .controller import CONTINUOUS, MODES, MOTIONS, MotionController
 from .serial_link import SerialLink, SimulatedLink
@@ -132,6 +132,9 @@ class Runtime:
         context=None
         count=0
         measured_at=time.monotonic()
+        held_gesture=None
+        gesture_count=0
+        gesture_last_request=0.0
         while not self.stop_event.wait(.02):
             state=self.motion.snapshot()
             mode=state["appMode"]
@@ -139,6 +142,9 @@ class Runtime:
             if new_context!=context:
                 self.behavior.reset(time.monotonic())
                 context=new_context
+                held_gesture=None
+                gesture_count=0
+                gesture_last_request=0.0
             frame,_,sequence,_,published_at=self.camera.latest(with_timestamp=True)
             autonomous=state["enabled"] and mode!="manual"
             if frame is None:
@@ -167,6 +173,16 @@ class Runtime:
                 decision=self.behavior.step(observation,now,enabled=autonomous,
                     manual=state["enabled"] and mode=="manual",stopped=not state["enabled"] and state["session"]>0,
                     obstacle=self.obstacle_blocked)
+                if mode=="hand_gesture" and autonomous:
+                    if self.detector is None: raise RuntimeError("Hand gesture model unavailable")
+                    gesture=self.detector.detect(frame)
+                    label=gesture.get("motion") if gesture else None
+                    gesture_count=gesture_count+1 if label==held_gesture else 1
+                    held_gesture=label
+                    action=label if label and gesture_count>=settings.min_frames and now-gesture_last_request>=settings.command_period else None
+                    decision=Decision("MANUAL_OVERRIDE" if not autonomous else "GESTURE_CONTROL",
+                                      action if label else "stand",False,"Optional gesture control")
+                    with self.lock: self.vision["hand"]=gesture or {}
                 preview=encode_vision_frame(frame,detection,decision.state,decision.motion or "hold")
                 if autonomous and not self._fresh_observation(state,published_at): continue
                 count+=1
@@ -188,14 +204,10 @@ class Runtime:
                 if decision.inhibit:
                     self.motion.stop(decision.reason,expected_generation=state["generation"])
                     continue
-                if mode=="hand_gesture":
-                    if self.detector is None: raise RuntimeError("Hand gesture model unavailable")
-                    gesture=self.detector.detect(frame)
-                    if not self._fresh_observation(state,published_at): continue
-                    motion=gesture["motion"] if gesture else None
-                else: motion=decision.motion
+                motion=decision.motion
                 if motion and self.motion.autonomous(mode,motion,expected_generation=state["generation"]):
                     self.behavior.accepted(motion,time.monotonic())
+                    if mode=="hand_gesture": gesture_last_request=time.monotonic()
             except Exception as error:
                 logging.exception("Vision failed")
                 with self.lock: self.vision["opencv"]=str(error)
@@ -267,7 +279,7 @@ def create_app(runtime):
         if mode == "hand_gesture" and runtime.detector is None:
             raise RuntimeError(runtime.vision["handGesture"])
         if mode in {"opencv", "hand_gesture"} and runtime.camera.latest()[0] is None:
-            raise RuntimeError("A fresh Pi camera frame is required for vision control")
+            raise RuntimeError("A fresh camera frame is required for vision control")
         generation = runtime.require_control(request.cookies.get("quadruped_control"))
         generation = runtime.motion.set_mode(mode, expected_generation=generation)
         return jsonify(ok=True, acceptedMode=mode, generation=generation, state=runtime.motion.snapshot())

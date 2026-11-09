@@ -1,5 +1,16 @@
 # Protocol v1 and reserved telemetry extension
 
+## Explicit virtual execution and trace extension
+
+Production serial v1 syntax/baud/ACK semantics below are retained. The host [VirtualUno](../software/pi/quadruped/virtual_uno.py) is an in-memory emulator behind the actual SerialLink worker, selected only with --actuator-backend virtual. It models safe startup, ARM without pose replay, original gait target ticks, ACCEPT/DONE, busy/invalid errors, priority STOP, 1.5 s communication watchdog and reset/reconnect disarming. Eight targets are commanded estimates; activeMask identifies channels actually driven in the model.
+
+[Generated virtual firmware](../tools/generate-virtual-firmware.py) copies production sources into ignored build/virtual/sketch, substitutes a no-I2C/no-GPIO PCA output stub, emits bounded TRACE lines and identifies as Quadruped107Virtual. The production host intentionally rejects that distinct hardware identity. This build is compiled in CI; it is not uploaded or exercised on a board. Production firmware remains unchanged and fails closed without its PCA.
+
+The [UDP trace extension](../simulation/README.md) is a separate laptop visualization protocol, not a replacement for serial v1. Packets are JSON objects: v=1, type hello/challenge/trace/ack/stop, random client/server sessions, one-use nonce and monotonically increasing seq. A trace additionally includes virtual=true, armed boolean, eight integer targets 50..600 and activeMask 0..255. Maximum packet size 2048 bytes; receiver processes ≤8 per poll. Challenges expire at 150 ms receiver-local age, accepted traces lease forces for 300 ms. Invalid/duplicate/out-of-order frames do not renew the lease.
+
+A new receiver epoch, receive timeout or explicit STOP inhibits output. STOP invalidates outstanding challenges; a disarmed frame must precede any new ARM. The Pi guard also disarms on missing acknowledgments; application re-enable is explicit. Trace snapshots may skip intermediate ticks and never replay old motion commands. Trusted private LAN only; random sessions reject accidental replay, not a hostile authenticated peer.
+
+
 USB serial is unchanged: ASCII lines, LF terminated, CR ignored, 115200 baud / 8N1, no flow control. Uno accepts at most 63 characters before LF; overflow discards through LF and returns ERR 0 line_too_long. Binary/NUL input is unsupported.
 
 ## Implemented commands

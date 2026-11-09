@@ -6,6 +6,11 @@ import tempfile
 
 code = """
 from quadruped.main import Runtime, create_app
+from quadruped.virtual_uno import VirtualUno
+from quadruped.bridge import TraceReceiver
+engine = VirtualUno()
+assert len(engine.snapshot()["targets"]) == 8
+assert not engine.snapshot()["armed"]
 runtime = Runtime(simulate=True)
 client = create_app(runtime).test_client()
 for name in ('/', '/app.js', '/styles.css', '/poses/stand.webp'):

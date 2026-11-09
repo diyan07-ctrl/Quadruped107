@@ -1,5 +1,16 @@
 # Safety and test procedure
 
+## Software-only development restriction
+
+Physical ARM is explicitly rejected by the web API on this branch. A real camera requires explicit virtual-actuator selection; failures never switch from virtual to physical serial or vice versa. Keep the Uno disconnected, all servos unpowered and suspected damaged HW-170 disconnected. No command here authorizes physical movement, firmware upload or power switching.
+
+STOP cancels the existing controller generation and serial queue, then waits for its virtual acknowledgment. Local inhibition and output-off are distinct events. Camera/native capture may block; an independent observation guard and network guard inhibit motion. Simulator receive lease expiration removes virtual forces. A stop/fault/reconnect never arms automatically.
+
+Host protocol emulation, optional virtual firmware compilation and PyBullet are simulation evidence only. They cannot establish actual servo position, physical stop time, stable walking, regulator qualification or independent hardware-watchdog protection. The model's fixed chassis masks balance; provisional free-base experiments may fall and are not a locomotion acceptance test.
+
+The [remaining hardware checklist](HARDWARE_VERIFICATION.md) gates future physical work. Existing battery packs/regulators remain NOT YET QUALIFIED under the [power study](../hardware/Power/README.md). No electrical measurement or hardware safety claim was added.
+
+
 ## Power and batteries
 
 Use a regulated supply within the exact servo voltage specification. Raw nominal 7.4 V / 2S Li-ion packs can exceed a 6 V-rated servo's limit. Do not supply servos from Pi, Uno 5V, or USB. Use common ground, suitably rated wire/connectors, protection, and an accessible servo-power disconnect.

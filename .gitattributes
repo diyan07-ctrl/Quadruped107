@@ -19,3 +19,6 @@ firmware/uno/sketch/* -text
 software/pi/quadruped/web/** -text
 archive/uno-q/** -text
 software/pi/quadruped/vision.py -text
+
+# Foreground Linux launch scripts must retain LF on Windows checkouts.
+*.sh text eol=lf

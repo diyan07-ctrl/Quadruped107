@@ -128,7 +128,8 @@ class BridgeContractTests(unittest.TestCase):
             thread.join(1)
             server.close()
             wait_for(lambda:not runtime.motion.snapshot()["enabled"],1.2)
-            self.assertFalse(runtime.link.engine.snapshot()["activeMask"])
+            wait_for(lambda:not runtime.link.engine.snapshot()["activeMask"],1.0)
+            self.assertFalse(runtime.link.engine.snapshot()["armed"])
         finally:
             runtime.close()
             stop.set()

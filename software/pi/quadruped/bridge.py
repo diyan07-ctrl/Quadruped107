@@ -181,6 +181,7 @@ class TraceClient:
         sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         sock.settimeout(.02)
         last_hello=0.0
+        awaiting=False
         was_armed=False
         try:
             while not self.stop_event.is_set():
@@ -191,9 +192,10 @@ class TraceClient:
                     self.seq+=1
                     sock.sendto(encode(dict(v=1,type="stop",client=self.client,server=self.session,seq=self.seq)),self.address)
                 was_armed=armed
-                if now-last_hello>=.05:
+                if now-last_hello>=.05 and (not awaiting or now-last_hello>CHALLENGE_TTL):
                     sock.sendto(encode(dict(v=1,type="hello",client=self.client)),self.address)
                     last_hello=now
+                    awaiting=True
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
                 if peer!=self.address: continue
@@ -225,6 +227,7 @@ class TraceClient:
                             self.ready=data.get("ready") is True
                             if data.get("fault"): self.fault=str(data["fault"])[:160]
                         self.pending=None
+                        awaiting=False
                 except (ValueError,TypeError,KeyError):
                     with self.lock: self.errors+=1
         except (OSError, RuntimeError):

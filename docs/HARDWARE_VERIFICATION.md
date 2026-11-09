@@ -1,5 +1,19 @@
 # HARDWARE_VERIFICATION — sole physical qualification checklist
 
+## Current assignment gate: no physical actuation
+
+All physical checks below remain pending unless separately supported by existing evidence. This session performed no power, servo, sensor or Pi measurements. SSH to both the reported IP and hostname failed with port-22 Permission denied before authentication. No credentials or Telegram configuration were read.
+
+- [ ] Restore authorized SSH/key connectivity without sharing secrets; enumerate current OS/RAM/storage, services, ports and V4L2 devices before deployment.
+- [ ] Validate the USB2.0 PC CAMERA with V4L2/YUYV; measure actual FPS/frame age, hot-unplug/recovery, frozen/slow capture behavior and native shutdown on Pi.
+- [ ] Run real camera + **explicit virtual actuators**, laptop bridge and dashboard; measure CPU/RSS, perception age, target-loss/STOP and network-recovery behavior.
+- [ ] Recover actual CAD assembly joint pivots/axes/export transforms, link masses/COM/inertias and physical servo-angle mapping before treating PyBullet as a locomotion predictor.
+- [ ] Keep the suspected damaged HW-170 isolated until a qualified electrical assessment/replacement; never test it by connecting servos.
+- [ ] Qualify battery/BMS/regulator/wiring/fusing/disconnect/OE/watchdog and individual calibration before separately authorized physical motion.
+
+Software simulation does not clear any electrical or movement gate. [Power evidence](../hardware/Power/TEST_PLAN.md) and [simulation acceptance](../simulation/README.md) specify separate procedures.
+
+
 All items below are **PENDING / NOT VERIFIED**. No photos, labels, electrical measurements or hardware tests were collected during Phase 0/0.1. This is the authoritative register of unresolved module-specific questions; other documents define requirements and test methods.
 
 For each item record specimen/assembly ID, exact manufacturer document/revision, date, setup, instruments, conditions, evidence path, result and reviewer. Do not mark passed from a simulator or seller title.

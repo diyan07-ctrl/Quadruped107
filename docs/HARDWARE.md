@@ -1,5 +1,14 @@
 # Hardware
 
+## Current physical state and simulation provenance
+
+User-reported: Pi 4 Model B with 2 GB RAM and USB2.0 PC CAMERA are operational; Uno is not connected to Pi. The HW-170 PCA9685 is suspected damaged and must remain disconnected/unpowered. All eight servos must remain unpowered. The servo battery/regulator are unqualified. The IMX219 CSI camera failed I2C initialization; its optional backend is retained without making it a dependency.
+
+No physical connection or performance was verified in this session. SSH was blocked before authentication. The USB camera's historical approximately 7.77 FPS is user-supplied evidence, not a new benchmark.
+
+Original Fusion, STEP, STL and spreadsheets are unchanged. The [CAD manifest](../simulation/model/cad_manifest.json) records binary STL bounds/hashes; [simulation](../simulation/README.md) explains inferred units and provisional assembly transforms. Firmware channels remain FL 0/1, FR 2/3, BL 4/5, BR 6/7. No physical servo targets or calibration limits were modified.
+
+
 The supplied inventory is recorded in [PROJECT](PROJECT.md). Connections have not been inspected on the assembled robot. “Verified in source” below means an inspected software assignment, not a measured wire.
 
 ## Mechanical assembly

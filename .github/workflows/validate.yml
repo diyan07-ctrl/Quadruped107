@@ -16,9 +16,14 @@ jobs:
       - run: python -m pip install -r software/pi/requirements-dev.txt -r simulation/requirements.txt -e software/pi
       - run: python -m pip check
       - run: python -m compileall -q software/pi/quadruped tests tools
-      - run: python simulation/build_model.py
-      - run: python -c "import runpy,json; print('MODEL_FILES_JSON='+json.dumps(runpy.run_path('simulation/build_model.py')['generate']()))"
+      - run: python simulation/build_model.py --check
       - run: python -m unittest discover -s tests -v
+      - run: python -m simulation.validate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: simulated-articulation
+          path: build/simulation/
+
       - run: python tools/generate-motion-data.py --check
       - run: python hardware/Power/power_budget.py --check
       - run: python hardware/Power/power_budget.py --json

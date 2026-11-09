@@ -1,5 +1,12 @@
 # Roadmap
 
+## Software-integration branch checkpoint
+
+Software development has advanced ahead of physical Phase 1 qualification: USB camera backend, deterministic blue-target behavior, virtual Uno, bounded trace bridge and CAD-visual PyBullet integration are implemented with hardware-free tests. These are not completed physical Phases 2–5.
+
+Next prerequisite is observational Pi validation: confirm current IP/key access, enumerate V4L2, run the explicitly virtual application and measure camera/processing FPS, age, CPU/RSS and recovery. No actuator is needed. Physical movement remains a separate authorized phase after damaged-board replacement/assessment, supply qualification, OE/disconnect/watchdog verification, individual calibration and supported-body testing. Advanced tracking, real obstacle sensing, touch personality, OLED/pan and actual locomotion acceptance remain pending.
+
+
 Existing feature code is retained. Completion requires the acceptance evidence below; source presence alone does not pass a phase.
 
 | Phase | Deliverables | Prerequisites | Tests | Acceptance criteria |

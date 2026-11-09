@@ -1,0 +1,96 @@
+{
+  "base_mass_kg": 0.8,
+  "channels": [
+    {
+      "channel": 0,
+      "direction": 1,
+      "joint": "shoulder_fl",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 278
+    },
+    {
+      "channel": 1,
+      "direction": 1,
+      "joint": "leg_fl",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 110
+    },
+    {
+      "channel": 2,
+      "direction": 1,
+      "joint": "shoulder_fr",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 328
+    },
+    {
+      "channel": 3,
+      "direction": 1,
+      "joint": "leg_fr",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 500
+    },
+    {
+      "channel": 4,
+      "direction": 1,
+      "joint": "shoulder_bl",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 295
+    },
+    {
+      "channel": 5,
+      "direction": 1,
+      "joint": "leg_bl",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 495
+    },
+    {
+      "channel": 6,
+      "direction": 1,
+      "joint": "shoulder_br",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 283
+    },
+    {
+      "channel": 7,
+      "direction": 1,
+      "joint": "leg_br",
+      "max_angle_rad": 1.2,
+      "max_tick": 600,
+      "min_angle_rad": -1.2,
+      "min_tick": 50,
+      "neutral_tick": 110
+    }
+  ],
+  "force_nm": 0.5,
+  "friction": 0.8,
+  "initial_height_m": 0.24157126808166504,
+  "lower_and_foot_mass_kg": 0.08,
+  "lower_span_m": 0.10500000190734864,
+  "max_velocity_rad_s": 3.0,
+  "provisional": true,
+  "schema": 1,
+  "units": "metres; STL mm scale inferred from STEP context",
+  "upper_mass_kg": 0.12,
+  "upper_span_m": 0.07857126617431641
+}
