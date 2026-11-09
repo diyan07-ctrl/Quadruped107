@@ -8,6 +8,7 @@ import math
 
 @dataclass(frozen=True)
 class VisionSettings:
+    target_color: str = "blue"
     hsv_lower: tuple = (95,70,30)
     hsv_upper: tuple = (140,255,255)
     enter_error: float = .32
@@ -20,6 +21,8 @@ class VisionSettings:
     search_seconds: float = 2.0
 
     def __post_init__(self):
+        if self.target_color not in ("blue", "yellow"):
+            raise ValueError("target_color must be blue or yellow")
         for triple in (self.hsv_lower,self.hsv_upper):
             if len(triple)!=3 or any(type(v) is not int or not 0<=v<=limit for v,limit in zip(triple,(179,255,255))):
                 raise ValueError("Invalid HSV triple")
@@ -38,6 +41,10 @@ class VisionSettings:
         with open(path,encoding="utf-8") as stream: data=json.load(stream)
         for key in ("hsv_lower","hsv_upper"):
             if key in data: data[key]=tuple(data[key])
+        if data.get("target_color") == "yellow":
+            # Explicit HSV entries override the yellow tennis-ball preset.
+            data.setdefault("hsv_lower", (20,70,70))
+            data.setdefault("hsv_upper", (45,255,255))
         return cls(**data)
 
 
