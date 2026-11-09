@@ -5,7 +5,7 @@ import time
 
 MOTIONS = {"initial", "stand", "greeting", "tail_wag", "forward", "backward", "turn_left", "turn_right"}
 CONTINUOUS = {"forward", "backward", "turn_left", "turn_right"}
-MODES = {"manual", "opencv", "hand_gesture"}
+MODES = {"manual", "opencv", "hand_gesture", "explore", "sensor_test", "idle"}
 LEASE_SECONDS = 1.0
 INTENT_TTL = 0.5
 
@@ -13,6 +13,7 @@ INTENT_TTL = 0.5
 class MotionController:
     def __init__(self, link):
         self.link = link
+        self.safety_check = None
         self.lock = threading.RLock()
         self.stop_event = threading.Event()
         self.wake = threading.Event()
@@ -98,7 +99,7 @@ class MotionController:
         finally:
             self._retire(ticket)
 
-    def stop(self, reason="Stopped; servos disabled", expected_generation=None):
+    def stop(self, reason="Stopped; servos disabled", expected_generation=None, *, wait=True):
         # Invalidate first, submit while holding only the state/transaction locks,
         # then release those locks before waiting. ARM/SERVO cannot delay STOP by
         # holding a lock for their acknowledgment timeout.
@@ -120,7 +121,7 @@ class MotionController:
                 except Exception as error:
                     self.error = str(error)
         self.wake.set()
-        if ticket is not None:
+        if ticket is not None and wait:
             try: self.link.wait(ticket)
             except Exception as error:
                 with self.lock: self.error = str(error)
@@ -131,6 +132,13 @@ class MotionController:
     def set_mode(self, mode, expected_generation=None):
         mode = mode.strip().lower().replace("-", "_")
         if mode not in MOTIONS | MODES: raise ValueError("Unknown mode")
+        if mode == "idle":
+            self.stop("Idle selected",expected_generation=expected_generation)
+            with self.lock: self.app_mode = "idle"
+            return self.generation
+        if mode == "manual" and self.snapshot()["appMode"] != "manual":
+            self.stop("Manual takeover; explicit enable required",expected_generation=expected_generation)
+            return self.generation
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation:
                 raise RuntimeError("Stale mode request")
@@ -142,10 +150,11 @@ class MotionController:
                 raise RuntimeError("Wait for the current step before changing control mode; STOP inhibits immediately")
             self.generation += 1
             if mode in MODES:
-                self.app_mode, self.desired = mode, "stand"
+                self.app_mode, self.desired = mode, "none" if mode in {"explore", "sensor_test"} or mode=="opencv" and self.safety_check else "stand"
                 self.vision_seen = time.monotonic()
             else:
                 self.app_mode, self.desired = "manual", mode
+            if self.desired == "none": self.executed = self.generation
             self.last_heartbeat = self.desired_at = time.monotonic()
             self.result, self.error = f"Selected {mode}", None
             generation = self.generation
@@ -153,7 +162,7 @@ class MotionController:
         return generation
 
     def autonomous(self, owner, motion, expected_generation=None):
-        if owner not in {"opencv", "hand_gesture"} or motion not in MOTIONS:
+        if owner not in {"opencv", "hand_gesture", "explore"} or motion not in MOTIONS:
             raise ValueError("Invalid autonomous owner or motion")
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation: return
@@ -175,6 +184,9 @@ class MotionController:
             if not self.enabled: raise RuntimeError("Enable servos first")
             if self.busy or self.desired in CONTINUOUS or self.generation != self.executed:
                 raise RuntimeError("Wait for motion to finish before calibrating")
+            if self.safety_check:
+                reason = self.safety_check("servo")
+                if reason: raise RuntimeError(reason)
             self.app_mode = "manual"
             generation = self.generation
             ticket = self.link.submit("SERVO", channel, pulse, timeout=3)
@@ -191,13 +203,17 @@ class MotionController:
     def _guard(self):
         while not self.stop_event.wait(0.05):
             with self.lock:
+                if self.stop_ticket is not None and self.stop_ticket.event.is_set():
+                    if self.stop_ticket.error: self.error = str(self.stop_ticket.error)
+                    self.stop_ticket = None
                 link = self.link.snapshot()
+                safety_reason = self.safety_check(self.current if self.busy else self.desired) if self.enabled and self.safety_check else None
                 stale = self.enabled and time.monotonic() - self.last_heartbeat > LEASE_SECONDS
                 reset = self.enabled and (not link["connected"] or not link["armed"] or link["epoch"] != self.epoch)
                 vision_stale = self.enabled and self.app_mode in {"opencv", "hand_gesture"} and time.monotonic() - self.vision_seen > .8
                 generation = self.generation
-            if stale or reset or vision_stale:
-                reason = ("Control heartbeat expired" if stale else
+            if stale or reset or vision_stale or safety_reason:
+                reason = (safety_reason if safety_reason else "Control heartbeat expired" if stale else
                           "Arduino disconnected or reset; enable again" if reset else "Vision observation expired")
                 self.stop(reason,
                           expected_generation=generation)
@@ -213,7 +229,8 @@ class MotionController:
                     motion, generation = self.desired, self.generation
                     # Stand is a safe release intent; a queued action/held direction
                     # expires unless a matching current heartbeat renews it.
-                    stale = motion != "stand" and time.monotonic() - self.desired_at > INTENT_TTL
+                    safety_reason = self.safety_check(motion) if self.safety_check else None
+                    stale = bool(safety_reason) or motion != "stand" and time.monotonic() - self.desired_at > INTENT_TTL
                     if not stale:
                         try:
                             ticket = self.link.submit("MOVE", motion)
@@ -221,7 +238,7 @@ class MotionController:
                         except Exception as error:
                             self.error = str(error)
             if stale:
-                self.stop("Stale motion intent", expected_generation=generation)
+                self.stop(safety_reason or "Stale motion intent", expected_generation=generation)
                 continue
             if not run:
                 self.wake.wait(0.05)

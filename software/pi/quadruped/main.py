@@ -28,7 +28,7 @@ class Runtime:
     def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
                  camera_backend=None, camera_device=None, width=640, height=480, fps=8,
                  actuator_backend=None, vision_config=None, virtual_speed=1.0,
-                 simulator_host=None, simulator_port=7002):
+                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
         if link is not None:
@@ -48,12 +48,28 @@ class Runtime:
         self.obstacle_blocked = False
         self.stats = ProcessStats()
         self.motion = MotionController(self.link)
+        self.sensors = None
+        self.navigation = None
+        self.nav_lock = threading.RLock()
+        self.nav_wake = threading.Event()
+        self.sensor_backend = sensor_backend
+        if virtual_sensors:
+            if not self.actuators_simulated or not hasattr(self.link, "engine"):
+                raise ValueError("Virtual sensing requires explicit protocol virtual actuators")
+            if not simulator_host and sensor_backend is None:
+                raise ValueError("Virtual sensing requires simulator telemetry or an explicit test backend")
+            from .sensors import SensorManager
+            from .navigation import Navigation, NavigationSettings, motion_inhibition
+            self.sensors = SensorManager()
+            self.navigation = Navigation(NavigationSettings.load(navigation_config),self.vision_settings)
+            self.motion.safety_check = lambda motion: motion_inhibition(self.sensors.snapshot(),motion,self.navigation.settings)
         self.bridge = None
         if simulator_host:
             if not self.actuators_simulated or not hasattr(self.link, "engine"):
                 raise ValueError("Network bridge requires explicitly selected protocol virtual actuators")
             from .bridge import TraceClient
-            self.bridge = TraceClient(simulator_host, simulator_port, self.link.engine.snapshot)
+            self.bridge = TraceClient(simulator_host, simulator_port, self.link.engine.snapshot,
+                                      on_sensors=self._sensor_update if self.sensors else None)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
         self.owner_lock = threading.Lock()
@@ -75,11 +91,13 @@ class Runtime:
                 self.vision["handGesture"] = f"Unavailable: {error}"
                 logging.warning("Hand gestures: %s", error)
         self.worker = threading.Thread(target=self._vision_loop, name="vision", daemon=True)
+        self.nav_worker = threading.Thread(target=self._navigation_loop, name="virtual-autonomy", daemon=True)
         self.bridge_guard = threading.Thread(target=self._bridge_guard, name="bridge-safety", daemon=True)
 
     def start(self):
         self.link.start(); self.camera.start(); self.motion.start(); self.worker.start()
         if self.bridge: self.bridge.start(); self.bridge_guard.start()
+        if self.sensors: self.nav_worker.start()
 
     def claim_control(self, token):
         with self.owner_lock:
@@ -127,8 +145,10 @@ class Runtime:
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES), motionModes=sorted(MOTIONS),
-                    features=dict(handGesture=self.detector is not None), vision=vision,
+                    link=self.link.snapshot(), controlModes=sorted(MODES if self.sensors else MODES-{"explore","sensor_test"}), motionModes=sorted(MOTIONS),
+                    sensors=self.sensors.snapshot() if self.sensors else None,
+                    autonomy=self.navigation_state(),
+                    features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None), vision=vision,
                     camera=dict(**self.camera.diagnostics(),
                                 snapshotEndpoint="/api/camera-frame", mjpegEndpoint="/video-feed"))
 
@@ -153,12 +173,12 @@ class Runtime:
                 gesture_last_request=0.0
                 last_gesture_sent=None
             frame,_,sequence,_,published_at=self.camera.latest(with_timestamp=True)
-            autonomous=state["enabled"] and mode!="manual"
+            autonomous=state["enabled"] and mode in {"opencv","hand_gesture"} and self.sensors is None
             if frame is None:
                 decision=self.behavior.step(None,time.monotonic(),enabled=autonomous,
                     manual=state["enabled"] and mode=="manual",stopped=not state["enabled"] and state["session"]>0)
                 with self.lock:
-                    self.vision["behavior"]=decision.state
+                    if not self.sensors: self.vision["behavior"]=decision.state
                     self.preview=None
                 if autonomous:
                     self.motion.stop("Camera frame expired during vision control",expected_generation=state["generation"])
@@ -191,7 +211,7 @@ class Runtime:
                     decision=Decision("MANUAL_OVERRIDE" if not autonomous else "GESTURE_CONTROL",
                                       action if label else "stand",False,"Optional gesture control")
                     with self.lock: self.vision["hand"]=gesture or {}
-                preview=encode_vision_frame(frame,detection,decision.state,decision.motion or "hold")
+                preview=encode_vision_frame(frame,detection,self.navigation_state()["state"] if self.sensors else decision.state,decision.motion or "hold")
                 if autonomous and not self._fresh_observation(state,published_at): continue
                 count+=1
                 elapsed=time.monotonic()-measured_at
@@ -201,7 +221,7 @@ class Runtime:
                         count,measured_at=0,time.monotonic()
                     self.preview,self.preview_at=preview,published_at
                     self.vision["blueBall"]=observation
-                    self.vision["behavior"]=decision.state
+                    if not self.sensors: self.vision["behavior"]=decision.state
                     self.vision["opencv"]=decision.reason or decision.state
                     self.vision["processingMs"]=round((time.monotonic()-started)*1000,2)
                     self.vision["transitions"]=list(self.behavior.transitions)
@@ -224,6 +244,45 @@ class Runtime:
                 if autonomous:
                     self.motion.stop(f"Vision failed: {error}",expected_generation=state["generation"])
 
+    def navigation_state(self):
+        with self.nav_lock:
+            return self.navigation.snapshot() if self.navigation else None
+
+    def _sensor_update(self,batch,**metadata):
+        if not self.sensors: return
+        self.sensors.ingest(batch,**metadata)
+        self.nav_wake.set()
+        state=self.motion.snapshot()
+        reason=self.motion.safety_check(state["currentMotion"] if state["busy"] else state["desiredMotion"])
+        if state["enabled"] and reason:
+            self.motion.stop(reason,expected_generation=state["generation"],wait=False)
+
+    def _navigation_loop(self):
+        while not self.stop_event.is_set():
+            self.nav_wake.wait(.02)
+            self.nav_wake.clear()
+            try:
+                if self.sensor_backend:
+                    batch=self.sensor_backend.sample(time.monotonic())
+                    if batch is not None: self._sensor_update(batch,session="explicit-test-backend")
+                state=self.motion.snapshot()
+                with self.lock: observation=dict(self.vision.get("blueBall",{}))
+                if state["enabled"] and state["appMode"]=="opencv" and observation.get("observed_at") is not None:
+                    self._fresh_observation(state,observation["observed_at"])
+                health=self.bridge.snapshot() if self.bridge else None
+                with self.nav_lock:
+                    decision=self.navigation.step(state["appMode"],state["enabled"],state["session"],
+                        self.sensors.snapshot(),observation,time.monotonic(),busy=state["busy"],
+                        communication_ok=not health or health["connected"] and not health["fault"])
+                if state["enabled"] and decision.stop:
+                    self.motion.stop(decision.reason,expected_generation=state["generation"],wait=False)
+                elif decision.motion and self.motion.autonomous(state["appMode"],decision.motion,expected_generation=state["generation"]):
+                    with self.nav_lock: self.navigation.accepted(decision.motion,time.monotonic())
+            except Exception:
+                logging.exception("Virtual autonomy failed")
+                state=self.motion.snapshot()
+                if state["enabled"]: self.motion.stop("Virtual autonomy worker fault",expected_generation=state["generation"],wait=False)
+
     def _bridge_guard(self):
         while not self.stop_event.wait(.05):
             health=self.bridge.snapshot()
@@ -238,6 +297,8 @@ class Runtime:
 
     def close(self):
         self.stop_event.set()
+        self.nav_wake.set()
+        if self.nav_worker.is_alive(): self.nav_worker.join(1)
         self.motion.close()
         if self.bridge: self.bridge.close()
         if self.bridge_guard.is_alive(): self.bridge_guard.join(1)
@@ -286,6 +347,12 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
+        if mode in {"explore","sensor_test"} and runtime.sensors is None:
+            raise RuntimeError("Explicit virtual sensors are required")
+        if mode == "hand_gesture" and runtime.sensors:
+            raise RuntimeError("Phase 2 supports blue tracking; optional gesture control remains Phase 1 only")
+        if runtime.sensors and mode not in {"manual","idle","sensor_test"} and runtime.sensors.snapshot()["fault"]:
+            raise RuntimeError(runtime.sensors.snapshot()["fault"])
         if mode == "hand_gesture" and runtime.detector is None:
             raise RuntimeError(runtime.vision["handGesture"])
         if mode in {"opencv", "hand_gesture"} and runtime.camera.latest()[0] is None:
@@ -317,6 +384,7 @@ def create_app(runtime):
         if not runtime.actuators_simulated:
             raise RuntimeError("Physical actuation is prohibited; explicitly select virtual actuators")
         if runtime.obstacle_blocked: raise RuntimeError("Clear the virtual obstacle before enabling")
+        if runtime.sensors and runtime.sensors.snapshot()["fault"]: raise RuntimeError(runtime.sensors.snapshot()["fault"])
         generation = runtime.motion.snapshot()["generation"]
         token, claim = runtime.claim_control(request.cookies.get("quadruped_control"))
         bridge_epoch = None
@@ -404,6 +472,8 @@ def main():
     parser.add_argument("--vision-config")
     parser.add_argument("--simulator", help="Trusted simulator host; enables mandatory network lease")
     parser.add_argument("--simulator-port", type=int, default=7002)
+    parser.add_argument("--virtual-sensors", action="store_true", help="Explicit Phase 2 virtual autonomy; simulator telemetry required")
+    parser.add_argument("--navigation-config")
     args = parser.parse_args()
     if args.simulate and args.camera_backend not in (None, "synthetic"):
         parser.error("--simulate means synthetic camera; use --camera-backend usb --actuator-backend virtual for mixed mode")
@@ -420,7 +490,8 @@ def main():
                       width=args.width, height=args.height, fps=args.fps,
                       actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
                       vision_config=args.vision_config, virtual_speed=args.virtual_speed,
-                      simulator_host=args.simulator, simulator_port=args.simulator_port)
+                      simulator_host=args.simulator, simulator_port=args.simulator_port,
+                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config)
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

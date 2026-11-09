@@ -24,6 +24,10 @@ class World:
         self.parameters=json.loads(Path(parameters or MODEL/"parameters.json").read_text())
         self.frames=0
         self.max_joint_error=0.0
+        self.max_active_error=0.0
+        self.active_error_squared=0.0
+        self.active_error_samples=0
+        self.max_torque=0.0
         self.contact_count=0
         self.self_contacts=0
         self.fault=None
@@ -106,6 +110,14 @@ class World:
         self.contact_count=max(self.contact_count,len(contacts))
         self.self_contacts=max(self.self_contacts,sum(c[1]==self.robot and c[2]==self.robot for c in contacts))
         self.max_joint_error=max(self.max_joint_error,max(abs(a-b) for a,b in zip(joints,self.targets)))
+        for channel,index in enumerate(self.joints):
+            if self.active_mask&(1<<channel):
+                error=abs(joints[channel]-self.targets[channel])
+                self.max_active_error=max(self.max_active_error,error)
+                self.active_error_squared+=error*error
+                self.active_error_samples+=1
+                torque=abs(self.p.getJointState(self.robot,index,physicsClientId=self.client)[3])
+                self.max_torque=max(self.max_torque,torque)
         if self.fault:
             for index in self.joints:
                 self.p.setJointMotorControl2(self.robot,index,self.p.VELOCITY_CONTROL,force=0,physicsClientId=self.client)
@@ -120,7 +132,12 @@ class World:
                     maxJointErrorRad=self.max_joint_error,maxContactCount=self.contact_count,
                     maxSelfCollisionContacts=self.self_contacts,fault=self.fault,
                     physicalLocomotionValidated=False,solverIterations=100,subSteps=4,
-                    modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"])
+                    modeledVelocityLimitRadS=self.parameters["max_velocity_rad_s"],
+                    maxActiveJointErrorRad=self.max_active_error,
+                    activeJointRmsErrorRad=math.sqrt(self.active_error_squared/self.active_error_samples) if self.active_error_samples else None,
+                    maxAppliedMotorTorqueNm=self.max_torque,
+                    currentJointPositions=[self.p.getJointState(self.robot,i,physicsClientId=self.client)[0] for i in self.joints],
+                    currentJointTargets=list(self.targets),activeMask=self.active_mask)
 
     def capture(self,path):
         import cv2
@@ -144,6 +161,11 @@ def main():
     parser.add_argument("--port",type=int,default=7002)
     parser.add_argument("--steps",type=int,default=0)
     parser.add_argument("--parameters")
+    parser.add_argument("--scenario",choices=("empty","single_obstacle","multiple_obstacles","narrow_passage","dead_end","target","sensor_failure","touch"))
+    parser.add_argument("--navigation-proxy",action="store_true",help="Explicit kinematic proxy; never inferred walking physics")
+    parser.add_argument("--show-rays",action="store_true")
+    parser.add_argument("--sensor-noise",type=float,default=0.0)
+    parser.add_argument("--sensor-latency",type=float,default=.02)
     parser.add_argument("--report")
     parser.add_argument("--capture")
     parser.add_argument("--demo",choices=("stand","initial","forward","backward","turn_left","turn_right","greeting","tail_wag"))
@@ -151,16 +173,21 @@ def main():
     args=parser.parse_args()
     if args.demo and not args.arm_demo: parser.error("Offline demo requires explicit --arm-demo")
     if args.steps<0: parser.error("steps must be nonnegative")
+    if args.navigation_proxy and (not args.scenario or args.free_base): parser.error("Proxy requires an explicit scenario and fixed-base fixture")
     world=World(gui=not args.headless,free_base=args.free_base,parameters=args.parameters)
     server=None
+    scene=None
     engine=None
     failed=False
     try:
+        if args.scenario:
+            from .environment import Scene
+            scene=Scene(world,args.scenario,proxy=args.navigation_proxy,show_rays=args.show_rays,noise=args.sensor_noise,latency=args.sensor_latency)
         if args.demo:
             engine=VirtualUno()
             engine.feed(b"HELLO\nARM 1\n")
             engine.feed(("MOVE 2 "+args.demo+"\n").encode())
-        else: server=TraceServer(args.host,args.port)
+        else: server=TraceServer(args.host,args.port,sensors=scene.telemetry if scene else None)
         started=time.monotonic()
         while not args.steps or world.frames<args.steps:
             if engine:
@@ -168,6 +195,7 @@ def main():
                 engine.advance()
                 frame=engine.snapshot()
             else: frame=server.poll()
+            if scene and not scene.advance(frame): raise SimulationFault("Navigation proxy collision guard")
             world.apply(frame)
             world.step()
             if not args.headless and world.frames%24==0:
@@ -180,6 +208,7 @@ def main():
         failed=True
     finally:
         evidence=world.diagnostics()
+        if scene: evidence["environment"]=scene.diagnostics()
         if server: evidence["bridge"]=server.receiver.snapshot(); server.close()
         if engine: evidence["virtualUno"]=engine.snapshot()
         if args.capture: world.capture(args.capture)
