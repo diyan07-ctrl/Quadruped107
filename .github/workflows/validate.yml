@@ -21,6 +21,16 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python -m simulation.validate
       - run: python -m simulation.model_study
+      - name: Render bounded virtual gait recording
+        run: python -m simulation.twin --headless --demo forward --arm-demo --steps 240 --record build/recordings/virtual-forward.avi --report build/recordings/virtual-forward.json
+      - name: Upload virtual gait recording
+        uses: actions/upload-artifact@v4
+        with:
+          name: quadruped107-phase3-simulation-video
+          path: |
+            build/recordings/virtual-forward.avi
+            build/recordings/virtual-forward.json
+          if-no-files-found: error
 
       - run: python tools/generate-motion-data.py --check
       - run: python hardware/Power/power_budget.py --check
