@@ -211,7 +211,7 @@ class Runtime:
                     decision=Decision("MANUAL_OVERRIDE" if not autonomous else "GESTURE_CONTROL",
                                       action if label else "stand",False,"Optional gesture control")
                     with self.lock: self.vision["hand"]=gesture or {}
-                preview=encode_vision_frame(frame,detection,self.navigation_state()["state"] if self.sensors else decision.state,decision.motion or "hold")
+                preview=encode_vision_frame(frame,detection,self.navigation_state()["state"] if self.sensors else decision.state,decision.motion or "hold",target_name=settings.target_color)
                 if autonomous and not self._fresh_observation(state,published_at): continue
                 count+=1
                 elapsed=time.monotonic()-measured_at
@@ -221,6 +221,7 @@ class Runtime:
                         count,measured_at=0,time.monotonic()
                     self.preview,self.preview_at=preview,published_at
                     self.vision["blueBall"]=observation
+                    self.vision["targetColor"]=settings.target_color
                     if not self.sensors: self.vision["behavior"]=decision.state
                     if not self.sensors: self.vision["opencv"]=decision.reason or decision.state
                     self.vision["processingMs"]=round((time.monotonic()-started)*1000,2)
