@@ -278,7 +278,8 @@ class RuntimeNavigationTests(unittest.TestCase):
 
     def test_actual_controller_explore_obstacle_stop_and_reconnect_latch(self):
         self.assertEqual(self.api.post("/api/arm",json={}).status_code,200)
-        self.assertEqual(self.api.post("/api/mode",json={"mode":"explore"}).status_code,200)
+        response=self.api.post("/api/mode",json={"mode":"explore"})
+        self.assertEqual(response.status_code,200,response.get_json())
         self.pump(lambda:self.runtime.link.engine.snapshot()["activeMotion"]=="forward")
         self.backend.distance=.2
         self.pump(lambda:not self.runtime.motion.snapshot()["enabled"])
@@ -323,7 +324,7 @@ class RuntimeNavigationTests(unittest.TestCase):
         self.backend.touches={}
         self.pump(lambda:not self.runtime.motion.snapshot()["enabled"],timeout=3)
         self.pump(lambda:not self.runtime.link.engine.snapshot()["armed"])
-        self.assertLessEqual(deadline,time.monotonic())
+        self.assertLessEqual(deadline,time.monotonic(),self.runtime.motion.snapshot())
 
     def test_sensor_disconnect_preempts_without_camera_dependency(self):
         self.api.post("/api/arm",json={})

@@ -145,7 +145,7 @@ class Runtime:
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES if self.sensors else MODES-{"explore","sensor_test"}), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
                     autonomy=self.navigation_state(),
                     features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None), vision=vision,
@@ -222,7 +222,7 @@ class Runtime:
                     self.preview,self.preview_at=preview,published_at
                     self.vision["blueBall"]=observation
                     if not self.sensors: self.vision["behavior"]=decision.state
-                    self.vision["opencv"]=decision.reason or decision.state
+                    if not self.sensors: self.vision["opencv"]=decision.reason or decision.state
                     self.vision["processingMs"]=round((time.monotonic()-started)*1000,2)
                     self.vision["transitions"]=list(self.behavior.transitions)
                 if not autonomous: continue
@@ -268,10 +268,10 @@ class Runtime:
             return "Obstacle override preempts autonomous motion"
         return None
 
-    def _sensor_update(self,batch,**metadata):
+    def _sensor_update(self,batch,*,notify=True,**metadata):
         if not self.sensors: return
         self.sensors.ingest(batch,**metadata)
-        self.nav_wake.set()
+        if notify: self.nav_wake.set()
         state=self.motion.snapshot()
         reason=self.motion.safety_check(state["currentMotion"] if state["busy"] else state["desiredMotion"])
         if state["enabled"] and reason:
@@ -284,7 +284,7 @@ class Runtime:
             try:
                 if self.sensor_backend:
                     batch=self.sensor_backend.sample(time.monotonic())
-                    if batch is not None: self._sensor_update(batch,session="explicit-test-backend")
+                    if batch is not None: self._sensor_update(batch,session="explicit-test-backend",notify=False)
                 state=self.motion.snapshot()
                 with self.lock: observation=dict(self.vision.get("blueBall",{}))
                 if state["enabled"] and state["appMode"]=="opencv" and observation.get("observed_at") is not None:
@@ -294,6 +294,9 @@ class Runtime:
                     decision=self.navigation.step(state["appMode"],state["enabled"],state["session"],
                         self.sensors.snapshot(),observation,time.monotonic(),busy=state["busy"],
                         communication_ok=not health or health["connected"] and not health["fault"])
+                with self.lock:
+                    self.vision["behavior"]=decision.state
+                    self.vision["opencv"]=decision.reason or decision.state
                 if state["enabled"] and decision.stop:
                     self.motion.stop(decision.reason,expected_generation=state["generation"],wait=False)
                 elif decision.motion and self.motion.autonomous(state["appMode"],decision.motion,expected_generation=state["generation"]):
