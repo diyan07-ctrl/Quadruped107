@@ -31,3 +31,27 @@ STOP must still wait for an OS write already in progress (configured 500 ms writ
 HTTP ownership is a trusted-LAN arbitration mechanism, not security against malicious clients or DNS rebinding. The retained development server can create multiple HTTP threads; viewer/request concurrency and inference resource budgets require Pi measurement. No Internet exposure is approved.
 
 The MCU can retain PWM during a freeze; a failed regulator can damage servos even with PWM inhibited. Software changes cannot repair absent physical protection, sense actual joint positions, or establish electrical current limits. See [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md), [calibration](CALIBRATION.md), and [power protection](../hardware/Power/PROTECTION.md).
+
+## Software-first integration decision (2026-11-09)
+
+Retained: Flask/MJPEG, current arbitration/ownership generations, serial v1, mandatory Uno architecture, original gait tables and physical firmware. Benefit: existing tested safety contracts remain exercised.
+
+Improved: single-owner USB/V4L2 capture with conservative timestamp/freshness diagnostics; explicit real-camera/virtual-output mode; deterministic bounded blue-target FSM; host emulator using original motion targets; challenge/lease trace bridge; CAD-mesh articulated fixture; reproducible launch and installation procedures.
+
+Deferred: physical motion, damaged PCA assessment, CSI recovery, sensor acquisition, independent watchdog/OE/power circuits, measured calibration and realistic dynamic model. These require physical evidence. No inferred CAD span or synthetic timing is presented as measured hardware data.
+
+Rejected: silent simulation fallback, automatic arming/replay, public dashboard exposure, neural/cloud dependency, Pi-side physics GUI, and unmeasured claims of gait stability. Each would add risk or resource cost without enabling the software demonstration.
+
+## Phase 2: virtual sensing and conservative exploration
+
+Retain the existing camera/detector, Flask, controller, serial worker, production firmware and original motion tables. Add SensorManager as the sole observation/debounce owner and Navigation as a pure bounded policy that requests existing controller actions. This avoids a second motion executor.
+
+Extend correlated UDP acknowledgments with bounded schema-1 observations rather than introducing a broker. Preserve source age plus receipt-time round-trip allowance; callbacks and independent guards can inhibit without waiting for video or an acknowledgment. A host stop epoch plus a freshly acknowledged disarmed trace closes stale readiness after STOP.
+
+Require both front ranges and three to five touches in the selected virtual profile; missing/conflicting/expired data fails closed. Extra simulator geometry evidence, explicitly distinct from ultrasonic capability, authorizes swept turns/reverse/footprint progress. Single-front-sensor recovery is rejected. Caution stops rather than pretending a calibrated speed scale exists.
+
+Manual takeover and Idle cancel/disarm atomically; no automatic re-arm after faults, target return, fresh telemetry, reset or reconnect. Touch and recovery fragments have finite budgets; no new servo targets are introduced.
+
+The nominal fixed fixture was observed drifting after dynamics updates. Add an explicit external support constraint and measured fixture error, keeping free-base mode separate. An optional kinematic proxy makes virtual navigation observable but is never labeled gait-derived walking. Preserve collision checking and the 0.5 Nm servo model cap. Gain/inertia sensitivity and explicit stand/settle experiments support better diagnostics, not physical parameter fitting.
+
+Defer physical drivers, TEL1 negotiation, Pi deployment, real-time/power qualification and realistic locomotion acceptance. No SSH or hardware access is needed or attempted.

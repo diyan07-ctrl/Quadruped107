@@ -1,79 +1,19 @@
-# Quadruped107 Connect — Pi 4 + Uno R3
+# Pi application
 
-The active runtime uses **Raspberry Pi OS + Picamera2 + Flask + USB serial**. Flash `firmware/uno/sketch/sketch.ino` to an **Arduino Uno R3**, and run `python -m quadruped.main` on the Pi 4. Follow the [main setup guide](../../README.md) and [wiring / architecture](../../docs/ARCHITECTURE.md).
+Phase 2 runs entirely on the laptop with --virtual-sensors and an explicit virtual actuator backend/simulator endpoint. See [launch guide](../../simulation/PHASE2.md), [states](../../docs/PHASE2.md) and [sensor protocol](../../docs/SENSORS.md). Pi deployment is postponed; no SSH/hardware connection is needed.
 
-## Configuration
+One camera owner, one serial owner, latest-frame vision and Flask/MJPEG browser controls. See [software guide](../../docs/SOFTWARE.md) for dependencies, configuration, concurrency and current safety restrictions.
 
-| CLI option | Environment variable | Default |
-| --- | --- | --- |
-| `--host` | `QUADRUPED_HOST` | `0.0.0.0` |
-| `--port` | `QUADRUPED_PORT` | `7000` |
-| `--serial-port` | `QUADRUPED_SERIAL_PORT` | `auto` |
-| `--camera-index` | `QUADRUPED_CAMERA_INDEX` | `0` |
-| `--gesture-model` | `QUADRUPED_GESTURE_MODEL` | Unconfigured |
-| `--simulate` | None | Off; synthetic video and serial when selected |
+- Synthetic camera + protocol emulator: `python -m quadruped.main --simulate --host 127.0.0.1`.
+- Real Pi USB camera + emulator: `python -m quadruped.main --camera-backend usb --camera-device /dev/video0 --actuator-backend virtual`.
+- Add `--simulator LAPTOP_PRIVATE_IP` to require the network receiver lease.
+- `--camera-backend picamera2` preserves optional CSI support; no CSI dependency exists in USB mode.
+- `--vision-config deploy/vision.example.json` selects editable HSV/FSM thresholds.
+- Default actuator mode is a physically inhibited serial monitor, with no automatic simulation fallback.
 
-## API
+GET: /api/state, /api/mode, /api/camera-frame, /video-feed.
+POST JSON: /api/arm, /api/stop, /api/mode, /api/heartbeat, /api/servo.
+POST /api/simulation/obstacle accepts {"blocked":true} only with virtual actuators. Clearing it does not re-arm.
+Owner clients retain the HttpOnly control cookie. STOP is available to all same-origin clients. An explicit enable is required after startup, reconnect, fault or STOP.
 
-All control requests use JSON POST bodies. Reads never start motion. There is no Arduino Bridge or App Lab dependency.
-
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| GET | `/api/state` | Uno link, servo enable, camera, vision and motion status |
-| GET | `/api/mode` | Current motion state |
-| GET | `/api/camera-frame` | Base64 JPEG snapshot |
-| GET | `/video-feed` | MJPEG stream, same port as the web app |
-| POST | `/api/arm` | Enable servos without starting a pose |
-| POST | `/api/stop` | Abort and disable servo outputs |
-| POST | `/api/mode` | `{"mode":"stand"}` or another motion / control mode |
-| POST | `/api/heartbeat` | `{"motion":null}` or the currently held direction |
-| POST | `/api/servo` | `{"channel":0,"pulse":278}` for individual calibration |
-
-The browser sends a heartbeat every 250 ms. Outputs are disabled after one second without it. Directional commands repeat only while held; on release the browser requests `stand`. STOP can interrupt a pose or gait. A missing USB heartbeat disables Uno outputs after 1.5 seconds. There is no automatic arming after startup, reset, reconnect, or STOP.
-
-## Calibration
-
-The Uno uses the existing channel mapping and pulse tables in [motion.h](../../firmware/uno/sketch/motion.h). The Pi does not generate servo PWM. Pulse values are PCA9685 ticks at 50 Hz, **not angles or microseconds**; each tick is approximately 4.88 μs. The firmware's broad 50–600 bounds do not establish the mechanical travel limits of a particular joint.
-
-Use an isolated, supported joint and a qualified limited-energy supply. A calibration client must first ARM, retain the returned ownership cookie, and maintain a 250 ms heartbeat independently while issuing one adjustment at a time. A separate terminal and browser are separate owners; STOP/release before changing clients. Do not bypass the owner check or leave an unattended heartbeat running. No unqualified full-range sweep is approved.
-
-The calibration API makes a temporary adjustment. Persist verified gait / pose targets by editing `motion.h` and flashing the Uno again. It does not silently rewrite firmware or apply the same calibration to all eight joints. The files under `archive/uno-q/` are historical UNO Q tools and are not compatible with this serial firmware.
-
-## Optional Hand Gestures
-
-The app uses [MediaPipe Tasks Gesture Recognizer](https://ai.google.dev/edge/mediapipe/solutions/vision/gesture_recognizer/python), replacing the UNO Q-specific Edge Impulse integration. Install only on a Python / Raspberry Pi OS combination supported by MediaPipe:
-
-```bash
-.venv/bin/python -m pip install -r software/pi/requirements-gestures.txt
-```
-
-Obtain a compatible `gesture_recognizer.task` model from the official MediaPipe guide and keep its license with your deployment. The repository does not include or automatically download a model. Start with:
-
-```bash
-.venv/bin/python -m quadruped.main \
-  --gesture-model /absolute/path/to/gesture_recognizer.task
-```
-
-| Standard model gesture | Pose |
-| --- | --- |
-| Open_Palm | Initial |
-| Thumb_Up | Stand |
-| Victory | Greeting |
-| Closed_Fist | Tail wag |
-
-Detections require confidence ≥ 0.65 and two consecutive frames. A held gesture runs once until the hand is removed / changes. Camera processing and motion stay on separate threads. If MediaPipe or the model cannot load, the app reports this and disables gesture selection; it does not treat model failure as a working mode.
-
-## Troubleshooting
-
-- **No Uno:** select the correct serial device; inspect `/dev/serial/by-id/`; check `dialout` membership and close Serial Monitor.
-- **Firmware handshake failed:** upload this Uno sketch at 115200 baud. The old UNO Q sketch speaks a different protocol.
-- **PCA9685 missing:** verify Uno A4/A5, 5 V logic supply, common ground, and address `0x40`.
-- **No Pi camera:** check `rpicam-hello --list-cameras`, the CSI ribbon, camera index, and apt-installed Picamera2. A USB webcam is not the default camera backend.
-- **Control heartbeat expired:** return to one visible control browser and enable servos again. Background tabs may throttle timers.
-- **Servos do not move:** confirm external servo power and D8/OE wiring; then verify safe pulse targets one joint at a time.
-
-Changes made on 2026-11-04 for the Pi 4 / Uno R3 port. GPL-3.0.
-
-## Phase 0.1 changes
-
-HTTP request bodies are unchanged, but custom clients must persist the ARM ownership cookie. Non-owner movement/heartbeat is rejected; STOP remains available. See [protocol](../../docs/PROTOCOL.md), [calibration contract](../../docs/CALIBRATION.md), [power study](../../hardware/Power/README.md) and [hardware checklist](../../docs/HARDWARE_VERIFICATION.md). The new profile validator is offline and does not apply joint limits to live commands.
+The existing HTTP/MJPEG interface and browser assets remain lightweight. Physical ARM is prohibited on this branch. See [simulation](../../simulation/README.md), [deployment](../../deploy/README.md) and [validation](../../docs/VALIDATION.md).

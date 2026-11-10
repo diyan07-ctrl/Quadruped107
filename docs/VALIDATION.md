@@ -1,3 +1,185 @@
+# Validation evidence
+
+## Phase 3 integrated checkpoint
+
+[PR run 42734353977](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42734353977), source cc085f3c7acecb8ad6437509c7e4b2a7529087bb, passed **154 tests in 59.428 s**, retaining the 128-test incoming Phase 3 baseline. All three jobs passed: Python 3.11, selected Python 3.13 vision/telemetry checks and production/virtual Uno compilation. The final synthetic operator controls and documentation receive their own head checks before PR readiness.
+
+- PASS — dependency consistency, Python compilation, package wheel/install/import/assets, original motion/model/power consistency, JavaScript/DOM, links/repository integrity, Mermaid and clean-checkout guards.
+- PASS — [integrated synthetic camera evidence](evidence/PHASE3_INTEGRATION.json): both colors accepted left/right and centered, eight joints, 58 distinct accepted virtual target vectors; obstacle override, camera fault, simulator reset and STOP disarmed without automatic re-arm. This is SIMULATED, not a real webcam measurement.
+- PASS — [fifteen controlled model experiments](evidence/PHASE3_MODEL_STUDY.json), with unchanged collision checks, torque cap, canonical CAD/gaits and physical calibration. Smoothing reduced target increments but increased lag and retained self-contact; default remains off.
+- PASS — Python 3.13 x86_64 execution and cp313/abi3 aarch64 OpenCV/NumPy wheel availability. This is not Pi OS native installation validation.
+- NOT TESTED — real Pi camera/FPS/CPU/RAM, GUI/mobile rendering on actual devices, physical sensor/Uno/PCA/servos, electrical protection, stopping time and walking. No SSH command ran on Pi: hostname resolution failed and last-known-IP connection was denied before authentication. No credentials, services or recordings were accessed.
+
+The earlier workflow YAML run had no executable jobs because an unquoted colon-containing pip option was parsed as YAML. The quote fix restored execution. The subsequent integration failure exposed a recovery fixture using an old detected observation while Camera.latest was unavailable; recovery now requires a newly available camera frame and fresh perception. Production readiness gates and assertions were retained. Configuration-race coverage additionally rejects an old detector result after a color change. Failed runs are not counted as successful validation.
+
+Exact launch/test procedures are in [Phase 3](PHASE3.md). Local Python/Arduino tools were unavailable; Python/firmware results above were executed in GitHub Actions. Local Node/Git/repository checks are reported separately. Earlier phase evidence follows for history.
+
+
+Phase 2 starts from verified unmerged Phase 1 head a15c39775a4063b396c3cd844f66324cd250021c, whose [final CI](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675810285) passed 75 tests and both Uno builds. Work is on phase2/autonomy-sensors-simulation; [PR #4](https://github.com/diyan07-ctrl/Quadruped107/pull/4) targets phase1/software-vision-digital-twin. No existing PR is merged.
+
+## Executed evidence
+
+- [First Phase 2 push 42679290045](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42679290045), c1ef144: **110 tests passed in 28.482 s**, dependencies, model/gait/power checks, installed wheel/assets, links, Mermaid and both firmware builds.
+- Wider integration revealed stale re-arm readiness, drifting nominal fixture pose and explicit-fixture polling contention. These were repaired with stop-epoch acknowledgment, an explicit external fixture constraint, atomic takeover/STOP retirement and bounded fixture polling. Original gait values, torque cap, collisions and physical firmware remain unchanged. The Phase 1 integration fixture now waits for the strengthened fresh-disarmed readiness barrier before re-arm; no assertion was removed.
+- [Push 42681826866](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681826866) and [PR 42681837310](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42681837310), 0ae7b21: **117 tests and every CI check passed** after those repairs.
+- [Measured model study](MODEL_STUDY.md) and [machine-readable evidence](evidence/PHASE2_MODEL_STUDY.json) preserve the source commit/run for simulated results. [Push 42682345230](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42682345230) and PR 42682357154 at 9e44cff passed **120 tests (44.947 s in push)**, all checks and twelve model experiments. Later scene-reset, stronger obstacle assertions and DOM additions are verified by the final PR checks.
+
+## Final implementation validation
+
+[Push 42683896441](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683896441) and [PR 42683905992](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683905992), source c0a083af91d5a97112dbb2dbed9ba56b40650711, passed **122 tests in 44.277 s** in push. This preserves all 75 Phase 1 tests and adds 47 Phase 2 tests. Both jobs passed, including dependencies, syntax, all eight scenarios, UDP/application integration, reset/reconnect, prerecorded camera, touch-after-enable, eight-routine articulation, twelve model experiments, installed package/assets, seven Mermaid diagrams, dashboard DOM checks and a clean checkout.
+
+Production Uno: **10,198 bytes flash / 998 bytes globals**, 1,050 bytes remain for locals/stack. Separate virtual build: **6,756 / 831**, 1,217 bytes remain. Neither firmware was uploaded or tested on a board. The documentation-only freeze commit records these completed implementation checks; its own PR checks are also verified before review.
+
+The full twenty-case scope matrix and deliberately untested physical/GUI categories below remain authoritative. The initial DOM failure was a test fetch fixture treating URL objects as strings; it was corrected without changing production behavior or removing an assertion.
+
+## Complete acceptance checkpoint
+
+[Push 42683505923](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683505923) at 9dc2180 passed **121 tests in 45.032 s**, all twelve model experiments, installed sensor/navigation imports/assets, both firmware builds, seven Mermaid diagrams, dashboard DOM checks and the clean-checkout guard. The DOM fixture was corrected to accept URL objects like browser fetch; its earlier failure did not indicate a backend test pass.
+
+[Network scenario evidence](evidence/PHASE2_NAVIGATION.json) records approximately 0.05850 m proxy advance, 0.59325 m front range at observed disarm, zero proxy contacts and activeMask=0. This is a simulated integration snapshot, **not a physical stopping-distance measurement**. The final touch-scene regression clocks its scheduled event from explicit enable rather than scene startup; final head checks are linked on PR #4.
+
+Local repository validation verifies 53 protected historical blobs, four intentionally identical STL groups and no matched credential patterns. A direct Phase 1 comparison confirms hardware, production firmware, calibration, LICENSE and AUTHORS unchanged. Git integrity and whitespace checks pass; generated videos/reports/caches remain ignored.
+
+## Scenario coverage
+
+Tests live in [test_phase2.py](../tests/test_phase2.py), with the preserved 75-test Phase 1 suite in the other test files. Tests use deterministic clocks/fixtures unless explicitly classified as threaded or UDP integration.
+
+| Requested scenario | Evidence scope |
+| --- | --- |
+| 1 Empty exploration | Pure policy plus actual Runtime/controller/virtual Uno |
+| 2 Obstacle ahead | Policy and PyBullet rays → UDP → runtime → Uno → proxy stop |
+| 3 Threshold/hysteresis | Deterministic exact-boundary unit test |
+| 4 Invalid range | Zero/negative/out-of-range/NaN/type tests |
+| 5 Timeout | Acquisition age and expiration tests |
+| 6 Missing sensor | Required range/touch records fail closed |
+| 7 Conflicting readings | Independent front values beyond tolerance |
+| 8 Blue target | Existing BGR detector, synthetic camera and real application path |
+| 9 Target behind obstacle | Policy and tracking integration preemption |
+| 10 Target loss | Preserved Phase 1 integration and navigation loss deadline |
+| 11 Manual tracking takeover | Real tracking API/controller cancellation |
+| 12 STOP during recovery | Unit deadline/priority plus actual controller/Uno STOP |
+| 13 Simulator disconnect | Actual UDP/Runtime loss and disarm |
+| 14 Touch interaction | Debounced event → existing greeting routine → bounded STOP |
+| 15 Bounce | Deterministic press/release filtering |
+| 16 Stuck touch | Held duration fault |
+| 17 Simultaneous touches | Priority safety contact inhibition |
+| 18 Delayed telemetry | Source+transport age, duplicates and unexpected sender |
+| 19 Reconnection | Actual reset/disconnect/reconnect; no auto re-arm |
+| 20 Mode switching | Bounded policy transitions, actual takeover/idle and stale-generation rejection |
+
+All eight named environments are instantiated and checked against known geometry. Scene reset changes the receiver epoch and reproduces seeded observations while disarmed. The blue prerecorded-camera generator is exercised through the real file backend. DOM checks verify supported mode exposure, escaped diagnostic text, disabled movement when disarmed, always-available STOP and Phase 1 compatibility. DOM testing is not screenshot/mobile-device qualification.
+
+## Reproduction
+
+```bash
+python -m pip install -r software/pi/requirements-dev.txt -r simulation/requirements.txt -e software/pi
+python -m pip check
+python -m compileall -q software/pi/quadruped tests tools simulation
+python simulation/build_model.py --check
+python -m simulation.proxy_probe
+python -m unittest discover -s tests -v
+python -m simulation.validate
+python -m simulation.model_study
+python tools/generate-motion-data.py --check
+python hardware/Power/power_budget.py --check
+python -m pip wheel --no-deps software/pi -w build/wheels
+python -m pip install --no-deps --force-reinstall build/wheels/*.whl
+python tools/check-installed.py
+node --check software/pi/quadruped/web/app.js
+node tools/check-repository.mjs
+npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
+node tools/check-mermaid.mjs
+node tools/check-dashboard.mjs
+arduino-cli compile --profile uno firmware/uno/sketch
+python tools/generate-virtual-firmware.py
+arduino-cli compile --profile uno build/virtual/sketch
+git diff --check
+git fsck --no-dangling
+```
+
+Python/Arduino execution uses GitHub Actions because the local saved interpreter/toolchain remains unavailable. Local Node syntax, repository/protected-blob/link/credential-pattern checks and Git checks run on Windows. Shell syntax is checked in CI. No Pi access is attempted or required. Existing historical SSH attempts below belong to Phase 1 only.
+
+## Qualification status
+
+| Category | Status |
+| --- | --- |
+| Software interfaces and policies | IMPLEMENTED |
+| Range rays, touches, scenarios and proxy | SIMULATED |
+| Referenced unit/integration/compile/packaging checks | AUTOMATED TESTED when their CI step passed |
+| Real Pi camera, CPU/RAM/latency | NOT TESTED — deliberately postponed |
+| Sensors/Uno/PCA/servo/power/physical stopping | PHYSICAL HARDWARE TESTED: none |
+| Physical locomotion and correct CAD dynamics | NOT TESTED; provisional model and self-contacts remain |
+| Laptop GUI visual/mobile rendering | NOT TESTED; headless physics and DOM checks only |
+
+Production Uno compile remains 10,198 bytes flash / 998 bytes globals; virtual build 6,756 / 831 in preceding checks. Recompile logs are the authority; compile memory is not stack high-water. No new physical firmware allocation was added. Bounded queues/logs and Pi design targets remain documented; no Pi performance measurement is claimed.
+
+---
+
+# Historical Phase 1 evidence
+
+# Software integration validation
+
+These results concern branch phase1/software-vision-digital-twin, based on verified Phase 0.1 head a629397e3cce82819e5d8a52db8938aa93af840c. PRs #1 and #2 were unmerged when inspected. [PR #3](https://github.com/diyan07-ctrl/Quadruped107/pull/3) targets the Phase 0.1 branch; no merge is authorized or performed.
+
+## Evidence and classification
+
+| Scope | Classification | Evidence / limitation |
+| --- | --- | --- |
+| First USB/vision/virtual-Uno checkpoint | PASS | [Run 42670685320](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42670685320), d926f29: 64 tests in 13.859 s, package/dependency/firmware checks |
+| Initial bridge and model checkpoint | FAIL, repaired in subsequent commits | [Run 42673376451](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42673376451): 73 tests; one assertion read virtual output before STOP acknowledgment. It now waits separately for local inhibition and output-off |
+| Production and virtual firmware | PASS (compile only) | [PR run 42673388763](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42673388763): 10,198 bytes flash / 998 bytes globals production; 6,756 / 831 virtual; no board uploaded |
+| Extended bidirectional integration | FAIL, model correction added | [Run 42674667131](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42674667131): passive joint exceeded provisional limit after STOP. Solver substeps/iterations and modeled velocity cap added; strict excursion guard retained |
+| Optional artifact-upload initialization | FAIL, optional dependency removed | Runs 42674092245/42674428014 did not create a Python job; firmware was separate. Standard job logs now carry JSON evidence; no checks are skipped to publish |
+| Real Pi/webcam deployment | BLOCKED — NETWORK ACCESS DENIED | SSH port 22 Permission denied before authentication for both reported IP/hostname; no Pi command ran |
+| Physical Uno, PCA, servo, sensor or electrical testing | BLOCKED — HARDWARE UNAVAILABLE / PROHIBITED | Uno disconnected, damaged PCA isolated, servos unpowered, no uploads or power switching |
+| CSI camera / actual optional gesture model | NOT TESTED | CSI reported faulty; no compatible gesture model supplied |
+| Physical gait feasibility / realistic dynamics | NOT TESTED | CAD surfaces reused; axes, pivots, masses, collision proxies and angle conversion remain provisional |
+
+[Run 42675186244](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675186244) at 80a48df passed all **74 tests in 21.519 s**, dependencies, compileall, canonical model/gait/power checks, eight-routine headless articulation, wheel installation/imports/assets, shell/JavaScript syntax, links/protected blobs, five Mermaid diagrams, clean checkout and both Uno builds. [Machine-readable simulation evidence](evidence/SIMULATION_CI.json) records the actual run.
+
+The earlier passive-joint excursion was corrected with solver substeps/iterations and a modeled velocity cap, without widening the excursion guard. The next test failure was a fixture sending a missing-key heartbeat during requested forward motion; it correctly triggered the release safeguard and was corrected to match browser behavior. Output queue overflow additionally has a fail-closed regression.
+
+Fixed-base maximum transient joint error was approximately 0.51–0.65 rad. Maximum self-contact counts were initial 2, forward 4, turn_left 2, turn_right 2 and greeting 2; stand/backward/tail_wag reported zero. These are contacts between provisional collision proxies and expose unresolved geometry/gait assumptions. No fixed-base finite-state fault occurred, but this is not collision-free or mechanically qualified walking. The separate free-base stand probe in [run 42675542675](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675542675), commit 5238cc4, completed 720 steps (three virtual seconds) without a configured fall/tilt/divergence fault; maximum contacts 12 and self-contact zero. Its provisional base ended at approximately (-0.0171, 0.0005, 0.2291) m. This is a numerical gravity probe with invented inertial/axis assumptions, not measured physical balance or walking. That run also passed all 74 tests in 21.574 s and every CI check. A final construction-boundary regression additionally prevents a simulation flag from relabeling an injected physical link; final results are verified on the PR. Unit fixtures, simulated integration, compile results and real hardware observations are separate categories.
+
+## Reproduction
+
+On a laptop or CI with Python 3.11:
+
+```bash
+python -m pip install -r software/pi/requirements-dev.txt -r simulation/requirements.txt -e software/pi
+python -m pip check
+python -m compileall -q software/pi/quadruped tests tools simulation
+python simulation/build_model.py --check
+python -m unittest discover -s tests -v
+python -m simulation.validate
+python tools/generate-motion-data.py --check
+python hardware/Power/power_budget.py --check
+python -m pip wheel --no-deps software/pi -w build/wheels
+python -m pip install --no-deps --force-reinstall build/wheels/*.whl
+python tools/check-installed.py
+node --check software/pi/quadruped/web/app.js
+node tools/check-repository.mjs
+npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
+node tools/check-mermaid.mjs
+arduino-cli core update-index
+arduino-cli compile --profile uno firmware/uno/sketch
+python tools/generate-virtual-firmware.py
+arduino-cli compile --profile uno build/virtual/sketch
+git diff --check
+```
+
+CI runs these on Ubuntu, including installed wheel imports/assets and packaged gait JSON outside the checkout. Local Python is unavailable (saved interpreter removed, replacement download blocked); Arduino CLI is unavailable locally. Local Node syntax, links/preserved-asset/credential-pattern checks and staged whitespace checks execute on Windows. No test execution is inferred from writing code.
+
+The simulation evidence runner writes build/simulation/articulation.json and a TinyRenderer stand.png, then prints its JSON. These are generated, ignored outputs, not physical photographs or certified mechanical parameters. The strict headless integration uses a synthetic blue target, actual controller/serial worker/emulator, real UDP loopback and PyBullet DIRECT. It covers both turns, centered hold, target-loss disarm, explicit re-enable and manual STOP. Other tests cover malformed/stale/duplicate traces, network loss, camera open/read/freeze/recovery, ownership and queue/timeout/reset behavior.
+
+Pi resource targets are in [SOFTWARE](SOFTWARE.md); none are measured here. Production Uno leaves 1,050 bytes static headroom for locals/stack; virtual build leaves 1,217 bytes. Compile accounting does not measure peak stack/interrupt use. No full OLED framebuffer or new production sensor allocation was added.
+
+See [baseline diagnostics](evidence/ENVIRONMENT_BASELINE.md), [simulation acceptance procedure](../simulation/README.md), [deploy instructions](../deploy/README.md) and [physical verification](HARDWARE_VERIFICATION.md). No physical stop time, power measurement, live Pi FPS or locomotion qualification is claimed.
+
+---
+
+## Historical Phase 0 / 0.1 record
+
 > Phase 0 evidence below is historical. Phase 0.1 results are recorded separately at the end. No physical testing was performed.
 
 # Validation
@@ -98,3 +280,13 @@ The attribute fix at c769bd2 passed [push run 42583604285](https://github.com/di
 The final documentation/deployment freeze clarifies external distribution, independent overvoltage power-cut requirements, A/B/C/D cost/mass tradeoffs and a 20 s service shutdown grace. Its final-head workflows are checked before PR readiness. No previously failed check is hidden or treated as a successful full run. No power source, regulator, current waveform, stopping latency, physical watchdog or assembled-robot test is claimed verified.
 
 Final architecture freeze 99b2614 passed [push workflow 42584023952](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42584023952) and [PR workflow 42584032557](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42584032557), including all 46 tests, power-table checks, installed assets, four diagrams, clean-tree guard and Uno build. The closing documentation clarification defines best-effort touch coalescing without stale replay; it activates no sensor code.
+
+## Final Phase 3 implementation checkpoint
+
+Source 45c15df523f1b606a0124acc1fb7aa6e23aa8b97 passed [PR workflow 42735297964](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42735297964): **157 tests in 59.664 s**, preserving all 128 incoming tests and adding 29 focused regressions. Python 3.13 passed 17 vision/readiness tests and six telemetry tests, read-only diagnostics and ARM64 wheel download. All three jobs succeeded. Production Uno remained 10,198 bytes flash / 998 bytes globals; separate virtual firmware 6,756 / 831. Neither was uploaded.
+
+The integrated demonstration observed 61 distinct virtual eight-target vectors in this run; counts vary with threaded scheduling and are not a performance benchmark. Both colors turned left/right and held center; target loss, obstacle override, camera fault, simulator reset and STOP remained disarming, with no automatic re-enable. The preserved 58-vector evidence file identifies its earlier source/run explicitly.
+
+Eight Mermaid diagrams parsed successfully. Package installation/assets, dependency consistency, model/gait/power checks, DOM behavior, clean checkout and repository checks passed (185 files, 53 protected historical blobs, four intentional duplicate STL groups). A direct Git comparison against incoming Phase 3 confirms no changes to hardware assets, firmware, model files, LICENSE or AUTHORS. Local JavaScript syntax, repository validation, whitespace and Git object integrity checks also passed; dangling intermediate objects are not tracked changes.
+
+The closing documentation/DOM commit adds assertions for synthetic target payload/visibility and records this completed checkpoint. Its head checks must also pass before marking PR #5 ready. Actual Pi, webcam and physical hardware results remain NOT TESTED/BLOCKED as stated above.

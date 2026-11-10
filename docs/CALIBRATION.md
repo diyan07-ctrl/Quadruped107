@@ -1,5 +1,12 @@
 # Calibration architecture v1
 
+## Digital-twin conversion
+
+No physical calibration changed. [Model parameters](../simulation/model/parameters.json) provide a separate provisional mapping: channels 0–7, inherited stand tick as zero, tick bounds 50..600, direction +1 and piecewise ±1.2 rad. These are simulation-only assumptions, not measured servo endpoints or valid physical limits. ARM leaves activeMask zero until an explicit command; the starting numeric tick estimate does not assert position feedback.
+
+The [motion generator](../tools/generate-motion-data.py) checks the original firmware table hash/values and reviewed routine order. Original spreadsheets and gait arrays remain unchanged. See [model provenance](../simulation/README.md).
+
+
 The existing gait table is preserved byte-for-byte. The new [profile template](../hardware/calibration/profile.example.json) is deliberately unqualified with null endpoints. [calibration.py](../software/pi/quadruped/calibration.py) validates profiles and calculations offline; it is **not connected to the live scheduler or firmware**, and does not make current calibration commands joint-safe.
 
 ## Data contract

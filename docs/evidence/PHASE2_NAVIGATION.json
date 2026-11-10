@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "9dc21806f6207590f5d1cdb569bf038301a5add2",
+  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42683505923",
+  "classification": "SIMULATED UDP INTEGRATION",
+  "scenario": "single_obstacle",
+  "physicalValidation": false,
+  "proxyPose": [
+    0.058500016219291386,
+    -2.762435550158768e-8,
+    0.24157126405375393
+  ],
+  "frontM": 0.5932499877608947,
+  "proxyContacts": 0,
+  "activeMask": 0,
+  "fault": "Forward clearance below caution threshold",
+  "steps": 875
+}

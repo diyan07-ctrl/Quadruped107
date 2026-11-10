@@ -1,0 +1,357 @@
+{
+  "schema": 1,
+  "sourceCommit": "5238cc42230e072dda032e9bcc7020a7fb6853ff",
+  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675542675",
+  "classification": "SIMULATED ARTICULATION / PROVISIONAL FREE-BASE PROBE; NOT PHYSICAL VALIDATION",
+  "host": "Ubuntu GitHub Actions",
+  "tests": {
+    "passed": 74,
+    "seconds": 21.574
+  },
+  "physicalValidation": false,
+  "stabilityProbe": {
+    "classification": "PROVISIONAL FREE-BASE GRAVITY PROBE",
+    "diagnostics": {
+      "baseEuler": [
+        -3.954393623801884e-7,
+        -8.324220384626727e-7,
+        0.010136590379348985
+      ],
+      "basePosition": [
+        -0.017072298490160117,
+        0.0005144193851896459,
+        0.22906124926755464
+      ],
+      "fault": null,
+      "fixedBase": false,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 12,
+      "maxJointErrorRad": 0.5534302136357001,
+      "maxSelfCollisionContacts": 0,
+      "modeledVelocityLimitRadS": 3,
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 720,
+      "subSteps": 4
+    },
+    "outcome": "No configured fall/tilt/divergence fault in three virtual seconds",
+    "physicalLocomotionValidated": false
+  },
+  "routines": [
+    {
+      "baseEuler": [
+        -0.0001463922060100975,
+        0.00003749557905575223,
+        0.010019519985240475
+      ],
+      "basePosition": [
+        -0.017529131065311947,
+        0.000549023592100758,
+        0.22908047048885008
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 46,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 12,
+      "maxJointErrorRad": 0.5534302136357001,
+      "maxSelfCollisionContacts": 0,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "stand",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 286,
+      "subSteps": 4,
+      "virtualSeconds": 1.1916666666666638
+    },
+    {
+      "baseEuler": [
+        0.018857825793833924,
+        0.02279292431131276,
+        0.18476017072689663
+      ],
+      "basePosition": [
+        0.010244856166072002,
+        -0.03152503252073397,
+        0.21071670192174702
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 73,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 8,
+      "maxJointErrorRad": 0.6542439781541561,
+      "maxSelfCollisionContacts": 2,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "initial",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 459,
+      "subSteps": 4,
+      "virtualSeconds": 1.9124999999999945
+    },
+    {
+      "baseEuler": [
+        0.4638827955213871,
+        -0.7155096502320025,
+        -0.4910155016240494
+      ],
+      "basePosition": [
+        -0.3550176292373343,
+        -0.04457846141203313,
+        0.17469761578303233
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 189,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 10,
+      "maxJointErrorRad": 0.5075000143733502,
+      "maxSelfCollisionContacts": 4,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "forward",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 271,
+      "subSteps": 4,
+      "virtualSeconds": 1.129166666666664
+    },
+    {
+      "baseEuler": [
+        -0.0022136146966533357,
+        -0.0038084546497202517,
+        0.08301415195129515
+      ],
+      "basePosition": [
+        -0.009203494956356643,
+        -0.0004476992143842547,
+        0.22791478417640554
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 182,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 9,
+      "maxJointErrorRad": 0.5075000143733502,
+      "maxSelfCollisionContacts": 0,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "backward",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 262,
+      "subSteps": 4,
+      "virtualSeconds": 1.0916666666666641
+    },
+    {
+      "baseEuler": [
+        -0.014158259949226426,
+        0.024004561783244446,
+        -0.03390178618212471
+      ],
+      "basePosition": [
+        -0.0036705497578281687,
+        0.005882456604138882,
+        0.2283625105577729
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 182,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 10,
+      "maxJointErrorRad": 0.5075000143733502,
+      "maxSelfCollisionContacts": 2,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "turn_left",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 262,
+      "subSteps": 4,
+      "virtualSeconds": 1.0916666666666641
+    },
+    {
+      "baseEuler": [
+        0.005970039099404687,
+        -0.0071347882560586365,
+        -0.040420612576003705
+      ],
+      "basePosition": [
+        0.036242069498322455,
+        -0.003465341518321281,
+        0.22843268340181272
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 184,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 9,
+      "maxJointErrorRad": 0.5075000143733502,
+      "maxSelfCollisionContacts": 2,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "turn_right",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 265,
+      "subSteps": 4,
+      "virtualSeconds": 1.104166666666664
+    },
+    {
+      "baseEuler": [
+        -0.000002147629106164427,
+        1.5314675123806314,
+        2.404809907350015
+      ],
+      "basePosition": [
+        2.024482339407742,
+        -0.20131295158114706,
+        0.07143000372490968
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 194,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 14,
+      "maxJointErrorRad": 0.5534302136357001,
+      "maxSelfCollisionContacts": 2,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "greeting",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 1864,
+      "subSteps": 4,
+      "virtualSeconds": 7.766666666666546
+    },
+    {
+      "baseEuler": [
+        -0.00006215984248696951,
+        -0.00007730888995937743,
+        -0.334704138985765
+      ],
+      "basePosition": [
+        0.04751970395991059,
+        -0.015352610984280535,
+        0.22907279814406598
+      ],
+      "classification": "SIMULATED FIXED-BASE ARTICULATION",
+      "distinctCommandedTargets": 204,
+      "fault": null,
+      "fixedBase": true,
+      "jointCount": 8,
+      "jointNames": [
+        "shoulder_fl",
+        "leg_fl",
+        "shoulder_fr",
+        "leg_fr",
+        "shoulder_bl",
+        "leg_bl",
+        "shoulder_br",
+        "leg_br"
+      ],
+      "maxContactCount": 12,
+      "maxJointErrorRad": 0.5534302136357001,
+      "maxSelfCollisionContacts": 0,
+      "modeledVelocityLimitRadS": 3,
+      "motion": "tail_wag",
+      "physicalLocomotionValidated": false,
+      "provisional": true,
+      "solverIterations": 100,
+      "steps": 1849,
+      "subSteps": 4,
+      "virtualSeconds": 7.704166666666549
+    }
+  ]
+}

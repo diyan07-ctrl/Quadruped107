@@ -1,5 +1,25 @@
 # Safety and test procedure
 
+## Phase 2 virtual safety policy
+
+No Pi access or physical hardware test is attempted in this phase. Physical ARM remains rejected; simulated sensors require explicit virtual outputs. Missing/invalid/conflicting/stale range or touch inputs inhibit, never imply clearance. A front range alone cannot authorize turns/reverse: separate fresh simulator swept-clearance evidence is required.
+
+STOP/fault/communication/critical sensing outrank manual takeover, obstacle policy, touch and selected tracking/exploration. Manual motion also passes clearance gates. Recovery and touch fragments have finite deadlines and end in disarm. Reconnection, fresh telemetry or target return cannot re-arm automatically.
+
+The planar navigation proxy and externally constrained articulation fixture are test tools. They do not validate locomotion, actual sensor electronics, motor torque, stopping distance or a physical stop circuit. The [model investigation](MODEL_STUDY.md) records unresolved contacts and provisional parameters. Existing [power](../hardware/Power/README.md), [calibration](CALIBRATION.md) and [hardware verification](HARDWARE_VERIFICATION.md) gates remain.
+
+
+## Software-only development restriction
+
+Physical ARM is explicitly rejected by the web API on this branch. A real camera requires explicit virtual-actuator selection; failures never switch from virtual to physical serial or vice versa. Keep the Uno disconnected, all servos unpowered and suspected damaged HW-170 disconnected. No command here authorizes physical movement, firmware upload or power switching.
+
+STOP cancels the existing controller generation and serial queue, then waits for its virtual acknowledgment. Local inhibition and output-off are distinct events. Camera/native capture may block; an independent observation guard and network guard inhibit motion. Simulator receive lease expiration removes virtual forces. A stop/fault/reconnect never arms automatically.
+
+Host protocol emulation, optional virtual firmware compilation and PyBullet are simulation evidence only. They cannot establish actual servo position, physical stop time, stable walking, regulator qualification or independent hardware-watchdog protection. The model's fixed chassis masks balance; provisional free-base experiments may fall and are not a locomotion acceptance test.
+
+The [remaining hardware checklist](HARDWARE_VERIFICATION.md) gates future physical work. Existing battery packs/regulators remain NOT YET QUALIFIED under the [power study](../hardware/Power/README.md). No electrical measurement or hardware safety claim was added.
+
+
 ## Power and batteries
 
 Use a regulated supply within the exact servo voltage specification. Raw nominal 7.4 V / 2S Li-ion packs can exceed a 6 V-rated servo's limit. Do not supply servos from Pi, Uno 5V, or USB. Use common ground, suitably rated wire/connectors, protection, and an accessible servo-power disconnect.
@@ -61,3 +81,9 @@ Servo battery fails while Pi survives: current software does not detect it; a pr
 Sensor/motion faults must inhibit their dependent moving behavior and latch locally; an invalid range is not permission to explore. These local drivers are not implemented. Optional OLED/inference failure may degrade presentation but must never block a safety path. All unresolved part-specific facts are in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md); [calibration](CALIBRATION.md) and [Power](../hardware/Power/README.md) define commissioning gates.
 
 The host now rejects vision results over 500 ms publication age and independently expires the vision observation lease at 0.8 s, even when the image worker is blocked. Preview age uses the original publication time. These are software checks, not exposure timestamps or guaranteed physical stop times. Fault reason remains latched through repeated STOP until an explicit successful ARM.
+
+## Phase 3 demonstration restrictions
+
+Only explicitly virtual actuators are permitted. The suspected damaged PCA9685 stays isolated; Uno/servos remain disconnected and unpowered. No physical ARM, firmware upload, GPIO, power switching or automatic fallback is added. Target/color/settings changes stop/disarm before replacement; old detector results cannot continue the previous intent. Synthetic scene controls cannot replace a real camera. Interaction requests require explicit virtual enable and valid sensing, and remain subordinate to STOP, faults and obstacles.
+
+Camera/target loss, browser ownership loss and simulator reset/disconnect require fresh readiness and explicit re-enable. Passive TEL1 receive freshness is not proof of acquisition freshness or servo-output state. Simulation interpolation is not a physical calibration or stop-time guarantee. See [Phase 3 limitations](PHASE3.md) and [hardware checklist](HARDWARE_VERIFICATION.md).

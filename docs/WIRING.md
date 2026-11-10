@@ -1,5 +1,17 @@
 # Proposed wiring
 
+## Phase 2 virtual-only interfaces
+
+No sensor wiring is performed or validated. Virtual URM37/HC-SR04 identities describe configurable ray approximations, not known module revisions. Proposed physical assignments below remain unverified and must be checked against actual pin labels/mode/supply/logic levels before use. Real ultrasonic triggers must be scheduled to avoid acoustic crosstalk; simultaneous virtual rays do not qualify that behavior. See [sensor contract](SENSORS.md).
+
+
+## Assignment wiring restriction
+
+**VERIFIED in this session:** no physical wiring; SSH could not reach the Pi. **USER-REPORTED:** working USB webcam on Pi, Uno disconnected, CSI faulty. **PROHIBITED:** powering the suspected damaged PCA9685, energizing servos, uploading/connecting actuator hardware or switching physical power.
+
+Use only USB webcam → Pi and the trusted-LAN software bridge to a laptop. All Uno/PCA/OE/sensor/battery connections below are future PROPOSED or HARDWARE-DEPENDENT design assignments. They do not describe an assembled safety circuit. The [architecture diagram](ARCHITECTURE.md) separates software and future power paths; see [power distribution](../hardware/Power/DISTRIBUTION.md).
+
+
 **No assembled electrical connection has been physically verified during Phase 0.** VERIFIED-IN-SOURCE means firmware assignment only. PROPOSED means an allocated connection. HARDWARE-DEPENDENT means verify the exact module before wiring. Original [electrical image](images/electrical-diagram.png) is historical and is not the Pi/Uno wiring authority.
 
 ## Pin allocation
