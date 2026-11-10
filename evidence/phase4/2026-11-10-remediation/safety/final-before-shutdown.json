@@ -1,0 +1,2854 @@
+{
+  "autonomy": {
+    "deadline": null,
+    "lastRequestedMotion": null,
+    "obstacle": "UNKNOWN",
+    "reason": "Disarmed; explicit enable required",
+    "recoveryAttempts": 0,
+    "state": "EMERGENCY_STOP",
+    "transitions": [
+      {
+        "at": 42513.552515465,
+        "previous": "IDLE",
+        "reason": "Disarmed; explicit enable required",
+        "state": "EMERGENCY_STOP"
+      }
+    ],
+    "virtual": true
+  },
+  "bridge": {
+    "ackAge": 0.005149507000169251,
+    "connected": true,
+    "epoch": 0,
+    "errors": 0,
+    "fault": null,
+    "maxRoundTripS": 0.06438204200094333,
+    "physical": false,
+    "readyToArm": true,
+    "roundTripS": 0.006003914000757504,
+    "sensorCallbackMs": 0.8259460009867325,
+    "transport": "UDP challenge/lease"
+  },
+  "camera": {
+    "actualFps": 8.32,
+    "available": true,
+    "backend": "usb",
+    "captureMs": 118.11,
+    "device": "/dev/video0",
+    "errors": 0,
+    "frameAge": 0.1759664179990068,
+    "height": 240,
+    "lastError": null,
+    "mjpegEndpoint": "/video-feed",
+    "ownerAlive": true,
+    "reconnects": 1,
+    "requestedFps": 30,
+    "snapshotEndpoint": "/api/camera-frame",
+    "status": "usb camera connected",
+    "syntheticTarget": null,
+    "unchangedFor": 0.057880858999851625,
+    "width": 320
+  },
+  "controlModes": [
+    "explore",
+    "idle",
+    "interaction",
+    "manual",
+    "opencv",
+    "sensor_test"
+  ],
+  "decisionHistory": [
+    {
+      "at": 42661.584401835,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 552,
+      "status": "reacquiring",
+      "time": "22:23:47"
+    },
+    {
+      "at": 42662.052311701,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 553,
+      "status": "locked",
+      "time": "22:23:48"
+    },
+    {
+      "at": 42662.159602536,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 554,
+      "status": "reacquiring",
+      "time": "22:23:48"
+    },
+    {
+      "at": 42662.754607871,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 555,
+      "status": "searching",
+      "time": "22:23:48"
+    },
+    {
+      "at": 42663.604776347,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 556,
+      "status": "locked",
+      "time": "22:23:49"
+    },
+    {
+      "at": 42663.735560074,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 557,
+      "status": "reacquiring",
+      "time": "22:23:49"
+    },
+    {
+      "at": 42663.968878159,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 558,
+      "status": "locked",
+      "time": "22:23:50"
+    },
+    {
+      "at": 42664.078082363,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 559,
+      "status": "reacquiring",
+      "time": "22:23:50"
+    },
+    {
+      "at": 42664.566249354,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 560,
+      "status": "searching",
+      "time": "22:23:50"
+    },
+    {
+      "at": 42664.693711112,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 561,
+      "status": "locked",
+      "time": "22:23:50"
+    },
+    {
+      "at": 42665.2930236,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 562,
+      "status": "reacquiring",
+      "time": "22:23:51"
+    },
+    {
+      "at": 42665.399602672,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 563,
+      "status": "locked",
+      "time": "22:23:51"
+    },
+    {
+      "at": 42665.526089708,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 564,
+      "status": "reacquiring",
+      "time": "22:23:51"
+    },
+    {
+      "at": 42665.76203524,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 565,
+      "status": "locked",
+      "time": "22:23:51"
+    },
+    {
+      "at": 42665.888858918,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 566,
+      "status": "reacquiring",
+      "time": "22:23:52"
+    },
+    {
+      "at": 42666.356806154,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 567,
+      "status": "searching",
+      "time": "22:23:52"
+    },
+    {
+      "at": 42666.483770125,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 568,
+      "status": "locked",
+      "time": "22:23:52"
+    },
+    {
+      "at": 42666.611187921,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 569,
+      "status": "reacquiring",
+      "time": "22:23:52"
+    },
+    {
+      "at": 42666.717860546,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 570,
+      "status": "locked",
+      "time": "22:23:52"
+    },
+    {
+      "at": 42666.845134234,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 571,
+      "status": "reacquiring",
+      "time": "22:23:53"
+    },
+    {
+      "at": 42667.099979788,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 572,
+      "status": "locked",
+      "time": "22:23:53"
+    },
+    {
+      "at": 42667.324559532,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 573,
+      "status": "reacquiring",
+      "time": "22:23:53"
+    },
+    {
+      "at": 42667.457861745,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 574,
+      "status": "locked",
+      "time": "22:23:53"
+    },
+    {
+      "at": 42667.570406251,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 575,
+      "status": "reacquiring",
+      "time": "22:23:53"
+    },
+    {
+      "at": 42667.815493411,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 576,
+      "status": "locked",
+      "time": "22:23:54"
+    },
+    {
+      "at": 42667.92635321,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 577,
+      "status": "reacquiring",
+      "time": "22:23:54"
+    },
+    {
+      "at": 42668.169283118,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 578,
+      "status": "locked",
+      "time": "22:23:54"
+    },
+    {
+      "at": 42668.300818774,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 579,
+      "status": "reacquiring",
+      "time": "22:23:54"
+    },
+    {
+      "at": 42668.769179835,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 580,
+      "status": "searching",
+      "time": "22:23:54"
+    },
+    {
+      "at": 42669.014061758,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 581,
+      "status": "locked",
+      "time": "22:23:55"
+    },
+    {
+      "at": 42669.26070535,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 582,
+      "status": "reacquiring",
+      "time": "22:23:55"
+    },
+    {
+      "at": 42669.862405141,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 583,
+      "status": "searching",
+      "time": "22:23:56"
+    },
+    {
+      "at": 42670.091295019,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 584,
+      "status": "locked",
+      "time": "22:23:56"
+    },
+    {
+      "at": 42670.224171945,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 585,
+      "status": "reacquiring",
+      "time": "22:23:56"
+    },
+    {
+      "at": 42670.691950794,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 586,
+      "status": "searching",
+      "time": "22:23:56"
+    },
+    {
+      "at": 42671.068517353,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 587,
+      "status": "locked",
+      "time": "22:23:57"
+    },
+    {
+      "at": 42671.423028378,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 588,
+      "status": "reacquiring",
+      "time": "22:23:57"
+    },
+    {
+      "at": 42671.667856395,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 589,
+      "status": "locked",
+      "time": "22:23:57"
+    },
+    {
+      "at": 42671.914773185,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 590,
+      "status": "reacquiring",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.027758644,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 591,
+      "status": "locked",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.134491435,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 592,
+      "status": "reacquiring",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.366989296,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 593,
+      "status": "locked",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.494738362,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 594,
+      "status": "reacquiring",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.622568205,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 595,
+      "status": "locked",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.730267439,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 596,
+      "status": "reacquiring",
+      "time": "22:23:58"
+    },
+    {
+      "at": 42672.964647131,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 597,
+      "status": "locked",
+      "time": "22:23:59"
+    },
+    {
+      "at": 42673.218868161,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 598,
+      "status": "reacquiring",
+      "time": "22:23:59"
+    },
+    {
+      "at": 42673.68774184,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 599,
+      "status": "searching",
+      "time": "22:23:59"
+    },
+    {
+      "at": 42674.410863567,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 600,
+      "status": "locked",
+      "time": "22:24:00"
+    },
+    {
+      "at": 42674.537246828,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 601,
+      "status": "reacquiring",
+      "time": "22:24:00"
+    },
+    {
+      "at": 42674.897161817,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 602,
+      "status": "locked",
+      "time": "22:24:01"
+    },
+    {
+      "at": 42675.130105447,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 603,
+      "status": "reacquiring",
+      "time": "22:24:01"
+    },
+    {
+      "at": 42675.616507176,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 604,
+      "status": "searching",
+      "time": "22:24:01"
+    },
+    {
+      "at": 42675.743726254,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 605,
+      "status": "locked",
+      "time": "22:24:01"
+    },
+    {
+      "at": 42675.850171143,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 606,
+      "status": "reacquiring",
+      "time": "22:24:02"
+    },
+    {
+      "at": 42676.339304983,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 607,
+      "status": "locked",
+      "time": "22:24:02"
+    },
+    {
+      "at": 42676.573712287,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 608,
+      "status": "reacquiring",
+      "time": "22:24:02"
+    },
+    {
+      "at": 42677.059388049,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 609,
+      "status": "searching",
+      "time": "22:24:03"
+    },
+    {
+      "at": 42677.178579549,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 610,
+      "status": "locked",
+      "time": "22:24:03"
+    },
+    {
+      "at": 42677.311954353,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 611,
+      "status": "reacquiring",
+      "time": "22:24:03"
+    },
+    {
+      "at": 42677.42511092,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 612,
+      "status": "locked",
+      "time": "22:24:03"
+    },
+    {
+      "at": 42677.918495638,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 613,
+      "status": "reacquiring",
+      "time": "22:24:04"
+    },
+    {
+      "at": 42678.392617876,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 614,
+      "status": "locked",
+      "time": "22:24:04"
+    },
+    {
+      "at": 42678.504439711,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 615,
+      "status": "reacquiring",
+      "time": "22:24:04"
+    },
+    {
+      "at": 42679.103158377,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 616,
+      "status": "searching",
+      "time": "22:24:05"
+    },
+    {
+      "at": 42679.469329128,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 617,
+      "status": "locked",
+      "time": "22:24:05"
+    },
+    {
+      "at": 42679.575801109,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 618,
+      "status": "reacquiring",
+      "time": "22:24:05"
+    },
+    {
+      "at": 42679.8311448,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 619,
+      "status": "locked",
+      "time": "22:24:06"
+    },
+    {
+      "at": 42679.93741623,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 620,
+      "status": "reacquiring",
+      "time": "22:24:06"
+    },
+    {
+      "at": 42680.193679792,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 621,
+      "status": "locked",
+      "time": "22:24:06"
+    },
+    {
+      "at": 42680.299811076,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 622,
+      "status": "reacquiring",
+      "time": "22:24:06"
+    },
+    {
+      "at": 42680.893699988,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 623,
+      "status": "searching",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.020484907,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 624,
+      "status": "locked",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.275116854,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 625,
+      "status": "reacquiring",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.381775276,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 626,
+      "status": "locked",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.636955804,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 627,
+      "status": "reacquiring",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.744703037,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 628,
+      "status": "locked",
+      "time": "22:24:07"
+    },
+    {
+      "at": 42681.871045206,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 629,
+      "status": "reacquiring",
+      "time": "22:24:08"
+    },
+    {
+      "at": 42682.231789159,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 630,
+      "status": "locked",
+      "time": "22:24:08"
+    },
+    {
+      "at": 42682.468734447,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 631,
+      "status": "reacquiring",
+      "time": "22:24:08"
+    },
+    {
+      "at": 42682.59529102,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 632,
+      "status": "locked",
+      "time": "22:24:08"
+    },
+    {
+      "at": 42682.827806639,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 633,
+      "status": "reacquiring",
+      "time": "22:24:09"
+    },
+    {
+      "at": 42682.955091122,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 634,
+      "status": "locked",
+      "time": "22:24:09"
+    },
+    {
+      "at": 42683.061353644,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 635,
+      "status": "reacquiring",
+      "time": "22:24:09"
+    },
+    {
+      "at": 42683.549714074,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 636,
+      "status": "searching",
+      "time": "22:24:09"
+    },
+    {
+      "at": 42684.504169461,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 637,
+      "status": "locked",
+      "time": "22:24:10"
+    },
+    {
+      "at": 42684.638261473,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 638,
+      "status": "reacquiring",
+      "time": "22:24:10"
+    },
+    {
+      "at": 42684.750506818,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 639,
+      "status": "locked",
+      "time": "22:24:10"
+    },
+    {
+      "at": 42684.881294748,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 640,
+      "status": "reacquiring",
+      "time": "22:24:11"
+    },
+    {
+      "at": 42685.342380603,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 641,
+      "status": "searching",
+      "time": "22:24:11"
+    },
+    {
+      "at": 42687.279901721,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 642,
+      "status": "locked",
+      "time": "22:24:13"
+    },
+    {
+      "at": 42687.386231038,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 643,
+      "status": "reacquiring",
+      "time": "22:24:13"
+    },
+    {
+      "at": 42687.876232953,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 644,
+      "status": "searching",
+      "time": "22:24:14"
+    },
+    {
+      "at": 42688.953607522,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 645,
+      "status": "locked",
+      "time": "22:24:15"
+    },
+    {
+      "at": 42689.08221059,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 646,
+      "status": "reacquiring",
+      "time": "22:24:15"
+    },
+    {
+      "at": 42689.315284382,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 647,
+      "status": "locked",
+      "time": "22:24:15"
+    },
+    {
+      "at": 42689.444915892,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 648,
+      "status": "reacquiring",
+      "time": "22:24:15"
+    },
+    {
+      "at": 42689.804425944,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 649,
+      "status": "locked",
+      "time": "22:24:16"
+    },
+    {
+      "at": 42689.910982812,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 650,
+      "status": "reacquiring",
+      "time": "22:24:16"
+    },
+    {
+      "at": 42690.40957944,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 651,
+      "status": "locked",
+      "time": "22:24:16"
+    },
+    {
+      "at": 42690.523105555,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 652,
+      "status": "reacquiring",
+      "time": "22:24:16"
+    },
+    {
+      "at": 42691.121128067,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 653,
+      "status": "locked",
+      "time": "22:24:17"
+    },
+    {
+      "at": 42691.227916783,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 654,
+      "status": "reacquiring",
+      "time": "22:24:17"
+    },
+    {
+      "at": 42691.841421887,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 655,
+      "status": "searching",
+      "time": "22:24:18"
+    },
+    {
+      "at": 42692.074573159,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 656,
+      "status": "locked",
+      "time": "22:24:18"
+    },
+    {
+      "at": 42692.201099769,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 657,
+      "status": "reacquiring",
+      "time": "22:24:18"
+    },
+    {
+      "at": 42692.687161578,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 658,
+      "status": "locked",
+      "time": "22:24:18"
+    },
+    {
+      "at": 42692.793667781,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 659,
+      "status": "reacquiring",
+      "time": "22:24:18"
+    },
+    {
+      "at": 42693.15392954,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 660,
+      "status": "locked",
+      "time": "22:24:19"
+    },
+    {
+      "at": 42693.40739988,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 661,
+      "status": "reacquiring",
+      "time": "22:24:19"
+    },
+    {
+      "at": 42693.641356969,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 662,
+      "status": "locked",
+      "time": "22:24:19"
+    },
+    {
+      "at": 42693.768444216,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 663,
+      "status": "reacquiring",
+      "time": "22:24:19"
+    },
+    {
+      "at": 42694.234535598,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 664,
+      "status": "locked",
+      "time": "22:24:20"
+    },
+    {
+      "at": 42694.361032375,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 665,
+      "status": "reacquiring",
+      "time": "22:24:20"
+    },
+    {
+      "at": 42694.593737064,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 666,
+      "status": "locked",
+      "time": "22:24:20"
+    },
+    {
+      "at": 42694.721727144,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 667,
+      "status": "reacquiring",
+      "time": "22:24:20"
+    },
+    {
+      "at": 42695.083654887,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 668,
+      "status": "locked",
+      "time": "22:24:21"
+    },
+    {
+      "at": 42695.210769262,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 669,
+      "status": "reacquiring",
+      "time": "22:24:21"
+    },
+    {
+      "at": 42695.44505203,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 670,
+      "status": "locked",
+      "time": "22:24:21"
+    },
+    {
+      "at": 42695.578269281,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 671,
+      "status": "reacquiring",
+      "time": "22:24:21"
+    },
+    {
+      "at": 42695.695807167,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 672,
+      "status": "locked",
+      "time": "22:24:21"
+    },
+    {
+      "at": 42695.806316176,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 673,
+      "status": "reacquiring",
+      "time": "22:24:22"
+    },
+    {
+      "at": 42696.163637958,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 674,
+      "status": "locked",
+      "time": "22:24:22"
+    },
+    {
+      "at": 42696.525406168,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 675,
+      "status": "reacquiring",
+      "time": "22:24:22"
+    },
+    {
+      "at": 42696.659575714,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target detected",
+      "requestId": null,
+      "seq": 676,
+      "status": "locked",
+      "time": "22:24:22"
+    },
+    {
+      "at": 42696.770248739,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 677,
+      "status": "reacquiring",
+      "time": "22:24:22"
+    },
+    {
+      "at": 42696.855481522,
+      "generation": 1,
+      "kind": "stop",
+      "motion": null,
+      "reason": "Stopped; servos disabled",
+      "requestId": null,
+      "seq": 678,
+      "status": "locally_inhibited",
+      "time": "22:24:23"
+    },
+    {
+      "at": 42696.873455027,
+      "generation": 1,
+      "kind": "stop_ack",
+      "motion": null,
+      "reason": "",
+      "requestId": 1,
+      "seq": 679,
+      "status": "acknowledged",
+      "time": "22:24:23"
+    }
+  ],
+  "features": {
+    "handGesture": false,
+    "virtualSensors": true
+  },
+  "link": {
+    "activeMask": 0,
+    "activeMotion": null,
+    "armed": false,
+    "connected": true,
+    "epoch": 1,
+    "error": null,
+    "kind": "virtual-uno",
+    "port": "virtual://uno",
+    "queued": 0,
+    "samples": 0,
+    "stopping": false,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "telemetry": {
+      "age": null,
+      "errors": 0,
+      "receiveFresh": false,
+      "record": null,
+      "supported": false
+    },
+    "virtual": true,
+    "virtualFault": null
+  },
+  "motion": {
+    "appMode": "manual",
+    "busy": false,
+    "currentMotion": "none",
+    "desiredMotion": "none",
+    "enabled": false,
+    "executedGeneration": 1,
+    "fault": "Startup; explicit enable required",
+    "generation": 1,
+    "heartbeatAgeS": 42696.927504575,
+    "heartbeatCount": 0,
+    "intentAgeS": 42696.927504575,
+    "lastError": null,
+    "lastRequest": null,
+    "lastResult": "Stopped; servos disabled",
+    "lastStopContext": null,
+    "maxHeartbeatGapS": 0.0,
+    "session": 0,
+    "stopping": false
+  },
+  "motionModes": [
+    "backward",
+    "forward",
+    "greeting",
+    "initial",
+    "stand",
+    "tail_wag",
+    "turn_left",
+    "turn_right"
+  ],
+  "obstacleVirtual": false,
+  "ok": true,
+  "physicalActuationAllowed": false,
+  "sensors": {
+    "config": {
+      "conflict_m": 0.2,
+      "debounce": 0.03,
+      "expiration": 0.3,
+      "max_m": 4.0,
+      "min_m": 0.02,
+      "rate_hz": 10.0,
+      "stuck_seconds": 2.0,
+      "timeout": 0.3,
+      "touch_count": 5
+    },
+    "diagnostics": {
+      "clockDomain": "receiver monotonic; source timestamps diagnostic only",
+      "faultEvents": [
+        {
+          "atMonotonic": 42513.552398875,
+          "observations": {},
+          "reason": "Missing, invalid or stale front range",
+          "receivedAgeS": null,
+          "seq": -1,
+          "session": null,
+          "transportAgeBoundS": 0.0
+        },
+        {
+          "atMonotonic": 42618.839108736,
+          "observations": {
+            "hcsr04": {
+              "age": 0.3062519059967599,
+              "error": "Observation expired",
+              "fresh": false,
+              "health": "STALE",
+              "id": "hcsr04",
+              "kind": "range",
+              "measurement": 2.7700000000000005,
+              "unit": "m",
+              "valid": false,
+              "virtual": true
+            },
+            "sweep_forward": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "sweep_forward",
+              "kind": "clearance",
+              "measurement": true,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "sweep_left": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "sweep_left",
+              "kind": "clearance",
+              "measurement": true,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "sweep_reverse": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "sweep_reverse",
+              "kind": "clearance",
+              "measurement": true,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "sweep_right": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "sweep_right",
+              "kind": "clearance",
+              "measurement": true,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "touch_back": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "touch_back",
+              "kind": "touch",
+              "measurement": false,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "touch_body": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "touch_body",
+              "kind": "touch",
+              "measurement": false,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "touch_head": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "touch_head",
+              "kind": "touch",
+              "measurement": false,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "touch_left": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "touch_left",
+              "kind": "touch",
+              "measurement": false,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "touch_right": {
+              "age": 0.2523961059996509,
+              "error": null,
+              "fresh": true,
+              "health": "OK",
+              "id": "touch_right",
+              "kind": "touch",
+              "measurement": false,
+              "unit": "boolean",
+              "valid": true,
+              "virtual": true
+            },
+            "urm37": {
+              "age": 0.3062519059967599,
+              "error": "Observation expired",
+              "fresh": false,
+              "health": "STALE",
+              "id": "urm37",
+              "kind": "range",
+              "measurement": 2.7700000000000005,
+              "unit": "m",
+              "valid": false,
+              "virtual": true
+            }
+          },
+          "reason": "Missing, invalid or stale front range",
+          "receivedAgeS": 0.24772049699822674,
+          "seq": 1586,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.004675609001424164
+        }
+      ],
+      "lastFault": {
+        "atMonotonic": 42619.024855791,
+        "observations": {
+          "hcsr04": {
+            "age": 0.49199896099889884,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "hcsr04",
+            "kind": "range",
+            "measurement": 2.7700000000000005,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_forward": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_forward",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_left": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_left",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_reverse": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_reverse",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_right": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_right",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_back": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_back",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_body": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_body",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_head": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_head",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_left": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_left",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_right": {
+            "age": 0.43814316100178985,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_right",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "urm37": {
+            "age": 0.49199896099889884,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "urm37",
+            "kind": "range",
+            "measurement": 2.7700000000000005,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          }
+        },
+        "reason": "Missing, invalid or stale front range",
+        "receivedAgeS": 0.4334675520003657,
+        "seq": 1586,
+        "session": "c000a7315abbaf413de2302118e9af40",
+        "transportAgeBoundS": 0.004675609001424164
+      },
+      "lastReceivedAtMonotonic": 42696.922562212,
+      "lastTransportAgeBoundS": 0.006003914000757504,
+      "recentBatches": [
+        {
+          "committedAtMonotonic": 42694.567297324,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1790,
+              "sampledAtSenderMonotonic": 26340.0916352,
+              "senderAgeS": 0.0541720000001078,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1790,
+              "sampledAtSenderMonotonic": 26340.0916352,
+              "senderAgeS": 0.0541720000001078,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.567058125,
+          "seq": 2676,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.007388256999547593
+        },
+        {
+          "committedAtMonotonic": 42694.663064486,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1791,
+              "sampledAtSenderMonotonic": 26340.1918564,
+              "senderAgeS": 0.050082099998689955,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1791,
+              "sampledAtSenderMonotonic": 26340.1918564,
+              "senderAgeS": 0.050082099998689955,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.662821565,
+          "seq": 2677,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.004401874000905082
+        },
+        {
+          "committedAtMonotonic": 42694.71738951,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1791,
+              "sampledAtSenderMonotonic": 26340.1918564,
+              "senderAgeS": 0.10410969999793451,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1791,
+              "sampledAtSenderMonotonic": 26340.1918564,
+              "senderAgeS": 0.10410969999793451,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.717118774,
+          "seq": 2678,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.004253562001395039
+        },
+        {
+          "committedAtMonotonic": 42694.813188597,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1792,
+              "sampledAtSenderMonotonic": 26340.2923607,
+              "senderAgeS": 0.09938669999974081,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1792,
+              "sampledAtSenderMonotonic": 26340.2923607,
+              "senderAgeS": 0.09938669999974081,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.812937379,
+          "seq": 2680,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.006291982994298451
+        },
+        {
+          "committedAtMonotonic": 42694.918247365,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1793,
+              "sampledAtSenderMonotonic": 26340.3960881,
+              "senderAgeS": 0.09992820000115898,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1793,
+              "sampledAtSenderMonotonic": 26340.3960881,
+              "senderAgeS": 0.09992820000115898,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.917996945,
+          "seq": 2682,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.005354168999474496
+        },
+        {
+          "committedAtMonotonic": 42694.956501216,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1794,
+              "sampledAtSenderMonotonic": 26340.496246,
+              "senderAgeS": 0.03717580000011367,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1794,
+              "sampledAtSenderMonotonic": 26340.496246,
+              "senderAgeS": 0.03717580000011367,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42694.956237907,
+          "seq": 2683,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.009853224997641519
+        },
+        {
+          "committedAtMonotonic": 42695.052036975,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1795,
+              "sampledAtSenderMonotonic": 26340.6001076,
+              "senderAgeS": 0.029082799999741837,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1795,
+              "sampledAtSenderMonotonic": 26340.6001076,
+              "senderAgeS": 0.029082799999741837,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.051706167,
+          "seq": 2684,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.008069002004049253
+        },
+        {
+          "committedAtMonotonic": 42695.184399096,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1796,
+              "sampledAtSenderMonotonic": 26340.7003228,
+              "senderAgeS": 0.04132490000120015,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1796,
+              "sampledAtSenderMonotonic": 26340.7003228,
+              "senderAgeS": 0.04132490000120015,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.184138119,
+          "seq": 2685,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.02775556500273524
+        },
+        {
+          "committedAtMonotonic": 42695.272743668,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1797,
+              "sampledAtSenderMonotonic": 26340.8043041,
+              "senderAgeS": 0.025171400000544963,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1797,
+              "sampledAtSenderMonotonic": 26340.8043041,
+              "senderAgeS": 0.025171400000544963,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.272469062,
+          "seq": 2686,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.04929268200066872
+        },
+        {
+          "committedAtMonotonic": 42695.358093115,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1797,
+              "sampledAtSenderMonotonic": 26340.8043041,
+              "senderAgeS": 0.10839640000267536,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1797,
+              "sampledAtSenderMonotonic": 26340.8043041,
+              "senderAgeS": 0.10839640000267536,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.357836991,
+          "seq": 2687,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.04913220400339924
+        },
+        {
+          "committedAtMonotonic": 42695.370332959,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1798,
+              "sampledAtSenderMonotonic": 26340.9085798,
+              "senderAgeS": 0.03757969999787747,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1798,
+              "sampledAtSenderMonotonic": 26340.9085798,
+              "senderAgeS": 0.03757969999787747,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.37009113,
+          "seq": 2688,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.008104223998088855
+        },
+        {
+          "committedAtMonotonic": 42695.449701732,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1798,
+              "sampledAtSenderMonotonic": 26340.9085798,
+              "senderAgeS": 0.09998369999811985,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1798,
+              "sampledAtSenderMonotonic": 26340.9085798,
+              "senderAgeS": 0.09998369999811985,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.449441108,
+          "seq": 2689,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.02735929500340717
+        },
+        {
+          "committedAtMonotonic": 42695.547284912,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1799,
+              "sampledAtSenderMonotonic": 26341.0087973,
+              "senderAgeS": 0.11643550000007963,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1799,
+              "sampledAtSenderMonotonic": 26341.0087973,
+              "senderAgeS": 0.11643550000007963,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.546771237,
+          "seq": 2691,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.027132059003633913
+        },
+        {
+          "committedAtMonotonic": 42695.556425448,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1800,
+              "sampledAtSenderMonotonic": 26341.1124757,
+              "senderAgeS": 0.021190600000409177,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1800,
+              "sampledAtSenderMonotonic": 26341.1124757,
+              "senderAgeS": 0.021190600000409177,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.555856312,
+          "seq": 2692,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.007648825994692743
+        },
+        {
+          "committedAtMonotonic": 42695.630319277,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1800,
+              "sampledAtSenderMonotonic": 26341.1124757,
+              "senderAgeS": 0.07534930000110762,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1800,
+              "sampledAtSenderMonotonic": 26341.1124757,
+              "senderAgeS": 0.07534930000110762,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.629816343,
+          "seq": 2693,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.024990640005853493
+        },
+        {
+          "committedAtMonotonic": 42695.685880369,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1801,
+              "sampledAtSenderMonotonic": 26341.2126256,
+              "senderAgeS": 0.04582440000012866,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1801,
+              "sampledAtSenderMonotonic": 26341.2126256,
+              "senderAgeS": 0.04582440000012866,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.685420897,
+          "seq": 2694,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.010446972999488935
+        },
+        {
+          "committedAtMonotonic": 42695.793529325,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1802,
+              "sampledAtSenderMonotonic": 26341.3168885,
+              "senderAgeS": 0.054325899996911176,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1802,
+              "sampledAtSenderMonotonic": 26341.3168885,
+              "senderAgeS": 0.054325899996911176,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.79307902,
+          "seq": 2695,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.02630957600194961
+        },
+        {
+          "committedAtMonotonic": 42695.976609321,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1803,
+              "sampledAtSenderMonotonic": 26341.4169326,
+              "senderAgeS": 0.11264830000072834,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1803,
+              "sampledAtSenderMonotonic": 26341.4169326,
+              "senderAgeS": 0.11264830000072834,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42695.9759945,
+          "seq": 2697,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.054309690996888094
+        },
+        {
+          "committedAtMonotonic": 42696.032868342,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1804,
+              "sampledAtSenderMonotonic": 26341.5169835,
+              "senderAgeS": 0.06658219999735593,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1804,
+              "sampledAtSenderMonotonic": 26341.5169835,
+              "senderAgeS": 0.06658219999735593,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.032295502,
+          "seq": 2698,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.05425754399766447
+        },
+        {
+          "committedAtMonotonic": 42696.117948814,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1805,
+              "sampledAtSenderMonotonic": 26341.6208227,
+              "senderAgeS": 0.05400469999949564,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1805,
+              "sampledAtSenderMonotonic": 26341.6208227,
+              "senderAgeS": 0.05400469999949564,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.117441065,
+          "seq": 2699,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.035427222996077035
+        },
+        {
+          "committedAtMonotonic": 42696.181588167,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1805,
+              "sampledAtSenderMonotonic": 26341.6208227,
+              "senderAgeS": 0.11691430000064429,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1805,
+              "sampledAtSenderMonotonic": 26341.6208227,
+              "senderAgeS": 0.11691430000064429,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.181148416,
+          "seq": 2700,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.03029660600441275
+        },
+        {
+          "committedAtMonotonic": 42696.219055145,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1806,
+              "sampledAtSenderMonotonic": 26341.7209707,
+              "senderAgeS": 0.07499390000157291,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1806,
+              "sampledAtSenderMonotonic": 26341.7209707,
+              "senderAgeS": 0.07499390000157291,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.218612654,
+          "seq": 2701,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.006769140003598295
+        },
+        {
+          "committedAtMonotonic": 42696.273155914,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1807,
+              "sampledAtSenderMonotonic": 26341.8251819,
+              "senderAgeS": 0.024865999999747146,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1807,
+              "sampledAtSenderMonotonic": 26341.8251819,
+              "senderAgeS": 0.024865999999747146,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.27269909,
+          "seq": 2702,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.006594624996068887
+        },
+        {
+          "committedAtMonotonic": 42696.385587125,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1808,
+              "sampledAtSenderMonotonic": 26341.9289261,
+              "senderAgeS": 0.03370069999800762,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1808,
+              "sampledAtSenderMonotonic": 26341.9289261,
+              "senderAgeS": 0.03370069999800762,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.385146097,
+          "seq": 2703,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.005693735998647753
+        },
+        {
+          "committedAtMonotonic": 42696.530689579,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1809,
+              "sampledAtSenderMonotonic": 26342.0334791,
+              "senderAgeS": 0.07511800000065705,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1809,
+              "sampledAtSenderMonotonic": 26342.0334791,
+              "senderAgeS": 0.07511800000065705,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.53018007,
+          "seq": 2704,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.006461165001383051
+        },
+        {
+          "committedAtMonotonic": 42696.609529659,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1810,
+              "sampledAtSenderMonotonic": 26342.1373384,
+              "senderAgeS": 0.029223400000773836,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1810,
+              "sampledAtSenderMonotonic": 26342.1373384,
+              "senderAgeS": 0.029223400000773836,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.608999725,
+          "seq": 2705,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.02963832299428759
+        },
+        {
+          "committedAtMonotonic": 42696.642656466,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1810,
+              "sampledAtSenderMonotonic": 26342.1373384,
+              "senderAgeS": 0.08337530000062543,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1810,
+              "sampledAtSenderMonotonic": 26342.1373384,
+              "senderAgeS": 0.08337530000062543,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.642131236,
+          "seq": 2706,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.004529869998805225
+        },
+        {
+          "committedAtMonotonic": 42696.722090368,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1811,
+              "sampledAtSenderMonotonic": 26342.2417549,
+              "senderAgeS": 0.05829530000119121,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1811,
+              "sampledAtSenderMonotonic": 26342.2417549,
+              "senderAgeS": 0.05829530000119121,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.721684505,
+          "seq": 2707,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.007844191997719463
+        },
+        {
+          "committedAtMonotonic": 42696.775375875,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1811,
+              "sampledAtSenderMonotonic": 26342.2417549,
+              "senderAgeS": 0.11230070000237902,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1811,
+              "sampledAtSenderMonotonic": 26342.2417549,
+              "senderAgeS": 0.11230070000237902,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.774885071,
+          "seq": 2708,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.005889992004085798
+        },
+        {
+          "committedAtMonotonic": 42696.834351119,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1812,
+              "sampledAtSenderMonotonic": 26342.3461524,
+              "senderAgeS": 0.05825909999839496,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1812,
+              "sampledAtSenderMonotonic": 26342.3461524,
+              "senderAgeS": 0.05825909999839496,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.833896943,
+          "seq": 2709,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.03319752799870912
+        },
+        {
+          "committedAtMonotonic": 42696.868941174,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1812,
+              "sampledAtSenderMonotonic": 26342.3461524,
+              "senderAgeS": 0.1001150999982201,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1812,
+              "sampledAtSenderMonotonic": 26342.3461524,
+              "senderAgeS": 0.1001150999982201,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.868461018,
+          "seq": 2710,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.0054682219997630455
+        },
+        {
+          "committedAtMonotonic": 42696.923008,
+          "ranges": {
+            "hcsr04": {
+              "sampleSeq": 1813,
+              "sampledAtSenderMonotonic": 26342.4462675,
+              "senderAgeS": 0.05395900000075926,
+              "valid": true,
+              "value": 2.7700000000000005
+            },
+            "urm37": {
+              "sampleSeq": 1813,
+              "sampledAtSenderMonotonic": 26342.4462675,
+              "senderAgeS": 0.05395900000075926,
+              "valid": true,
+              "value": 2.7700000000000005
+            }
+          },
+          "receivedAtMonotonic": 42696.922562212,
+          "seq": 2711,
+          "session": "c000a7315abbaf413de2302118e9af40",
+          "transportAgeBoundS": 0.006003914000757504
+        }
+      ],
+      "rejectionReasons": {
+        "Duplicate/out-of-order telemetry": 748
+      },
+      "snapshotAtMonotonic": 42696.927609184
+    },
+    "events": [],
+    "fault": null,
+    "front_m": 2.7700000000000005,
+    "observations": {
+      "hcsr04": {
+        "age": 0.06500988599873381,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "hcsr04",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_forward": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_forward",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_left": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_left",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_reverse": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_reverse",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_right": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_right",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_back": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_back",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_body": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_body",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_head": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_head",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_left": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_left",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_right": {
+        "age": 0.031616386004316155,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_right",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "urm37": {
+        "age": 0.06500988599873381,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "urm37",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      }
+    },
+    "receivedAge": 0.005046972000855021,
+    "rejected": 748,
+    "seq": 2711,
+    "session": "c000a7315abbaf413de2302118e9af40",
+    "touches": {
+      "touch_back": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_body": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_head": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_left": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_right": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      }
+    },
+    "virtual": true
+  },
+  "simulation": true,
+  "system": {
+    "architecture": "aarch64",
+    "availableMemoryBytes": 1525477376,
+    "measurementHost": "diyan07",
+    "pid": 42353,
+    "processCpuPercent": 44.21,
+    "rssBytes": 174551040
+  },
+  "vision": {
+    "behavior": "EMERGENCY_STOP",
+    "blueBall": {
+      "area": 0,
+      "bbox": null,
+      "candidates": [],
+      "circleArea": 0,
+      "circularity": 0,
+      "detected": false,
+      "fillRatio": 0,
+      "frameAge": 0.15140643699851353,
+      "frameHeight": 240,
+      "frameWidth": 320,
+      "lockId": 115,
+      "lockState": "reacquiring",
+      "maskArea": 527,
+      "observed_at": 42696.751904575,
+      "offset": null,
+      "processingHeight": 240,
+      "processingWidth": 320,
+      "radius": null,
+      "rejectReason": "locked_target_missing",
+      "revision": 2,
+      "targetColor": "yellow",
+      "x": null,
+      "y": null
+    },
+    "hand": {},
+    "handGesture": "Not configured",
+    "observationAge": 0.17446004199882736,
+    "opencv": "Disarmed; explicit enable required",
+    "processingFps": 8.23,
+    "processingMs": 8.67,
+    "targetColor": "yellow",
+    "targetFresh": true,
+    "transitions": [
+      {
+        "at": 42513.551924088,
+        "previous": "IDLE",
+        "reason": "No valid observation",
+        "state": "CAMERA_FAULT"
+      },
+      {
+        "at": 42514.486426782,
+        "previous": "CAMERA_FAULT",
+        "reason": "",
+        "state": "IDLE"
+      }
+    ]
+  },
+  "visionConfig": {
+    "persisted": true,
+    "revision": 2,
+    "settings": {
+      "command_period": 0.6,
+      "enter_error": 0.32,
+      "exit_error": 0.2,
+      "hsv_lower": [
+        20,
+        70,
+        70
+      ],
+      "hsv_upper": [
+        45,
+        255,
+        255
+      ],
+      "lock_distance": 0.2,
+      "loss_seconds": 0.35,
+      "max_age": 0.5,
+      "max_radius_ratio": 0.38,
+      "min_area": 150,
+      "min_circularity": 0.55,
+      "min_frames": 2,
+      "min_radius": 8,
+      "reacquire_seconds": 0.6,
+      "search_enabled": false,
+      "search_seconds": 2.0,
+      "smoothing_alpha": 0.35,
+      "target_color": "yellow"
+    }
+  }
+}

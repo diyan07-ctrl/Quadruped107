@@ -1,0 +1,43 @@
+./build/phase4-toolchain/python311/python.exe : test_newly_available_range_is_not_hidden_by_batch_cache 
+(test_phase4_remediation.AcquisitionCadenceTests.test_newly_available_range_is_not_hidden_by_batch_cache) ... pybullet 
+build time: Oct 21 2025 11:46:21
+At line:2 char:1
++ ./build/phase4-toolchain/python311/python.exe -m unittest discover -s ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_newly_avai...1 2025 11:46:21:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ok
+test_sensor_acquisition_continues_between_udp_sensor_requests 
+(test_phase4_remediation.AcquisitionCadenceTests.test_sensor_acquisition_continues_between_udp_sensor_requests) ... ok
+test_explicit_cancellation_prevents_further_renewals 
+(test_phase4_remediation.IntentFreshnessTests.test_explicit_cancellation_prevents_further_renewals) ... ok
+test_failed_renewal_is_latched_and_never_retried 
+(test_phase4_remediation.IntentFreshnessTests.test_failed_renewal_is_latched_and_never_retried) ... ok
+test_generic_heartbeat_does_not_extend_a_held_direction 
+(test_phase4_remediation.IntentFreshnessTests.test_generic_heartbeat_does_not_extend_a_held_direction) ... ok
+test_matching_renewals_survive_slow_independent_telemetry 
+(test_phase4_remediation.IntentFreshnessTests.test_matching_renewals_survive_slow_independent_telemetry) ... ok
+test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) ... ok
+test_repeated_hello_preserves_inflight_nonce_and_original_expiry 
+(test_phase4_remediation.LossRecoveryTests.test_repeated_hello_preserves_inflight_nonce_and_original_expiry) ... ok
+test_stop_during_challenge_precedes_disarmed_handshake 
+(test_phase4_remediation.LossRecoveryTests.test_stop_during_challenge_precedes_disarmed_handshake) ... ok
+test_fresh_packet_cannot_refresh_stale_individual_range 
+(test_phase4_remediation.SensorAtomicTimeTests.test_fresh_packet_cannot_refresh_stale_individual_range) ... ok
+test_new_fresh_sample_cannot_appear_from_future_to_safety_reader 
+(test_phase4_remediation.SensorAtomicTimeTests.test_new_fresh_sample_cannot_appear_from_future_to_safety_reader) ... ok
+test_packet_loss_and_reordering_do_not_renew_measurements 
+(test_phase4_remediation.SensorAtomicTimeTests.test_packet_loss_and_reordering_do_not_renew_measurements) ... ok
+test_reader_wait_does_not_hide_genuine_measurement_expiry 
+(test_phase4_remediation.SensorAtomicTimeTests.test_reader_wait_does_not_hide_genuine_measurement_expiry) ... ok
+test_repeated_identical_new_measurements_remain_healthy 
+(test_phase4_remediation.SensorAtomicTimeTests.test_repeated_identical_new_measurements_remain_healthy) ... ok
+test_restart_missing_and_invalid_values_fail_closed 
+(test_phase4_remediation.SensorAtomicTimeTests.test_restart_missing_and_invalid_values_fail_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.588s
+
+OK

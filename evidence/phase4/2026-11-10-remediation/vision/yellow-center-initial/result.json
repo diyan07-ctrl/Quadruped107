@@ -1,0 +1,1750 @@
+{
+  "id": "yellow-center-initial",
+  "result": "FAIL",
+  "source": "REAL PI USB CAMERA; operator declared target placement",
+  "color": "yellow",
+  "label": "yellow-center-initial",
+  "startedUtc": "2026-11-10T10:29:42.683280+00:00",
+  "endedUtc": "2026-11-10T10:29:50.857732+00:00",
+  "durationS": 8.172000000000025,
+  "uniqueObservedFrames": 19,
+  "detectedFrames": 3,
+  "note": "Observed sampled frames, not camera capture FPS; original is decoded PNG when available, otherwise JPEG.",
+  "samples": [
+    {
+      "elapsedS": 0.15599999999994907,
+      "sequence": 6431,
+      "frameAgeS": 0.22737938499994925,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 4164,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            33.0,
+            16.0
+          ],
+          [
+            120.0,
+            59.0,
+            21.0
+          ],
+          [
+            159.0,
+            106.0,
+            26.0
+          ],
+          [
+            164.0,
+            173.0,
+            32.0
+          ],
+          [
+            169.0,
+            227.0,
+            198.0
+          ]
+        ],
+        "overexposedFraction": 0.06125
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 0.45299999999997453,
+      "sequence": 6434,
+      "frameAgeS": 0.1787026669990155,
+      "detection": {
+        "area": 166,
+        "bbox": [
+          147,
+          143,
+          21,
+          15
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              147,
+              143,
+              21,
+              15
+            ],
+            "circleArea": 334,
+            "circularity": 0.667,
+            "contourArea": 166,
+            "fillRatio": 0.497,
+            "radius": 10,
+            "x": 157,
+            "y": 148
+          }
+        ],
+        "circleArea": 334,
+        "circularity": 0.667,
+        "detected": true,
+        "fillRatio": 0.497,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2991,
+        "offset": -0.019,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 10,
+        "rejectReason": null,
+        "x": 157,
+        "y": 148
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            28.0,
+            22.0
+          ],
+          [
+            114.0,
+            53.0,
+            27.0
+          ],
+          [
+            157.0,
+            96.0,
+            32.0
+          ],
+          [
+            164.0,
+            135.0,
+            39.0
+          ],
+          [
+            169.0,
+            170.0,
+            208.10000000000218
+          ]
+        ],
+        "overexposedFraction": 0.07015625
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 0.75,
+      "sequence": 6436,
+      "frameAgeS": 0.21382264000203577,
+      "detection": {
+        "area": 205,
+        "bbox": [
+          146,
+          143,
+          24,
+          16
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              146,
+              143,
+              24,
+              16
+            ],
+            "circleArea": 428,
+            "circularity": 0.654,
+            "contourArea": 205,
+            "fillRatio": 0.479,
+            "radius": 12,
+            "x": 158,
+            "y": 148
+          }
+        ],
+        "circleArea": 428,
+        "circularity": 0.654,
+        "detected": true,
+        "fillRatio": 0.479,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3171,
+        "offset": -0.013,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 12,
+        "rejectReason": null,
+        "x": 158,
+        "y": 148
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            34.0,
+            21.0
+          ],
+          [
+            132.0,
+            56.0,
+            26.0
+          ],
+          [
+            158.0,
+            98.0,
+            31.0
+          ],
+          [
+            164.0,
+            144.0,
+            37.0
+          ],
+          [
+            169.0,
+            177.0,
+            206.0
+          ]
+        ],
+        "overexposedFraction": 0.06859375
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 1.2179999999998472,
+      "sequence": 6439,
+      "frameAgeS": 0.16244583500156295,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3163,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            34.0,
+            21.0
+          ],
+          [
+            120.0,
+            58.0,
+            25.0
+          ],
+          [
+            157.0,
+            98.0,
+            30.0
+          ],
+          [
+            164.0,
+            143.0,
+            37.0
+          ],
+          [
+            169.0,
+            179.0,
+            207.0
+          ]
+        ],
+        "overexposedFraction": 0.06880208333333333
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 1.9529999999999745,
+      "sequence": 6447,
+      "frameAgeS": 0.1846634190005716,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3380,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            30.0,
+            22.0
+          ],
+          [
+            120.0,
+            55.0,
+            26.0
+          ],
+          [
+            158.0,
+            98.0,
+            31.0
+          ],
+          [
+            164.0,
+            143.0,
+            37.0
+          ],
+          [
+            169.0,
+            177.0,
+            205.0
+          ]
+        ],
+        "overexposedFraction": 0.06791666666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 2.2970000000000255,
+      "sequence": 6449,
+      "frameAgeS": 0.20481943900085753,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3094,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            32.0,
+            22.0
+          ],
+          [
+            114.0,
+            55.0,
+            27.0
+          ],
+          [
+            157.0,
+            94.0,
+            33.0
+          ],
+          [
+            164.0,
+            135.0,
+            39.0
+          ],
+          [
+            169.0,
+            166.0,
+            208.0
+          ]
+        ],
+        "overexposedFraction": 0.07026041666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 3.3279999999999745,
+      "sequence": 6454,
+      "frameAgeS": 0.16795008000190137,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2787,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            30.0,
+            24.0
+          ],
+          [
+            115.0,
+            51.0,
+            28.0
+          ],
+          [
+            157.0,
+            90.0,
+            34.0
+          ],
+          [
+            164.0,
+            128.0,
+            40.0
+          ],
+          [
+            169.0,
+            157.0,
+            212.0
+          ]
+        ],
+        "overexposedFraction": 0.07151041666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 4.2029999999999745,
+      "sequence": 6462,
+      "frameAgeS": 0.23438707799869007,
+      "detection": {
+        "area": 7899,
+        "bbox": [
+          99,
+          144,
+          102,
+          96
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              99,
+              144,
+              102,
+              96
+            ],
+            "circleArea": 9318,
+            "circularity": 0.868,
+            "contourArea": 7899,
+            "fillRatio": 0.848,
+            "radius": 54,
+            "x": 149,
+            "y": 196
+          }
+        ],
+        "circleArea": 9318,
+        "circularity": 0.868,
+        "detected": true,
+        "fillRatio": 0.848,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 7834,
+        "offset": -0.069,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 54,
+        "rejectReason": null,
+        "x": 149,
+        "y": 196
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            27.0,
+            68.0,
+            9.0
+          ],
+          [
+            146.0,
+            96.0,
+            13.0
+          ],
+          [
+            163.0,
+            175.0,
+            16.0
+          ],
+          [
+            169.0,
+            240.0,
+            20.0
+          ],
+          [
+            170.0,
+            255.0,
+            166.0
+          ]
+        ],
+        "overexposedFraction": 0.0284375
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 4.7029999999999745,
+      "sequence": 6470,
+      "frameAgeS": 0.17373196599874063,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 6175,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            46.0,
+            12.0
+          ],
+          [
+            132.0,
+            74.0,
+            17.0
+          ],
+          [
+            158.0,
+            136.0,
+            21.0
+          ],
+          [
+            164.0,
+            207.0,
+            25.0
+          ],
+          [
+            169.0,
+            255.0,
+            183.0
+          ]
+        ],
+        "overexposedFraction": 0.046927083333333335
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 5.014999999999873,
+      "sequence": 6472,
+      "frameAgeS": 0.2107992289966205,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 5931,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            45.0,
+            13.0
+          ],
+          [
+            132.0,
+            73.0,
+            18.0
+          ],
+          [
+            158.0,
+            134.0,
+            21.0
+          ],
+          [
+            164.0,
+            213.0,
+            25.0
+          ],
+          [
+            169.0,
+            255.0,
+            184.0
+          ]
+        ],
+        "overexposedFraction": 0.04760416666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 5.311999999999898,
+      "sequence": 6474,
+      "frameAgeS": 0.24367721599992365,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 6332,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            46.0,
+            13.0
+          ],
+          [
+            140.0,
+            77.0,
+            17.0
+          ],
+          [
+            159.0,
+            140.0,
+            21.0
+          ],
+          [
+            164.0,
+            213.0,
+            25.0
+          ],
+          [
+            167.0,
+            255.0,
+            183.0
+          ]
+        ],
+        "overexposedFraction": 0.046510416666666665
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 5.639999999999873,
+      "sequence": 6477,
+      "frameAgeS": 0.24780041899794014,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 5858,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            48.0,
+            14.0
+          ],
+          [
+            135.0,
+            77.0,
+            17.0
+          ],
+          [
+            159.0,
+            135.0,
+            21.0
+          ],
+          [
+            164.0,
+            204.0,
+            25.0
+          ],
+          [
+            169.0,
+            242.0,
+            188.0
+          ]
+        ],
+        "overexposedFraction": 0.04984375
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 6.25,
+      "sequence": 6481,
+      "frameAgeS": 0.22102399499999592,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 4714,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            36.0,
+            18.0
+          ],
+          [
+            132.0,
+            64.0,
+            21.0
+          ],
+          [
+            158.0,
+            111.0,
+            24.0
+          ],
+          [
+            164.0,
+            173.0,
+            30.0
+          ],
+          [
+            169.0,
+            222.0,
+            195.10000000000218
+          ]
+        ],
+        "overexposedFraction": 0.05932291666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 6.530999999999949,
+      "sequence": 6485,
+      "frameAgeS": 0.1671228949999204,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3361,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            31.0,
+            23.0
+          ],
+          [
+            140.0,
+            57.0,
+            26.0
+          ],
+          [
+            159.0,
+            98.0,
+            31.0
+          ],
+          [
+            164.0,
+            141.0,
+            38.0
+          ],
+          [
+            169.0,
+            173.0,
+            207.0
+          ]
+        ],
+        "overexposedFraction": 0.06864583333333334
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 6.764999999999873,
+      "sequence": 6487,
+      "frameAgeS": 0.1779985540015332,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 3113,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            32.0,
+            24.0
+          ],
+          [
+            120.0,
+            58.0,
+            28.0
+          ],
+          [
+            159.0,
+            98.0,
+            33.0
+          ],
+          [
+            164.0,
+            135.0,
+            40.0
+          ],
+          [
+            170.0,
+            163.0,
+            212.0
+          ]
+        ],
+        "overexposedFraction": 0.07088541666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 7.2970000000000255,
+      "sequence": 6491,
+      "frameAgeS": 0.1929461200015794,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2770,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            30.0,
+            26.0
+          ],
+          [
+            120.0,
+            54.0,
+            30.0
+          ],
+          [
+            159.0,
+            94.0,
+            36.0
+          ],
+          [
+            165.0,
+            125.0,
+            42.0
+          ],
+          [
+            170.0,
+            148.0,
+            217.0
+          ]
+        ],
+        "overexposedFraction": 0.07578125
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 7.5,
+      "sequence": 6493,
+      "frameAgeS": 0.2052554309993866,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2604,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            28.0,
+            27.0
+          ],
+          [
+            110.0,
+            51.0,
+            32.0
+          ],
+          [
+            160.0,
+            90.0,
+            37.0
+          ],
+          [
+            166.0,
+            122.0,
+            44.0
+          ],
+          [
+            170.0,
+            144.0,
+            220.0
+          ]
+        ],
+        "overexposedFraction": 0.07666666666666666
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 7.733999999999924,
+      "sequence": 6495,
+      "frameAgeS": 0.19077387300058035,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2512,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            27.0,
+            27.0
+          ],
+          [
+            96.0,
+            49.0,
+            32.0
+          ],
+          [
+            160.0,
+            91.0,
+            38.0
+          ],
+          [
+            166.0,
+            124.0,
+            44.0
+          ],
+          [
+            170.0,
+            144.0,
+            220.0
+          ]
+        ],
+        "overexposedFraction": 0.07744791666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    },
+    {
+      "elapsedS": 8.030999999999949,
+      "sequence": 6497,
+      "frameAgeS": 0.2392459120019339,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "maskArea": 2524,
+        "offset": null,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": null,
+        "rejectReason": "no_circular_candidate",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          80,
+          60,
+          160,
+          120
+        ],
+        "hsvPercentiles": [
+          [
+            30.0,
+            29.0,
+            28.0
+          ],
+          [
+            118.75,
+            50.0,
+            33.0
+          ],
+          [
+            160.0,
+            90.0,
+            38.0
+          ],
+          [
+            166.0,
+            121.0,
+            44.0
+          ],
+          [
+            170.0,
+            140.0,
+            222.0
+          ]
+        ],
+        "overexposedFraction": 0.07838541666666667
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      }
+    }
+  ]
+}

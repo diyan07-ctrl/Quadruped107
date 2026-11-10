@@ -1,0 +1,145 @@
+{"started_utc": "2026-11-10T09:55:07.093170+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-audit.sh"}
+set -eu
+date -u --iso-8601=seconds
+uname -a
+free -m
+df -h /
+vcgencmd get_throttled
+cd ~/Quadruped107
+git status --short --branch
+git diff --cached --binary | sha256sum
+git diff --binary | sha256sum
+git config --get-all remote.origin.fetch
+cd ~/Quadruped107-phase4-qualification
+git status --short --branch
+git rev-parse HEAD
+ss -ltnp
+pgrep -af 'app-probe|quadruped.main|run-endurance' || true
+fuser /dev/video0 || true
+v4l2-ctl -d /dev/video0 --list-formats-ext
+v4l2-ctl -d /dev/video0 --list-ctrls-menus
+PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import sys,cv2,numpy,flask,serial,json
+from importlib.metadata import version
+print(json.dumps(dict(python=sys.version,opencv=cv2.__version__,numpy=numpy.__version__,flask=version('Flask'),pyserial=version('pyserial'))))
+PY
+
+--- OBSERVED OUTPUT ---
+2026-11-10T09:55:08+00:00
+Linux diyan07 6.18.60+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.18.60-1+rpt1 (2026-11-03) aarch64 GNU/Linux
+               total        used        free      shared  buff/cache   available
+Mem:            1844         344         641          25         951        1500
+Swap:           1843           0        1843
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G  7.5G   20G  28% /
+throttled=0x0
+## phase1/software-vision-digital-twin...origin/phase1/software-vision-digital-twin [behind 29]
+M  .github/workflows/validate.yml
+M  .gitignore
+M  README.md
+A  deploy/navigation.example.json
+A  deploy/sensors.example.json
+M  deploy/vision.example.json
+A  deploy/vision.yellow.json
+M  docs/ARCHITECTURE.md
+M  docs/DECISIONS.md
+M  docs/EXTENSIONS.md
+M  docs/HARDWARE.md
+M  docs/HARDWARE_VERIFICATION.md
+A  docs/MODEL_STUDY.md
+A  docs/PHASE2.md
+A  docs/PHASE3.md
+A  docs/PHASE4.md
+M  docs/PROJECT.md
+M  docs/PROTOCOL.md
+M  docs/ROADMAP.md
+M  docs/SAFETY.md
+A  docs/SENSORS.md
+M  docs/SOFTWARE.md
+M  docs/VALIDATION.md
+M  docs/WIRING.md
+A  docs/evidence/PHASE2_MODEL_STUDY.json
+A  docs/evidence/PHASE2_NAVIGATION.json
+A  docs/evidence/PHASE3_INTEGRATION.json
+A  docs/evidence/PHASE3_MODEL_STUDY.json
+A  simulation/PHASE2.md
+M  simulation/README.md
+A  simulation/environment.py
+A  simulation/model_study.py
+A  simulation/proxy_probe.py
+M  simulation/twin.py
+M  software/pi/README.md
+M  software/pi/quadruped/autonomy.py
+M  software/pi/quadruped/bridge.py
+M  software/pi/quadruped/camera.py
+M  software/pi/quadruped/controller.py
+A  software/pi/quadruped/explain.py
+M  software/pi/quadruped/main.py
+A  software/pi/quadruped/navigation.py
+A  software/pi/quadruped/sensors.py
+M  software/pi/quadruped/serial_link.py
+A  software/pi/quadruped/telemetry.py
+M  software/pi/quadruped/virtual_uno.py
+M  software/pi/quadruped/vision.py
+A  software/pi/quadruped/vision_config.py
+M  software/pi/quadruped/web/app.js
+M  software/pi/quadruped/web/index.html
+M  software/pi/quadruped/web/styles.css
+A  tests/test_demonstration.py
+A  tests/test_phase2.py
+A  tests/test_phase3.py
+A  tests/test_pi_preflight.py
+M  tests/test_simulation.py
+A  tests/test_telemetry.py
+A  tests/test_vision_readiness.py
+A  tools/check-dashboard.mjs
+M  tools/check-installed.py
+A  tools/generate-blue-video.py
+A  tools/pi-preflight.py
+A  tools/qualify-demo.py
+A  tools/record-usb-camera.py
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  -
++refs/heads/phase1/software-vision-digital-twin:refs/remotes/origin/phase1/software-vision-digital-twin
++refs/heads/phase4/pi-hil-qualification:refs/remotes/origin/phase4/pi-hil-qualification
+## HEAD (no branch)
+d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      128          0.0.0.0:22        0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:111       0.0.0.0:*          
+LISTEN 0      128             [::]:22           [::]:*          
+LISTEN 0      4096            [::]:111          [::]:*          
+ioctl: VIDIOC_ENUM_FMT
+	Type: Video Capture
+
+	[0]: 'YUYV' (YUYV 4:2:2)
+		Size: Discrete 640x480
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 352x288
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 320x240
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 176x144
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 160x120
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+
+User Controls
+
+                     brightness 0x00980900 (int)    : min=0 max=255 step=1 default=128 value=128 flags=has-min-max
+                       contrast 0x00980901 (int)    : min=0 max=255 step=1 default=148 value=148 flags=has-min-max
+                     saturation 0x00980902 (int)    : min=0 max=255 step=1 default=90 value=90 flags=has-min-max
+                            hue 0x00980903 (int)    : min=-127 max=127 step=1 default=0 value=0 flags=has-min-max
+                          gamma 0x00980910 (int)    : min=1 max=8 step=1 default=4 value=4 flags=has-min-max
+           power_line_frequency 0x00980918 (menu)   : min=0 max=2 default=1 value=1 (50 Hz)
+				0: Disabled
+				1: 50 Hz
+				2: 60 Hz
+                      sharpness 0x0098091b (int)    : min=0 max=15 step=1 default=3 value=3 flags=has-min-max
+         backlight_compensation 0x0098091c (int)    : min=1 max=5 step=1 default=1 value=1 flags=has-min-max
+{"python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]", "opencv": "4.10.0", "numpy": "2.2.4", "flask": "3.1.2", "pyserial": "3.5"}

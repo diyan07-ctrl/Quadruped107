@@ -1,5 +1,15 @@
 # Phase 4 safety and fault injection
 
+## Remediation safety result
+
+The [remediation report](../evidence/phase4/2026-11-10-remediation/reports/REMEDIATION.md) records deterministic repairs to atomic sensor/time evaluation and STOP-before-recovery ordering. Freshness validation, 150 ms challenge TTL, 300 ms bridge lease, 300 ms sensor expiry, genuine stale-intent inhibition and explicit re-enable remain intact.
+
+Actual reproduced stale range at 60.943 s disarmed movement. Later fresh input/reconnect stayed disarmed. A separate headless run then completed 905.094 s without automatic re-arm or unexpected stop. It logged one source rejected datagram and 1,920 rejected duplicate/out-of-order sensor batches; these counters are disclosed rather than hidden.
+
+The complete new-head active fault sequence remains unverified after operator Escape stopped GUI work. [Final STOP](../evidence/phase4/2026-11-10-remediation/safety/final-before-shutdown.json) showed disabled/disarmed/mask zero; [shutdown](../evidence/phase4/2026-11-10-remediation/safety/shutdown.log) released the webcam and reconfirmed preserved Pi patch hashes. No physical actuator API/upload was used. No independent electrical inactivity measurement is claimed.
+
+### Historical safety tests
+
 **Virtual outputs only.** No GPIO, PCA9685 access, physical serial ARM, servo
 power operation or firmware upload was performed. Physical power/OE voltage was
 not electrically measured; software inhibition is not proof of an electrical stop.

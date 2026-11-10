@@ -1,5 +1,11 @@
 # Phase 4 — Pi camera and virtual hardware-in-the-loop qualification
 
+## Remediation status — 10 November 2026
+
+**PARTIALLY VERIFIED.** The repaired real-camera/Pi/LAN/virtual-actuator headless run passed 905.094 s, with 904.559 s continuous healthy simulator output and all eight measured joints moving. See the [remediation report](../evidence/phase4/2026-11-10-remediation/reports/REMEDIATION.md). Separate GUI endurance, controlled blue/yellow target trials, real autonomous pursuit and the complete recording set remain unqualified. Physical outputs remain prohibited; do not merge PR #6 or begin powered Phase 5.
+
+Use the existing isolated Pi qualification worktree; preserve the original checkout and staged work. The tested runtime is `ff3827690b635510198d16516237dc77d98013e3`. New instrumentation commands and exact evidence are linked in the report. The sections below retain the original procedures.
+
 Stacked on Phase 3. **No physical actuator tests authorized.** Keep the Uno, PCA9685 and all servos disconnected/unpowered. Preserve existing SSH and Telegram services.
 
 ## Read-only Pi preflight

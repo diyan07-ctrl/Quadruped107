@@ -1,5 +1,13 @@
 # Phase 4 performance measurements
 
+## Remediation measurements
+
+The separate successful [905 s analysis](../evidence/phase4/2026-11-10-remediation/endurance/headless-fiveg-905/analysis.json) records capture **8.330 FPS**, vision **8.340 FPS**, mean CPU **44.26% of one core**, RSS **178.84–179.25 MB decimal**, maximum sampled front age **243.0 ms**, maximum intent age **111.4 ms**, maximum ACK age **119.4 ms**, and maximum physics tick **61.43 ms**. All eight measured virtual joints moved in every full 10 s window; the continuous healthy source interval was **904.559 s**. Full logs and source alignment are in the [new index](../evidence/phase4/2026-11-10-remediation/README.md).
+
+These dim-scene, instrumented results do not replace the historical bright 19.84 FPS benchmark below. Camera exposure integration time remains unmeasured; V4L2 advertises YUYV only, and no MJPEG support or qualified manual exposure control is claimed. QPC replaced coarse 15.625 ms GetTickCount64 pacing for the Windows simulator without changing safety thresholds. Local PyBullet remains 3.2.5; CI 3.2.7 passed current runtime checks.
+
+### Historical benchmarks
+
 All values below came from the real Pi USB webcam on 10 November 2026. Raw data:
 [benchmark JSON](../evidence/phase4/2026-11-10/camera/benchmark.json),
 [full log](../evidence/phase4/2026-11-10/camera/benchmark.log),

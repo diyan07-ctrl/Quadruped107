@@ -1,0 +1,16 @@
+{"started_utc": "2026-11-10T12:40:42.342247+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\read-pi-final.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+tail -n 8 build/phase4-remediation/final/pi-regression.log
+/usr/sbin/iw dev wlan0 get power_save
+
+--- OBSERVED OUTPUT ---
+    except ImportError as error: raise RuntimeError("Install simulation/requirements.txt on the laptop") from error
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Install simulation/requirements.txt on the laptop
+
+----------------------------------------------------------------------
+Ran 173 tests in 46.272s
+
+FAILED (errors=6, skipped=4)
+Power save: off

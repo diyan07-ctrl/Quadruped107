@@ -1,0 +1,17 @@
+{"started_utc": "2026-11-10T16:51:12.095356+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\prepare-gui.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+printf '{"action_id":"gui-qualification","shutdown":true}' > build/phase4-remediation/pi-v5/control.tmp
+mv build/phase4-remediation/pi-v5/control.tmp build/phase4-remediation/pi-v5/control.json
+sleep 3
+mkdir -p build/phase4-remediation/pi-v6
+cp build/phase4-remediation/pi-v5/vision.json build/phase4-remediation/pi-v6/vision.json
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 21600 --output build/phase4-remediation/pi-v6 --control build/phase4-remediation/pi-v6/control.json > build/phase4-remediation/pi-v6/console.log 2>&1 < /dev/null &
+echo APP_PID=$!
+git rev-parse HEAD
+/usr/sbin/iw dev wlan0 get power_save
+
+--- OBSERVED OUTPUT ---
+APP_PID=42353
+ff3827690b635510198d16516237dc77d98013e3
+Power save: off

@@ -1,0 +1,14 @@
+{"started_utc": "2026-11-10T16:45:48.974167+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\fiveg-progress.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import json
+from pathlib import Path
+p=Path('build/phase4-remediation/headless-fiveg-905/result.json')
+if p.exists():
+ r=json.loads(p.read_text());print(json.dumps(dict(result=r['result'],durationS=r['durationS'],samples=r['samples'],failure=None if r['failure'] is None else {k:v for k,v in r['failure'].items() if k!='state'})))
+else: print(Path('build/phase4-remediation/headless-fiveg-905/console.log').read_text()[-1600:])
+PY
+
+--- OBSERVED OUTPUT ---
+{"result": "PASS", "durationS": 905.0936831450017, "samples": 4081, "failure": null}

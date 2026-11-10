@@ -1,0 +1,8 @@
+{
+  "event": "Computer Use stopped by user physical Escape key",
+  "source": "Computer Use tool interruption response",
+  "response": "No further UI input or recording; CLI safety cleanup and documentation only",
+  "gui900SecondsExecuted": false,
+  "physicalTargetReposition": "Operator said cannot do right now",
+  "assembledUtc": "2026-11-10T16:58:57.246243+00:00"
+}

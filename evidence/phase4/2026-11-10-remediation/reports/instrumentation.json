@@ -1,0 +1,31 @@
+{
+  "runtimeCommit": "ff3827690b635510198d16516237dc77d98013e3",
+  "note": "Viewer and analyzer were qualification working-tree additions at execution; exact blobs are included in the reporting commit. Other listed tools were committed before execution.",
+  "files": [
+    {
+      "path": "tools/phase4-hil.py",
+      "sha256": "e25b475fd60c9434f9d52f7142d56f1fcb8898de39abb73752144664806f1d4d",
+      "gitBlob": "e94e325a70a7ed157113f806d2f4d94f9c60b691"
+    },
+    {
+      "path": "tools/hil_lease.py",
+      "sha256": "56fed8350564e63182d1c463305897c02e9e20890305156823e5a99cd942a86a",
+      "gitBlob": "2a86b7dc70e899ae83c3fa4b54b30509dbb7fc9f"
+    },
+    {
+      "path": "tools/phase4-live-view.py",
+      "sha256": "5549ad1a91b74a247791a161c14ff9769a341a2cb32d67721cfd08453194f56d",
+      "gitBlob": "c090a7e1922b433d8e8bda6f14c1cf75370d315e"
+    },
+    {
+      "path": "tools/phase4-analyze-run.py",
+      "sha256": "26126286fe8b8ab6d87b88b808af152bd1b97b686efcc855bf8edeca573c52e7",
+      "gitBlob": "bb7d3dd6b96789abf72a3d41035002f778d9a727"
+    },
+    {
+      "path": "tools/phase4-vision-study.py",
+      "sha256": "9733e043247b3c82c48d4dcef255619c4e4e1b17d1b122af10dc74f823b6b3de",
+      "gitBlob": "4a6e754c7c19107a576cb5c0d04ad4d3f495a5a8"
+    }
+  ]
+}

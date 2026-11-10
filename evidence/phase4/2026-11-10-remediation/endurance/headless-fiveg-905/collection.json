@@ -1,0 +1,44 @@
+[
+  {
+    "path": "evidence\\phase4\\2026-11-10-remediation\\endurance\\headless-fiveg-905\\result.json",
+    "sha256": "729e84a37e15db2538b3368b96f2aa501c23154535935fa5c90a40053a476513",
+    "bytes": 709406,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "diyan07@192.168.1.42",
+      "cat Quadruped107-phase4-qualification/build/phase4-remediation/headless-fiveg-905/result.json"
+    ]
+  },
+  {
+    "path": "evidence\\phase4\\2026-11-10-remediation\\endurance\\headless-fiveg-905\\console.log",
+    "sha256": "9efda235d48e8183c05c7ca3c2918870b5b202ff5cfb50d8f14e53efcc516e32",
+    "bytes": 4257,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "diyan07@192.168.1.42",
+      "cat Quadruped107-phase4-qualification/build/phase4-remediation/headless-fiveg-905/console.log"
+    ]
+  },
+  {
+    "path": "build\\phase4-remediation\\public-artifacts\\endurance\\headless-fiveg-905\\samples.jsonl.gz",
+    "sha256": "b13efe5379cb868c2c519e355149f018d277bc8b37b673d463a64b92b5f85d85",
+    "bytes": 31083334,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "diyan07@192.168.1.42",
+      "gzip -c Quadruped107-phase4-qualification/build/phase4-remediation/headless-fiveg-905/samples.jsonl"
+    ]
+  }
+]

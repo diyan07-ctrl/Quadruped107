@@ -1,0 +1,111 @@
+{
+  "id": "R-INVALID-LIVE",
+  "startedUtc": "2026-11-10T14:16:55.093503+00:00",
+  "command": "Client.call(api/mode, mode=invalid-motion) on the actual Pi virtual application",
+  "physicalActuation": false,
+  "before": {
+    "motion": {
+      "appMode": "manual",
+      "busy": false,
+      "currentMotion": "none",
+      "desiredMotion": "none",
+      "enabled": false,
+      "executedGeneration": 1,
+      "fault": "Startup; explicit enable required",
+      "generation": 1,
+      "heartbeatAgeS": 33250.575135576,
+      "heartbeatCount": 0,
+      "intentAgeS": 33250.575135576,
+      "lastError": null,
+      "lastRequest": null,
+      "lastResult": "Stopped; servos disabled",
+      "lastStopContext": null,
+      "maxHeartbeatGapS": 0.0,
+      "session": 0,
+      "stopping": false
+    },
+    "link": {
+      "activeMask": 0,
+      "activeMotion": null,
+      "armed": false,
+      "connected": true,
+      "epoch": 1,
+      "error": null,
+      "kind": "virtual-uno",
+      "port": "virtual://uno",
+      "queued": 0,
+      "samples": 0,
+      "stopping": false,
+      "targets": [
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300
+      ],
+      "telemetry": {
+        "age": null,
+        "errors": 0,
+        "receiveFresh": false,
+        "record": null,
+        "supported": false
+      },
+      "virtual": true,
+      "virtualFault": null
+    },
+    "bridge": {
+      "ackAge": null,
+      "connected": false,
+      "epoch": 0,
+      "errors": 0,
+      "fault": null,
+      "maxRoundTripS": 0.0,
+      "physical": false,
+      "readyToArm": false,
+      "roundTripS": null,
+      "sensorCallbackMs": 0.0,
+      "transport": "UDP challenge/lease"
+    }
+  },
+  "httpStatus": 409,
+  "response": {
+    "error": "Missing, invalid or stale front range",
+    "ok": false
+  },
+  "result": "FAIL",
+  "after": {
+    "activeMask": 0,
+    "activeMotion": null,
+    "armed": false,
+    "connected": true,
+    "epoch": 1,
+    "error": null,
+    "kind": "virtual-uno",
+    "port": "virtual://uno",
+    "queued": 0,
+    "samples": 0,
+    "stopping": false,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "telemetry": {
+      "age": null,
+      "errors": 0,
+      "receiveFresh": false,
+      "record": null,
+      "supported": false
+    },
+    "virtual": true,
+    "virtualFault": null
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "run": "headless-fiveg-905",
+  "requestedResult": "PASS",
+  "durationS": 905.0936831450017,
+  "samples": 4081,
+  "unhealthySampleTimesS": [],
+  "maximumStateSampleGapS": 0.24265527500392636,
+  "sensorRejectionsDelta": 1920,
+  "bridgeErrorsDelta": 0,
+  "sensorRejectionReasonsDelta": {
+    "Duplicate/out-of-order telemetry": 1920
+  },
+  "sourceRejectedDatagrams": 1,
+  "sourceTraceDatagrams": 15419,
+  "sourceAlignment": "Source acquisition timestamps retained by Pi are matched to the same Windows monotonic clock; no cross-host one-way latency calculation",
+  "sourceStart": 18961.4929222,
+  "sourceEnd": 19866.3383052,
+  "sourcePhysicsSamples": 8836,
+  "inactiveSourceSamples": 2,
+  "longestContinuousHealthySourceS": 904.5589110000001,
+  "maximumPhysicsTickS": 0.061427299999195384,
+  "measuredJointRangesRad": [
+    0.46380533767945875,
+    0.2234698488757713,
+    0.49349933787949574,
+    0.24075836829814534,
+    0.48505012512783147,
+    0.2294131944020836,
+    0.47874287658889336,
+    0.22050126198916664
+  ],
+  "automaticRearm": false,
+  "journalDrops": 0,
+  "result": "PASS"
+}

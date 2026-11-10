@@ -1,5 +1,17 @@
 # Phase 4 qualification — 10 November 2026
 
+## Current remediation result
+
+**PARTIALLY VERIFIED.** [New evidence index](../evidence/phase4/2026-11-10-remediation/README.md) and [remediation report](../evidence/phase4/2026-11-10-remediation/reports/REMEDIATION.md) supersede current-status conclusions while retaining every original failure below.
+
+- Repaired implementation: `ff3827690b635510198d16516237dc77d98013e3`; 179 Windows tests passed, 39 Pi subset tests passed with 2 skips; Python/Python 3.13/Uno CI passed.
+- New 5 GHz headless qualification: 905.094 s, 4,081 healthy Pi samples, 904.559 s continuous healthy source output, all eight actual virtual joints moving in every full 10 s window.
+- Earlier remediation endurance failed at 60.943 s on genuine stale range; it remains FAIL. The preceding successful 90 s trial is separate.
+- New controlled yellow trial: 3/19 sampled frames detected with a clipped ball; not a successful full-outline trial. Physical reposition was unavailable.
+- GUI endurance and full synchronized capture remain unqualified. Computer Use was stopped by operator Escape before active GUI testing. CLI cleanup verified STOP and released the webcam.
+
+No safety age/lease threshold was increased; no physical actuator was operated. PR #6 remains draft. The historical qualification report follows unchanged.
+
 **PARTIALLY VERIFIED. Phase 4 is not complete; PR #6 must remain draft.**
 
 Tested implementation: `d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e` on

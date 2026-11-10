@@ -1,5 +1,11 @@
 # Phase 4 test matrix
 
+## Current remediation matrix
+
+The [separate 51-case remediation matrix](../evidence/phase4/2026-11-10-remediation/reports/TEST_MATRIX.md) records **23 PASS / 5 FAIL / 23 BLOCKED**, with [JSON](../evidence/phase4/2026-11-10-remediation/reports/test-matrix.json) and [CSV](../evidence/phase4/2026-11-10-remediation/reports/test-matrix.csv). These are qualification cases, not Python unit-test counts. The new headless 905 s trial passes; the original and earlier remediation failures remain failures. Mandatory target/GUI/recording gates remain open.
+
+The original 48-case matrix below is historical and has not been reclassified.
+
 **PARTIALLY VERIFIED.** Source `d29dfdb`; 10 November 2026. Each result is limited to its stated evidence class. [Full records](../evidence/phase4/2026-11-10/reports/test-matrix.json) include commands, preconditions, environment, expected/actual results and limitations.
 
 | Test ID | Result | Observation / evidence |

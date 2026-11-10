@@ -1,0 +1,16 @@
+{"started_utc": "2026-11-10T12:19:23.954756+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\robust-progress.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import json
+from pathlib import Path
+p=Path('build/phase4-remediation/robust-smoke/result.json')
+if p.exists():
+ r=json.loads(p.read_text());print(json.dumps({k:r[k] for k in ('result','durationS','samples')}));print(json.dumps({k:v for k,v in (r.get('failure') or {}).items() if k!='state'}));s=(r.get('failure') or {}).get('state',{});print('sensorFault',s.get('sensors',{}).get('fault'));print('motion',s.get('motion'))
+else: print(Path('build/phase4-remediation/robust-smoke/console.log').read_text()[-1200:])
+PY
+
+--- OBSERVED OUTPUT ---
+{"elapsedS": 0.011906187999557005, "enabled": true, "sensorSeq": 564, "front": 2.7700000000000005, "intentAgeS": 0.015428765000251587}
+{"elapsedS": 30.075836047999474, "enabled": true, "sensorSeq": 1057, "front": 2.7699999306803424, "intentAgeS": 0.0942214819988294}
+

@@ -1,5 +1,20 @@
 # Phase 4 remaining issues
 
+## Current remaining acceptance work
+
+The [remediation report](../evidence/phase4/2026-11-10-remediation/reports/REMEDIATION.md) proves a successful separate 905 s headless trial after acquisition, snapshot, cache, transport and STOP-order repairs and a qualified 5 GHz setup. Do not reinterpret the historical failures below as passes.
+
+1. Complete the separate visible-GUI 900 s healthy active run; operator Escape stopped Computer Use before it began.
+2. Resolve black PyBullet capture in the two-window recording sample and complete genuine demonstration clips. No further UI input was issued after the stop.
+3. Reposition the real yellow ball fully inside the frame; complete controlled blue/yellow center/left/right/motion/loss/reappearance/multiple-candidate/distractor/switch trials. Current yellow trial was 3/19, clipped; offline saturation experiments are not physical success.
+4. Demonstrate real target-controlled autonomous decisions with separately measured virtual joint motion, then repeat the full active safety/fault sequence on the final network setup. Synthetic and old-head tests do not substitute for these gates.
+5. Preserve the qualified setup: Pi radio power-save OFF is a runtime setting; laptop 5 GHz and a Pi-only Public-profile UDP 7002 rule were verified. The successful combined configuration does not uniquely identify the old radio buffering cause.
+6. Repeat the Windows-owned finite remote-heartbeat trial on the final 5 GHz setup. Its earlier 29.610 s SSH-tunnel timeout remains FAIL; the successful Pi-owned run establishes local healthy intent renewal, not remote HTTP reliability.
+
+The uncurated broad Pi attempt had six missing-PyBullet errors; the selected application subset passes 39 tests with two intentional Windows-only acquisition skips. The Windows suite passes all 179. PyBullet remains local 3.2.5 versus CI 3.2.7, explicitly documented. Powered Phase 5 remains unapproved.
+
+### Historical remaining-issues assessment
+
 1. **Release blocker — sustained virtual sensing.** GUI and headless operation
    intermittently exceeded front-range freshness. The receiver/host failed closed.
    The first fully healthy contiguous interval was only 560.807 s. The Pi-local
