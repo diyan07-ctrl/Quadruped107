@@ -248,6 +248,17 @@ class TraceClient:
                                 self.epoch+=1
                             self.session=server
                         state=self.source()
+                        if was_armed and not state['armed']:
+                            # STOP can occur while recvfrom is blocked. Send it
+                            # before any disarmed handshake; a delayed STOP after
+                            # that handshake would invalidate a new explicit ARM.
+                            with self.lock: self.ready=False
+                            self.seq+=1
+                            sock.sendto(encode(dict(v=1,type='stop',client=self.client,server=server,seq=self.seq)),self.address)
+                            was_armed=False
+                            self.pending=self.pending_packet=None
+                            continue
+                        was_armed=bool(state['armed'])
                         if self.pending and self.pending_packet:
                             old_nonce,old_seq,born,sent_armed,sent_stop_epoch=self.pending
                             if (nonce==old_nonce and now-born<=CHALLENGE_TTL and

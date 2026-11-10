@@ -160,6 +160,26 @@ class IntentFreshnessTests(unittest.TestCase):
 
 @unittest.skipUnless(importlib.util.find_spec('pybullet'),'PyBullet not installed')
 class AcquisitionCadenceTests(unittest.TestCase):
+    def test_newly_available_range_is_not_hidden_by_batch_cache(self):
+        from simulation.twin import World
+        from simulation.environment import Scene
+        now=[0.0];world=World()
+        try:
+            scene=Scene(world,'empty',clock=lambda:now[0],latency=.02)
+            frame=dict(virtual=True,armed=False,activeMask=0,targets=[300]*8)
+            scene.advance(frame)
+            now[0]=.099
+            old=scene.telemetry()
+            now[0]=.1;scene.advance(frame)
+            now[0]=.121;scene.advance(frame)
+            new=scene.telemetry()
+            self.assertGreater(new['seq'],old['seq'])
+            for record in new['observations']:
+                if record['kind']=='range':
+                    self.assertEqual(record['sampleSeq'],2)
+                    self.assertAlmostEqual(record['age'],.021)
+        finally: world.close()
+
     def test_sensor_acquisition_continues_between_udp_sensor_requests(self):
         from simulation.twin import World
         from simulation.environment import Scene
@@ -178,6 +198,32 @@ class AcquisitionCadenceTests(unittest.TestCase):
         finally: world.close()
 
 class LossRecoveryTests(unittest.TestCase):
+    def test_stop_during_challenge_precedes_disarmed_handshake(self):
+        now=[1.0];receiver=TraceReceiver(clock=lambda:now[0]);pending=[];sent=[]
+        state=dict(armed=True,activeMask=255,targets=[300]*8,stopEpoch=0)
+        client=TraceClient('127.0.0.1',7002,lambda:dict(state))
+        class Wire:
+            def settimeout(self,value): pass
+            def close(self): pass
+            def sendto(self,raw,address):
+                msg=decode(raw);sent.append(msg)
+                reply=receiver.handle(raw,('127.0.0.1',1234))
+                if reply: pending.append(reply)
+            def recvfrom(self,size):
+                if pending:
+                    reply=pending.pop(0)
+                    if decode(reply)['type']=='challenge': state.update(armed=False,activeMask=0,stopEpoch=1)
+                    if decode(reply)['type']=='ack': client.stop_event.set()
+                    return reply,('127.0.0.1',7002)
+                now[0]+=.02
+                if now[0]>2: client.stop_event.set()
+                raise socket.timeout()
+        with patch('quadruped.bridge.socket.socket',return_value=Wire()),patch('quadruped.bridge.time.monotonic',side_effect=lambda:now[0]):
+            client._run()
+        stop=next(i for i,m in enumerate(sent) if m['type']=='stop')
+        disarmed=next(i for i,m in enumerate(sent) if m['type']=='trace' and not m['armed'])
+        self.assertLess(stop,disarmed)
+
     def test_repeated_hello_preserves_inflight_nonce_and_original_expiry(self):
         now=[0.0];receiver=TraceReceiver(clock=lambda:now[0]);peer=('127.0.0.1',1234)
         hello=encode(dict(v=1,type='hello',client='ab'*16))

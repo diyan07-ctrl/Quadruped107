@@ -179,12 +179,17 @@ class Scene:
 
     def telemetry(self):
         now=self.clock()
-        if now>=self.next_batch:
+        ranges=[record for sensor in self.ultrasonic.values() if (record:=sensor.sample(now)) is not None]
+        # A newly available acquisition must supersede a cached batch immediately.
+        # Its own age remains intact; repeated reads never renew the measurement.
+        previous={r['id']:r.get('sampleSeq') for r in (self.last_batch or {}).get('observations',[]) if r['kind']=='range'}
+        changed={r['id']:r.get('sampleSeq') for r in ranges}!=previous
+        if now>=self.next_batch or changed:
             self.next_batch=now+.05
             self.seq+=1
             if self.scenario=="touch":
                 self.touches["head"].pressed=self.armed_at is not None and 1.0<=now-self.armed_at<1.2
-            records=[record for sensor in self.ultrasonic.values() if (record:=sensor.sample(now)) is not None]
+            records=ranges
             records += [sensor.sample(now) for sensor in self.touches.values()]
             records += [dict(id=k,kind="clearance",value=value,valid=True,age=0.0) for k,value in self.clearance().items()]
             self.last_batch=dict(schema=1,seq=self.seq,observations=records)
