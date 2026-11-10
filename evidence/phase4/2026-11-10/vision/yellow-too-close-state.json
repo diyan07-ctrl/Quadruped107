@@ -1,0 +1,515 @@
+{
+  "autonomy": {
+    "deadline": null,
+    "lastRequestedMotion": null,
+    "obstacle": "UNKNOWN",
+    "reason": "Disarmed; explicit enable required",
+    "recoveryAttempts": 0,
+    "state": "EMERGENCY_STOP",
+    "transitions": [
+      {
+        "at": 5104.700067549,
+        "previous": "IDLE",
+        "reason": "Disarmed; explicit enable required",
+        "state": "EMERGENCY_STOP"
+      }
+    ],
+    "virtual": true
+  },
+  "bridge": {
+    "ackAge": 0.024697154999557824,
+    "connected": true,
+    "epoch": 0,
+    "errors": 0,
+    "fault": null,
+    "physical": false,
+    "readyToArm": true,
+    "transport": "UDP challenge/lease"
+  },
+  "camera": {
+    "actualFps": 21.03,
+    "available": true,
+    "backend": "usb",
+    "captureMs": 60.77,
+    "device": "/dev/video0",
+    "errors": 0,
+    "frameAge": 0.09308092700030102,
+    "height": 240,
+    "lastError": null,
+    "mjpegEndpoint": "/video-feed",
+    "ownerAlive": true,
+    "reconnects": 1,
+    "requestedFps": 30,
+    "snapshotEndpoint": "/api/camera-frame",
+    "status": "usb camera connected",
+    "syntheticTarget": null,
+    "unchangedFor": 0.032340063999981794,
+    "width": 320
+  },
+  "controlModes": [
+    "explore",
+    "idle",
+    "interaction",
+    "manual",
+    "opencv",
+    "sensor_test"
+  ],
+  "decisionHistory": [
+    {
+      "at": 5104.700154029,
+      "generation": null,
+      "kind": "autonomy",
+      "motion": null,
+      "reason": "Disarmed; explicit enable required",
+      "requestId": null,
+      "seq": 1,
+      "status": "EMERGENCY_STOP",
+      "time": "11:57:50"
+    },
+    {
+      "at": 5105.69982793,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target missing",
+      "requestId": null,
+      "seq": 2,
+      "status": "searching",
+      "time": "11:57:51"
+    },
+    {
+      "at": 5132.270707718,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target detected",
+      "requestId": null,
+      "seq": 3,
+      "status": "locked",
+      "time": "11:58:18"
+    },
+    {
+      "at": 5132.342501143,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target missing",
+      "requestId": null,
+      "seq": 4,
+      "status": "reacquiring",
+      "time": "11:58:18"
+    },
+    {
+      "at": 5132.947262343,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target detected",
+      "requestId": null,
+      "seq": 5,
+      "status": "locked",
+      "time": "11:58:19"
+    },
+    {
+      "at": 5133.051988184,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target missing",
+      "requestId": null,
+      "seq": 6,
+      "status": "reacquiring",
+      "time": "11:58:19"
+    },
+    {
+      "at": 5133.285927279,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target detected",
+      "requestId": null,
+      "seq": 7,
+      "status": "locked",
+      "time": "11:58:19"
+    },
+    {
+      "at": 5133.33599873,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target missing",
+      "requestId": null,
+      "seq": 8,
+      "status": "reacquiring",
+      "time": "11:58:19"
+    },
+    {
+      "at": 5133.869561643,
+      "generation": 1,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target missing",
+      "requestId": null,
+      "seq": 9,
+      "status": "searching",
+      "time": "11:58:20"
+    },
+    {
+      "at": 5175.423090091,
+      "generation": 1,
+      "kind": "stop",
+      "motion": null,
+      "reason": "Vision configuration changed; explicit enable required",
+      "requestId": null,
+      "seq": 10,
+      "status": "locally_inhibited",
+      "time": "11:59:01"
+    },
+    {
+      "at": 5175.431445023,
+      "generation": 2,
+      "kind": "configuration",
+      "motion": null,
+      "reason": "yellow target selected",
+      "requestId": null,
+      "seq": 11,
+      "status": "applied_disarmed",
+      "time": "11:59:01"
+    },
+    {
+      "at": 5175.463250006,
+      "generation": 2,
+      "kind": "perception",
+      "motion": null,
+      "reason": "yellow target missing",
+      "requestId": null,
+      "seq": 12,
+      "status": "searching",
+      "time": "11:59:01"
+    }
+  ],
+  "features": {
+    "handGesture": false,
+    "virtualSensors": true
+  },
+  "link": {
+    "activeMask": 0,
+    "activeMotion": null,
+    "armed": false,
+    "connected": true,
+    "epoch": 1,
+    "error": null,
+    "kind": "virtual-uno",
+    "port": "virtual://uno",
+    "queued": 0,
+    "samples": 0,
+    "stopping": false,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "telemetry": {
+      "age": null,
+      "errors": 0,
+      "receiveFresh": false,
+      "record": null,
+      "supported": false
+    },
+    "virtual": true,
+    "virtualFault": null
+  },
+  "motion": {
+    "appMode": "manual",
+    "busy": false,
+    "currentMotion": "none",
+    "desiredMotion": "none",
+    "enabled": false,
+    "executedGeneration": 1,
+    "fault": "Startup; explicit enable required",
+    "generation": 1,
+    "lastError": null,
+    "lastRequest": null,
+    "lastResult": "Vision configuration changed; explicit enable required",
+    "session": 0,
+    "stopping": false
+  },
+  "motionModes": [
+    "backward",
+    "forward",
+    "greeting",
+    "initial",
+    "stand",
+    "tail_wag",
+    "turn_left",
+    "turn_right"
+  ],
+  "obstacleVirtual": false,
+  "ok": true,
+  "physicalActuationAllowed": false,
+  "sensors": {
+    "config": {
+      "conflict_m": 0.2,
+      "debounce": 0.03,
+      "expiration": 0.3,
+      "max_m": 4.0,
+      "min_m": 0.02,
+      "rate_hz": 10.0,
+      "stuck_seconds": 2.0,
+      "timeout": 0.3,
+      "touch_count": 5
+    },
+    "events": [],
+    "fault": null,
+    "front_m": 2.7700000000000005,
+    "observations": {
+      "hcsr04": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "hcsr04",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_forward": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_forward",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_left": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_left",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_reverse": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_reverse",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_right": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_right",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_back": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_back",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_body": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_body",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_head": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_head",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_left": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_left",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_right": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_right",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "urm37": {
+        "age": 0.0431565180006146,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "urm37",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      }
+    },
+    "receivedAge": 0.02456656499998644,
+    "rejected": 325,
+    "seq": 811,
+    "session": "643263e41304a82cf99f3bd8f4ea82d4",
+    "touches": {
+      "touch_back": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_body": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_head": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_left": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_right": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      }
+    },
+    "virtual": true
+  },
+  "simulation": true,
+  "system": {
+    "architecture": "aarch64",
+    "availableMemoryBytes": 1521790976,
+    "measurementHost": "diyan07",
+    "pid": 2136,
+    "processCpuPercent": 58.28,
+    "rssBytes": 170704896
+  },
+  "vision": {
+    "behavior": "EMERGENCY_STOP",
+    "blueBall": {
+      "area": 0,
+      "bbox": null,
+      "candidates": [],
+      "circleArea": 0,
+      "circularity": 0,
+      "detected": false,
+      "fillRatio": 0,
+      "frameAge": 0.07439892100046563,
+      "frameHeight": 240,
+      "frameWidth": 320,
+      "lockId": 0,
+      "lockState": "searching",
+      "maskArea": 0,
+      "observed_at": 5175.485520435,
+      "offset": null,
+      "processingHeight": 240,
+      "processingWidth": 320,
+      "radius": null,
+      "rejectReason": "mask_too_small",
+      "revision": 2,
+      "targetColor": "yellow",
+      "x": null,
+      "y": null
+    },
+    "hand": {},
+    "handGesture": "Not configured",
+    "observationAge": 0.09174090100077592,
+    "opencv": "Disarmed; explicit enable required",
+    "processingFps": 19.59,
+    "processingMs": 8.41,
+    "targetColor": "yellow",
+    "targetFresh": true,
+    "transitions": []
+  },
+  "visionConfig": {
+    "persisted": true,
+    "revision": 2,
+    "settings": {
+      "command_period": 0.6,
+      "enter_error": 0.32,
+      "exit_error": 0.2,
+      "hsv_lower": [
+        20,
+        70,
+        70
+      ],
+      "hsv_upper": [
+        45,
+        255,
+        255
+      ],
+      "lock_distance": 0.2,
+      "loss_seconds": 0.35,
+      "max_age": 0.5,
+      "max_radius_ratio": 0.38,
+      "min_area": 150,
+      "min_circularity": 0.55,
+      "min_frames": 2,
+      "min_radius": 8,
+      "reacquire_seconds": 0.6,
+      "search_enabled": false,
+      "search_seconds": 2.0,
+      "smoothing_alpha": 0.35,
+      "target_color": "yellow"
+    }
+  }
+}

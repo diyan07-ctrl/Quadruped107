@@ -43,11 +43,30 @@ Open the camera once, after checking for other consumers. In a Pi foreground she
 
 From Windows, forward the loopback dashboard with `ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:17000:127.0.0.1:7000 PI_USER@PI_ADDRESS` and open `http://127.0.0.1:17000`. Confirm the camera is fresh, the virtual sensor data is valid, and the bridge has a disarmed handshake before any explicit virtual enable.
 
-Measure actual camera and perception FPS, frame age, CPU/RSS and Stop/re-enable behavior. Confirm that **real camera -> OpenCV -> decision -> virtual Uno -> UDP -> articulated PyBullet** is functioning; synthetic tests do not establish this. No camera recordings are required.
+Measure actual camera and perception FPS, frame age, CPU/RSS and Stop/re-enable behavior. Confirm that **real camera -> OpenCV -> decision -> virtual Uno -> UDP -> articulated PyBullet** is functioning; synthetic tests do not establish this. Record genuine tests where recording is available, retain full logs, and keep large or private footage out of normal Git history.
 
 For a simulator restart, verify disarm and zero active outputs before and after reconnection. A Winsock reset from a closed UDP port is recoverable on both the application and simulator sockets. A reset cannot refresh the receiver lease or substitute for a new disarmed handshake.
 
 ## Qualification record
+
+### Current hardware session — 10 November 2026
+
+**PARTIALLY VERIFIED.** Authenticated Pi access, clean isolated worktree,
+successful preflight, real USB capture at both resolutions, real blue-object
+observations, Pi-to-Windows UDP, live dashboard, virtual STOP/fault tests and
+measured motion of all eight PyBullet joints were executed. The repaired Windows
+suite passed 163 tests and both Uno sketches compiled without upload.
+
+Yellow tracking and sustained freshness/endurance did not meet all acceptance
+gates. Do not mark this PR complete or begin powered actuator qualification.
+The [current qualification report](PHASE4_VALIDATION.md),
+[test matrix](PHASE4_TEST_MATRIX.md), [performance report](PHASE4_PERFORMANCE.md),
+[safety report](PHASE4_SAFETY.md) and
+[evidence index](../evidence/phase4/2026-11-10/README.md) supersede the earlier
+access-blocked status below. Exact instrumented launches are preserved with the
+evidence; the GUI session used UDP 17012 and the headless retest UDP 7002.
+
+### Historical checkpoint before this session
 
 - **AUTOMATED TESTED** — Reproduced the restricted-refspec tracking error in a disposable single-branch checkout. Adding the Phase 4 refspec repaired the checkout and made the preflight script available. The Windows suite passed 161 tests, up from the Phase 3 baseline of 157. The model generator, motion data, power tables, simulator validation, model study, proxy probe, and dashboard DOM checks also passed. Both production and virtual Uno sketches compiled locally.
 - **WINDOWS SIMULATOR VERIFIED** — Windows 11 rendered the model in the PyBullet OpenGL window and bound UDP 7002 on the private interface. The PyPI 3.2.7 pin required an MSVC source build on this machine. Local simulator runs used conda-forge PyBullet 3.25 with Python 3.11. The repository pin remains 3.2.7 for CI.

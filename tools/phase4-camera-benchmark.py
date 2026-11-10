@@ -27,6 +27,7 @@ def main():
                                ('width',cv2.CAP_PROP_FRAME_WIDTH,width),('height',cv2.CAP_PROP_FRAME_HEIGHT,height),
                                ('fps',cv2.CAP_PROP_FPS,request_fps),('buffers',cv2.CAP_PROP_BUFFERSIZE,1)]:
             properties[name]=dict(requested=value,accepted=cap.set(key,value),reported=cap.get(key))
+        started_utc=datetime.now(timezone.utc).isoformat()
         start=time.monotonic()
         cpu=time.process_time()
         latencies=[]
@@ -54,7 +55,7 @@ def main():
         finally: cap.release()
         elapsed=time.monotonic()-start
         ordered=sorted(latencies)
-        record=dict(started_utc=datetime.now(timezone.utc).isoformat(),source='REAL PI USB V4L2',
+        record=dict(started_utc=started_utc,ended_utc=datetime.now(timezone.utc).isoformat(),source='REAL PI USB V4L2',
           resolution=dimensions,properties=properties,duration_s=elapsed,successful_frames=len(latencies),
           failed_frames=failed,driver_dropped_frames=None,capture_fps=len(latencies)/elapsed,
           vision_throughput_fps=len(process)/elapsed,detector_compute_capacity_fps=len(process)/sum(process),

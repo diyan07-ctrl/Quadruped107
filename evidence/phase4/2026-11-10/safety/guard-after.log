@@ -1,0 +1,17 @@
+./build/phase4-toolchain/python311/python.exe : test_current_fault_still_disarms 
+(test_safety.BridgeGuardGenerationTests.test_current_fault_still_disarms) ... ok
+At line:2 char:38
++ ... /pi;tests'; ./build/phase4-toolchain/python311/python.exe -m unittest ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_current_fa...disarms) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_delayed_fault_cannot_stop_a_later_explicit_enable 
+(test_safety.BridgeGuardGenerationTests.test_delayed_fault_cannot_stop_a_later_explicit_enable) ... ok
+test_reset_disconnect_and_reconnect_never_rearm 
+(test_phase2.LifecycleRegressionTests.test_reset_disconnect_and_reconnect_never_rearm) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.885s
+
+OK

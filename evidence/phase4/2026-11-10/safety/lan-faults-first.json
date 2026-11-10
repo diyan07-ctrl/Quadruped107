@@ -1,0 +1,1576 @@
+[
+  {
+    "id": "F-UDP-LOSS",
+    "started_utc": "2026-11-10T07:10:11.370993+00:00",
+    "classification": "REAL PI/LAN; SIMULATED SENSOR/ACTUATOR FAULTS",
+    "injection": {
+      "pause_udp": true
+    },
+    "injection_to_observed_output_off_ms": 1031.0000000026776,
+    "observed": {
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 50,
+        "fault": "Missing, invalid or stale front range",
+        "generation": 50,
+        "lastError": null,
+        "lastRequest": null,
+        "lastResult": "Missing, invalid or stale front range",
+        "session": 8,
+        "stopping": false
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          289,
+          110,
+          311,
+          500,
+          310,
+          495,
+          269,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "bridge": {
+        "ackAge": 0.25401238999984344,
+        "connected": true,
+        "epoch": 0,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "sensors": {
+        "config": {
+          "conflict_m": 0.2,
+          "debounce": 0.03,
+          "expiration": 0.3,
+          "max_m": 4.0,
+          "min_m": 0.02,
+          "rate_hz": 10.0,
+          "stuck_seconds": 2.0,
+          "timeout": 0.3,
+          "touch_count": 5
+        },
+        "events": [],
+        "fault": "Missing, invalid or stale front range",
+        "front_m": null,
+        "observations": {
+          "hcsr04": {
+            "age": 0.34271112899386935,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "hcsr04",
+            "kind": "range",
+            "measurement": 2.769999934382888,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_forward": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_forward",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_left": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_left",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_reverse": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_reverse",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_right": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_right",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_back": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_back",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_body": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_body",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_head": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_head",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_left": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_left",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_right": {
+            "age": 0.26471112899980653,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_right",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "urm37": {
+            "age": 0.34271112899386935,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "urm37",
+            "kind": "range",
+            "measurement": 2.769999934382888,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          }
+        },
+        "receivedAge": 0.2538915409995752,
+        "rejected": 8662,
+        "seq": 31789,
+        "session": "643263e41304a82cf99f3bd8f4ea82d4",
+        "touches": {
+          "touch_back": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_body": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_head": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_left": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_right": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          }
+        },
+        "virtual": true
+      },
+      "autonomy": {
+        "deadline": null,
+        "lastRequestedMotion": null,
+        "obstacle": "UNKNOWN",
+        "reason": "Disarmed; explicit enable required",
+        "recoveryAttempts": 0,
+        "state": "EMERGENCY_STOP",
+        "transitions": [
+          {
+            "at": 5104.700067549,
+            "previous": "IDLE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5601.948398992,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5602.992260141,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5605.516994399,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5608.742852518,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5609.250495424,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5612.731741046,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5613.299447064,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5616.714038442,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5617.0609534,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5620.405497747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5620.909620199,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5621.950387524,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5624.524352111,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5624.64454405,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7646.262176566,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7647.339414697,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7647.360269502,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          }
+        ],
+        "virtual": true
+      }
+    },
+    "result": "PASS",
+    "automatic_rearm": false
+  },
+  {
+    "id": "F-SIM-RESET",
+    "started_utc": "2026-11-10T07:10:14.872062+00:00",
+    "classification": "REAL PI/LAN; SIMULATED SENSOR/ACTUATOR FAULTS",
+    "injection": {
+      "reset": true
+    },
+    "injection_to_observed_output_off_ms": 437.9999999946449,
+    "observed": {
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 55,
+        "fault": "Missing, invalid or stale front range",
+        "generation": 55,
+        "lastError": null,
+        "lastRequest": null,
+        "lastResult": "Missing, invalid or stale front range",
+        "session": 9,
+        "stopping": false
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          110,
+          311,
+          500,
+          310,
+          495,
+          336,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "bridge": {
+        "ackAge": 0.0030460099997071666,
+        "connected": true,
+        "epoch": 2,
+        "errors": 0,
+        "fault": "Simulator reset; explicit re-arm required",
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "sensors": {
+        "config": {
+          "conflict_m": 0.2,
+          "debounce": 0.03,
+          "expiration": 0.3,
+          "max_m": 4.0,
+          "min_m": 0.02,
+          "rate_hz": 10.0,
+          "stuck_seconds": 2.0,
+          "timeout": 0.3,
+          "touch_count": 5
+        },
+        "events": [],
+        "fault": null,
+        "front_m": 2.7700000000000005,
+        "observations": {
+          "hcsr04": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "hcsr04",
+            "kind": "range",
+            "measurement": 2.7700000000000005,
+            "unit": "m",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_forward": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_forward",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_left": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_left",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_reverse": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_reverse",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_right": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_right",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_back": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_back",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_body": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_body",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_head": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_head",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_left": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_left",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_right": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_right",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "urm37": {
+            "age": 0.026438448000590142,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "urm37",
+            "kind": "range",
+            "measurement": 2.7700000000000005,
+            "unit": "m",
+            "valid": true,
+            "virtual": true
+          }
+        },
+        "receivedAge": 0.0029664940002476214,
+        "rejected": 8671,
+        "seq": 3,
+        "session": "d54c1e9900d43694f057b172454f6a64",
+        "touches": {
+          "touch_back": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_body": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_head": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_left": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_right": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          }
+        },
+        "virtual": true
+      },
+      "autonomy": {
+        "deadline": null,
+        "lastRequestedMotion": null,
+        "obstacle": "UNKNOWN",
+        "reason": "Disarmed; explicit enable required",
+        "recoveryAttempts": 0,
+        "state": "EMERGENCY_STOP",
+        "transitions": [
+          {
+            "at": 5104.700067549,
+            "previous": "IDLE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5601.948398992,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5602.992260141,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5605.516994399,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5608.742852518,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5609.250495424,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5612.731741046,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5613.299447064,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5616.714038442,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5617.0609534,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5620.405497747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5620.909620199,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5621.950387524,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5624.524352111,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5624.64454405,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7646.262176566,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7647.339414697,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7647.360269502,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7649.852378577,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7650.256474051,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7650.277336781,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          }
+        ],
+        "virtual": true
+      }
+    },
+    "result": "PASS",
+    "automatic_rearm": false
+  },
+  {
+    "id": "F-SENSOR-STALE",
+    "started_utc": "2026-11-10T07:10:16.941502+00:00",
+    "classification": "REAL PI/LAN; SIMULATED SENSOR/ACTUATOR FAULTS",
+    "injection": {
+      "stale_sensors": true
+    },
+    "injection_to_observed_output_off_ms": 250.0,
+    "observed": {
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 60,
+        "fault": "Missing, invalid or stale front range",
+        "generation": 60,
+        "lastError": null,
+        "lastRequest": null,
+        "lastResult": "Missing, invalid or stale front range",
+        "session": 10,
+        "stopping": false
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          150,
+          311,
+          500,
+          310,
+          495,
+          336,
+          150
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "bridge": {
+        "ackAge": 0.010633980999955384,
+        "connected": true,
+        "epoch": 3,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "sensors": {
+        "config": {
+          "conflict_m": 0.2,
+          "debounce": 0.03,
+          "expiration": 0.3,
+          "max_m": 4.0,
+          "min_m": 0.02,
+          "rate_hz": 10.0,
+          "stuck_seconds": 2.0,
+          "timeout": 0.3,
+          "touch_count": 5
+        },
+        "events": [],
+        "fault": "Missing, invalid or stale front range",
+        "front_m": null,
+        "observations": {
+          "hcsr04": {
+            "age": 2.1489346309981556,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "hcsr04",
+            "kind": "range",
+            "measurement": null,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_forward": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_forward",
+            "kind": "clearance",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_left": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_left",
+            "kind": "clearance",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_reverse": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_reverse",
+            "kind": "clearance",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "sweep_right": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "sweep_right",
+            "kind": "clearance",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_back": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_back",
+            "kind": "touch",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_body": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_body",
+            "kind": "touch",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_head": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_head",
+            "kind": "touch",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_left": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_left",
+            "kind": "touch",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "touch_right": {
+            "age": 2.069934631000251,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "touch_right",
+            "kind": "touch",
+            "measurement": null,
+            "unit": "boolean",
+            "valid": false,
+            "virtual": true
+          },
+          "urm37": {
+            "age": 2.1489346309981556,
+            "error": "Observation expired",
+            "fresh": false,
+            "health": "STALE",
+            "id": "urm37",
+            "kind": "range",
+            "measurement": null,
+            "unit": "m",
+            "valid": false,
+            "virtual": true
+          }
+        },
+        "receivedAge": 0.043502109000655764,
+        "rejected": 8682,
+        "seq": 12,
+        "session": "264be79dfdd8c416bfea7d06542d3603",
+        "touches": {
+          "touch_back": {
+            "pressed": false,
+            "stuck": false,
+            "valid": false
+          },
+          "touch_body": {
+            "pressed": false,
+            "stuck": false,
+            "valid": false
+          },
+          "touch_head": {
+            "pressed": false,
+            "stuck": false,
+            "valid": false
+          },
+          "touch_left": {
+            "pressed": false,
+            "stuck": false,
+            "valid": false
+          },
+          "touch_right": {
+            "pressed": false,
+            "stuck": false,
+            "valid": false
+          }
+        },
+        "virtual": true
+      },
+      "autonomy": {
+        "deadline": null,
+        "lastRequestedMotion": null,
+        "obstacle": "UNKNOWN",
+        "reason": "Disarmed; explicit enable required",
+        "recoveryAttempts": 0,
+        "state": "EMERGENCY_STOP",
+        "transitions": [
+          {
+            "at": 5104.700067549,
+            "previous": "IDLE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5601.948398992,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5602.992260141,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5605.516994399,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5608.742852518,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5609.250495424,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5612.731741046,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5613.299447064,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5616.714038442,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5617.0609534,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5620.405497747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5620.909620199,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5621.950387524,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5624.524352111,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5624.64454405,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7646.262176566,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7647.339414697,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7647.360269502,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7649.852378577,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7650.256474051,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7650.277336781,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7651.938878697,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7652.181119316,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          }
+        ],
+        "virtual": true
+      }
+    },
+    "result": "PASS",
+    "automatic_rearm": false
+  },
+  {
+    "id": "F-OBSTACLE",
+    "started_utc": "2026-11-10T07:10:19.888685+00:00",
+    "classification": "REAL PI/LAN; SIMULATED SENSOR/ACTUATOR FAULTS",
+    "injection": {
+      "obstacle": true
+    },
+    "injection_to_observed_output_off_ms": 297.0000000059372,
+    "observed": {
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 65,
+        "fault": "Forward clearance below caution threshold",
+        "generation": 65,
+        "lastError": null,
+        "lastRequest": null,
+        "lastResult": "Forward clearance below caution threshold",
+        "session": 11,
+        "stopping": false
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          190,
+          311,
+          500,
+          310,
+          495,
+          336,
+          190
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "bridge": {
+        "ackAge": 0.014780877000703185,
+        "connected": true,
+        "epoch": 4,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "sensors": {
+        "config": {
+          "conflict_m": 0.2,
+          "debounce": 0.03,
+          "expiration": 0.3,
+          "max_m": 4.0,
+          "min_m": 0.02,
+          "rate_hz": 10.0,
+          "stuck_seconds": 2.0,
+          "timeout": 0.3,
+          "touch_count": 5
+        },
+        "events": [],
+        "fault": null,
+        "front_m": 0.2500000000000008,
+        "observations": {
+          "hcsr04": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "hcsr04",
+            "kind": "range",
+            "measurement": 0.2500000000000008,
+            "unit": "m",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_forward": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_forward",
+            "kind": "clearance",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_left": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_left",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_reverse": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_reverse",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "sweep_right": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "sweep_right",
+            "kind": "clearance",
+            "measurement": true,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_back": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_back",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_body": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_body",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_head": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_head",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_left": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_left",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "touch_right": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "touch_right",
+            "kind": "touch",
+            "measurement": false,
+            "unit": "boolean",
+            "valid": true,
+            "virtual": true
+          },
+          "urm37": {
+            "age": 0.09989670700088027,
+            "error": null,
+            "fresh": true,
+            "health": "OK",
+            "id": "urm37",
+            "kind": "range",
+            "measurement": 0.2500000000000008,
+            "unit": "m",
+            "valid": true,
+            "virtual": true
+          }
+        },
+        "receivedAge": 0.0752726110004005,
+        "rejected": 8693,
+        "seq": 26,
+        "session": "3507e97372bf260ed8d06d542b449283",
+        "touches": {
+          "touch_back": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_body": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_head": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_left": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          },
+          "touch_right": {
+            "pressed": false,
+            "stuck": false,
+            "valid": true
+          }
+        },
+        "virtual": true
+      },
+      "autonomy": {
+        "deadline": null,
+        "lastRequestedMotion": null,
+        "obstacle": "UNKNOWN",
+        "reason": "Disarmed; explicit enable required",
+        "recoveryAttempts": 0,
+        "state": "EMERGENCY_STOP",
+        "transitions": [
+          {
+            "at": 5104.700067549,
+            "previous": "IDLE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5601.948398992,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5602.992260141,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5605.516994399,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5608.742852518,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5609.250495424,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5612.731741046,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5613.299447064,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5616.714038442,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5617.0609534,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5620.405497747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5620.909620199,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5621.950387524,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 5624.524352111,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 5624.64454405,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7646.262176566,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7647.339414697,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7647.360269502,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7649.852378577,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7650.256474051,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Missing, invalid or stale front range",
+            "state": "SENSOR_FAULT"
+          },
+          {
+            "at": 7650.277336781,
+            "previous": "SENSOR_FAULT",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7651.938878697,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7652.181119316,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          },
+          {
+            "at": 7654.909764125,
+            "previous": "EMERGENCY_STOP",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 7655.145440863,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Disarmed; explicit enable required",
+            "state": "EMERGENCY_STOP"
+          }
+        ],
+        "virtual": true
+      }
+    },
+    "result": "PASS",
+    "automatic_rearm": false
+  }
+]

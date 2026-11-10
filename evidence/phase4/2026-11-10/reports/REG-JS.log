@@ -1,0 +1,1 @@
+{"id": "REG-JS", "started_utc": "2026-11-10T06:08:51.251258+00:00", "commit": "be9fe3feeddf8fb06b36e708a775ab52b215eccf", "argv": ["node", "--check", "software/pi/quadruped/web/app.js"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107"}

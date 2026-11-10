@@ -58,7 +58,7 @@ Physical sensor drivers, qualified stopping and walking remain pending. The opti
 
 Primary: Pi 4 Model B (2 GB), mandatory Uno R3, eight MG996R/MG995-family servos and PCA9685. The functional USB2.0 PC CAMERA is the current camera candidate; CSI/Picamera2 remains optional. URM37, HC-SR04, touch sensors, three 7.4 V/1800 mAh packs and a power bank await module/power qualification. Pi 5, pan servo and OLED remain optional.
 
-Automated software and simulated integration evidence is in [VALIDATION](docs/VALIDATION.md). SSH access was blocked before authentication, so no new Pi performance or physical camera results are claimed. The articulated model uses original mesh surfaces with provisional pivots, masses and calibration; it does not establish physical walking feasibility.
+Automated software evidence is in [VALIDATION](docs/VALIDATION.md). The [current Phase 4 report](docs/PHASE4_VALIDATION.md) records authenticated Pi access, real USB-camera measurements and real LAN virtual-actuator testing. Phase 4 is **PARTIALLY VERIFIED**: yellow tracking and sustained freshness/endurance remain acceptance blockers. The articulated model uses original mesh surfaces with provisional pivots, masses and calibration; it does not establish physical walking feasibility.
 
 [Architecture](docs/ARCHITECTURE.md) · [Software](docs/SOFTWARE.md) · [Protocol](docs/PROTOCOL.md) · [Safety](docs/SAFETY.md) · [Calibration](docs/CALIBRATION.md) · [Hardware verification](docs/HARDWARE_VERIFICATION.md) · [Roadmap](docs/ROADMAP.md) · [Design decisions](docs/DECISIONS.md)
 

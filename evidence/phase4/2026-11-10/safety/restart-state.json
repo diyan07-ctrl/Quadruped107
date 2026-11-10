@@ -1,0 +1,441 @@
+{
+  "autonomy": {
+    "deadline": null,
+    "lastRequestedMotion": null,
+    "obstacle": "UNKNOWN",
+    "reason": "Disarmed; explicit enable required",
+    "recoveryAttempts": 0,
+    "state": "EMERGENCY_STOP",
+    "transitions": [
+      {
+        "at": 8707.397666341,
+        "previous": "IDLE",
+        "reason": "Disarmed; explicit enable required",
+        "state": "EMERGENCY_STOP"
+      }
+    ],
+    "virtual": true
+  },
+  "bridge": {
+    "ackAge": 0.05978644599963445,
+    "connected": true,
+    "epoch": 0,
+    "errors": 0,
+    "fault": null,
+    "physical": false,
+    "readyToArm": true,
+    "transport": "UDP challenge/lease"
+  },
+  "camera": {
+    "actualFps": 8.33,
+    "available": true,
+    "backend": "usb",
+    "captureMs": 116.81,
+    "device": "/dev/video0",
+    "errors": 0,
+    "frameAge": 0.22730939899884106,
+    "height": 240,
+    "lastError": null,
+    "mjpegEndpoint": "/video-feed",
+    "ownerAlive": true,
+    "reconnects": 1,
+    "requestedFps": 30,
+    "snapshotEndpoint": "/api/camera-frame",
+    "status": "usb camera connected",
+    "syntheticTarget": null,
+    "unchangedFor": 0.11052413499965041,
+    "width": 320
+  },
+  "controlModes": [
+    "explore",
+    "idle",
+    "interaction",
+    "manual",
+    "opencv",
+    "sensor_test"
+  ],
+  "decisionHistory": [
+    {
+      "at": 8707.397744229,
+      "generation": null,
+      "kind": "autonomy",
+      "motion": null,
+      "reason": "Disarmed; explicit enable required",
+      "requestId": null,
+      "seq": 1,
+      "status": "EMERGENCY_STOP",
+      "time": "12:57:53"
+    },
+    {
+      "at": 8708.335481512,
+      "generation": 5,
+      "kind": "perception",
+      "motion": null,
+      "reason": "blue target detected",
+      "requestId": null,
+      "seq": 2,
+      "status": "locked",
+      "time": "12:57:54"
+    }
+  ],
+  "features": {
+    "handGesture": false,
+    "virtualSensors": true
+  },
+  "link": {
+    "activeMask": 0,
+    "activeMotion": null,
+    "armed": false,
+    "connected": true,
+    "epoch": 1,
+    "error": null,
+    "kind": "virtual-uno",
+    "port": "virtual://uno",
+    "queued": 0,
+    "samples": 0,
+    "stopping": false,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "telemetry": {
+      "age": null,
+      "errors": 0,
+      "receiveFresh": false,
+      "record": null,
+      "supported": false
+    },
+    "virtual": true,
+    "virtualFault": null
+  },
+  "motion": {
+    "appMode": "manual",
+    "busy": false,
+    "currentMotion": "none",
+    "desiredMotion": "none",
+    "enabled": false,
+    "executedGeneration": 0,
+    "fault": "Startup; explicit enable required",
+    "generation": 0,
+    "lastError": null,
+    "lastRequest": null,
+    "lastResult": "Connect the Uno, then enable servos",
+    "session": 0,
+    "stopping": false
+  },
+  "motionModes": [
+    "backward",
+    "forward",
+    "greeting",
+    "initial",
+    "stand",
+    "tail_wag",
+    "turn_left",
+    "turn_right"
+  ],
+  "obstacleVirtual": false,
+  "ok": true,
+  "physicalActuationAllowed": false,
+  "sensors": {
+    "config": {
+      "conflict_m": 0.2,
+      "debounce": 0.03,
+      "expiration": 0.3,
+      "max_m": 4.0,
+      "min_m": 0.02,
+      "rate_hz": 10.0,
+      "stuck_seconds": 2.0,
+      "timeout": 0.3,
+      "touch_count": 5
+    },
+    "events": [],
+    "fault": null,
+    "front_m": 2.7700000000000005,
+    "observations": {
+      "hcsr04": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "hcsr04",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_forward": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_forward",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_left": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_left",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_reverse": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_reverse",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_right": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_right",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_back": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_back",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_body": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_body",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_head": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_head",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_left": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_left",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_right": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_right",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "urm37": {
+        "age": 0.11166920400137315,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "urm37",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": true,
+        "virtual": true
+      }
+    },
+    "receivedAge": 0.09693973200046457,
+    "rejected": 541,
+    "seq": 2162,
+    "session": "8c4b312246dbef8f086069ad14257778",
+    "touches": {
+      "touch_back": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_body": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_head": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_left": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      },
+      "touch_right": {
+        "pressed": false,
+        "stuck": false,
+        "valid": true
+      }
+    },
+    "virtual": true
+  },
+  "simulation": true,
+  "system": {
+    "architecture": "aarch64",
+    "availableMemoryBytes": 1514962944,
+    "measurementHost": "diyan07",
+    "pid": 8655,
+    "processCpuPercent": 33.21,
+    "rssBytes": 169717760
+  },
+  "vision": {
+    "behavior": "EMERGENCY_STOP",
+    "blueBall": {
+      "area": 9657,
+      "bbox": [
+        135,
+        118,
+        117,
+        110
+      ],
+      "candidates": [
+        {
+          "bbox": [
+            135,
+            118,
+            117,
+            110
+          ],
+          "circleArea": 10904,
+          "circularity": 0.862,
+          "contourArea": 9657,
+          "fillRatio": 0.886,
+          "radius": 59,
+          "x": 193,
+          "y": 171
+        }
+      ],
+      "circleArea": 10904,
+      "circularity": 0.862,
+      "contourArea": 9657,
+      "detected": true,
+      "fillRatio": 0.886,
+      "frameAge": 0.14372461299899442,
+      "frameHeight": 240,
+      "frameWidth": 320,
+      "lockId": 2,
+      "lockState": "locked",
+      "maskArea": 9762,
+      "observed_at": 8873.654961706,
+      "offset": 0.20716423166203285,
+      "processingHeight": 240,
+      "processingWidth": 320,
+      "radius": 59,
+      "rawOffset": 0.20625,
+      "rejectReason": null,
+      "revision": 5,
+      "targetColor": "blue",
+      "x": 193,
+      "y": 171
+    },
+    "hand": {},
+    "handGesture": "Not configured",
+    "observationAge": 0.22593727899948135,
+    "opencv": "Disarmed; explicit enable required",
+    "processingFps": 8.26,
+    "processingMs": 10.88,
+    "targetColor": "blue",
+    "targetFresh": true,
+    "transitions": [
+      {
+        "at": 8707.397052502,
+        "previous": "IDLE",
+        "reason": "No valid observation",
+        "state": "CAMERA_FAULT"
+      },
+      {
+        "at": 8708.333093895,
+        "previous": "CAMERA_FAULT",
+        "reason": "",
+        "state": "IDLE"
+      }
+    ]
+  },
+  "visionConfig": {
+    "persisted": true,
+    "revision": 5,
+    "settings": {
+      "command_period": 0.6,
+      "enter_error": 0.32,
+      "exit_error": 0.2,
+      "hsv_lower": [
+        95,
+        40,
+        30
+      ],
+      "hsv_upper": [
+        140,
+        255,
+        255
+      ],
+      "lock_distance": 0.2,
+      "loss_seconds": 0.35,
+      "max_age": 0.5,
+      "max_radius_ratio": 0.38,
+      "min_area": 150,
+      "min_circularity": 0.55,
+      "min_frames": 2,
+      "min_radius": 8,
+      "reacquire_seconds": 0.6,
+      "search_enabled": false,
+      "search_seconds": 2.0,
+      "smoothing_alpha": 0.35,
+      "target_color": "blue"
+    }
+  }
+}

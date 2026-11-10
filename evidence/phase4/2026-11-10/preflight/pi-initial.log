@@ -1,0 +1,14 @@
+ssh : bash: -c: line 1: syntax error near unexpected token 
+`sys.version,cv2.__version__,numpy.__version__,quadruped.__file__'
+At line:2 char:1
++ ssh -o BatchMode=yes -o ConnectTimeout=8 diyan07@192.168.1.42 'cd ~/Q ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (bash: -c: line ...ruped.__file__':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+bash: -c: line 1: `cd ~/Quadruped107 && date -u --iso-8601=seconds && git status --short --branch && git rev-parse 
+HEAD && git config --get-all remote.origin.fetch; cat /etc/os-release; free -m; df -h /; vcgencmd get_throttled; ls -l 
+/dev/video*; id; ip -br -4 address; ss -ltnp; pgrep -af quadruped; v4l2-ctl --list-devices; v4l2-ctl -d /dev/video0 
+--list-formats-ext; cd ~/Quadruped107 && .venv-pi-virtual/bin/python tools/pi-preflight.py && 
+.venv-pi-virtual/bin/python -c import sys,cv2,numpy,flask,serial,quadruped; 
+print(sys.version,cv2.__version__,numpy.__version__,quadruped.__file__)'

@@ -1,0 +1,85 @@
+{"started_utc": "2026-11-10T07:54:26.056469+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-protocol-check.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python - <<'PYUNO'
+import json
+from quadruped.virtual_uno import VirtualUno
+uno=VirtualUno()
+lines=[]
+uno.emit=lines.append
+uno.feed(b'HELLO\nMOVE 1 forward\nARM 2\nMOVE 3 forward\nSTOP 4\nARM 5\nSERVO 6 9 999\nSTOP 7\n')
+assert any(line.startswith('ACCEPT 3') for line in lines)
+assert any(line.startswith('ERR 1') for line in lines)
+assert any(line.startswith('ERR 6') for line in lines)
+assert uno.snapshot()['activeMask']==0 and not uno.snapshot()['armed']
+print(json.dumps(dict(id='D-VUNO-PI',classification='PI HOST VIRTUAL UNO, SEPARATE PROTOCOL INSTANCE',result='PASS',responses=lines,final=uno.snapshot()),indent=2))
+PYUNO
+PYTHONPATH=software/pi:tests ~/Quadruped107/.venv-pi-virtual/bin/python -m unittest test_pi_preflight test_telemetry -v
+cd ~/Quadruped107
+sha256sum build/phase4-qualification/original-staged.patch build/phase4-qualification/original-unstaged.patch
+git diff --cached --binary | sha256sum
+git diff --binary | sha256sum
+
+--- OBSERVED OUTPUT ---
+{
+  "id": "D-VUNO-PI",
+  "classification": "PI HOST VIRTUAL UNO, SEPARATE PROTOCOL INSTANCE",
+  "result": "PASS",
+  "responses": [
+    "READY Quadruped107 1",
+    "ERR 1 disarmed",
+    "DONE 2 armed",
+    "ACCEPT 3 forward",
+    "ERR 3 stopped",
+    "DONE 4 stopped",
+    "DONE 5 armed",
+    "ERR 6 servo_out_of_range",
+    "DONE 7 stopped"
+  ],
+  "final": {
+    "virtual": true,
+    "armed": false,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "stopEpoch": 4,
+    "activeMask": 0,
+    "activeMotion": null,
+    "fault": null,
+    "samples": 0,
+    "history": [
+      "HELLO",
+      "MOVE 1 forward",
+      "ARM 2",
+      "MOVE 3 forward",
+      "STOP 4",
+      "ARM 5",
+      "SERVO 6 9 999",
+      "STOP 7"
+    ]
+  }
+}
+test_missing_ss_reports_unknown (test_pi_preflight.PreflightTests.test_missing_ss_reports_unknown) ... ok
+test_observational_contract (test_pi_preflight.PreflightTests.test_observational_contract) ... ok
+test_duplicate_out_of_order_expiration_and_wrap (test_telemetry.TelemetryTests.test_duplicate_out_of_order_expiration_and_wrap) ... ok
+test_fields_and_unknown_output_enable (test_telemetry.TelemetryTests.test_fields_and_unknown_output_enable) ... ok
+test_history_is_bounded_and_records_actual_outcomes (test_telemetry.TelemetryTests.test_history_is_bounded_and_records_actual_outcomes) ... ok
+test_invalid_and_reserved_fields (test_telemetry.TelemetryTests.test_invalid_and_reserved_fields) ... ok
+test_reset_requires_new_session (test_telemetry.TelemetryTests.test_reset_requires_new_session) ... ok
+test_tel_cannot_complete_motion_or_arm (test_telemetry.TelemetryTests.test_tel_cannot_complete_motion_or_arm) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.019s
+
+OK
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  build/phase4-qualification/original-staged.patch
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  build/phase4-qualification/original-unstaged.patch
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  -
