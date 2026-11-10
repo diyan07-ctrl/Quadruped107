@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "cc085f3c7acecb8ad6437509c7e4b2a7529087bb",
+  "run": "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42734353977",
+  "source": "synthetic BGR camera fixture",
+  "physicalValidation": false,
+  "targets": [
+    {
+      "target": "blue",
+      "acceptedLeft": true,
+      "acceptedRight": true,
+      "centered": true
+    },
+    {
+      "target": "yellow",
+      "acceptedLeft": true,
+      "acceptedRight": true,
+      "centered": true
+    }
+  ],
+  "virtualJoints": 8,
+  "distinctTargetVectors": 58,
+  "stop": true,
+  "obstacleOverride": true,
+  "cameraFault": true,
+  "simulatorReset": true,
+  "automaticRearm": false
+}

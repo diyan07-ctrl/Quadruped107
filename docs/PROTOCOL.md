@@ -1,14 +1,26 @@
-# USB serial protocol v1
+# Protocol v1 and reserved telemetry extension
 
-This specifies the inspected implementation, including its limitations. Keep existing commands compatible during the repository refactor. Historical UNO Q Bridge RPC is a different interface and is archived.
+## Phase 2 additive sensor telemetry
 
-## Framing and identity
+See [SENSORS](SENSORS.md) for the complete bounded schema. Correlated v1 simulation ACKs may contain sensors={schema:1,seq,observations:[...]}; range unit is metres and source age is preserved plus a conservative round-trip allowance. Duplicate/out-of-order or stale telemetry cannot renew sensing. activeMotion and behavior are bounded additive trace metadata for diagnostics and the explicit proxy.
 
-USB serial uses 115200 baud, 8 data bits, no parity, one stop bit, no flow control. ASCII lines end with LF; Uno ignores CR. The Uno buffer accepts 63 characters before LF; longer lines are discarded through LF and yield ERR 0 line_too_long. Spaces separate tokens. Only known ASCII tokens should be sent; binary/NUL input is unsupported.
+A host virtual-Uno stopEpoch prevents stale ready flags from permitting ARM after STOP. The bridge must acknowledge a fresh disarmed trace for the current stop epoch. This is host simulation metadata, not a change to serial v1 or physical firmware. Reserved TEL1 remains unimplemented; future adapters must convert millimetres explicitly. All physical protocols and fail-closed production behavior remain unchanged.
 
-Pi waits 2 s after opening the port for Uno reset, clears input, sends HELLO and expects exactly READY Quadruped107 1 within 3 s. Firmware also emits READY at boot. HELLO disarms. Unexpected READY during normal operation is treated as reset and drops the link.
 
-## Commands and replies
+## Explicit virtual execution and trace extension
+
+Production serial v1 syntax/baud/ACK semantics below are retained. The host [VirtualUno](../software/pi/quadruped/virtual_uno.py) is an in-memory emulator behind the actual SerialLink worker, selected only with --actuator-backend virtual. It models safe startup, ARM without pose replay, original gait target ticks, ACCEPT/DONE, busy/invalid errors, priority STOP, 1.5 s communication watchdog and reset/reconnect disarming. Eight targets are commanded estimates; activeMask identifies channels actually driven in the model.
+
+[Generated virtual firmware](../tools/generate-virtual-firmware.py) copies production sources into ignored build/virtual/sketch, substitutes a no-I2C/no-GPIO PCA output stub, emits bounded TRACE lines and identifies as Quadruped107Virtual. The production host intentionally rejects that distinct hardware identity. This build is compiled in CI; it is not uploaded or exercised on a board. Production firmware remains unchanged and fails closed without its PCA.
+
+The [UDP trace extension](../simulation/README.md) is a separate laptop visualization protocol, not a replacement for serial v1. Packets are JSON objects: v=1, type hello/challenge/trace/ack/stop, random client/server sessions, one-use nonce and monotonically increasing seq. A trace additionally includes virtual=true, armed boolean, eight integer targets 50..600 and activeMask 0..255. Maximum packet size 2048 bytes; receiver processes ≤8 per poll. Challenges expire at 150 ms receiver-local age, accepted traces lease forces for 300 ms. Invalid/duplicate/out-of-order frames do not renew the lease.
+
+A new receiver epoch, receive timeout or explicit STOP inhibits output. STOP invalidates outstanding challenges; a disarmed frame must precede any new ARM. The Pi guard also disarms on missing acknowledgments; application re-enable is explicit. Trace snapshots may skip intermediate ticks and never replay old motion commands. Trusted private LAN only; random sessions reject accidental replay, not a hostile authenticated peer.
+
+
+USB serial is unchanged: ASCII lines, LF terminated, CR ignored, 115200 baud / 8N1, no flow control. Uno accepts at most 63 characters before LF; overflow discards through LF and returns ERR 0 line_too_long. Binary/NUL input is unsupported.
+
+## Implemented commands
 
 ```text
 HELLO                    -> READY Quadruped107 1
@@ -20,28 +32,40 @@ STOP 3                   -> DONE 3 stopped
 SERVO 4 0 278            -> DONE 4 servo
 ```
 
-ARM enables OE only if the PWM driver initialized and no motion is active; it does not choose a pose. MOVE requires arming and runs one complete named routine. Valid names: initial, stand, greeting, tail_wag, forward, backward, turn_left, turn_right. Directional repetition is a Pi scheduling decision, not a latched Uno command.
+HELLO and boot leave outputs disabled. ARM enables signals without selecting a pose. MOVE runs exactly one named routine: initial, stand, greeting, tail_wag, forward, backward, turn_left, turn_right. SERVO accepts channels 0–7, ticks 50–600; these are broad guards, not qualified joint limits. Optional channel 8 remains rejected by current firmware.
 
-SERVO takes channel 0–7 and integer PCA9685 ticks 50–600; it writes immediately, without joint-specific limits or a ramp. Current pan channel 8 is reserved and rejected. STOP inhibits outputs even when disarmed or driver initialization failed. A stopped MOVE eventually returns ERR with its original ID.
+IDs are decimal. Pi limits normal IDs to 11 digits so MOVE's saved buffer is not exceeded. ID 0 is reserved for parser/best-effort stop; if normal IDs exhaust, new ordinary work is rejected and STOP can still use 0. Restart disarmed to reset the sequence. Firmware does not deduplicate requests; only matching DONE/ERR completes a host request, never ACCEPT/PONG or an unrelated ID.
 
-## IDs and parsing details
+Errors include invalid_id, pca9685_missing, busy, disarmed, invalid_motion, argument_too_long, unknown_motion, invalid_servo, servo_out_of_range, unknown_command, stopped and line_too_long. Validation order depends on driver/arming/busy state. Unknown MOVE may receive ACCEPT then ERR unknown_motion. MOVE/SERVO reject trailing tokens; HELLO/PING/ARM/STOP currently tolerate them. Send only strict forms.
 
-Pi assigns monotonically increasing decimal IDs per process. Only DONE/ERR with a matching pending ID completes a request. ACCEPT does not complete it, PONG is independent, and unrelated IDs are ignored. ID 0 is reserved by convention for parser errors and best-effort shutdown STOP. Firmware does not deduplicate requests or replay cached results.
+## Phase 0.1 host transaction policy
 
-The MOVE parser copies IDs into a 12-byte buffer, so use at most 11 digits (Pi currently has no rollover policy). Firmware validates IDs as decimal strings; it does not require uniqueness. MOVE names fit a 20-byte buffer. Extra arguments are rejected for MOVE/SERVO; HELLO/PING/ARM/STOP currently tolerate trailing tokens. Clients must emit the strict forms above rather than relying on this tolerance.
+The worker has up to four ordinary pending requests, including sent work, and a separate single urgent STOP slot. Repeated STOP calls coalesce until completion. STOP immediately marks the host disarmed, cancels ordinary pending requests with stopped, clears the ordinary queue and increments a cancellation barrier. Late ARM/DONE replies from older requests cannot set armed state.
 
-Typical errors: invalid_id, pca9685_missing, busy, disarmed, invalid_motion, argument_too_long, unknown_motion, invalid_servo, servo_out_of_range, unknown_command, stopped, line_too_long. Error checking order depends on driver, arming and busy state. An unknown named MOVE can receive ACCEPT followed by ERR unknown_motion. Recover from validation errors by fixing the request; never automatically resend motion after link failure.
+Submission is nonblocking with respect to queue space; excess ordinary work rejects immediately. An ordinary request older than 250 ms at dispatch or past its completion deadline faults the link instead of being sent. New ARM/MOVE/SERVO reject while STOP is unacknowledged. ARM rejects while other ordinary requests are pending. Capacity and barrier checks also apply to direct transport callers.
 
-## Heartbeats, faults and recovery
+The worker sends urgent work before ordinary work and heartbeat servicing. A request already in an OS write cannot be retracted; the transaction lock can wait for the configured 500 ms write timeout. Bytes already buffered at Uno may be parsed before STOP. This priority policy is not a guaranteed physical stop time.
 
-Pi sends PING every 300 ms, including while MOVE is pending. No PONG for 1.2 s drops the link. Uno checks for more than 1500 ms without PING while armed and emits FAULT watchdog after disabling outputs. ARM initializes this timeout. The watchdog is a loop-serviced communication timeout, not an AVR hardware watchdog.
+Controller state locks are released during acknowledgment waits. ARM/SERVO/MOVE reserve one active controller ticket; STOP does not wait for that ticket's acknowledgment. Generations reject old HTTP arm/mode/calibration/heartbeat requests and prevent late completion from reviving stopped intent. Unsent poses/directions expire after 500 ms, with matching owner heartbeats renewing a held direction; stand is retained as the safe release request.
 
-Boot driver failure reports FAULT pca9685_missing. Runtime I2C failures are not fully surfaced. Any FAULT received by Pi drops the session, fails pending commands and clears the queue. Read timeout is 50 ms; write timeout is 500 ms. ARM and SERVO calls use 3 s command timeouts, STOP uses 2 s, and MOVE defaults to 20 s. A command timeout forces reconnection.
+## Timeouts, faults and recovery
 
-One worker owns serial reads and writes. STOP is serviced during cooperative gait delays but currently shares the outgoing FIFO; it has no separate hardware or queue-priority channel. Unplug, reset, handshake failure, command timeout or unexpected READY causes pending requests to fail; no queued motion is replayed. Reconnection repeats HELLO and leaves outputs disabled until explicit ARM. Opening USB may reset Uno; use a stable by-id path where possible.
+Host waits 2 s after opening USB, clears input, then sends HELLO and verifies exact identity within 3 s. PING cadence is 300 ms; missing PONG for 1.2 s fails the link. ARM/SERVO completion timeout is 3 s, STOP 2 s, MOVE 20 s. Read timeout is 50 ms and write timeout 500 ms. Partial command writes and malformed/truncated responses fault the session.
 
-## Telemetry and compatibility
+Uno's existing >1500 ms PING timeout is software serviced during cooperative waits. It emits FAULT watchdog after disabling outputs; driver initialization failure emits FAULT pca9685_missing. Unexpected READY or any FAULT during a session fails pending commands and discards queues. Runtime I2C failures are not comprehensively detected.
 
-v1 provides identity, completion, heartbeat and fault lines only. Pi exposes these plus camera/mode state through GET /api/state. It does not receive distance, touch, battery, or joint-position telemetry.
+On timeout, disconnect or reset, no motion replays. Reconnection repeats HELLO, stays disarmed and requires explicit enable. Controller fault reason remains latched until a fresh ARM completes in the same generation/session. The independent MCU watchdog/physical-stop/rail circuits are designed but not yet implemented/qualified.
 
-A later sensor phase must define a versioned unsolicited sensor record with freshness/validity before implementation. Do not emit unversioned sensor text into this channel or describe unsupported telemetry as available. Existing v1 lines remain stable unless a reviewed engineering change includes host/firmware compatibility tests. Protocol v1 framing and baud are unchanged by Phase 0.
+## HTTP ownership compatibility
+
+JSON bodies, URLs and browser assets remain unchanged. POST /api/arm now sets an HttpOnly SameSite=Strict quadruped_control cookie. Non-browser clients must retain it for mode, calibration and heartbeat calls; first ARM claims ownership. Non-owners receive HTTP 409; STOP is available regardless of owner. Cookie values are not telemetry and must not be logged or committed. This is a deliberate safety tightening, not authentication or a new wire protocol.
+
+## Telemetry
+
+Current v1 supplies identity, heartbeat, completion and fault status only; there are no range, touch, voltage or measured-position values. The optional negotiated CAPS/TELEM/TEL1 contract is specified in [EXTENSIONS](EXTENSIONS.md), including framing/ranges, sequence wrap, validity and expiry. It is not activated in Phase 0.1. Old peers retain existing behavior and must not arm or repeatedly retry because telemetry capability is absent.
+
+## Phase 3 passive telemetry preparation
+
+The host now passively recognizes the reserved [TEL1 record](EXTENSIONS.md). It bounds ASCII records to 63 characters, validates fields/flags, handles sequence and uptime wrap, rejects duplicates/backward records and expires receive freshness after 300 ms. A new serial session resets history. TEL lines cannot complete pending ARM/MOVE/STOP acknowledgments. No CAPS/TELEM command is sent and firmware remains unchanged.
+
+Diagnostics explicitly report controlQualified=false and acquisitionFreshnessKnown=false. TEL1 lacks an output-enable field, so servoOutputsEnabled is null, never inferred from voltage or armed intent. Distance, touch, voltage, inhibit, overload and watchdog flags are exposed only according to validity/freshness. A future negotiated revision must carry acquisition age and actual OE state before safety use; no reserved bit is assigned silently.

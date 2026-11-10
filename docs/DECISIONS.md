@@ -1,0 +1,57 @@
+# Phase 0.1 architecture decision record
+
+Freeze basis: Phase 0 PR #1 remains unmerged as inspected on 2026-11-09; main is fb5bacc and Phase 0 head is 6ce7fcb. Phase 0.1 branches from that head and is stacked on PR #1. No branch was merged or force-pushed.
+
+The freeze is a software/interface design baseline with explicit physical qualification gates. It does not certify the assembled robot.
+
+| Decision | Disposition and engineering reason | Acceptance / consequence |
+| --- | --- | --- |
+| Pi 4 + Uno R3 + PCA9685 / USB | Retain. Fits course digital interfaces and separates video from gait execution | Pi 5 upgrade requires power/cable qualification; no ROS/message broker |
+| Flask / HTTP / MJPEG | Retain. Existing tests, small dependency surface, no measured migration benefit | Single process, one camera/serial owner; LAN only; resource tests pending |
+| Serial v1 | Retain baud, framing, command formats and identity | Host scheduling changes do not require a firmware change |
+| STOP behind FIFO / operation lock | Improve now. Separate coalesced urgent slot; cancel ordinary pending work; no acknowledgment wait while holding controller state lock | Tests cover full queue, blocked ARM/SERVO, old acknowledgments, timeouts and disconnect |
+| Race between selection/submission/STOP | Improve now. Submit under state lock, compare generations, reserve one controller operation and retire only its ticket | Late completion cannot enable or overwrite a stopped/new operation |
+| Unbounded transport work | Improve now. Four ordinary pending requests max, 250 ms queue TTL, finite deadlines and 11-digit IDs | Capacity rejects immediately; STOP has independent capacity and ID 0 fallback |
+| Operator ownership | Improve now. First ARM claims HttpOnly same-site cookie lease; other clients cannot drive/renew it; STOP remains available | Browser works unchanged; API clients must retain cookies. No authentication claim |
+| Stale intent / mode transition | Improve now. 500 ms unsent action/held-direction TTL; held heartbeat renews; stand remains a release intent | Mode switches while a MOVE is active reject; explicit STOP interrupts. New pose/direction is latest-only |
+| Camera latency | Improve queue behavior with queue=False, remove redundant wait, reject >500 ms results and add an independent 0.8 s observation lease | A blocked worker is inhibited by the separate guard; capture remains blocking and publication age is not exposure age; hardware metadata qualification still required |
+| Startup/shutdown | Improve cleanup ordering; stop motion before camera/inference teardown | Hung camera/inference may exceed join deadlines; independent motor hardware protection still required |
+| Independent watchdog / physical stop | Design frozen; implement and qualify in Phase 1 | No watchdog or stop-circuit protection is falsely claimed in existing firmware |
+| First servo movement | Defer hardware actuation changes; introduce offline versioned calibration contract | Current estimate of 300 ticks is not sensed. Supported commissioning is mandatory |
+| OLED on Uno | Reject full framebuffer. A 1024-byte image consumes nearly all existing headroom | Optional OLED belongs to Pi-side 3.3 V I2C; no core dependency |
+| Sensor/monitoring extension | Specify optional negotiated TEL1 records, no current firmware driver | Preserves v1 peers; sensing and local policy remain on Uno |
+| Power choice | A is minimum-cost conditional candidate; D is robust fallback with independent logic bank | None of the current packs/converters is qualified. See [Power](../hardware/Power/README.md) |
+| Duplicate control implementations | Retain historical UNO Q only in archive; reject active Bridge dependencies | Preserve provenance and spreadsheets; no duplicate active runtime |
+| Free software / learning outcomes | Retain Python/Arduino/OpenCV/Picamera2/Flask/pySerial/GitHub tooling; optional models require license review | Demonstrate PWM, GPIO, I2C, USB framing, state/fault logic, energy calculations and measured validation through Phase 5 |
+
+## Known residual software limits
+
+STOP must still wait for an OS write already in progress (configured 500 ms write timeout), parser service, bus calls and physical electronics. Serial heartbeat uses a 300 ms cadence; reads wait up to 50 ms. Host real-time scheduling is not guaranteed. A cancellation barrier cannot retract bytes already delivered to Uno.
+
+HTTP ownership is a trusted-LAN arbitration mechanism, not security against malicious clients or DNS rebinding. The retained development server can create multiple HTTP threads; viewer/request concurrency and inference resource budgets require Pi measurement. No Internet exposure is approved.
+
+The MCU can retain PWM during a freeze; a failed regulator can damage servos even with PWM inhibited. Software changes cannot repair absent physical protection, sense actual joint positions, or establish electrical current limits. See [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md), [calibration](CALIBRATION.md), and [power protection](../hardware/Power/PROTECTION.md).
+
+## Software-first integration decision (2026-11-09)
+
+Retained: Flask/MJPEG, current arbitration/ownership generations, serial v1, mandatory Uno architecture, original gait tables and physical firmware. Benefit: existing tested safety contracts remain exercised.
+
+Improved: single-owner USB/V4L2 capture with conservative timestamp/freshness diagnostics; explicit real-camera/virtual-output mode; deterministic bounded blue-target FSM; host emulator using original motion targets; challenge/lease trace bridge; CAD-mesh articulated fixture; reproducible launch and installation procedures.
+
+Deferred: physical motion, damaged PCA assessment, CSI recovery, sensor acquisition, independent watchdog/OE/power circuits, measured calibration and realistic dynamic model. These require physical evidence. No inferred CAD span or synthetic timing is presented as measured hardware data.
+
+Rejected: silent simulation fallback, automatic arming/replay, public dashboard exposure, neural/cloud dependency, Pi-side physics GUI, and unmeasured claims of gait stability. Each would add risk or resource cost without enabling the software demonstration.
+
+## Phase 2: virtual sensing and conservative exploration
+
+Retain the existing camera/detector, Flask, controller, serial worker, production firmware and original motion tables. Add SensorManager as the sole observation/debounce owner and Navigation as a pure bounded policy that requests existing controller actions. This avoids a second motion executor.
+
+Extend correlated UDP acknowledgments with bounded schema-1 observations rather than introducing a broker. Preserve source age plus receipt-time round-trip allowance; callbacks and independent guards can inhibit without waiting for video or an acknowledgment. A host stop epoch plus a freshly acknowledged disarmed trace closes stale readiness after STOP.
+
+Require both front ranges and three to five touches in the selected virtual profile; missing/conflicting/expired data fails closed. Extra simulator geometry evidence, explicitly distinct from ultrasonic capability, authorizes swept turns/reverse/footprint progress. Single-front-sensor recovery is rejected. Caution stops rather than pretending a calibrated speed scale exists.
+
+Manual takeover and Idle cancel/disarm atomically; no automatic re-arm after faults, target return, fresh telemetry, reset or reconnect. Touch and recovery fragments have finite budgets; no new servo targets are introduced.
+
+The nominal fixed fixture was observed drifting after dynamics updates. Add an explicit external support constraint and measured fixture error, keeping free-base mode separate. An optional kinematic proxy makes virtual navigation observable but is never labeled gait-derived walking. Preserve collision checking and the 0.5 Nm servo model cap. Gain/inertia sensitivity and explicit stand/settle experiments support better diagnostics, not physical parameter fitting.
+
+Defer physical drivers, TEL1 negotiation, Pi deployment, real-time/power qualification and realistic locomotion acceptance. No SSH or hardware access is needed or attempted.

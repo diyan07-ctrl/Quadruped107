@@ -1,0 +1,11 @@
+{
+  "min_m": 0.02,
+  "max_m": 4,
+  "rate_hz": 10,
+  "timeout": 0.3,
+  "expiration": 0.3,
+  "debounce": 0.03,
+  "stuck_seconds": 2,
+  "conflict_m": 0.2,
+  "touch_count": 5
+}

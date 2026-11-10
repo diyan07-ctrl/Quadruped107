@@ -1,10 +1,25 @@
 # Roadmap
 
+## Phase 2 software checkpoint and Phase 3 candidates
+
+Phase 2 implements virtual sensing, conservative exploration, touch fragments, tracking priority, bidirectional simulation telemetry and deterministic scenario tests. These are SIMULATED / AUTOMATED TESTED when supported by CI; they do not complete physical obstacle avoidance or interaction acceptance.
+
+Suggested Phase 3: improve repeatable demonstration scenarios and interaction semantics within current safety bounds; recover CAD joint constraints and qualified model parameters; investigate self-contact and command/ramp timing; design the future Uno TEL1 adapter and local safety driver tests. Actual Pi deployment and hardware commissioning remain separate, explicitly authorized work after qualification.
+
+
+## Software-integration branch checkpoint
+
+Software development has advanced ahead of physical Phase 1 qualification: USB camera backend, deterministic blue-target behavior, virtual Uno, bounded trace bridge and CAD-visual PyBullet integration are implemented with hardware-free tests. These are not completed physical Phases 2–5.
+
+Next prerequisite is observational Pi validation: confirm current IP/key access, enumerate V4L2, run the explicitly virtual application and measure camera/processing FPS, age, CPU/RSS and recovery. No actuator is needed. Physical movement remains a separate authorized phase after damaged-board replacement/assessment, supply qualification, OE/disconnect/watchdog verification, individual calibration and supported-body testing. Advanced tracking, real obstacle sensing, touch personality, OLED/pan and actual locomotion acceptance remain pending.
+
+
 Existing feature code is retained. Completion requires the acceptance evidence below; source presence alone does not pass a phase.
 
 | Phase | Deliverables | Prerequisites | Tests | Acceptance criteria |
 | --- | --- | --- | --- | --- |
 | 0 — Architecture and repository | Audit, final architecture/stack, wiring proposal, safety, organized assets, standards, README, validation, branch/PR | Repository and supplied inventory | Imports, existing suite, HTTP simulation, firmware compile where available, links/paths, asset hashes, secret review | All requested documents exist; existing behavior/assets/attribution preserved; actual results and pending hardware tests recorded; commits published |
+| 0.1 — Architecture hardening and power freeze | Priority/cancellation tests, ownership, versioned calibration/telemetry contracts, complete Power study/calculator and qualification checklist | Verified Phase 0 head; manufacturer sources | Race/failure tests, calculator/table consistency, package/firmware/diagram checks | Published branch/PR, passing available checks, all electrical approval still conditional |
 | 1 — Movement, control, calibration | Per-joint endpoints/directions and repeatable poses/gaits; physical stop integration; bounded bus faults; MCU hardware watchdog; stale-command review | Regulated qualified supply, OE circuit, power disconnect, supported chassis, module inspection | One-joint checks, voltage sag/load tests, STOP during every routine, USB/browser/Pi loss, MCU reset/hang recovery, command races/timeouts | Reviewed calibration and safe range for all eight joints; stop timing measured; no motion after reboot/reconnect without explicit enable; stable controlled walking on test surface |
 | 2 — Exploration and avoidance | Nonblocking URM37 driver, optional HC-SR04 fallback, freshness/validity-aware telemetry, local obstacle override, bounded exploration | Phase 1; verified sensor revision/pinout/mode, placement and range tests | Missing/invalid/stale echo, crosstalk, soft/angled obstacles, Pi busy/disconnected, conflicting manual input | Local safety preempts motion without Pi round trip; robot stops within measured test-course clearance; invalid sensing inhibits exploration |
 | 3 — Touch and personality | Debounced 3–5 touch inputs, interaction states, cancellable bounded behaviors | Phases 1–2; touch placement/polarity and contact risks checked | Bounce, stuck input, simultaneous touch, manual takeover, stop during behavior | Touch responses repeat reliably; manual and safety overrides cancel interaction; no uncontrolled repeating actions |
@@ -12,3 +27,11 @@ Existing feature code is retained. Completion requires the acceptance evidence b
 | 5 — Monitoring and demonstration | Integrated telemetry, fault presentation, logs, deployment and repeatable demo procedure | Prior phase evidence and sensor protocol finalized | Endurance/load, boot/restart, fault injection, full demonstration rehearsal | Evidence-backed demo with visible mode/fault state, documented runtime and recovery, reproducible setup, limitations disclosed |
 
 Timing, obstacle clearance and endurance limits must be measured and approved for the actual assembly; Phase 0 does not invent distances, runtime or torque margins. Optional OLED, camera pan and Pi 5 remain enhancements after core safety and memory/power review.
+
+Phase 0.1 freeze: implement the independent watchdog/rail/physical-stop circuits and actual calibration activation only in Phase 1, after [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md). [Power](../hardware/Power/README.md) supplies conditional selection and measured-acceptance methods; calculations are not a phase acceptance measurement.
+
+## Phase 3 software checkpoint and next gate
+
+Implemented: revisioned blue/yellow selection, bounded target association, explainable accepted/rejected commands, cancellable virtual interactions, passive TEL1 parsing and end-to-end synthetic-camera/virtual-Uno/UDP/PyBullet regressions. Experimental smoothing remains off after measured lag tradeoffs. [Validation](VALIDATION.md) distinguishes CI evidence from hardware acceptance.
+
+Next: qualify real Pi camera/dependencies and measure resources; recover CAD joint constraints/masses and investigate remaining self-contact; then independently qualify power/OE/disconnect, Uno local watchdog/sensor safety and supported per-servo calibration. No free walking or physical autonomous exploration until those gates pass. Future interaction/vision phases should build on the existing arbiter rather than adding competing motion controllers.

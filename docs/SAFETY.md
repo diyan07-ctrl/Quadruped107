@@ -1,5 +1,25 @@
 # Safety and test procedure
 
+## Phase 2 virtual safety policy
+
+No Pi access or physical hardware test is attempted in this phase. Physical ARM remains rejected; simulated sensors require explicit virtual outputs. Missing/invalid/conflicting/stale range or touch inputs inhibit, never imply clearance. A front range alone cannot authorize turns/reverse: separate fresh simulator swept-clearance evidence is required.
+
+STOP/fault/communication/critical sensing outrank manual takeover, obstacle policy, touch and selected tracking/exploration. Manual motion also passes clearance gates. Recovery and touch fragments have finite deadlines and end in disarm. Reconnection, fresh telemetry or target return cannot re-arm automatically.
+
+The planar navigation proxy and externally constrained articulation fixture are test tools. They do not validate locomotion, actual sensor electronics, motor torque, stopping distance or a physical stop circuit. The [model investigation](MODEL_STUDY.md) records unresolved contacts and provisional parameters. Existing [power](../hardware/Power/README.md), [calibration](CALIBRATION.md) and [hardware verification](HARDWARE_VERIFICATION.md) gates remain.
+
+
+## Software-only development restriction
+
+Physical ARM is explicitly rejected by the web API on this branch. A real camera requires explicit virtual-actuator selection; failures never switch from virtual to physical serial or vice versa. Keep the Uno disconnected, all servos unpowered and suspected damaged HW-170 disconnected. No command here authorizes physical movement, firmware upload or power switching.
+
+STOP cancels the existing controller generation and serial queue, then waits for its virtual acknowledgment. Local inhibition and output-off are distinct events. Camera/native capture may block; an independent observation guard and network guard inhibit motion. Simulator receive lease expiration removes virtual forces. A stop/fault/reconnect never arms automatically.
+
+Host protocol emulation, optional virtual firmware compilation and PyBullet are simulation evidence only. They cannot establish actual servo position, physical stop time, stable walking, regulator qualification or independent hardware-watchdog protection. The model's fixed chassis masks balance; provisional free-base experiments may fall and are not a locomotion acceptance test.
+
+The [remaining hardware checklist](HARDWARE_VERIFICATION.md) gates future physical work. Existing battery packs/regulators remain NOT YET QUALIFIED under the [power study](../hardware/Power/README.md). No electrical measurement or hardware safety claim was added.
+
+
 ## Power and batteries
 
 Use a regulated supply within the exact servo voltage specification. Raw nominal 7.4 V / 2S Li-ion packs can exceed a 6 V-rated servo's limit. Do not supply servos from Pi, Uno 5V, or USB. Use common ground, suitably rated wire/connectors, protection, and an accessible servo-power disconnect.
@@ -14,7 +34,7 @@ Check one joint at a time for channel, direction, neutral, clearance, and safe e
 
 ## Stops and communication loss
 
-Startup, HELLO and STOP disable outputs. ARM only enables signals and does not issue a pose. Browser STOP / X asks Uno to abort and drive OE HIGH; this is a software stop, not a certified emergency stop. A hardware servo-power disconnect is the independent stop available to the operator.
+Startup, HELLO and STOP disable outputs. ARM only enables signals and does not issue a pose. Browser STOP / X asks Uno to abort and drive OE HIGH; this is a software stop, not a certified emergency stop. An independently rated physical servo-power disconnect is required; its presence and behavior have not been verified.
 
 Browser lease expiry is 1 s; Pi PING loss causes Uno software disarm after more than 1.5 s when its loop remains responsive. Neither is an MCU hardware watchdog. Frozen code, queued commands, I2C hangs, or failed electronics can defeat timing. The physical-stop input, MCU watchdog, runtime bus-fault handling, and per-joint calibrated limits remain Phase 1 work.
 
@@ -37,3 +57,33 @@ Existing blue-ball tracking turns to search when it sees no ball; it does not de
 7. Permit unsupported walking only after electrical, calibration, stop and mechanical tests pass. Log failures and conditions in [VALIDATION](VALIDATION.md).
 
 Phase 0 performs no physical tests. Compilation and simulation cannot establish electrical safety, stopping reliability, stability, or load capacity.
+
+## Phase 0.1 watchdog and power-fault design
+
+No AVR watchdog is enabled by this task. The Phase 1 design uses the ATmega328P watchdog's independent oscillator in reset mode, with an initial **1 s nominal candidate** subject to oscillator tolerance and bootloader qualification. Software PING expiry remains 1.5 s: a healthy loop pets the hardware watchdog only after bounded control/safety progress, while absent PING separately inhibits motion. Do not pet the watchdog from a timer interrupt that could hide a frozen main loop.
+
+Before activation, capture/reset MCUSR early, clear WDRF and disable/reconfigure WDT using the required timed sequence. Verify the installed bootloader handles watchdog resets without a reset loop. Assert OE inhibit before I2C initialization and never ARM automatically after WDRF, brownout or USB reset. Reserve a reset-cause fault for telemetry. See the [Microchip watchdog/reset specification](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf); select the exact installed part/bootloader documentation before coding.
+
+Keep nominal healthy progress gaps below 250 ms as a design target, including all I2C failures and parser work. Existing 25 ms Wire timeout configuration does not prove a complete sequence is bounded or that write faults are acted on. Phase 1 must check transaction status, drive OE HIGH first on a bus fault, latch the fault and service bounded recovery. Choose the final watchdog interval from measured worst-case valid work plus tolerance; the candidate is not a guaranteed physical stop deadline.
+
+Inspect actual brownout fuses and the minimum valid 16 MHz supply voltage. Do not assume the shipped BOD threshold protects every clock/voltage state. Add/qualify external voltage supervision where needed. A logic-rail OE pull-up cannot establish safe behavior when logic is absent but servo power remains; partial power, leakage and reset must be tested.
+
+Independent hardware protection must cover an inaccessible/frozen MCU, servo-rail restoration, overvoltage, short circuit and overload. A proposed servo-rail power-good/UV/OV latch dominates enable and requires deliberate recovery after supply faults. D12 is proposed stop status; the accessible DC-rated power disconnect must work with Pi/Uno absent. Do not connect an asserted supervisor output directly against D8; qualify a proper fail-safe buffer/open-drain/gating circuit.
+
+## Failure response boundaries
+
+Software can reject conflicting/stale commands, cancel host queues, expire browser/serial leases and request OE inhibition while its hardware path works. It cannot retract buffered bytes, remove an overvoltage supply, sense true joint position, recover a dead CPU by itself, guarantee stopped torque, or protect an unqualified wire against a battery short.
+
+The Phase 0.1 STOP priority path cancels ordinary requests and ignores late acknowledgments. It may still wait for a write already in progress, parser service or bus activity. Fault reason stays latched until explicit enable. Every normal mode change clears older intent; busy control-mode switches reject and request explicit STOP for immediate inhibition.
+
+Servo battery fails while Pi survives: current software does not detect it; a proposed independent rail latch is required to prevent old pulses taking effect when power returns. Pi fails while servo power survives: Uno USB logic can disappear, so OE/power gating must default safe without firmware or 5 V. See the full [power failure matrix](../hardware/Power/PROTECTION.md).
+
+Sensor/motion faults must inhibit their dependent moving behavior and latch locally; an invalid range is not permission to explore. These local drivers are not implemented. Optional OLED/inference failure may degrade presentation but must never block a safety path. All unresolved part-specific facts are in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md); [calibration](CALIBRATION.md) and [Power](../hardware/Power/README.md) define commissioning gates.
+
+The host now rejects vision results over 500 ms publication age and independently expires the vision observation lease at 0.8 s, even when the image worker is blocked. Preview age uses the original publication time. These are software checks, not exposure timestamps or guaranteed physical stop times. Fault reason remains latched through repeated STOP until an explicit successful ARM.
+
+## Phase 3 demonstration restrictions
+
+Only explicitly virtual actuators are permitted. The suspected damaged PCA9685 stays isolated; Uno/servos remain disconnected and unpowered. No physical ARM, firmware upload, GPIO, power switching or automatic fallback is added. Target/color/settings changes stop/disarm before replacement; old detector results cannot continue the previous intent. Synthetic scene controls cannot replace a real camera. Interaction requests require explicit virtual enable and valid sensing, and remain subordinate to STOP, faults and obstacles.
+
+Camera/target loss, browser ownership loss and simulator reset/disconnect require fresh readiness and explicit re-enable. Passive TEL1 receive freshness is not proof of acquisition freshness or servo-output state. Simulation interpolation is not a physical calibration or stop-time guarantee. See [Phase 3 limitations](PHASE3.md) and [hardware checklist](HARDWARE_VERIFICATION.md).

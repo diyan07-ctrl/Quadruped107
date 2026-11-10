@@ -25,7 +25,7 @@ No active implementation is duplicated. Archive implementations are explicitly h
 - Source comments previously called inherited values calibrated, but no physical verification evidence is supplied.
 - Communication watchdog depends on a running cooperative loop; no AVR hardware watchdog, physical stop input, or comprehensive I2C write-fault handling.
 - SafePulseMin/Max are broad guards; no per-joint endpoints, position feedback or first-motion position certainty.
-- STOP shares a serial FIFO and controller operation lock; calibration/arming contention and concurrent mode changes need measured/failure-path qualification.
+- Phase 0 finding RESOLVED IN SOFTWARE in Phase 0.1: STOP shared FIFO/operation-lock delays are replaced by a bounded ordinary queue, priority slot and cancellation/generation barriers. OS write/parser/bus/physical latency still requires measurement.
 - Publication timestamps do not prove camera exposure freshness; capture backlog and actual latency need measurement.
 - Browser control is single-operator by procedure, without an ownership token or authentication; threaded streams have no viewer cap.
 - Legacy station README and source contain differing shoulder values; preserve as history rather than silently adopting either.
@@ -37,3 +37,7 @@ No active implementation is duplicated. Archive implementations are explicitly h
 Repository-path moves use Git renames. Preservation is checked against baseline Git blobs for CAD, meshes, ZIP, spreadsheets, images, animation and firmware targets. Link checks include archive documents, with absent placeholder screenshots removed rather than invented.
 
 Secret-pattern and tracked-generated-file checks cover current tracked text; they are not an exhaustive historical secret audit. No credentials should be printed in reports. Known design limits are documented rather than addressed with out-of-scope sensing, new autonomous behavior or unverified firmware safety changes.
+
+## Phase 0.1 reconciliation
+
+See [DECISIONS](DECISIONS.md) for retained/improved/deferred/rejected choices. Priority STOP, host races, stale inference and operator ownership now have failure-path tests; camera exposure age, native-call/resource bounds, Uno bus faults and all physical protections remain qualification gates. The [Power study](../hardware/Power/README.md) and [hardware register](HARDWARE_VERIFICATION.md) supersede informal supply assumptions. No waveform, current, thermal or robot test was performed.

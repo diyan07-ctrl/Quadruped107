@@ -17,4 +17,4 @@ dependencies = {file = ["requirements.txt"]}
 include = ["quadruped*"]
 
 [tool.setuptools.package-data]
-quadruped = ["web/*.html", "web/*.css", "web/*.js", "web/poses/*.webp"]
+quadruped = ["web/*.html", "web/*.css", "web/*.js", "web/poses/*.webp", "data/*.json"]

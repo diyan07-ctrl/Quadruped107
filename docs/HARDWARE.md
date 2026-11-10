@@ -1,5 +1,19 @@
 # Hardware
 
+## Phase 2 simulated sensor status
+
+Two configurable front ray sensors and three to five virtual touch inputs are implemented. Extra swept-clearance flags are calculated from known simulation geometry, not attributed to the available ultrasonic modules. The damaged PCA9685, unqualified servo supply and all servos remain outside this software work. No real electronics or physical module placement is verified.
+
+
+## Current physical state and simulation provenance
+
+User-reported: Pi 4 Model B with 2 GB RAM and USB2.0 PC CAMERA are operational; Uno is not connected to Pi. The HW-170 PCA9685 is suspected damaged and must remain disconnected/unpowered. All eight servos must remain unpowered. The servo battery/regulator are unqualified. The IMX219 CSI camera failed I2C initialization; its optional backend is retained without making it a dependency.
+
+No physical connection or performance was verified in this session. SSH was blocked before authentication. The USB camera's historical approximately 7.77 FPS is user-supplied evidence, not a new benchmark.
+
+Original Fusion, STEP, STL and spreadsheets are unchanged. The [CAD manifest](../simulation/model/cad_manifest.json) records binary STL bounds/hashes; [simulation](../simulation/README.md) explains inferred units and provisional assembly transforms. Firmware channels remain FL 0/1, FR 2/3, BL 4/5, BR 6/7. No physical servo targets or calibration limits were modified.
+
+
 The supplied inventory is recorded in [PROJECT](PROJECT.md). Connections have not been inspected on the assembled robot. “Verified in source” below means an inspected software assignment, not a measured wire.
 
 ## Mechanical assembly
@@ -33,12 +47,16 @@ Uno R3 uses 5 V logic; Pi GPIO uses 3.3 V logic. Pi–Uno communication is USB o
 
 Prefer URM37 pulse-trigger sensing after verifying its revision, interface mode, labels, supply, and output levels. HC-SR04 is an optional alternative/additional range sensor, with independent trigger scheduling to avoid crosstalk. Touch sensors connect to reserved Uno GPIO after output type and polarity checks. Sensors do not currently have drivers.
 
-SSD1306 OLED may share Uno I2C only after address/pull-up/logic compatibility checks. A 128 × 64 monochrome framebuffer alone consumes 1024 bytes, significant on Uno's 2 KiB SRAM; the display must not compromise safety memory. It is not a required dependency.
+Optional SSD1306 OLED now belongs to Pi I2C1 with a verified 3.3 V-compatible interface. A 128 × 64 framebuffer consumes 1024 bytes and is rejected on Uno given its 1050-byte baseline stack/local headroom. It is not a core dependency.
 
 ## Hardware-dependent facts
 
-Verify servo make/revision and rated voltage; stall/load current; battery cell count, protection, discharge rating and charger; regulator continuous/transient ratings; switch/fuse/wire ratings; USB power-bank capability; camera model and cable; touch module voltage/polarity; URM37 and HC-SR04 revisions; actual OE breakout circuitry; joint endpoints/directions; and mechanical clearances.
+All unresolved specimen-specific facts are recorded once in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md), including battery/BMS, module revision, limits and supply qualification.
 
 Nominal 7.4 V and 1800 mAh describe the supplied packs, not usable peak current or runtime. Do not connect the three packs together in series or parallel without a specifically engineered battery system.
 
 Sources: [Uno R3](https://docs.arduino.cc/hardware/uno-rev3/), [PCA9685 wiring](https://learn.adafruit.com/16-channel-pwm-servo-driver/hooking-it-up), [URM37 manufacturer guide](https://wiki.dfrobot.com/sen0001/docs/21984). Module-specific documentation takes precedence over family-level examples.
+
+## Phase 0.1 power and calibration freeze
+
+[Power](../hardware/Power/README.md) selects independent logic and regulated-servo domains conditionally: existing-pack Option A first, qualified 3S servo Option D if needed. No installed power component is approved without evidence. Use external motor distribution rather than assuming PCA terminal/trace capacity. [Calibration](CALIBRATION.md) defines versioned per-joint limits/rates without applying unverified targets. [Extensions](EXTENSIONS.md) reserves A0/A1 monitoring and Pi-side OLED; all proposed sensor wiring remains unverified.

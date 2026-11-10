@@ -1,0 +1,876 @@
+{
+  "schema": 1,
+  "firmware_sha256": "99d33a2f85f60d6ebdb9406d76841da6a21d2664f36eb0b799cbc1939c580cfb",
+  "constants": {
+    "ServoFrequencyHz": 50,
+    "FirstServoChannel": 0,
+    "LastServoChannel": 7,
+    "SafePulseMin": 50,
+    "SafePulseMax": 600,
+    "SmoothStepPulse": 5,
+    "SmoothStepDelayMs": 15,
+    "InitialArmsStepDelayMs": 22,
+    "MotionStageDelayMs": 500,
+    "GreetingWavePauseMs": 120,
+    "GreetingWaveCycles": 3,
+    "TailWagPauseMs": 120,
+    "TailWagCycles": 4,
+    "GaitStepDelayMs": 5,
+    "GaitFramePauseMs": 20,
+    "ChannelShoulderFL": 0,
+    "ChannelLegFL": 1,
+    "ChannelShoulderFR": 2,
+    "ChannelLegFR": 3,
+    "ChannelShoulderBL": 4,
+    "ChannelLegBL": 5,
+    "ChannelShoulderBR": 6,
+    "ChannelLegBR": 7
+  },
+  "tables": {
+    "InitialShoulders": [
+      [
+        0,
+        175
+      ],
+      [
+        2,
+        440
+      ],
+      [
+        4,
+        405
+      ],
+      [
+        6,
+        175
+      ]
+    ],
+    "InitialLegs": [
+      [
+        1,
+        513
+      ],
+      [
+        3,
+        90
+      ],
+      [
+        5,
+        75
+      ],
+      [
+        7,
+        525
+      ]
+    ],
+    "StandShoulders": [
+      [
+        0,
+        278
+      ],
+      [
+        2,
+        328
+      ],
+      [
+        4,
+        295
+      ],
+      [
+        6,
+        283
+      ]
+    ],
+    "StandLegs": [
+      [
+        1,
+        110
+      ],
+      [
+        3,
+        500
+      ],
+      [
+        5,
+        495
+      ],
+      [
+        7,
+        110
+      ]
+    ],
+    "GreetingSupportLegs": [
+      [
+        1,
+        430
+      ],
+      [
+        7,
+        180
+      ]
+    ],
+    "GreetingSupportShoulders": [
+      [
+        2,
+        380
+      ]
+    ],
+    "GreetingShoulderForward": [
+      [
+        0,
+        235
+      ]
+    ],
+    "GreetingShoulderBack": [
+      [
+        0,
+        328
+      ]
+    ],
+    "GreetingReturnFLToStand": [
+      [
+        1,
+        110
+      ],
+      [
+        0,
+        278
+      ]
+    ],
+    "GreetingReturnBRToStand": [
+      [
+        7,
+        110
+      ],
+      [
+        2,
+        328
+      ]
+    ],
+    "TailWagPose": [
+      [
+        0,
+        175
+      ],
+      [
+        2,
+        440
+      ],
+      [
+        1,
+        312
+      ],
+      [
+        3,
+        295
+      ],
+      [
+        5,
+        495
+      ],
+      [
+        7,
+        110
+      ]
+    ],
+    "TailWagSideA": [
+      [
+        4,
+        240
+      ],
+      [
+        6,
+        229
+      ]
+    ],
+    "TailWagSideB": [
+      [
+        4,
+        350
+      ],
+      [
+        6,
+        336
+      ]
+    ],
+    "ForwardPrepare": [
+      [
+        1,
+        110
+      ],
+      [
+        3,
+        500
+      ],
+      [
+        5,
+        495
+      ],
+      [
+        7,
+        110
+      ]
+    ],
+    "ForwardLiftA": [
+      [
+        1,
+        200
+      ],
+      [
+        7,
+        200
+      ]
+    ],
+    "ForwardPlaceA": [
+      [
+        0,
+        226
+      ],
+      [
+        6,
+        336
+      ]
+    ],
+    "ForwardPlantA": [
+      [
+        1,
+        110
+      ],
+      [
+        7,
+        110
+      ]
+    ],
+    "ForwardPushA": [
+      [
+        0,
+        329
+      ],
+      [
+        6,
+        229
+      ]
+    ],
+    "ForwardLiftB": [
+      [
+        3,
+        410
+      ],
+      [
+        5,
+        410
+      ]
+    ],
+    "ForwardPlaceB": [
+      [
+        2,
+        384
+      ],
+      [
+        4,
+        240
+      ]
+    ],
+    "ForwardPlantB": [
+      [
+        3,
+        500
+      ],
+      [
+        5,
+        495
+      ]
+    ],
+    "ForwardPushB": [
+      [
+        2,
+        271
+      ],
+      [
+        4,
+        350
+      ]
+    ],
+    "BackwardPlaceA": [
+      [
+        0,
+        329
+      ],
+      [
+        6,
+        229
+      ]
+    ],
+    "BackwardPushA": [
+      [
+        0,
+        226
+      ],
+      [
+        6,
+        336
+      ]
+    ],
+    "BackwardPlaceB": [
+      [
+        2,
+        271
+      ],
+      [
+        4,
+        350
+      ]
+    ],
+    "BackwardPushB": [
+      [
+        2,
+        384
+      ],
+      [
+        4,
+        240
+      ]
+    ],
+    "TurnLeftPlaceA": [
+      [
+        0,
+        329
+      ],
+      [
+        6,
+        336
+      ]
+    ],
+    "TurnLeftPushA": [
+      [
+        0,
+        226
+      ],
+      [
+        6,
+        229
+      ]
+    ],
+    "TurnLeftPlaceB": [
+      [
+        2,
+        384
+      ],
+      [
+        4,
+        350
+      ]
+    ],
+    "TurnLeftPushB": [
+      [
+        2,
+        271
+      ],
+      [
+        4,
+        240
+      ]
+    ],
+    "TurnRightPlaceA": [
+      [
+        0,
+        226
+      ],
+      [
+        6,
+        229
+      ]
+    ],
+    "TurnRightPushA": [
+      [
+        0,
+        329
+      ],
+      [
+        6,
+        336
+      ]
+    ],
+    "TurnRightPlaceB": [
+      [
+        2,
+        271
+      ],
+      [
+        4,
+        240
+      ]
+    ],
+    "TurnRightPushB": [
+      [
+        2,
+        384
+      ],
+      [
+        4,
+        350
+      ]
+    ]
+  },
+  "routines": {
+    "stand": [
+      {
+        "table": "StandShoulders",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "StandLegs",
+        "delay_ms": 15
+      }
+    ],
+    "initial": [
+      {
+        "table": "InitialLegs",
+        "delay_ms": 22
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "InitialShoulders",
+        "delay_ms": 15
+      }
+    ],
+    "greeting": [
+      {
+        "table": "StandShoulders",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "StandLegs",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "GreetingSupportShoulders",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "GreetingSupportLegs",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "GreetingShoulderForward",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingShoulderBack",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingShoulderForward",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingShoulderBack",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingShoulderForward",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingShoulderBack",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "GreetingReturnFLToStand",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "GreetingReturnBRToStand",
+        "delay_ms": 15
+      }
+    ],
+    "tail_wag": [
+      {
+        "table": "StandShoulders",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "StandLegs",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "TailWagPose",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "TailWagSideA",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideB",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideA",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideB",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideA",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideB",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideA",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "TailWagSideB",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 120
+      },
+      {
+        "table": "StandShoulders",
+        "delay_ms": 15
+      },
+      {
+        "pause_ms": 500
+      },
+      {
+        "table": "StandLegs",
+        "delay_ms": 15
+      }
+    ],
+    "forward": [
+      {
+        "table": "ForwardPrepare",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlaceA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPushA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlaceB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPushB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      }
+    ],
+    "backward": [
+      {
+        "table": "ForwardPrepare",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "BackwardPlaceA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "BackwardPushA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "BackwardPlaceB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "BackwardPushB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      }
+    ],
+    "turn_left": [
+      {
+        "table": "ForwardPrepare",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnLeftPlaceA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnLeftPushA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnLeftPlaceB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnLeftPushB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      }
+    ],
+    "turn_right": [
+      {
+        "table": "ForwardPrepare",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnRightPlaceA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnRightPushA",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardLiftB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnRightPlaceB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "ForwardPlantB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      },
+      {
+        "table": "TurnRightPushB",
+        "delay_ms": 5
+      },
+      {
+        "pause_ms": 20
+      }
+    ]
+  }
+}
