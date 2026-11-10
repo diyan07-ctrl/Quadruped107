@@ -1,5 +1,10 @@
 # Hardware
 
+## Phase 2 simulated sensor status
+
+Two configurable front ray sensors and three to five virtual touch inputs are implemented. Extra swept-clearance flags are calculated from known simulation geometry, not attributed to the available ultrasonic modules. The damaged PCA9685, unqualified servo supply and all servos remain outside this software work. No real electronics or physical module placement is verified.
+
+
 ## Current physical state and simulation provenance
 
 User-reported: Pi 4 Model B with 2 GB RAM and USB2.0 PC CAMERA are operational; Uno is not connected to Pi. The HW-170 PCA9685 is suspected damaged and must remain disconnected/unpowered. All eight servos must remain unpowered. The servo battery/regulator are unqualified. The IMX219 CSI camera failed I2C initialization; its optional backend is retained without making it a dependency.

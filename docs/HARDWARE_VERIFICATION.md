@@ -1,5 +1,12 @@
 # HARDWARE_VERIFICATION — sole physical qualification checklist
 
+## Phase 2 deferral
+
+PHYSICAL HARDWARE TESTED: none. Pi deployment, SSH access, real sensors, Uno/PCA connection, power switching and servo movement are deliberately postponed; no connection is attempted.
+
+Before later physical sensing: identify exact URM37/HC-SR04 revisions and interfaces, voltage levels, safe pinout and acoustic scheduling; qualify touch polarity, placement, debounce and roles. Implement and test Uno local safety plus negotiated telemetry separately. Simulated swept-volume flags have no physical equivalent until additional qualified sensing provides it. Existing power, damaged-PCA isolation, calibration, watchdog/OE and independent disconnect requirements remain unchanged.
+
+
 ## Current assignment gate: no physical actuation
 
 All physical checks below remain pending unless separately supported by existing evidence. This session performed no power, servo, sensor or Pi measurements. SSH to both the reported IP and hostname failed with port-22 Permission denied before authentication. No credentials or Telegram configuration were read.
@@ -35,3 +42,14 @@ For each item record specimen/assembly ID, exact manufacturer document/revision,
 - [ ] **HV15 Integrated evidence:** measured STOP→OE and STOP→torque response, browser/USB/Pi failure recovery, no automatic movement after rail restoration, temperatures, usable runtime and reproducible demonstration course limits.
 
 Use [power test methods](../hardware/Power/TEST_PLAN.md), [calibration contract](CALIBRATION.md), [safety design](SAFETY.md), and [validation evidence](VALIDATION.md). Electrical approval remains blocked until the applicable items pass. Supported isolated-joint commissioning can begin only with a qualified limited-energy source, independently working disconnect and a reviewed fixture procedure.
+
+## Phase 3 remaining physical verification (NOT TESTED)
+
+- [ ] Confirm current Pi address and authorized SSH path; inspect existing services/environments without replacing Telegram/SSH configuration.
+- [ ] Qualify Python 3.13 OS OpenCV/NumPy and report actual pip-check warnings before remediation.
+- [ ] Verify USB V4L2 ownership, blue/yellow BGR/HSV behavior, lighting/false positives, unplug/recovery and sustained capture/processing FPS, observation age, CPU/RAM.
+- [ ] Recover mechanical pivots/axes, link masses/inertia and real servo calibration; investigate modeled contacts before using physics as locomotion evidence.
+- [ ] Keep damaged PCA9685 isolated. Independently qualify replacement/repair, regulated power, fusing, physical disconnect, OE/reset and watchdog/local safety before any future physical ARM.
+- [ ] Verify future TEL1 source acquisition age, touch debounce, actual output-enable state and local STOP independent of Pi; passive host parsing provides none of these hardware guarantees.
+
+No item above was completed through the unsuccessful Phase 3 network probe. See [operator procedure](PHASE3.md).

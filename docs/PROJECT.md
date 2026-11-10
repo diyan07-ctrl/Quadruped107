@@ -23,7 +23,7 @@ Quadruped107 is an autonomous-robotics course project for ENR107 Digital Electro
 
 The complete project covers calibrated manual motion, obstacle-aware exploration, touch interaction, vision/gesture tracking, telemetry, and a final integrated demonstration. The browser controls, gait routines, synthetic simulation, blue-ball detector, and optional gesture interface already exist. They are preserved through Phase 0, without treating their presence as completion of later integration phases.
 
-The robot has no verified odometry, localization, balance feedback, or joint-position feedback. Existing vision is heuristic tracking, not safe navigation. There are no active range or touch drivers and no sensor telemetry.
+The robot has no verified odometry, localization, balance feedback, or joint-position feedback. Existing vision is heuristic tracking, not safe navigation. Physical range/touch drivers and Uno sensor telemetry remain unimplemented. Phase 2 provides explicitly virtual rays, touch inputs and bounded simulator telemetry; see [PHASE2](PHASE2.md).
 
 ## Engineering objectives and success criteria
 

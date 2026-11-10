@@ -208,3 +208,14 @@ body.focus-mode.focus-side-rails .pose-preview { height: clamp(58px, 8vh, 74px);
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .diagnostic-card strong { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+
+.virtual-autonomy h2 { font-size: 1rem; margin: 1rem 0 .5rem; }
+.virtual-autonomy p { font-size: .8rem; opacity: .8; }
+.mode-strip { flex-wrap: wrap; }
+[hidden] { display: none !important; }
+
+.target-settings, .decision-panel { margin: 1rem 0; font-size: .85rem; overflow-wrap: anywhere; }
+.target-settings label { display: block; margin: .5rem 0; }
+.target-settings select { width: 100%; padding: .6rem; background: #142136; color: #fff; border-radius: .4rem; }
+.decision-panel h2 { font-size: 1rem; }
+#decisionHistory { max-height: 14rem; overflow: auto; padding-left: 1.5rem; }

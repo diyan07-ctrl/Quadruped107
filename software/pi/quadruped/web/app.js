@@ -10,6 +10,8 @@ const state = {
   busy: false,
   enabled: false,
   heartbeatPending: false,
+  visionRevision: null,
+  historySequence: -1,
   activeInputs: new Map(),
   activeMovementMode: null,
 };
@@ -188,7 +190,7 @@ function formatHandStatus(hand, fallback = "Reserved") {
 
 function updateVisionStatus(vision = {}) {
   if (state.appMode === "opencv") {
-    elements.visionStatus.textContent = formatBlueBallStatus(vision.blueBall);
+    elements.visionStatus.textContent = `${vision.targetColor === "yellow" ? "Yellow" : "Blue"}: ${formatBlueBallStatus(vision.blueBall)}`;
     return;
   }
   if (state.appMode === "hand_gesture") {
@@ -203,14 +205,19 @@ async function loadState() {
     const data = await fetchJson("/api/state");
     setCameraStatus(data.camera?.status);
     renderDiagnostics(data);
+    renderDecisions(data);
     applyMotionState(data.motion);
     updateVisionStatus(data.vision);
+    const targetButton = document.querySelector('[data-app-mode="opencv"]');
+    if (targetButton) targetButton.textContent = `${data.vision?.targetColor === "yellow" ? "Yellow tennis-ball" : "Blue target"} tracking`;
     state.enabled = Boolean(data.motion?.enabled && data.link?.armed);
     if (!state.enabled) releaseAllMovement("disabled", false);
     elements.armButton.disabled = !data.simulation || !data.link?.connected || state.enabled;
     elements.armButton.textContent = data.simulation ? "Enable virtual actuators" : "Physical actuation inhibited";
     [...elements.driveButtons, ...elements.poseButtons, ...elements.appModeButtons].forEach((button) => {
-      button.disabled = !state.enabled || (button.dataset.appMode === "hand_gesture" && !data.features?.handGesture);
+      const mode = button.dataset.appMode;
+      if (mode) button.hidden = !data.controlModes?.includes(mode) || (mode === "hand_gesture" && !data.features?.handGesture);
+      button.disabled = !state.enabled || (mode && !data.controlModes?.includes(mode));
     });
     setConnectionStatus(data.simulation ? "Simulation" : (state.enabled ? "Enabled" : (data.link?.connected ? "Disabled" : "Uno disconnected")),
       state.enabled ? "status-success" : "status-warning");
@@ -510,5 +517,102 @@ function renderDiagnostics(data) {
   show("behaviorDiagnostics", `${vision.behavior || "IDLE"} / ${target.detected ? "x error " + Number(target.offset).toFixed(2) + " / area " + target.area : "no target"}`);
   show("actuatorDiagnostics", `${link.kind || (data.simulation ? "unit stub" : "serial monitor")} / ${data.bridge ? (data.bridge.connected ? "simulator connected" : "simulator unavailable") : "local only"}`);
   show("safetyDiagnostics", data.motion?.enabled ? "VIRTUAL ENABLED — physical outputs prohibited" : (data.motion?.fault || "STOPPED"));
+  const section = document.getElementById("virtualAutonomy");
+  if (section) section.hidden = !data.features?.virtualSensors;
+  if (data.sensors && data.autonomy) {
+    const sensors = data.sensors;
+    const nav = data.autonomy;
+    const observations = Object.values(sensors.observations || {});
+    const oldest = observations.length ? Math.max(...observations.map(value => value.age)) : null;
+    show("navState", (data.motion?.appMode || "idle") + " / " + nav.state);
+    show("navRange", (sensors.front_m == null ? "Unknown" : sensors.front_m.toFixed(3) + " m") + " / " + nav.obstacle);
+    show("navHealth", (sensors.fault || "OK") + " / " + (oldest == null ? "missing" : Math.round(oldest * 1000) + " ms maximum age"));
+    show("navTouch", Object.entries(sensors.touches || {}).map(([key, value]) => key + ": " + (value.stuck ? "STUCK" : !value.valid ? "INVALID" : value.pressed ? "pressed" : "released")).join(" / "));
+    show("navDecision", nav.reason + " / " + (nav.lastRequestedMotion || "none"));
+    show("navOverride", (data.motion?.fault || sensors.fault || "none") + " / " + (data.bridge?.connected ? "simulator connected" : "no simulator"));
+  }
   show("traceDiagnostics", link.targets ? link.targets.join(" / ") + " | active mask " + link.activeMask : "No protocol trace (legacy unit stub or inhibited serial monitor)");
 }
+
+
+function renderDecisions(data) {
+  const config = data.visionConfig;
+  const select = document.getElementById("targetColorSelect");
+  const search = document.getElementById("targetSearch");
+  if (select && search) {
+    select.disabled = search.disabled = !data.simulation || !config;
+    if (config) {
+      state.visionRevision = config.revision;
+      select.value = config.settings.target_color;
+      search.checked = config.settings.search_enabled;
+    }
+  }
+  const synthetic = document.getElementById("syntheticTargetControls");
+  if (synthetic) synthetic.hidden = !data.simulation || data.camera?.backend !== "synthetic";
+  const actions = document.getElementById("interactionActions");
+  if (actions) {
+    actions.hidden = !data.features?.virtualSensors;
+    actions.querySelectorAll("button").forEach(button => {button.disabled = !data.motion?.enabled || data.motion?.appMode !== "interaction" || data.motion?.busy;});
+  }
+  const target = data.vision?.blueBall || {};
+  const age = data.vision?.observationAge;
+  const summary = document.getElementById("targetDetection");
+  if (summary) summary.textContent = (data.vision?.targetColor || "unknown") + ": " +
+    (data.vision?.targetFresh && target.detected ? "candidate detected; error " + Number(target.offset).toFixed(3) +
+      "; " + (target.lockState || "unknown lock") : "no fresh locked target") +
+    "; age " + (age == null ? "unavailable" : Math.round(age * 1000) + " ms");
+  const request = data.motion?.lastRequest;
+  const outcome = document.getElementById("motionOutcome");
+  if (outcome) outcome.textContent = "Request: " + (request ? request.motion + " / " + request.status + " / " + request.reason : "none") +
+    "; virtual Uno active: " + (data.link?.activeMotion || "none") + "; STOP/fault: " + (data.motion?.fault || "none");
+  const history = data.decisionHistory || [];
+  const sequence = history.length ? history[history.length - 1].seq : 0;
+  const list = document.getElementById("decisionHistory");
+  if (list && sequence !== state.historySequence) {
+    state.historySequence = sequence;
+    list.replaceChildren(...history.slice(-32).map(entry => {
+      const row = document.createElement("li");
+      row.textContent = entry.time + " — " + entry.kind + ": " + entry.status +
+        (entry.motion ? " / " + entry.motion : "") + (entry.reason ? " / " + entry.reason : "") +
+        (entry.requestId == null ? "" : " / request " + entry.requestId);
+      return row;
+    }));
+  }
+}
+async function changeTargetSettings() {
+  releaseAllMovement("target-change", false);
+  try {
+    await fetchJson("/api/vision", {method:"POST",body:JSON.stringify({
+      revision:state.visionRevision,
+      target_color:document.getElementById("targetColorSelect").value,
+      search_enabled:document.getElementById("targetSearch").checked
+    })});
+    setResult("Target settings applied; explicitly enable virtual actuators again.");
+  } catch (error) {setResult(error.message);}
+  await loadState();
+}
+document.getElementById("targetColorSelect")?.addEventListener("change", changeTargetSettings);
+document.getElementById("targetSearch")?.addEventListener("change", changeTargetSettings);
+
+document.querySelectorAll("[data-interaction]").forEach(button => {
+  button.addEventListener("click", async () => {
+    try {
+      await fetchJson("/api/interaction",{method:"POST",body:JSON.stringify({name:button.dataset.interaction})});
+      setResult("Interaction intent queued; execution is shown in command history.");
+    } catch (error) {setResult(error.message);}
+    await loadState();
+  });
+});
+
+document.querySelectorAll("[data-synthetic-target]").forEach(button => {
+  button.addEventListener("click",async()=>{
+    try {
+      await fetchJson("/api/simulation/target",{method:"POST",body:JSON.stringify({
+        visible:button.dataset.syntheticTarget!=="hide",
+        x:button.dataset.syntheticTarget==="hide"?0:Number(button.dataset.syntheticTarget),
+        color:document.getElementById("targetColorSelect").value
+      })});
+    } catch(error) {setResult(error.message);}
+    await loadState();
+  });
+});

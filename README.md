@@ -2,7 +2,9 @@
 
 An eight-joint quadruped for ENR107 Digital Electronics, with Raspberry Pi 4 vision and an Arduino Uno R3 motion controller.
 
-This branch develops software before physical locomotion. It supports USB webcam capture, blue-target detection, browser control, a virtual Uno and an eight-joint CAD-mesh PyBullet fixture. Physical ARM is inhibited. The suspected damaged PCA9685 must remain disconnected and all servos unpowered.
+Phase 3 adds stable blue/yellow target tracking, persisted dashboard preferences, explainable virtual decisions and bounded interactions. [Run the integrated laptop demonstration](docs/PHASE3.md); no Raspberry Pi access is required.
+
+This branch develops software before physical locomotion. It supports USB webcam capture, blue/yellow-target detection, browser control, a virtual Uno and an eight-joint CAD-mesh PyBullet fixture. Physical ARM is inhibited. The suspected damaged PCA9685 must remain disconnected and all servos unpowered.
 
 ## Architecture
 
@@ -12,6 +14,7 @@ flowchart LR
     Browser["Browser / HTTP + MJPEG"] <--> Pi
     Pi --> VUno["Explicit virtual Uno / v1 serial worker"]
     VUno --> Bridge["UDP challenges / freshness lease"]
+    Twin -->|virtual sensor telemetry| Pi
     Bridge --> Twin["Laptop PyBullet / provisional CAD joints"]
     Pi -. "future qualified USB serial" .-> Uno["Mandatory Uno R3"]
     Uno -. "I2C + OE, future qualification" .-> PCA["PCA9685 / currently disconnected"]
@@ -48,6 +51,10 @@ Open http://127.0.0.1:7000. Enable **virtual actuators** explicitly before choos
 | [archive/uno-q](archive/uno-q/README.md) | Historical code, excluded from active runtime |
 
 ## Hardware and status
+
+[Phase 3 demonstration](docs/PHASE3.md) · [Phase 2 architecture](docs/PHASE2.md) · [Sensor contract](docs/SENSORS.md) · [Model investigation](docs/MODEL_STUDY.md)
+
+Physical sensor drivers, qualified stopping and walking remain pending. The optional planar proxy represents kinematic navigation, not gait-derived locomotion.
 
 Primary: Pi 4 Model B (2 GB), mandatory Uno R3, eight MG996R/MG995-family servos and PCA9685. The functional USB2.0 PC CAMERA is the current camera candidate; CSI/Picamera2 remains optional. URM37, HC-SR04, touch sensors, three 7.4 V/1800 mAh packs and a power bank await module/power qualification. Pi 5, pan servo and OLED remain optional.
 

@@ -1,5 +1,5 @@
 """Deterministic visual decisions; this module never sends actuator commands."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass, asdict
 from collections import deque
 import json
 import logging
@@ -8,8 +8,16 @@ import math
 
 @dataclass(frozen=True)
 class VisionSettings:
-    hsv_lower: tuple = (95,70,30)
-    hsv_upper: tuple = (140,255,255)
+    target_color: str = "blue"
+    hsv_lower: tuple | None = None
+    hsv_upper: tuple | None = None
+    min_area: int = 150
+    min_radius: int = 8
+    max_radius_ratio: float = .38
+    min_circularity: float = .55
+    smoothing_alpha: float = .35
+    lock_distance: float = .20
+    reacquire_seconds: float = .6
     enter_error: float = .32
     exit_error: float = .20
     min_frames: int = 2
@@ -20,6 +28,22 @@ class VisionSettings:
     search_seconds: float = 2.0
 
     def __post_init__(self):
+        if self.target_color not in ("blue", "yellow"):
+            raise ValueError("target_color must be blue or yellow")
+        defaults=((20,70,70),(45,255,255)) if self.target_color=="yellow" else ((95,70,30),(140,255,255))
+        for name,value in zip(("hsv_lower","hsv_upper"),defaults):
+            triple=getattr(self,name)
+            if triple is None: object.__setattr__(self,name,value)
+            elif not isinstance(triple,(tuple,list)): raise ValueError("HSV must be a triple")
+            else: object.__setattr__(self,name,tuple(triple))
+        for key in ("min_area","min_radius"):
+            value=getattr(self,key)
+            if type(value) is not int or not 1<=value<=10000: raise ValueError("Invalid "+key)
+        for key in ("max_radius_ratio","min_circularity","smoothing_alpha","lock_distance"):
+            value=getattr(self,key)
+            if type(value) not in (int,float) or not math.isfinite(value) or not 0<value<=1: raise ValueError("Invalid "+key)
+        if type(self.reacquire_seconds) not in (int,float) or not math.isfinite(self.reacquire_seconds) or not .1<=self.reacquire_seconds<=2:
+            raise ValueError("Reacquisition must be .1..2 seconds")
         for triple in (self.hsv_lower,self.hsv_upper):
             if len(triple)!=3 or any(type(v) is not int or not 0<=v<=limit for v,limit in zip(triple,(179,255,255))):
                 raise ValueError("Invalid HSV triple")
@@ -33,12 +57,20 @@ class VisionSettings:
         if type(self.search_enabled) is not bool: raise ValueError("search_enabled must be boolean")
 
     @classmethod
+    def from_dict(cls,data):
+        if not isinstance(data,dict): raise ValueError("Vision settings must be an object")
+        try: return cls(**data)
+        except TypeError as error: raise ValueError("Unsupported vision setting") from error
+
+    @classmethod
     def load(cls,path):
         if not path: return cls()
-        with open(path,encoding="utf-8") as stream: data=json.load(stream)
-        for key in ("hsv_lower","hsv_upper"):
-            if key in data: data[key]=tuple(data[key])
-        return cls(**data)
+        from pathlib import Path
+        path=Path(path)
+        if path.stat().st_size>4096: raise ValueError("Vision configuration exceeds 4096 bytes")
+        return cls.from_dict(json.loads(path.read_text(encoding="utf-8")))
+
+    def to_dict(self): return asdict(self)
 
 
 @dataclass(frozen=True)
@@ -59,6 +91,7 @@ class Behavior:
         self.state="IDLE"
         self.started=now
         self.last_seen=None
+        self.last_observation=None
         self.candidate=None
         self.persistence=0
         self.last_request=-1e9
@@ -100,12 +133,14 @@ class Behavior:
         error=observation.get("offset")
         if isinstance(error,bool) or not isinstance(error,(int,float)) or not math.isfinite(error) or abs(error)>1:
             return self._result("CAMERA_FAULT",now,inhibit=True,reason="Invalid target error")
-        self.last_seen=now
+        self.last_seen=observation["observed_at"]
         if self.state=="TARGET_LEFT" and error < -self.settings.exit_error: target="TARGET_LEFT"
         elif self.state=="TARGET_RIGHT" and error > self.settings.exit_error: target="TARGET_RIGHT"
         else: target="TARGET_LEFT" if error < -self.settings.enter_error else "TARGET_RIGHT" if error > self.settings.enter_error else "TARGET_CENTER"
-        self.persistence=self.persistence+1 if target==self.candidate else 1
-        self.candidate=target
+        if observation["observed_at"]!=self.last_observation:
+            self.persistence=self.persistence+1 if target==self.candidate else 1
+            self.candidate=target
+            self.last_observation=observation["observed_at"]
         if self.persistence<self.settings.min_frames:
             return self._result(self.state,now,motion="stand",reason="Detection persistence")
         return self._result(target,now,motion={"TARGET_LEFT":"turn_left","TARGET_RIGHT":"turn_right","TARGET_CENTER":"stand"}[target])

@@ -38,10 +38,27 @@
             <div class="section-label">Mode</div>
             <div class="mode-strip" aria-label="Control mode selector">
               <button class="mode-button is-active" type="button" data-app-mode="manual">Manual</button>
-              <button class="mode-button" type="button" data-app-mode="opencv">OpenCV</button>
+              <button class="mode-button" type="button" data-app-mode="opencv">Blue target tracking</button>
+              <button class="mode-button" type="button" data-app-mode="explore" hidden>Virtual exploration</button>
+              <button class="mode-button" type="button" data-app-mode="sensor_test" hidden>Virtual sensor test</button>
+              <button class="mode-button" type="button" data-app-mode="idle">Idle</button>
+              <button class="mode-button" type="button" data-app-mode="interaction" hidden>Interactions</button>
               <button class="mode-button" type="button" data-app-mode="hand_gesture">Hand Gesture</button>
             </div>
           </div>
+          <section class="target-settings" aria-label="Vision target selection">
+            <label for="targetColorSelect">Selected color candidate</label>
+            <select id="targetColorSelect"><option value="blue">Blue ball</option><option value="yellow">Yellow / yellow-green ball</option></select>
+            <label><input id="targetSearch" type="checkbox"> Explicit bounded search</label>
+            <p>Changing settings stops and disarms. HSV detects color/shape, not unique tennis-ball identity.</p>
+          </section>
+          <section id="syntheticTargetControls" hidden aria-label="Synthetic camera fixture">
+            <p>SYNTHETIC input only: generate a circle in the selected color.</p>
+            <button type="button" data-synthetic-target="-0.7">Left</button>
+            <button type="button" data-synthetic-target="0">Center</button>
+            <button type="button" data-synthetic-target="0.7">Right</button>
+            <button type="button" data-synthetic-target="hide">Hide target</button>
+          </section>
           <div class="movement-section">
             <div class="section-label">Movement</div>
             <div class="dpad" aria-label="Hold directional controls to move">
@@ -61,6 +78,13 @@
             </div>
           </div>
 
+          <div class="interaction-actions" hidden id="interactionActions">
+            <p>Explicit virtual interactions; each ends in STOP.</p>
+            <button type="button" data-interaction="attention">Attention</button>
+            <button type="button" data-interaction="greeting">Greeting</button>
+            <button type="button" data-interaction="tail_wag">Tail wag</button>
+            <button type="button" data-interaction="neutral">Neutral</button>
+          </div>
           <div class="poses-section">
             <div class="section-label">Animations / Poses</div>
             <div class="pose-grid">
@@ -111,6 +135,24 @@
             </div>
           </div>
 
+          <section id="virtualAutonomy" class="virtual-autonomy" hidden aria-label="Virtual autonomy diagnostics">
+            <h2>Virtual autonomy / simulated sensors</h2>
+            <div class="diagnostic-grid" aria-live="polite">
+              <div class="diagnostic-card"><span>Mode / autonomy state</span><strong id="navState">IDLE</strong></div>
+              <div class="diagnostic-card"><span>Front range / obstacle</span><strong id="navRange">Unknown</strong></div>
+              <div class="diagnostic-card"><span>Sensor freshness / health</span><strong id="navHealth">Unavailable</strong></div>
+              <div class="diagnostic-card"><span>Debounced touch / stuck inputs</span><strong id="navTouch">Unknown</strong></div>
+              <div class="diagnostic-card"><span>Last decision / requested motion</span><strong id="navDecision">None</strong></div>
+              <div class="diagnostic-card"><span>Safety override / simulator</span><strong id="navOverride">Disarmed</strong></div>
+            </div>
+            <p>Virtual sensing only. Swept-clearance evidence belongs to the simulator. No physical stopping or walking qualification.</p>
+          </section>
+          <section class="decision-panel" aria-label="Explainable decision history">
+            <h2>Decisions and command outcomes</h2>
+            <p id="targetDetection">No fresh target observation</p>
+            <p id="motionOutcome">No motion request</p>
+            <ol id="decisionHistory" aria-label="Recent factual decisions"></ol>
+          </section>
           <div class="diagnostic-grid" aria-live="polite">
             <div class="diagnostic-card"><span>Camera</span><strong id="cameraReadout">Starting</strong></div>
             <div class="diagnostic-card"><span>Vision</span><strong id="visionStatus">Reserved</strong></div>

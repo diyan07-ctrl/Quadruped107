@@ -1,5 +1,14 @@
 # Software and development
 
+## Current Phase 2 development configuration
+
+Use the [local laptop instructions](../simulation/PHASE2.md). Add --virtual-sensors with explicit virtual actuators and a simulator endpoint; --navigation-config / --sensor-config select reviewed JSON assumptions. Flask, camera, serial and ownership remain; no new dependency is introduced.
+
+The bounded virtual-autonomy worker is independent of camera capture/vision. Sensor ingress can submit asynchronous priority STOP; the controller guard and admission checks repeat safety validation. One sensor manager owns freshness/debounce; there is no competing motor controller. The dashboard exposes only supported modes and labels all sensor states simulated.
+
+**Pi deployment is postponed.** No SSH, OS, service or network changes are performed in Phase 2. Pi commands below are retained Phase 1 installation references, not tasks executed or prerequisites for these simulations. Actual Pi CPU/RAM/camera measurements remain unperformed.
+
+
 ## Active configuration
 
 Use Python 3, Flask/HTTP/MJPEG, OpenCV/NumPy and pySerial. Preserve Arduino C++/Adafruit PCA9685 for the future mandatory Uno. No framework migration, ROS, broker or cloud dependency is needed. Pi 4 (2 GB, user-reported Raspberry Pi OS 64-bit Trixie) is primary; PyBullet runs on a development laptop.
@@ -53,3 +62,11 @@ Design targets, **not Pi measurements**: capture approximately the camera's sust
 Native V4L2/libcamera/OpenCV, DNS initialization and the inherited threaded HTTP streaming server do not have hard bounded execution/resource guarantees. Keep one browser/video consumer, never expose ports to the Internet, and measure real workloads before optimizing. Hand-gesture support is optional and requires its separately supplied compatible model; it is not a requirement for blue-object integration.
 
 Shutdown inhibits motion before closing bridge, serial, camera and detector workers. Bounded joins warn if native code remains blocked. Foreground launch avoids altering boot behavior while hardware is unqualified. [Power](../hardware/Power/README.md) and [safety](SAFETY.md) remain mandatory for future physical deployment.
+
+## Phase 3 runtime contract
+
+See [operator guide](PHASE3.md) for reproducible laptop/Pi commands. GET/POST /api/vision applies bounded validated settings with an expected revision; atomic schema-1 preferences default to ignored build/state/vision.json. Applying a change cancels motion and resets target/session state. The owner camera thread alone renders explicit synthetic fixtures; POST /api/simulation/target is unavailable for real cameras.
+
+Decision history holds at most 128 events, with requested/accepted/submitted/completed/rejected status. UI displays at most 32, using textContent. Personality is explicitly selected, sensor-gated and deadline-bounded; no new production poses. Optional simulation interpolation uses one latest eight-value vector and immediate STOP mask removal. Passive TEL1 diagnostics are never motion-qualified.
+
+CI executes the full suite on Python 3.11 and selected vision/telemetry checks on Python 3.13, checks dependency consistency and downloads cp313/abi3 aarch64 OpenCV/NumPy wheels. This does not validate Pi OS packages or native-device performance. tools/qualify-demo.py records read-only imports, pip-check and optional local application diagnostics; it captures no images or secrets.

@@ -1,0 +1,11 @@
+{
+  "target_color": "yellow",
+  "enter_error": 0.32,
+  "exit_error": 0.2,
+  "min_frames": 2,
+  "loss_seconds": 0.35,
+  "max_age": 0.5,
+  "command_period": 0.6,
+  "search_enabled": false,
+  "search_seconds": 2
+}

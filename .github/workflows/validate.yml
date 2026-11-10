@@ -1,5 +1,13 @@
 name: Validate Pi and Uno runtime
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      record_demo:
+        type: boolean
+        default: false
+        description: Optional bounded offline simulation recording
 permissions:
   contents: read
 
@@ -17,8 +25,22 @@ jobs:
       - run: python -m pip check
       - run: python -m compileall -q software/pi/quadruped tests tools simulation
       - run: python simulation/build_model.py --check
+      - run: python -m simulation.proxy_probe
       - run: python -m unittest discover -s tests -v
       - run: python -m simulation.validate
+      - run: python -m simulation.model_study
+      - name: Render bounded virtual gait recording
+        if: github.event_name == 'workflow_dispatch' && inputs.record_demo
+        run: python -m simulation.twin --headless --demo forward --arm-demo --steps 240 --record build/recordings/virtual-forward.avi --report build/recordings/virtual-forward.json
+      - name: Upload virtual gait recording
+        if: github.event_name == 'workflow_dispatch' && inputs.record_demo
+        uses: actions/upload-artifact@v4
+        with:
+          name: quadruped107-phase3-simulation-video
+          path: |
+            build/recordings/virtual-forward.avi
+            build/recordings/virtual-forward.json
+          if-no-files-found: error
 
       - run: python tools/generate-motion-data.py --check
       - run: python hardware/Power/power_budget.py --check
@@ -31,6 +53,7 @@ jobs:
       - run: node tools/check-repository.mjs
       - run: npm install --prefix build/mermaid --no-save mermaid@12.3.0 jsdom@26
       - run: node tools/check-mermaid.mjs
+      - run: node tools/check-dashboard.mjs
       - run: git diff --exit-code
   uno:
     runs-on: ubuntu-latest
@@ -44,3 +67,20 @@ jobs:
           python-version: '3.11'
       - run: python tools/generate-virtual-firmware.py
       - run: arduino-cli compile --profile uno build/virtual/sketch
+
+  python313:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r software/pi/requirements-dev.txt -e software/pi
+      - run: python -m pip check
+      - run: python -m unittest discover -s tests -p test_vision_readiness.py -v
+      - run: python -m unittest discover -s tests -p test_telemetry.py -v
+      - run: python tools/qualify-demo.py --output build/diagnostics/ci-python313.json
+      - run: >-
+          python -m pip download --only-binary=:all: --platform manylinux_2_17_aarch64
+          --implementation cp --python-version 313 --abi cp313 --abi abi3
+          numpy opencv-python-headless==4.11.0.86 -d build/pi-wheels

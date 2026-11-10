@@ -20,7 +20,8 @@ def encode(data):
 
 def decode(raw):
     if len(raw)>MAX_PACKET: raise ValueError("Simulation packet too large")
-    data=json.loads(raw)
+    try: data=json.loads(raw)
+    except RecursionError as error: raise ValueError("Nested simulation packet exceeds parser budget") from error
     if not isinstance(data,dict) or type(data.get("v")) is not int or data["v"]!=1:
         raise ValueError("Invalid simulation protocol version")
     return data
@@ -40,7 +41,7 @@ class TraceReceiver:
         self.last_frame=None
         self.peer_since=self.clock()
         self.requires_disarmed=True
-        self.state=dict(virtual=True,armed=False,activeMask=0,targets=[300]*8)
+        self.state=dict(virtual=True,armed=False,activeMask=0,targets=[300]*8,activeMotion=None)
         self.reason="Waiting for explicit virtual connection"
 
     def expire(self):
@@ -48,6 +49,7 @@ class TraceReceiver:
             self.state["armed"]=False
             self.state["activeMask"]=0
             self.requires_disarmed=True
+            self.state["activeMotion"]=None
             self.reason="Simulator receive lease expired"
 
     def handle(self,raw,address):
@@ -79,6 +81,7 @@ class TraceReceiver:
                 self.state["activeMask"]=0
                 self.requires_disarmed=True
                 self.challenge=None
+                self.state["activeMotion"]=None
                 self.reason="Priority virtual STOP"
                 return None
             if kind!="trace" or self.challenge is None: raise ValueError("No outstanding challenge")
@@ -94,6 +97,11 @@ class TraceReceiver:
                 any(type(t) is not int or not 50<=t<=600 for t in targets) or
                 type(mask) is not int or not 0<=mask<=255):
                 raise ValueError("Invalid virtual actuator payload")
+            active=data.get("activeMotion")
+            if active is not None and active not in ("initial","stand","forward","backward","turn_left","turn_right","greeting","tail_wag"):
+                raise ValueError("Invalid active motion")
+            behavior=data.get("behavior")
+            if behavior is not None and (not isinstance(behavior,str) or len(behavior)>40): raise ValueError("Invalid behavior label")
             self.last_seq=seq
             self.last_frame=self.clock()
             if not armed: self.requires_disarmed=False
@@ -102,7 +110,7 @@ class TraceReceiver:
                 self.state["activeMask"]=0
                 self.reason="Disarmed frame required before fresh ARM"
             else:
-                self.state=dict(virtual=True,armed=armed,activeMask=mask if armed else 0,targets=targets)
+                self.state=dict(virtual=True,armed=armed,activeMask=mask if armed else 0,targets=targets,activeMotion=active if armed else None,behavior=behavior)
                 self.reason=None
             return encode(dict(v=1,type="ack",server=self.session,nonce=nonce,seq=seq,
                                ready=not self.requires_disarmed,fault=self.reason))
@@ -117,7 +125,8 @@ class TraceReceiver:
 
 
 class TraceServer:
-    def __init__(self,host="127.0.0.1",port=7002):
+    def __init__(self,host="127.0.0.1",port=7002,*,sensors=None):
+        self.sensors=sensors
         self.receiver=TraceReceiver()
         self.socket=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.socket.bind((host,port))
@@ -130,8 +139,13 @@ class TraceServer:
             except BlockingIOError: break
             reply=self.receiver.handle(raw,address)
             if reply is not None:
-                try: self.socket.sendto(reply,address)
-                except OSError: pass
+                try:
+                    if self.sensors:
+                        message=decode(reply)
+                        if message["type"]=="ack": message["sensors"]=self.sensors()
+                        reply=encode(message)
+                    self.socket.sendto(reply,address)
+                except (OSError,ValueError): pass
         return self.receiver.snapshot()
 
     def close(self):
@@ -141,7 +155,8 @@ class TraceServer:
 
 
 class TraceClient:
-    def __init__(self,host,port,snapshot):
+    def __init__(self,host,port,snapshot,*,on_sensors=None):
+        self.on_sensors=on_sensors
         if type(port) is not int or not 1<=port<=65535: raise ValueError("Invalid simulator port")
         address=socket.gethostbyname(host)
         if not (ipaddress.ip_address(address).is_private or ipaddress.ip_address(address).is_loopback):
@@ -158,21 +173,25 @@ class TraceClient:
         self.epoch=0
         self.fault=None
         self.ready=False
+        self.disarmed_stop_epoch=None
         self.errors=0
         self.thread=threading.Thread(target=self._run,name="simulation-bridge",daemon=True)
 
     def start(self): self.thread.start()
 
     def snapshot(self):
+        source=self.source()
         with self.lock:
             age=time.monotonic()-self.last_ack if self.last_ack else None
             return dict(connected=age is not None and age<=LEASE,ackAge=age,
-                        readyToArm=self.ready,fault=self.fault,epoch=self.epoch,errors=self.errors,
+                        readyToArm=self.ready and not source["armed"] and source.get("stopEpoch")==self.disarmed_stop_epoch,fault=self.fault,epoch=self.epoch,errors=self.errors,
                         transport="UDP challenge/lease",physical=False)
 
     def prepare_arm(self):
+        source=self.source()
         with self.lock:
-            if not self.last_ack or time.monotonic()-self.last_ack>LEASE or not self.ready:
+            if (not self.last_ack or time.monotonic()-self.last_ack>LEASE or not self.ready
+                or source["armed"] or source.get("stopEpoch")!=self.disarmed_stop_epoch):
                 raise RuntimeError("Simulator unavailable or awaiting disarmed handshake")
             self.fault=None
             return self.epoch
@@ -189,6 +208,7 @@ class TraceClient:
                 state=self.source()
                 armed=bool(state["armed"])
                 if was_armed and not armed and self.session:
+                    with self.lock: self.ready=False
                     self.seq+=1
                     sock.sendto(encode(dict(v=1,type="stop",client=self.client,server=self.session,seq=self.seq)),self.address)
                 was_armed=armed
@@ -199,6 +219,7 @@ class TraceClient:
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
                 if peer!=self.address: continue
+                now=time.monotonic()  # receipt time, including time blocked in recvfrom
                 try:
                     data=decode(raw)
                     if data.get("type")=="challenge":
@@ -215,16 +236,20 @@ class TraceClient:
                         if self.seq>=2**31: raise RuntimeError("Simulation sequence exhausted")
                         state=self.source()
                         message=dict(v=1,type="trace",client=self.client,server=server,nonce=nonce,seq=self.seq,
-                                     virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"])
-                        self.pending=(nonce,self.seq,now)
+                                     virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"],
+                                     activeMotion=state.get("activeMotion"),behavior=state.get("behavior"))
+                        self.pending=(nonce,self.seq,now,bool(state["armed"]),state.get("stopEpoch"))
                         sock.sendto(encode(message),self.address)
                     elif data.get("type")=="ack" and self.pending:
-                        nonce,seq,born=self.pending
+                        nonce,seq,born,sent_armed,sent_stop_epoch=self.pending
                         if data.get("server")!=self.session or data.get("nonce")!=nonce or data.get("seq")!=seq or now-born>LEASE:
                             raise ValueError("Stale acknowledgment")
+                        if self.on_sensors and "sensors" in data:
+                            self.on_sensors(data["sensors"],session=self.session,transport_age=max(0,now-born))
                         with self.lock:
                             self.last_ack=now
-                            self.ready=data.get("ready") is True
+                            self.ready=data.get("ready") is True and not sent_armed
+                            if self.ready: self.disarmed_stop_epoch=sent_stop_epoch
                             if data.get("fault"): self.fault=str(data["fault"])[:160]
                         self.pending=None
                         awaiting=False

@@ -29,6 +29,8 @@ class Camera:
         self.factory = factory or cv2.VideoCapture
         self.lock = threading.Lock()
         self.stop_event = threading.Event()
+        self.synthetic_target=None
+        self.synthetic_x=None
         self.frame = self.jpeg = None
         self.timestamp = 0.0
         self.status = "Starting camera"
@@ -37,6 +39,12 @@ class Camera:
         self.last_error = None
         self.last_changed = 0.0
         self.thread = threading.Thread(target=self._run, name="camera-owner", daemon=True)
+
+    def set_synthetic_target(self,*,visible,color,x):
+        if not self.simulate: raise RuntimeError("Synthetic input is unavailable for real/file cameras")
+        if type(visible) is not bool or color not in ("blue","yellow") or type(x) not in (int,float) or not math.isfinite(x) or not -1<=x<=1:
+            raise ValueError("Invalid synthetic target")
+        with self.lock: self.synthetic_target=dict(visible=visible,color=color,x=x)
 
     def start(self): self.thread.start()
 
@@ -55,7 +63,7 @@ class Camera:
                         width=self.width, height=self.height, frameAge=age,
                         captureMs=round(self.capture_ms, 2), errors=self.errors,
                         reconnects=self.reconnects, lastError=self.last_error, status=self.status,
-                        ownerAlive=self.thread.is_alive(), unchangedFor=(time.monotonic()-self.last_changed
+                        ownerAlive=self.thread.is_alive(),syntheticTarget=dict(self.synthetic_target) if self.synthetic_target else None, unchangedFor=(time.monotonic()-self.last_changed
                             if self.last_changed else None))
 
     def _open(self):
@@ -100,6 +108,14 @@ class Camera:
                     started = time.monotonic()
                     if self.simulate:
                         frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+                        with self.lock: target=dict(self.synthetic_target) if self.synthetic_target else None
+                        if target and target["visible"]:
+                            if self.synthetic_x is None: self.synthetic_x=target["x"]
+                            self.synthetic_x+=max(-.2,min(.2,target["x"]-self.synthetic_x))
+                            center=(round((self.synthetic_x+1)*self.width/2),self.height//2)
+                            cv2.circle(frame,center,max(4,min(self.width,self.height)//12),
+                                       (255,0,0) if target["color"]=="blue" else (0,255,180),-1)
+                        elif target: self.synthetic_x=None
                         cv2.putText(frame, "SIMULATION - no hardware", (10, self.height//2),
                                     cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 1)
                     elif self.backend == "picamera2":

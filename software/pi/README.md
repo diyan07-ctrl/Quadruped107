@@ -1,5 +1,7 @@
 # Pi application
 
+Phase 2 runs entirely on the laptop with --virtual-sensors and an explicit virtual actuator backend/simulator endpoint. See [launch guide](../../simulation/PHASE2.md), [states](../../docs/PHASE2.md) and [sensor protocol](../../docs/SENSORS.md). Pi deployment is postponed; no SSH/hardware connection is needed.
+
 One camera owner, one serial owner, latest-frame vision and Flask/MJPEG browser controls. See [software guide](../../docs/SOFTWARE.md) for dependencies, configuration, concurrency and current safety restrictions.
 
 - Synthetic camera + protocol emulator: `python -m quadruped.main --simulate --host 127.0.0.1`.
