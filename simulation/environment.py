@@ -98,7 +98,7 @@ class SimulatedTouchSensor:
 
 class Scene:
     """Sensor rays use PyBullet. Swept-clearance is extra simulator geometry evidence."""
-    def __init__(self,world,scenario="empty",*,seed=0,clock=time.monotonic,latency=.02,noise=0.0,proxy=False,show_rays=False,sensor_config=None,profiles=None):
+    def __init__(self,world,scenario="empty",*,seed=0,clock=time.perf_counter,latency=.02,noise=0.0,proxy=False,show_rays=False,sensor_config=None,profiles=None):
         if scenario not in SCENARIOS: raise ValueError("Unknown scenario")
         if proxy and not world.fixed: raise ValueError("Navigation proxy requires the fixed-base articulated fixture")
         config=sensor_config or SensorConfig()

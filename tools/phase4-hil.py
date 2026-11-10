@@ -28,12 +28,13 @@ def atomic(path,value):
 
 class Journal:
     """Bounded nonblocking producer; disk work belongs to a separate thread."""
-    def __init__(self,path):
+    def __init__(self,path,clock=time.monotonic):
         self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True)
+        self.clock=clock
         self.queue=queue.Queue(maxsize=4096);self.dropped=0
         self.thread=threading.Thread(target=self._run,daemon=True);self.thread.start()
     def put(self,value):
-        try: self.queue.put_nowait(dict(utc=utc(),localMonotonic=time.monotonic(),**value))
+        try: self.queue.put_nowait(dict(utc=utc(),localMonotonic=self.clock(),**value))
         except queue.Full: self.dropped+=1
     def _run(self):
         with self.path.open('w',encoding='utf-8') as file:
@@ -48,9 +49,10 @@ def twin(args):
     from simulation.twin import World
     from simulation.environment import Scene
     from quadruped.bridge import TraceServer,decode
+    clock=time.perf_counter
     world=World(gui=args.gui)
-    scene=Scene(world,'empty',latency=.02)
-    journal=Journal(args.output/'trace.jsonl')
+    scene=Scene(world,'empty',latency=.02,clock=clock)
+    journal=Journal(args.output/'trace.jsonl',clock=clock)
     control={};last_action=None
     def sensors():
         batch=scene.telemetry()
@@ -60,21 +62,21 @@ def twin(args):
     server=TraceServer(args.host,args.port,sensors=sensors)
     original=server.receiver.handle
     def handle(raw,peer):
-        started=time.monotonic();before=server.receiver.invalid
+        started=clock();before=server.receiver.invalid
         reply=original(raw,peer)
         try: message=decode(raw)
         except ValueError: message={}
         journal.put(dict(kind='udp',peer=peer,messageType=message.get('type'),seq=message.get('seq'),
           sentArmed=message.get('armed'),accepted=reply is not None,rejected=server.receiver.invalid!=before,
-          receiver=server.receiver.snapshot(),handleMs=1000*(time.monotonic()-started)))
+          receiver=server.receiver.snapshot(),handleMs=1000*(clock()-started)))
         return reply
     server.receiver.handle=handle
-    start=last_tick=time.monotonic();next_tick=start
+    start=last_tick=clock();next_tick=start
     last_control=last_sample=last_image=0
     intervals=[]
     try:
-        while time.monotonic()-start<args.seconds:
-            now=time.monotonic();intervals.append(now-last_tick);last_tick=now
+        while clock()-start<args.seconds:
+            now=clock();intervals.append(now-last_tick);last_tick=now
             if now-last_control>=.1:
                 if args.control.exists():
                     try: control=json.loads(args.control.read_text())
@@ -102,10 +104,11 @@ def twin(args):
                 # Optional slow preview, separately measured; endurance need not render it.
                 world.capture(args.output/'preview.png');last_image=now
             next_tick+=1/240
-            time.sleep(max(0,min(.01,next_tick-time.monotonic())))
+            time.sleep(max(0,min(.01,next_tick-clock())))
     finally:
         server.close();world.apply(dict(virtual=True,armed=False,activeMask=0,targets=[300]*8))
-        atomic(args.output/'result.json',dict(durationS=time.monotonic()-start,diagnostics=world.diagnostics(),journalDrops=journal.dropped))
+        atomic(args.output/'result.json',dict(durationS=clock()-start,diagnostics=world.diagnostics(),journalDrops=journal.dropped,
+            clock=vars(time.get_clock_info('perf_counter'))))
         world.close();journal.close()
 
 def pi(args):

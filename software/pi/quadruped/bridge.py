@@ -28,7 +28,7 @@ def decode(raw):
 
 
 class TraceReceiver:
-    def __init__(self,*,clock=time.monotonic):
+    def __init__(self,*,clock=time.perf_counter):
         self.clock=clock
         self.invalid=0
         self.reset()
