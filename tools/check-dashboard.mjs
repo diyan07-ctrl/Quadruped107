@@ -16,7 +16,7 @@ let data={
   controlModes:['manual','opencv','explore','sensor_test','idle'],
   link:{connected:true,armed:true,kind:'virtual-uno',targets:Array(8).fill(300),activeMask:255},
   motion:{enabled:true,appMode:'explore',desiredMotion:'forward',currentMotion:'forward',generation:1,busy:false,lastResult:'Virtual'},
-  camera:{available:false,status:'Synthetic DOM fixture'},vision:{targetColor:'yellow',targetFresh:true,observationAge:.1,blueBall:{detected:true,offset:-.5,lockState:'locked'}},system:{},
+  camera:{backend:'synthetic',available:false,status:'Synthetic DOM fixture'},vision:{targetColor:'yellow',targetFresh:true,observationAge:.1,blueBall:{detected:true,offset:-.5,lockState:'locked'}},system:{},
   visionConfig:{revision:7,settings:{target_color:'yellow',search_enabled:false}},
   decisionHistory:[{seq:1,time:'12:00:00',kind:'motion_request',status:'requested',motion:'turn_left',reason:'<img id=historyInjected>'}],
   bridge:{connected:true},sensors:{front_m:2,fault:null,observations:{urm37:{age:.1}},touches:{}},
@@ -40,6 +40,11 @@ try {
   assert.equal(w.document.getElementById('historyInjected'),null);
   assert.equal(w.document.getElementById('targetColorSelect').value,'yellow');
   assert.match(w.document.getElementById('decisionHistory').textContent,/requested/);
+  assert.equal(w.document.getElementById('syntheticTargetControls').hidden,false);
+  w.document.querySelector('[data-synthetic-target="-0.7"]').click();
+  await flush();
+  const fixture=calls.find(([url,method])=>url==='/api/simulation/target'&&method==='POST');
+  assert.deepEqual(JSON.parse(fixture[2]),{visible:true,x:-.7,color:'yellow'});
   w.document.getElementById('targetColorSelect').value='blue';
   w.document.getElementById('targetColorSelect').dispatchEvent(new w.Event('change'));
   await flush();
@@ -55,9 +60,10 @@ try {
   w.document.getElementById('stopButton').click();
   await flush();
   assert(calls.some(([url,method])=>url==='/api/stop'&&method==='POST'));
-  data={...data,features:{virtualSensors:false,handGesture:false},controlModes:['manual','opencv','idle'],sensors:null,autonomy:null};
+  data={...data,camera:{...data.camera,backend:'usb'},features:{virtualSensors:false,handGesture:false},controlModes:['manual','opencv','idle'],sensors:null,autonomy:null};
   await w.loadState();
   assert.equal(w.document.getElementById('virtualAutonomy').hidden,true);
+  assert.equal(w.document.getElementById('syntheticTargetControls').hidden,true);
   assert.equal(w.document.querySelector('[data-app-mode="explore"]').hidden,true);
   console.log('Dashboard DOM passed: virtual/legacy modes, text escaping, disabled motion and available STOP.');
 } finally {w.close();}

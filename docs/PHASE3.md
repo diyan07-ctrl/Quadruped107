@@ -18,7 +18,7 @@ python -m venv .venv-demo
 
 Open http://127.0.0.1:7000. On Linux replace Scripts/python.exe with bin/python. Keep both processes running. The model receives accepted virtual Uno output through the existing UDP bridge, rather than moving from UI intent alone. No Uno, GPIO or physical servo connection is needed or authorized.
 
-1. While disarmed select Blue or Yellow in the dashboard and apply. Select the labeled SYNTHETIC target Left control; wait for a fresh, detected target and healthy virtual sensing/simulator.
+1. While disarmed select Blue or Yellow in the dashboard (the selection applies immediately). Select the labeled SYNTHETIC target Left control; wait for a fresh, detected target and healthy virtual sensing/simulator.
 2. Explicitly enable virtual actuators, then select OpenCV tracking. Move the synthetic target through Center and Right. The camera owner renders an interpolated colored circle; the normal detector and controller handle it. These controls never substitute for a USB/file camera.
 3. Hide the target. Target loss stops/disarms. Camera or simulator faults also stop/disarm. Recovery needs a fresh observation, fresh simulator/sensors and explicit enable. There is no automatic re-arm.
 4. To change target color, apply the new preset while stopped and show the matching synthetic circle. Applying configuration cancels motion, clears tracking and increments its revision, including when changed during an active session.
