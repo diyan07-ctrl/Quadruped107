@@ -15,6 +15,9 @@ class MotionController:
         from .explain import DecisionHistory
         self.events=DecisionHistory()
         self.last_request=None
+        self.last_stop_context=None
+        self.heartbeat_count=0
+        self.max_heartbeat_gap=0.0
         self.link = link
         self.safety_check = None
         self.lock = threading.RLock()
@@ -41,18 +44,26 @@ class MotionController:
 
     def snapshot(self):
         with self.lock:
+            now=time.monotonic()
             return dict(appMode=self.app_mode, desiredMotion=self.desired,
                         currentMotion=self.current, generation=self.generation,
                         executedGeneration=self.executed, busy=self.busy,
                         session=self.session,
                         enabled=self.enabled, stopping=self.stop_ticket is not None,
-                        fault=self.fault, lastResult=self.result, lastError=self.error,lastRequest=self.last_request)
+                        fault=self.fault, lastResult=self.result, lastError=self.error,lastRequest=self.last_request,
+                        intentAgeS=now-self.desired_at,heartbeatAgeS=now-self.last_heartbeat,
+                        heartbeatCount=self.heartbeat_count,maxHeartbeatGapS=self.max_heartbeat_gap,
+                        lastStopContext=self.last_stop_context)
 
     def heartbeat(self, held_motion=None, expected_generation=None):
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation:
                 raise RuntimeError("Stale heartbeat")
-            self.last_heartbeat = time.monotonic()
+            now=time.monotonic()
+            if self.enabled and self.last_heartbeat:
+                self.max_heartbeat_gap=max(self.max_heartbeat_gap,now-self.last_heartbeat)
+            self.last_heartbeat=now
+            self.heartbeat_count+=1
             if held_motion == self.desired and held_motion in CONTINUOUS:
                 self.desired_at = self.last_heartbeat
 
@@ -109,6 +120,12 @@ class MotionController:
         with self.lock:
             if expected_generation is not None and expected_generation != self.generation:
                 return
+            if self.enabled:
+                now=time.monotonic()
+                self.last_stop_context=dict(atMonotonic=now,reason=reason,generation=self.generation,
+                    desiredMotion=self.desired,currentMotion=self.current,busy=self.busy,
+                    intentAgeS=now-self.desired_at,heartbeatAgeS=now-self.last_heartbeat,
+                    heartbeatCount=self.heartbeat_count,maxHeartbeatGapS=self.max_heartbeat_gap)
             self.enabled = False
             self.generation += 1
             self.executed = self.generation

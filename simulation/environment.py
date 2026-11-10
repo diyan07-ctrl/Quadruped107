@@ -48,6 +48,7 @@ class SimulatedUltrasonicSensor:
         self.pending=deque(maxlen=8)
         self.current=None
         self.last_rays=[]
+        self.sample_seq=0
 
     def sample(self,now):
         if now>=self.next_poll:
@@ -67,7 +68,9 @@ class SimulatedUltrasonicSensor:
             blocked_self=any(hit[0]==self.world.robot for _,_,hit in rays)
             value=min(self.settings.max_m*hit[2] if hit[0]>=0 else self.settings.max_m for _,_,hit in rays)
             value+=self.random.uniform(-self.settings.noise_m,self.settings.noise_m)
-            record=dict(id=self.identity,kind="range",value=value,valid=not blocked_self,error="Self obstruction" if blocked_self else None)
+            self.sample_seq+=1
+            record=dict(id=self.identity,kind="range",value=value,valid=not blocked_self,error="Self obstruction" if blocked_self else None,
+                        sampleSeq=self.sample_seq,sampledAtMonotonic=now)
             if self.mode in ("invalid","disconnected","no_echo"): record.update(valid=False,value=None,error=self.mode)
             if self.mode=="out_of_range": record["value"]=self.settings.max_m+1
             capture=now-1 if self.mode=="timeout" else now
@@ -195,6 +198,11 @@ class Scene:
 
     def advance(self,frame,dt=1/240):
         if not number(dt,.0001,.02): raise ValueError("Bounded simulation step required")
+        # Acquisition follows the owner/physics cadence, independently of UDP
+        # requests. Polling only while encoding an ACK aliases the sample rate
+        # to network jitter and can return the previous delayed measurement.
+        now=self.clock()
+        for sensor in self.ultrasonic.values(): sensor.sample(now)
         armed=bool(frame.get("armed"))
         if armed and not self.was_armed: self.armed_at=self.clock()
         elif not armed: self.armed_at=None

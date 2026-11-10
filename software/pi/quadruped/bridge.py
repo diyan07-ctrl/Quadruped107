@@ -178,6 +178,9 @@ class TraceClient:
         self.ready=False
         self.disarmed_stop_epoch=None
         self.errors=0
+        self.last_rtt=None
+        self.max_rtt=0.0
+        self.last_sensor_callback_ms=0.0
         self.thread=threading.Thread(target=self._run,name="simulation-bridge",daemon=True)
 
     def start(self): self.thread.start()
@@ -188,6 +191,7 @@ class TraceClient:
             age=time.monotonic()-self.last_ack if self.last_ack else None
             return dict(connected=age is not None and age<=LEASE,ackAge=age,
                         readyToArm=self.ready and not source["armed"] and source.get("stopEpoch")==self.disarmed_stop_epoch,fault=self.fault,epoch=self.epoch,errors=self.errors,
+                        roundTripS=self.last_rtt,maxRoundTripS=self.max_rtt,sensorCallbackMs=self.last_sensor_callback_ms,
                         transport="UDP challenge/lease",physical=False)
 
     def prepare_arm(self):
@@ -252,8 +256,12 @@ class TraceClient:
                         if data.get("server")!=self.session or data.get("nonce")!=nonce or data.get("seq")!=seq or now-born>LEASE:
                             raise ValueError("Stale acknowledgment")
                         if self.on_sensors and "sensors" in data:
+                            callback_started=time.monotonic()
                             self.on_sensors(data["sensors"],session=self.session,transport_age=max(0,now-born))
+                            self.last_sensor_callback_ms=1000*(time.monotonic()-callback_started)
                         with self.lock:
+                            self.last_rtt=now-born
+                            self.max_rtt=max(self.max_rtt,self.last_rtt)
                             self.last_ack=now
                             self.ready=data.get("ready") is True and not sent_armed
                             if self.ready: self.disarmed_stop_epoch=sent_stop_epoch
