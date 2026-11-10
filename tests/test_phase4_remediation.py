@@ -2,6 +2,7 @@
 import sys
 import importlib.util
 import threading
+import socket
 import unittest
 from unittest.mock import patch
 from pathlib import Path
@@ -13,6 +14,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from hil_lease import HeldIntentLease
 from quadruped.controller import MotionController
 from test_safety import GateLink
+from quadruped.bridge import TraceReceiver,TraceClient,encode,decode
 
 class SnapshotGate:
     """Pause one reader immediately before it acquires the actual state lock."""
@@ -174,5 +176,48 @@ class AcquisitionCadenceTests(unittest.TestCase):
                 self.assertTrue(records[identity]['valid'])
                 self.assertLess(records[identity]['age'],.13)
         finally: world.close()
+
+class LossRecoveryTests(unittest.TestCase):
+    def test_repeated_hello_preserves_inflight_nonce_and_original_expiry(self):
+        now=[0.0];receiver=TraceReceiver(clock=lambda:now[0]);peer=('127.0.0.1',1234)
+        hello=encode(dict(v=1,type='hello',client='ab'*16))
+        first=decode(receiver.handle(hello,peer))
+        now[0]=.05
+        second=decode(receiver.handle(hello,peer))
+        self.assertEqual(first['nonce'],second['nonce'])
+        now[0]=.151
+        trace=dict(v=1,type='trace',client='ab'*16,server=first['server'],nonce=first['nonce'],seq=1,
+                   virtual=True,armed=False,activeMask=0,targets=[300]*8)
+        self.assertIsNone(receiver.handle(encode(trace),peer))
+        self.assertFalse(receiver.snapshot()['armed'])
+
+    def test_one_lost_datagram_does_not_force_full_challenge_timeout(self):
+        for lost_type in ('challenge','trace','ack'):
+            with self.subTest(lost_type=lost_type):
+                now=[0.0];receiver=TraceReceiver(clock=lambda:now[0]);pending=[];hello_times=[];dropped=[False]
+                client=TraceClient('127.0.0.1',7002,lambda:dict(armed=False,activeMask=0,targets=[300]*8))
+                class Wire:
+                    def settimeout(self,value): pass
+                    def close(self): pass
+                    def sendto(self,raw,address):
+                        msg=decode(raw)
+                        if msg['type']=='hello': hello_times.append(now[0])
+                        if msg['type']==lost_type and not dropped[0]: dropped[0]=True;return
+                        reply=receiver.handle(raw,('127.0.0.1',1234))
+                        if reply:
+                            if decode(reply)['type']==lost_type and not dropped[0]: dropped[0]=True
+                            else: pending.append(reply)
+                    def recvfrom(self,size):
+                        if pending:
+                            reply=pending.pop(0)
+                            if decode(reply)['type']=='ack': client.stop_event.set()
+                            return reply,('127.0.0.1',7002)
+                        now[0]+=.02
+                        if now[0]>.5: client.stop_event.set()
+                        raise socket.timeout()
+                with patch('quadruped.bridge.socket.socket',return_value=Wire()),patch('quadruped.bridge.time.monotonic',side_effect=lambda:now[0]):
+                    client._run()
+                self.assertTrue(dropped[0]);self.assertTrue(client.ready)
+                self.assertLessEqual(hello_times[1]-hello_times[0],.081)
 
 if __name__=='__main__': unittest.main()

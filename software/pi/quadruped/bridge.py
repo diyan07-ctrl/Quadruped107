@@ -68,8 +68,13 @@ class TraceReceiver:
             if kind=="hello":
                 if self.peer is None: self.peer_since=self.clock()
                 self.peer,self.client=address,client
-                nonce=secrets.token_hex(16)
-                self.challenge=(nonce,self.clock())
+                # A retry must not invalidate an in-flight trace or extend the
+                # original challenge lifetime. Consumed/expired nonces are replaced.
+                if self.challenge is not None and 0<=self.clock()-self.challenge[1]<=CHALLENGE_TTL:
+                    nonce=self.challenge[0]
+                else:
+                    nonce=secrets.token_hex(16)
+                    self.challenge=(nonce,self.clock())
                 return encode(dict(v=1,type="challenge",server=self.session,nonce=nonce))
             if self.peer is None or data.get("server")!=self.session: raise ValueError("Session mismatch")
             seq=data.get("seq")
@@ -173,6 +178,7 @@ class TraceClient:
         self.seq=0
         self.last_ack=0.0
         self.pending=None
+        self.pending_packet=None
         self.epoch=0
         self.fault=None
         self.ready=False
@@ -207,7 +213,6 @@ class TraceClient:
         sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         sock.settimeout(.02)
         last_hello=0.0
-        awaiting=False
         was_armed=False
         try:
             while not self.stop_event.is_set():
@@ -219,10 +224,9 @@ class TraceClient:
                     self.seq+=1
                     sock.sendto(encode(dict(v=1,type="stop",client=self.client,server=self.session,seq=self.seq)),self.address)
                 was_armed=armed
-                if now-last_hello>=.05 and (not awaiting or now-last_hello>CHALLENGE_TTL):
+                if now-last_hello>=.05:
                     sock.sendto(encode(dict(v=1,type="hello",client=self.client)),self.address)
                     last_hello=now
-                    awaiting=True
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
                 except ConnectionResetError:
@@ -243,14 +247,23 @@ class TraceClient:
                                 self.ready=False
                                 self.epoch+=1
                             self.session=server
+                        state=self.source()
+                        if self.pending and self.pending_packet:
+                            old_nonce,old_seq,born,sent_armed,sent_stop_epoch=self.pending
+                            if (nonce==old_nonce and now-born<=CHALLENGE_TTL and
+                                bool(state['armed'])==sent_armed and state.get('stopEpoch')==sent_stop_epoch):
+                                # Re-send the same bounded trace. Neither its
+                                # sequence nor its birth time is refreshed.
+                                sock.sendto(self.pending_packet,self.address)
+                                continue
                         self.seq+=1
                         if self.seq>=2**31: raise RuntimeError("Simulation sequence exhausted")
-                        state=self.source()
                         message=dict(v=1,type="trace",client=self.client,server=server,nonce=nonce,seq=self.seq,
                                      virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"],
                                      activeMotion=state.get("activeMotion"),behavior=state.get("behavior"))
                         self.pending=(nonce,self.seq,now,bool(state["armed"]),state.get("stopEpoch"))
-                        sock.sendto(encode(message),self.address)
+                        self.pending_packet=encode(message)
+                        sock.sendto(self.pending_packet,self.address)
                     elif data.get("type")=="ack" and self.pending:
                         nonce,seq,born,sent_armed,sent_stop_epoch=self.pending
                         if data.get("server")!=self.session or data.get("nonce")!=nonce or data.get("seq")!=seq or now-born>LEASE:
@@ -267,7 +280,7 @@ class TraceClient:
                             if self.ready: self.disarmed_stop_epoch=sent_stop_epoch
                             if data.get("fault"): self.fault=str(data["fault"])[:160]
                         self.pending=None
-                        awaiting=False
+                        self.pending_packet=None
                 except (ValueError,TypeError,KeyError):
                     with self.lock: self.errors+=1
         except (OSError, RuntimeError):
