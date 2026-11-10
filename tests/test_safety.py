@@ -11,6 +11,7 @@ from quadruped.serial_link import SerialLink, MAX_ID, QUEUE_TTL
 from quadruped.controller import MotionController, INTENT_TTL
 from quadruped.main import Runtime, create_app
 from test_runtime import FakeSerial, wait_for
+from unittest.mock import Mock
 
 
 class GateLink(SerialLink):
@@ -29,6 +30,39 @@ class GateLink(SerialLink):
         if ticket.verb != self.block and not ticket.event.is_set():
             self._receive(f"DONE {ticket.identifier} {'armed' if ticket.verb == 'ARM' else 'stopped'}")
         return super().wait(ticket)
+
+
+class BridgeGuardGenerationTests(unittest.TestCase):
+    def test_delayed_fault_cannot_stop_a_later_explicit_enable(self):
+        controller = MotionController(GateLink())
+        controller.arm()
+        runtime = Runtime.__new__(Runtime)
+        runtime.motion = controller
+        runtime.stop_event = Mock()
+        runtime.stop_event.wait.side_effect = [False, True]
+        def delayed_health():
+            # A health observation began before the operator completed recovery.
+            controller.stop('Previous simulator fault')
+            controller.arm()
+            return dict(connected=True, fault='Previous simulator fault')
+        runtime.bridge = Mock()
+        runtime.bridge.snapshot.side_effect = delayed_health
+        runtime._bridge_guard()
+        self.assertTrue(controller.snapshot()['enabled'])
+        self.assertTrue(controller.link.snapshot()['armed'])
+
+    def test_current_fault_still_disarms(self):
+        controller = MotionController(GateLink())
+        controller.arm()
+        runtime = Runtime.__new__(Runtime)
+        runtime.motion = controller
+        runtime.stop_event = Mock()
+        runtime.stop_event.wait.side_effect = [False, True]
+        runtime.bridge = Mock()
+        runtime.bridge.snapshot.return_value = dict(connected=False, fault=None)
+        runtime._bridge_guard()
+        self.assertFalse(controller.snapshot()['enabled'])
+        self.assertFalse(controller.link.snapshot()['armed'])
 
 
 class PriorityTests(unittest.TestCase):
