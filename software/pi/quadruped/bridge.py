@@ -137,6 +137,9 @@ class TraceServer:
         for _ in range(8):
             try: raw,address=self.socket.recvfrom(MAX_PACKET+1)
             except BlockingIOError: break
+            except ConnectionResetError:
+                # A previously addressed UDP client may have closed its port.
+                continue
             reply=self.receiver.handle(raw,address)
             if reply is not None:
                 try:
@@ -218,6 +221,10 @@ class TraceClient:
                     awaiting=True
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
+                except ConnectionResetError:
+                    # Winsock reports an earlier UDP send to a closed port here.
+                    # Keep probing; only a fresh ACK can renew the motion lease.
+                    continue
                 if peer!=self.address: continue
                 now=time.monotonic()  # receipt time, including time blocked in recvfrom
                 try:

@@ -4,21 +4,54 @@ Stacked on Phase 3. **No physical actuator tests authorized.** Keep the Uno, PCA
 
 ## Read-only Pi preflight
 
-On the user's existing Pi SSH terminal, check out this branch and run:
+On the Pi, inspect the checkout before switching branches. Preserve local edits and any branch commits.
 
 ~~~bash
 cd ~/Quadruped107
-git fetch origin
-git switch phase4/pi-hil-qualification
-python3 tools/pi-preflight.py
+git status --short --branch
+git branch -avv
+git config --get-all remote.origin.fetch
+git rev-parse HEAD
 ~~~
+
+A single-branch clone may have a remote-tracking ref from an explicit fetch while its persistent fetch refspec still excludes that branch. If the current refspec excludes Phase 4, add the branch to the tracked set. Fetch before switching:
+
+~~~bash
+git remote set-branches --add origin phase4/pi-hil-qualification
+git fetch origin
+git switch --track origin/phase4/pi-hil-qualification
+git branch --show-current
+git rev-parse HEAD
+test -f tools/pi-preflight.py
+~~~
+
+If the local Phase 4 branch already exists, switch to it and set its upstream with `git branch --set-upstream-to=origin/phase4/pi-hil-qualification`. Inspect divergence before moving it. If local edits prevent the switch, leave them in place until their disposition is clear.
+
+Run `python3 tools/pi-preflight.py` for the OS interpreter, then run it with the selected application interpreter to see the deployment dependencies. The import flags check discovery. Verify actual imports independently with `.venv-pi-virtual/bin/python -c 'import cv2, numpy, flask, serial, quadruped'` when using the standard deployment environment.
 
 The script checks Python imports, /dev/video0 existence/access, port 7000 listener state, and checkout presence. It does not open the camera, take frames, launch services, read passwords, use GPIO or contact any other machine. Its output deliberately does not contain IP addresses, user names or private data.
 
 ## Separate HIL acceptance
 
-After the preflight, use the existing docs/PHASE3.md Pi installation and laptop simulator procedure. Open the camera only when it is not owned by another process. Use real USB camera input with explicitly virtual actuator backend and virtual sensors; simulator on a trusted private LAN. The Pi dashboard should remain bound to loopback, reachable via an authorized SSH tunnel.
+After the preflight, use the [Pi installation procedure](PHASE3.md). On Windows, use the [simulator setup](../simulation/README.md). Start the simulator with `--scenario empty --host WINDOWS_PRIVATE_IP`. The scenario supplies virtual sensor telemetry for the Pi's `--virtual-sensors` option. Use the actual private interface and verify UDP 7002 from the Pi.
+
+Open the camera once, after checking for other consumers. In a Pi foreground shell run:
+
+~~~bash
+.venv-pi-virtual/bin/python -m quadruped.main --camera-backend usb --camera-device /dev/video0 --width 640 --height 480 --fps 8 --actuator-backend virtual --virtual-sensors --simulator WINDOWS_PRIVATE_IP --vision-state build/state/pi-vision.json --host 127.0.0.1 --port 7000
+~~~
+
+From Windows, forward the loopback dashboard with `ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:17000:127.0.0.1:7000 PI_USER@PI_ADDRESS` and open `http://127.0.0.1:17000`. Confirm the camera is fresh, the virtual sensor data is valid, and the bridge has a disarmed handshake before any explicit virtual enable.
 
 Measure actual camera and perception FPS, frame age, CPU/RSS and Stop/re-enable behavior. Confirm that **real camera -> OpenCV -> decision -> virtual Uno -> UDP -> articulated PyBullet** is functioning; synthetic tests do not establish this. No camera recordings are required.
+
+For a simulator restart, verify disarm and zero active outputs before and after reconnection. A Winsock reset from a closed UDP port is recoverable on both the application and simulator sockets. A reset cannot refresh the receiver lease or substitute for a new disarmed handshake.
+
+## Qualification record
+
+- **AUTOMATED TESTED** — Reproduced the restricted-refspec tracking error in a disposable single-branch checkout. Adding the Phase 4 refspec repaired the checkout and made the preflight script available. The Windows suite passed 161 tests, up from the Phase 3 baseline of 157. The model generator, motion data, power tables, simulator validation, model study, proxy probe, and dashboard DOM checks also passed. Both production and virtual Uno sketches compiled locally.
+- **WINDOWS SIMULATOR VERIFIED** — Windows 11 rendered the model in the PyBullet OpenGL window and bound UDP 7002 on the private interface. The PyPI 3.2.7 pin required an MSVC source build on this machine. Local simulator runs used conda-forge PyBullet 3.25 with Python 3.11. The repository pin remains 3.2.7 for CI.
+- **SIMULATED ONLY** — A Windows synthetic-camera application and a separate headless PyBullet process exchanged UDP traces. Both presets tracked left/right and centered. Blue target loss and yellow operator STOP each cleared the virtual Uno output mask. The receiver recorded 46 distinct armed target vectors, measured eight joint angles, and finished with a zero output mask. Neither run automatically rearmed. The GUI run showed intermittent sensor expiry and failed closed. Use `--headless` for the timed LAN run if the GUI cannot keep telemetry fresh. Keep the existing lease and sensor expiry limits.
+- **BLOCKED** — The Pi answered SSH, but unattended authentication was rejected. Pi checkout repair, preflight, real camera capture and performance, physical blue/yellow targets, and Pi-to-Windows HIL remain pending. The synthetic evidence does not qualify the webcam or a physical tennis ball.
 
 Physical movement remains gated by docs/HARDWARE_VERIFICATION.md and hardware/Power/TEST_PLAN.md: inspect/replace damaged PCA9685, qualify servo power/fusing/disconnect/OE, local Uno watchdog/sensing, mechanical calibration and supported-body checks before ever powering a servo.
