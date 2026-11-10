@@ -111,12 +111,14 @@ class IntegratedDemonstrationTests(unittest.TestCase):
             def ready():
                 pump(lambda:runtime.link.snapshot()["connected"] and runtime.bridge.snapshot()["readyToArm"] and
                     not runtime.motion.snapshot()["busy"] and not runtime.motion.snapshot()["stopping"] and
-                    not runtime.sensors.snapshot()["fault"] and runtime.vision.get("blueBall",{}).get("detected"))
+                    not runtime.sensors.snapshot()["fault"] and runtime.camera.latest()[0] is not None and
+                    runtime.state()["vision"]["targetFresh"] and runtime.vision.get("blueBall",{}).get("detected"))
             def enable():
                 ready()
                 result=api.post("/api/arm",json={})
                 self.assertEqual(result.status_code,200,result.json)
-                self.assertEqual(api.post("/api/mode",json={"mode":"opencv"}).status_code,200)
+                response=api.post("/api/mode",json={"mode":"opencv"})
+                self.assertEqual(response.status_code,200,response.json)
             try:
                 for color,bgr in (("blue",(255,0,0)),("yellow",(0,255,180))):
                     source.update(x=100,color=bgr,available=True)
@@ -175,3 +177,31 @@ class IntegratedDemonstrationTests(unittest.TestCase):
                     obstacleOverride=True,cameraFault=True,simulatorReset=True,automaticRearm=False)))
             finally:
                 runtime.close(); server.close(); world.close()
+
+
+class InteractionRuntimeTests(unittest.TestCase):
+    def test_explicit_personality_uses_virtual_uno_and_stop_cancels(self):
+        from test_phase2 import ExplicitBackend
+        from test_runtime import wait_for
+        runtime=Runtime(camera_backend="synthetic",actuator_backend="virtual",virtual_sensors=True,sensor_backend=ExplicitBackend())
+        runtime.start()
+        api=create_app(runtime).test_client()
+        def pump(predicate,timeout=4):
+            deadline=time.monotonic()+timeout
+            while time.monotonic()<deadline:
+                api.post("/api/heartbeat",json={})
+                if predicate(): return
+                time.sleep(.02)
+            self.fail(json.dumps(runtime.state()))
+        try:
+            pump(lambda:runtime.link.snapshot()["connected"] and not runtime.sensors.snapshot()["fault"])
+            self.assertEqual(api.post("/api/arm",json={}).status_code,200)
+            self.assertEqual(api.post("/api/mode",json={"mode":"interaction"}).status_code,200)
+            self.assertEqual(api.post("/api/interaction",json={"name":"greeting"}).status_code,200)
+            self.assertEqual(api.post("/api/interaction",json={"name":"tail_wag"}).status_code,409)
+            pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="greeting")
+            self.assertEqual(api.post("/api/stop",json={}).status_code,200)
+            self.assertFalse(runtime.link.engine.snapshot()["activeMask"])
+            self.assertEqual(api.post("/api/interaction",json={"name":"attention"}).status_code,409)
+            self.assertEqual(sum(line.startswith("MOVE") and line.endswith("greeting") for line in runtime.link.engine.snapshot()["history"]),1)
+        finally: runtime.close()

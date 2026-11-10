@@ -16,14 +16,16 @@ let data={
   controlModes:['manual','opencv','explore','sensor_test','idle'],
   link:{connected:true,armed:true,kind:'virtual-uno',targets:Array(8).fill(300),activeMask:255},
   motion:{enabled:true,appMode:'explore',desiredMotion:'forward',currentMotion:'forward',generation:1,busy:false,lastResult:'Virtual'},
-  camera:{available:false,status:'Synthetic DOM fixture'},vision:{},system:{},
+  camera:{available:false,status:'Synthetic DOM fixture'},vision:{targetColor:'yellow',targetFresh:true,observationAge:.1,blueBall:{detected:true,offset:-.5,lockState:'locked'}},system:{},
+  visionConfig:{revision:7,settings:{target_color:'yellow',search_enabled:false}},
+  decisionHistory:[{seq:1,time:'12:00:00',kind:'motion_request',status:'requested',motion:'turn_left',reason:'<img id=historyInjected>'}],
   bridge:{connected:true},sensors:{front_m:2,fault:null,observations:{urm37:{age:.1}},touches:{}},
   autonomy:{state:'EXPLORING',obstacle:'CLEAR',reason:'<img id="injected">',lastRequestedMotion:'forward'}
 };
 const calls=[];
 w.fetch=async(url,options={})=>{
   const pathname=new URL(String(url),'http://127.0.0.1:7000').pathname;
-  calls.push([pathname,options.method||'GET']);
+  calls.push([pathname,options.method||'GET',options.body]);
   return {ok:true,status:200,json:async()=>pathname==='/api/state'?data:pathname==='/api/camera-frame'?{available:false,status:'Fixture'}:{ok:true,state:data.motion}};
 };
 w.setInterval=()=>0;
@@ -35,6 +37,15 @@ try {
   assert.equal(w.document.getElementById('virtualAutonomy').hidden,false);
   assert.match(w.document.getElementById('navState').textContent,/EXPLORING/);
   assert.equal(w.document.getElementById('injected'),null);
+  assert.equal(w.document.getElementById('historyInjected'),null);
+  assert.equal(w.document.getElementById('targetColorSelect').value,'yellow');
+  assert.match(w.document.getElementById('decisionHistory').textContent,/requested/);
+  w.document.getElementById('targetColorSelect').value='blue';
+  w.document.getElementById('targetColorSelect').dispatchEvent(new w.Event('change'));
+  await flush();
+  const selection=calls.find(([url,method])=>url==='/api/vision'&&method==='POST');
+  assert.equal(JSON.parse(selection[2]).revision,7);
+  assert.equal(JSON.parse(selection[2]).target_color,'blue');
   assert.equal(w.document.querySelector('[data-app-mode="explore"]').hidden,false);
   assert.equal(w.document.querySelector('[data-app-mode="hand_gesture"]').hidden,true);
   data={...data,motion:{...data.motion,enabled:false},link:{...data.link,armed:false}};

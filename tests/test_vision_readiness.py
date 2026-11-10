@@ -134,3 +134,33 @@ class PreferenceTests(unittest.TestCase):
             state=Path(folder)/"bad.json"
             state.write_text('{"schema":99}')
             with self.assertRaises(ValueError): Runtime(simulate=True,vision_state=state)
+
+
+class ConfigurationRaceTests(unittest.TestCase):
+    def test_inflight_old_color_result_cannot_publish_after_switch(self):
+        import threading
+        entered,release=threading.Event(),threading.Event()
+        runtime=Runtime(simulate=True)
+        api=create_app(runtime).test_client()
+        original=detect_blue_ball
+        calls=[0]
+        def delayed(frame,**kwargs):
+            calls[0]+=1
+            if calls[0]==1:
+                entered.set()
+                release.wait(2)
+                return original(image([(100,200,35)]))
+            return original(frame,**kwargs)
+        with patch("quadruped.main.detect_blue_ball",side_effect=delayed):
+            runtime.start()
+            try:
+                self.assertTrue(entered.wait(1))
+                self.assertEqual(api.post("/api/vision",json={"revision":1,"target_color":"yellow"}).status_code,200)
+                release.set()
+                wait_for(lambda:runtime.vision.get("blueBall",{}).get("revision")==2)
+                self.assertEqual(runtime.vision["targetColor"],"yellow")
+                self.assertFalse(runtime.vision["blueBall"]["detected"])
+                self.assertFalse(runtime.motion.snapshot()["enabled"])
+            finally:
+                release.set()
+                runtime.close()
