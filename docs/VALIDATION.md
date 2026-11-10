@@ -1,4 +1,19 @@
-# Phase 2 validation
+# Validation evidence
+
+## Phase 3 integrated checkpoint
+
+[PR run 42734353977](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42734353977), source cc085f3c7acecb8ad6437509c7e4b2a7529087bb, passed **154 tests in 59.428 s**, retaining the 128-test incoming Phase 3 baseline. All three jobs passed: Python 3.11, selected Python 3.13 vision/telemetry checks and production/virtual Uno compilation. The final synthetic operator controls and documentation receive their own head checks before PR readiness.
+
+- PASS — dependency consistency, Python compilation, package wheel/install/import/assets, original motion/model/power consistency, JavaScript/DOM, links/repository integrity, Mermaid and clean-checkout guards.
+- PASS — [integrated synthetic camera evidence](evidence/PHASE3_INTEGRATION.json): both colors accepted left/right and centered, eight joints, 58 distinct accepted virtual target vectors; obstacle override, camera fault, simulator reset and STOP disarmed without automatic re-arm. This is SIMULATED, not a real webcam measurement.
+- PASS — [fifteen controlled model experiments](evidence/PHASE3_MODEL_STUDY.json), with unchanged collision checks, torque cap, canonical CAD/gaits and physical calibration. Smoothing reduced target increments but increased lag and retained self-contact; default remains off.
+- PASS — Python 3.13 x86_64 execution and cp313/abi3 aarch64 OpenCV/NumPy wheel availability. This is not Pi OS native installation validation.
+- NOT TESTED — real Pi camera/FPS/CPU/RAM, GUI/mobile rendering on actual devices, physical sensor/Uno/PCA/servos, electrical protection, stopping time and walking. No SSH command ran on Pi: hostname resolution failed and last-known-IP connection was denied before authentication. No credentials, services or recordings were accessed.
+
+The earlier workflow YAML run had no executable jobs because an unquoted colon-containing pip option was parsed as YAML. The quote fix restored execution. The subsequent integration failure exposed a recovery fixture using an old detected observation while Camera.latest was unavailable; recovery now requires a newly available camera frame and fresh perception. Production readiness gates and assertions were retained. Configuration-race coverage additionally rejects an old detector result after a color change. Failed runs are not counted as successful validation.
+
+Exact launch/test procedures are in [Phase 3](PHASE3.md). Local Python/Arduino tools were unavailable; Python/firmware results above were executed in GitHub Actions. Local Node/Git/repository checks are reported separately. Earlier phase evidence follows for history.
+
 
 Phase 2 starts from verified unmerged Phase 1 head a15c39775a4063b396c3cd844f66324cd250021c, whose [final CI](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42675810285) passed 75 tests and both Uno builds. Work is on phase2/autonomy-sensors-simulation; [PR #4](https://github.com/diyan07-ctrl/Quadruped107/pull/4) targets phase1/software-vision-digital-twin. No existing PR is merged.
 
@@ -265,3 +280,13 @@ The attribute fix at c769bd2 passed [push run 42583604285](https://github.com/di
 The final documentation/deployment freeze clarifies external distribution, independent overvoltage power-cut requirements, A/B/C/D cost/mass tradeoffs and a 20 s service shutdown grace. Its final-head workflows are checked before PR readiness. No previously failed check is hidden or treated as a successful full run. No power source, regulator, current waveform, stopping latency, physical watchdog or assembled-robot test is claimed verified.
 
 Final architecture freeze 99b2614 passed [push workflow 42584023952](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42584023952) and [PR workflow 42584032557](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42584032557), including all 46 tests, power-table checks, installed assets, four diagrams, clean-tree guard and Uno build. The closing documentation clarification defines best-effort touch coalescing without stale replay; it activates no sensor code.
+
+## Final Phase 3 implementation checkpoint
+
+Source 45c15df523f1b606a0124acc1fb7aa6e23aa8b97 passed [PR workflow 42735297964](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42735297964): **157 tests in 59.664 s**, preserving all 128 incoming tests and adding 29 focused regressions. Python 3.13 passed 17 vision/readiness tests and six telemetry tests, read-only diagnostics and ARM64 wheel download. All three jobs succeeded. Production Uno remained 10,198 bytes flash / 998 bytes globals; separate virtual firmware 6,756 / 831. Neither was uploaded.
+
+The integrated demonstration observed 61 distinct virtual eight-target vectors in this run; counts vary with threaded scheduling and are not a performance benchmark. Both colors turned left/right and held center; target loss, obstacle override, camera fault, simulator reset and STOP remained disarming, with no automatic re-enable. The preserved 58-vector evidence file identifies its earlier source/run explicitly.
+
+Eight Mermaid diagrams parsed successfully. Package installation/assets, dependency consistency, model/gait/power checks, DOM behavior, clean checkout and repository checks passed (185 files, 53 protected historical blobs, four intentional duplicate STL groups). A direct Git comparison against incoming Phase 3 confirms no changes to hardware assets, firmware, model files, LICENSE or AUTHORS. Local JavaScript syntax, repository validation, whitespace and Git object integrity checks also passed; dangling intermediate objects are not tracked changes.
+
+The closing documentation/DOM commit adds assertions for synthetic target payload/visibility and records this completed checkpoint. Its head checks must also pass before marking PR #5 ready. Actual Pi, webcam and physical hardware results remain NOT TESTED/BLOCKED as stated above.

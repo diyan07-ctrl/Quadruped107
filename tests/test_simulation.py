@@ -196,9 +196,14 @@ class DigitalTwinTests(unittest.TestCase):
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
             self.assertEqual(api.post("/api/mode",json={"mode":"opencv"}).status_code,200)
             pump(lambda:any(line.endswith("turn_left") and line.startswith("MOVE") for line in runtime.link.engine.snapshot()["history"]))
-            target["x"]=560
+            # Preserve the target identity while moving through real camera observations.
+            for x in (160,240,320,400,480,560):
+                target["x"]=x
+                pump(lambda:runtime.vision.get("blueBall",{}).get("x")==x)
             pump(lambda:any(line.endswith("turn_right") and line.startswith("MOVE") for line in runtime.link.engine.snapshot()["history"]))
-            target["x"]=320
+            for x in (480,400,320):
+                target["x"]=x
+                pump(lambda:runtime.vision.get("blueBall",{}).get("x")==x)
             pump(lambda:runtime.vision.get("behavior")=="TARGET_CENTER")
             target["x"]=None
             pump(lambda:not runtime.motion.snapshot()["enabled"],timeout=2)

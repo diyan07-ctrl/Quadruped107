@@ -1,6 +1,6 @@
 # Sensor and accessory extension contracts
 
-Physical sensor drivers and TEL1 remain unimplemented. Phase 2 implements only [virtual sensing and behaviors](PHASE2.md); its [UDP observation schema](SENSORS.md) is separate from this reserved physical contract. Uno owns range/touch acquisition and local safety policy; Pi owns display, tracking, telemetry presentation and high-level scheduling. All future motion requests use the same controller; local inhibition outranks them.
+Physical sensor drivers and TEL1 firmware emission/negotiation remain unimplemented. Phase 3 adds passive, diagnostic-only host TEL1 parsing; it sends no capability commands and does not qualify telemetry for motion. Phase 2 implements only [virtual sensing and behaviors](PHASE2.md); its [UDP observation schema](SENSORS.md) is separate from this reserved physical contract. Uno owns range/touch acquisition and local safety policy; Pi owns display, tracking, telemetry presentation and high-level scheduling. All future motion requests use the same controller; local inhibition outranks them.
 
 | Extension | Proposed ownership / wiring | Rate / freshness | Invalid/failure behavior |
 | --- | --- | --- | --- |

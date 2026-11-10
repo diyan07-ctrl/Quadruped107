@@ -2,9 +2,9 @@
 
 An eight-joint quadruped for ENR107 Digital Electronics, with Raspberry Pi 4 vision and an Arduino Uno R3 motion controller.
 
-Phase 2 adds simulated ultrasonic/touch sensing, conservative virtual exploration, bounded interactions and obstacle-aware tracking. [Run the laptop simulation](simulation/PHASE2.md); no Raspberry Pi access is required.
+Phase 3 adds stable blue/yellow target tracking, persisted dashboard preferences, explainable virtual decisions and bounded interactions. [Run the integrated laptop demonstration](docs/PHASE3.md); no Raspberry Pi access is required.
 
-This branch develops software before physical locomotion. It supports USB webcam capture, blue-target detection, browser control, a virtual Uno and an eight-joint CAD-mesh PyBullet fixture. Physical ARM is inhibited. The suspected damaged PCA9685 must remain disconnected and all servos unpowered.
+This branch develops software before physical locomotion. It supports USB webcam capture, blue/yellow-target detection, browser control, a virtual Uno and an eight-joint CAD-mesh PyBullet fixture. Physical ARM is inhibited. The suspected damaged PCA9685 must remain disconnected and all servos unpowered.
 
 ## Architecture
 
@@ -52,7 +52,7 @@ Open http://127.0.0.1:7000. Enable **virtual actuators** explicitly before choos
 
 ## Hardware and status
 
-[Phase 2 architecture](docs/PHASE2.md) · [Sensor contract](docs/SENSORS.md) · [Model investigation](docs/MODEL_STUDY.md)
+[Phase 3 demonstration](docs/PHASE3.md) · [Phase 2 architecture](docs/PHASE2.md) · [Sensor contract](docs/SENSORS.md) · [Model investigation](docs/MODEL_STUDY.md)
 
 Physical sensor drivers, qualified stopping and walking remain pending. The optional planar proxy represents kinematic navigation, not gait-derived locomotion.
 

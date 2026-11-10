@@ -19,7 +19,7 @@ from .autonomy import Behavior, VisionSettings, Decision
 from .diagnostics import ProcessStats
 from .controller import CONTINUOUS, MODES, MOTIONS, MotionController
 from .serial_link import SerialLink, SimulatedLink
-from .vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame
+from .vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame, TargetLock
 
 APP_DIR = Path(__file__).resolve().parent
 
@@ -28,7 +28,7 @@ class Runtime:
     def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
                  camera_backend=None, camera_device=None, width=640, height=480, fps=8,
                  actuator_backend=None, vision_config=None, virtual_speed=1.0,
-                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None, sensor_config=None):
+                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None, sensor_config=None, vision_state=None):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
         if link is not None:
@@ -43,7 +43,15 @@ class Runtime:
         else: self.link = SimulatedLink() if simulate else SerialLink(port)
         self.camera = Camera(simulate, camera_index, backend=camera_backend, device=camera_device,
                              width=width, height=height, fps=fps)
-        self.vision_settings = VisionSettings.load(vision_config)
+        from .vision_config import load_state
+        self.settings_lock=threading.RLock()
+        self.vision_state_path=Path(vision_state) if vision_state else None
+        if vision_config and self.vision_state_path and Path(vision_config).resolve()==self.vision_state_path.resolve():
+            raise ValueError("Vision preferences must be separate from the supplied configuration")
+        self.vision_revision=1
+        if not vision_config and self.vision_state_path and self.vision_state_path.exists():
+            self.vision_settings,self.vision_revision=load_state(self.vision_state_path)
+        else: self.vision_settings = VisionSettings.load(vision_config)
         self.behavior = Behavior(self.vision_settings)
         self.obstacle_blocked = False
         self.stats = ProcessStats()
@@ -77,7 +85,7 @@ class Runtime:
         self.owner_seen = 0.0
         self.owner_generation = 0
         self.arming_claim = False
-        self.vision = dict(opencv="Idle", handGesture="Not configured",
+        self.vision = dict(opencv="Idle", targetColor=self.vision_settings.target_color, handGesture="Not configured",
                            blueBall={}, hand={})
         self.preview = None
         self.preview_at = 0.0
@@ -140,20 +148,27 @@ class Runtime:
 
     def state(self):
         _, jpeg, _, status = self.camera.latest()
-        with self.lock:
+        with self.settings_lock,self.lock:
             vision = {**self.vision}
+            config=self.vision_configuration()
+            vision["targetColor"]=self.vision_settings.target_color
+            observed=vision.get("blueBall",{}).get("observed_at")
+            vision["observationAge"]=time.monotonic()-observed if observed is not None else None
+            vision["targetFresh"]=observed is not None and 0<=vision["observationAge"]<=self.vision_settings.max_age
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
-                    autonomy=self.navigation_state(),
+                    autonomy=self.navigation_state(),visionConfig=config,
+                    decisionHistory=self.motion.events.snapshot(),
                     features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None), vision=vision,
                     camera=dict(**self.camera.diagnostics(),
                                 snapshotEndpoint="/api/camera-frame", mjpegEndpoint="/video-feed"))
 
     def _vision_loop(self):
         last_sequence=0
+        target_tracker=TargetLock(self.vision_settings)
         context=None
         count=0
         measured_at=time.monotonic()
@@ -164,9 +179,12 @@ class Runtime:
         while not self.stop_event.wait(.02):
             state=self.motion.snapshot()
             mode=state["appMode"]
-            new_context=(mode,state["session"])
+            with self.settings_lock: settings,revision=self.vision_settings,self.vision_revision
+            new_context=(mode,state["session"],revision)
             if new_context!=context:
+                self.behavior=Behavior(settings)
                 self.behavior.reset(time.monotonic())
+                target_tracker=TargetLock(settings)
                 context=new_context
                 held_gesture=None
                 gesture_count=0
@@ -187,14 +205,19 @@ class Runtime:
             last_sequence=sequence
             started=time.monotonic()
             try:
-                settings=self.vision_settings
-                if settings.hsv_lower==(95,70,30) and settings.hsv_upper==(140,255,255):
+                if (settings.hsv_lower==(95,70,30) and settings.hsv_upper==(140,255,255) and
+                    (settings.min_area,settings.min_radius,settings.max_radius_ratio,settings.min_circularity)==(150,8,.38,.55)):
                     detection=detect_blue_ball(frame)
                 else:
-                    detection=detect_blue_ball(frame,lower=settings.hsv_lower,upper=settings.hsv_upper)
+                    detection=detect_blue_ball(frame,lower=settings.hsv_lower,upper=settings.hsv_upper,
+                        min_area=settings.min_area,min_radius=settings.min_radius,
+                        max_radius_ratio=settings.max_radius_ratio,min_circularity=settings.min_circularity)
+                with self.settings_lock:
+                    if revision!=self.vision_revision: continue
+                detection=target_tracker.process(detection,published_at,allow_new=not state["enabled"])
                 now=time.monotonic()
                 observation={k:v for k,v in detection.items() if k!="mask"}
-                observation.update(observed_at=published_at,frameAge=now-published_at)
+                observation.update(observed_at=published_at,frameAge=now-published_at,revision=revision,targetColor=settings.target_color)
                 if autonomous and not self._fresh_observation(state,published_at): continue
                 if now-published_at>settings.max_age: continue
                 decision=self.behavior.step(observation,now,enabled=autonomous,
@@ -211,20 +234,26 @@ class Runtime:
                     decision=Decision("MANUAL_OVERRIDE" if not autonomous else "GESTURE_CONTROL",
                                       action if label else "stand",False,"Optional gesture control")
                     with self.lock: self.vision["hand"]=gesture or {}
-                preview=encode_vision_frame(frame,detection,self.navigation_state()["state"] if self.sensors else decision.state,decision.motion or "hold")
+                preview=encode_vision_frame(frame,detection,self.navigation_state()["state"] if self.sensors else decision.state,decision.motion or "hold",target_name=settings.target_color)
                 if autonomous and not self._fresh_observation(state,published_at): continue
+                with self.settings_lock:
+                    if revision!=self.vision_revision: continue
                 count+=1
                 elapsed=time.monotonic()-measured_at
-                with self.lock:
+                with self.settings_lock,self.lock:
+                    if revision!=self.vision_revision: continue
                     if elapsed>=.5:
                         self.vision["processingFps"]=round(count/elapsed,2)
                         count,measured_at=0,time.monotonic()
                     self.preview,self.preview_at=preview,published_at
                     self.vision["blueBall"]=observation
+                    self.vision["targetColor"]=settings.target_color
                     if not self.sensors: self.vision["behavior"]=decision.state
                     if not self.sensors: self.vision["opencv"]=decision.reason or decision.state
                     self.vision["processingMs"]=round((time.monotonic()-started)*1000,2)
                     self.vision["transitions"]=list(self.behavior.transitions)
+                self.motion.events.record("perception",status=detection.get("lockState","unknown"),
+                    reason=settings.target_color+" target "+("detected" if observation.get("detected") else "missing"),generation=revision)
                 if not autonomous: continue
                 if not self.actuators_simulated:
                     self.motion.stop("Physical autonomous motion is inhibited",expected_generation=state["generation"])
@@ -241,8 +270,48 @@ class Runtime:
             except Exception as error:
                 logging.exception("Vision failed")
                 with self.lock: self.vision["opencv"]=str(error)
-                if autonomous:
-                    self.motion.stop(f"Vision failed: {error}",expected_generation=state["generation"])
+                current=self.motion.snapshot()
+                with self.lock: self.vision["blueBall"]={}
+                if current["enabled"] and current["appMode"] in {"opencv","hand_gesture"}:
+                    self.motion.stop(f"Vision failed: {error}",expected_generation=current["generation"])
+
+    def vision_configuration(self):
+        with self.settings_lock:
+            return dict(revision=self.vision_revision,settings=self.vision_settings.to_dict(),
+                        persisted=self.vision_state_path is not None)
+
+    def update_vision(self,data,token):
+        if not self.actuators_simulated: raise RuntimeError("Target selection requires explicitly virtual actuators")
+        with self.owner_lock:
+            if self.arming_claim: raise RuntimeError("Enable operation in progress")
+            if self.owner_token is not None and token!=self.owner_token and (
+                self.motion.snapshot()["enabled"] or time.monotonic()-self.owner_seen<1):
+                raise RuntimeError("Another browser owns control")
+            with self.settings_lock:
+                if type(data.get("revision")) is not int or data["revision"]!=self.vision_revision:
+                    raise RuntimeError("Stale vision configuration revision")
+                changes={k:v for k,v in data.items() if k!="revision"}
+                merged=self.vision_settings.to_dict()
+                if changes.get("target_color",merged["target_color"])!=merged["target_color"]:
+                    merged.pop("hsv_lower"); merged.pop("hsv_upper")
+                merged.update(changes)
+                settings=VisionSettings.from_dict(merged)
+                self.motion.stop("Vision configuration changed; explicit enable required",wait=False)
+                revision=self.vision_revision+1
+                if self.vision_state_path:
+                    from .vision_config import save_state
+                    try: save_state(self.vision_state_path,settings,revision)
+                    except OSError as error: raise RuntimeError("Preference write failed; actuators remain disarmed") from error
+                self.vision_settings,self.vision_revision=settings,revision
+                if self.navigation:
+                    with self.nav_lock: self.navigation.tracker=Behavior(settings)
+                with self.lock:
+                    self.preview=None
+                    self.vision["blueBall"]={}
+                    self.vision["targetColor"]=settings.target_color
+                self.motion.events.record("configuration",status="applied_disarmed",
+                    reason=settings.target_color+" target selected",generation=revision)
+                return self.vision_configuration()
 
     def _trace_state(self):
         state=self.link.engine.snapshot()
@@ -287,16 +356,19 @@ class Runtime:
                     if batch is not None: self._sensor_update(batch,session="explicit-test-backend",notify=False)
                 state=self.motion.snapshot()
                 with self.lock: observation=dict(self.vision.get("blueBall",{}))
+                with self.settings_lock:
+                    if observation.get("revision")!=self.vision_revision: observation={}
                 if state["enabled"] and state["appMode"]=="opencv" and observation.get("observed_at") is not None:
                     self._fresh_observation(state,observation["observed_at"])
                 health=self.bridge.snapshot() if self.bridge else None
                 with self.nav_lock:
                     decision=self.navigation.step(state["appMode"],state["enabled"],state["session"],
                         self.sensors.snapshot(),observation,time.monotonic(),busy=state["busy"],
-                        communication_ok=not health or health["connected"] and not health["fault"])
+                        communication_ok=not health or health["connected"] and not health["fault"],generation=state["generation"])
                 with self.lock:
                     self.vision["behavior"]=decision.state
                     self.vision["opencv"]=decision.reason or decision.state
+                self.motion.events.record("autonomy",status=decision.state,reason=decision.reason)
                 if state["enabled"] and decision.stop:
                     self.motion.stop(decision.reason,expected_generation=state["generation"],wait=False)
                 elif decision.motion and self.motion.autonomous(state["appMode"],decision.motion,expected_generation=state["generation"]):
@@ -346,11 +418,15 @@ def create_app(runtime):
                 return jsonify(ok=False, error="Use application/json"), 415
 
     @app.errorhandler(ValueError)
-    def invalid(error): return jsonify(ok=False, error=str(error)), 400
+    def invalid(error):
+        runtime.motion.events.record("api_rejection",status="rejected",reason=request.path+": "+str(error))
+        return jsonify(ok=False, error=str(error)), 400
 
     @app.errorhandler(RuntimeError)
     @app.errorhandler(TimeoutError)
-    def unavailable(error): return jsonify(ok=False, error=str(error)), 409
+    def unavailable(error):
+        runtime.motion.events.record("api_rejection",status="rejected",reason=request.path+": "+str(error))
+        return jsonify(ok=False, error=str(error)), 409
 
     @app.get("/")
     def index(): return send_from_directory(APP_DIR / "web", "index.html")
@@ -361,6 +437,13 @@ def create_app(runtime):
     @app.get("/api/state")
     def state(): return jsonify(runtime.state())
 
+    @app.get("/api/vision")
+    def vision_config(): return jsonify(ok=True,**runtime.vision_configuration())
+
+    @app.post("/api/vision")
+    def set_vision():
+        return jsonify(ok=True,**runtime.update_vision(body(),request.cookies.get("quadruped_control")))
+
     @app.get("/api/mode")
     def mode(): return jsonify(ok=True, state=runtime.motion.snapshot())
 
@@ -370,7 +453,7 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
-        if mode in {"explore","sensor_test"} and runtime.sensors is None:
+        if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
         if mode == "hand_gesture" and runtime.sensors:
             raise RuntimeError("Phase 2 supports blue tracking; optional gesture control remains Phase 1 only")
@@ -435,12 +518,42 @@ def create_app(runtime):
         runtime.release_control(token, claim)
         return jsonify(ok=True, state=runtime.motion.snapshot())
 
+    @app.post("/api/interaction")
+    def interaction():
+        data=body()
+        generation=runtime.require_control(request.cookies.get("quadruped_control"))
+        state=runtime.motion.snapshot()
+        if not runtime.sensors or not runtime.actuators_simulated or state["appMode"]!="interaction" or not state["enabled"]:
+            raise RuntimeError("Select virtual Interactions after explicit enable")
+        if state["busy"] or state["stopping"]: raise RuntimeError("Motion or STOP pending")
+        sensor=runtime.sensors.snapshot()
+        if sensor["fault"] or sensor["front_m"]<=runtime.navigation.settings.caution_m:
+            raise RuntimeError(sensor["fault"] or "Interaction obstacle clearance insufficient")
+        with runtime.nav_lock:
+            runtime.navigation.request_interaction(data.get("name"),state["session"],generation)
+        runtime.nav_wake.set()
+        runtime.motion.events.record("interaction",status="requested",reason=str(data.get("name")),generation=generation)
+        return jsonify(ok=True,status="queued_intent",physical=False)
+
     @app.post("/api/servo")
     def servo():
         generation = runtime.require_control(request.cookies.get("quadruped_control"))
         data = body()
         runtime.motion.servo(data.get("channel"), data.get("pulse"), expected_generation=generation)
         return jsonify(ok=True)
+
+    @app.post("/api/simulation/target")
+    def synthetic_target():
+        data=body()
+        if not runtime.actuators_simulated or not runtime.camera.simulate:
+            raise RuntimeError("Explicit synthetic camera and virtual actuators required")
+        with runtime.owner_lock:
+            if runtime.motion.snapshot()["enabled"] and request.cookies.get("quadruped_control")!=runtime.owner_token:
+                raise RuntimeError("Another browser owns control")
+            runtime.camera.set_synthetic_target(visible=data.get("visible"),color=data.get("color"),x=data.get("x"))
+        runtime.motion.events.record("synthetic_input",status="fixture_changed",
+            reason=str(data.get("color"))+" "+("visible" if data.get("visible") else "hidden"))
+        return jsonify(ok=True,synthetic=True,physical=False)
 
     @app.post("/api/simulation/obstacle")
     def obstacle():
@@ -495,6 +608,7 @@ def main():
     parser.add_argument("--actuator-backend", choices=("virtual", "serial-monitor"), default=None)
     parser.add_argument("--virtual-speed", type=float, default=1.0)
     parser.add_argument("--vision-config")
+    parser.add_argument("--vision-state",default=os.getenv("QUADRUPED_VISION_STATE","build/state/vision.json"))
     parser.add_argument("--simulator", help="Trusted simulator host; enables mandatory network lease")
     parser.add_argument("--simulator-port", type=int, default=7002)
     parser.add_argument("--virtual-sensors", action="store_true", help="Explicit Phase 2 virtual autonomy; simulator telemetry required")
@@ -517,7 +631,7 @@ def main():
                       actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
                       vision_config=args.vision_config, virtual_speed=args.virtual_speed,
                       simulator_host=args.simulator, simulator_port=args.simulator_port,
-                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config,sensor_config=args.sensor_config)
+                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config,sensor_config=args.sensor_config,vision_state=args.vision_state)
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

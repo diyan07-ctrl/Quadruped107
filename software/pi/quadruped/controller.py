@@ -5,13 +5,16 @@ import time
 
 MOTIONS = {"initial", "stand", "greeting", "tail_wag", "forward", "backward", "turn_left", "turn_right"}
 CONTINUOUS = {"forward", "backward", "turn_left", "turn_right"}
-MODES = {"manual", "opencv", "hand_gesture", "explore", "sensor_test", "idle"}
+MODES = {"manual", "opencv", "hand_gesture", "explore", "sensor_test", "idle", "interaction"}
 LEASE_SECONDS = 1.0
 INTENT_TTL = 0.5
 
 
 class MotionController:
     def __init__(self, link):
+        from .explain import DecisionHistory
+        self.events=DecisionHistory()
+        self.last_request=None
         self.link = link
         self.safety_check = None
         self.lock = threading.RLock()
@@ -43,7 +46,7 @@ class MotionController:
                         executedGeneration=self.executed, busy=self.busy,
                         session=self.session,
                         enabled=self.enabled, stopping=self.stop_ticket is not None,
-                        fault=self.fault, lastResult=self.result, lastError=self.error)
+                        fault=self.fault, lastResult=self.result, lastError=self.error,lastRequest=self.last_request)
 
     def heartbeat(self, held_motion=None, expected_generation=None):
         with self.lock:
@@ -111,6 +114,7 @@ class MotionController:
             self.executed = self.generation
             self.app_mode = "manual"
             self.desired = self.current = "none"
+            self.events.record("stop",status="locally_inhibited",reason=reason,generation=self.generation)
             self.result = reason
             if self.fault is None: self.fault = reason
             ticket = None
@@ -122,7 +126,9 @@ class MotionController:
                     self.error = str(error)
         self.wake.set()
         if ticket is not None and wait:
-            try: self.link.wait(ticket)
+            try:
+                self.link.wait(ticket)
+                self.events.record("stop_ack",status="acknowledged",generation=self.generation,request_id=ticket.identifier)
             except Exception as error:
                 with self.lock: self.error = str(error)
             finally:
@@ -160,7 +166,7 @@ class MotionController:
                 raise RuntimeError("Wait for the current step before changing control mode; STOP inhibits immediately")
             self.generation += 1
             if mode in MODES:
-                self.app_mode, self.desired = mode, "none" if mode in {"explore", "sensor_test"} or mode=="opencv" and self.safety_check else "stand"
+                self.app_mode, self.desired = mode, "none" if mode in {"explore", "sensor_test", "interaction"} or mode=="opencv" and self.safety_check else "stand"
                 self.vision_seen = time.monotonic()
             else:
                 self.app_mode, self.desired = "manual", mode
@@ -172,16 +178,24 @@ class MotionController:
         return generation
 
     def autonomous(self, owner, motion, expected_generation=None):
-        if owner not in {"opencv", "hand_gesture", "explore"} or motion not in MOTIONS:
+        if owner not in {"opencv", "hand_gesture", "explore", "interaction"} or motion not in MOTIONS:
             raise ValueError("Invalid autonomous owner or motion")
         with self.lock:
-            if expected_generation is not None and expected_generation != self.generation: return
-            if not self.enabled or self.app_mode != owner: return
-            if self.busy and not (motion == "stand" and self.active is not None and self.active.verb == "MOVE"): return
-            if motion == "stand" and self.desired == "stand": return
-            if self.generation != self.executed and motion != "stand": return
+            self.events.record("motion_request",motion=motion,status="requested",generation=expected_generation)
+            reason=None
+            if expected_generation is not None and expected_generation != self.generation: reason="Stale generation"
+            elif not self.enabled or self.app_mode != owner: reason="Disarmed or different control owner"
+            elif self.busy and not (motion=="stand" and self.active is not None and self.active.verb=="MOVE"): reason="Motion already active"
+            elif motion=="stand" and self.desired=="stand": reason="Stand intent already selected"
+            elif self.generation != self.executed and motion!="stand": reason="Intent pending"
+            if reason:
+                self.last_request=dict(motion=motion,status="rejected",reason=reason,generation=self.generation)
+                self.events.record("motion_rejected",motion=motion,status="rejected",reason=reason,generation=self.generation)
+                return False
             self.generation += 1
             self.desired, self.desired_at = motion, time.monotonic()
+            self.last_request=dict(motion=motion,status="intent_accepted",reason="Awaiting serial dispatch",generation=self.generation)
+            self.events.record("motion_intent",motion=motion,status="intent_accepted",generation=self.generation)
         self.wake.set()
         return True
 
@@ -245,6 +259,7 @@ class MotionController:
                         try:
                             ticket = self.link.submit("MOVE", motion)
                             self.active, self.busy, self.current = ticket, True, motion
+                            self.events.record("motion_dispatch",motion=motion,status="submitted_to_serial",generation=generation,request_id=ticket.identifier)
                         except Exception as error:
                             self.error = str(error)
             if stale:
@@ -262,6 +277,7 @@ class MotionController:
                 with self.lock:
                     if generation == self.generation:
                         self.result, self.error = f"Completed {motion}", None
+                        self.events.record("motion_complete",motion=motion,status="acknowledged_complete",generation=generation,request_id=ticket.identifier)
             except Exception as error:
                 with self.lock:
                     still_current = self.enabled

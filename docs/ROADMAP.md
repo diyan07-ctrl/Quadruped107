@@ -29,3 +29,9 @@ Existing feature code is retained. Completion requires the acceptance evidence b
 Timing, obstacle clearance and endurance limits must be measured and approved for the actual assembly; Phase 0 does not invent distances, runtime or torque margins. Optional OLED, camera pan and Pi 5 remain enhancements after core safety and memory/power review.
 
 Phase 0.1 freeze: implement the independent watchdog/rail/physical-stop circuits and actual calibration activation only in Phase 1, after [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md). [Power](../hardware/Power/README.md) supplies conditional selection and measured-acceptance methods; calculations are not a phase acceptance measurement.
+
+## Phase 3 software checkpoint and next gate
+
+Implemented: revisioned blue/yellow selection, bounded target association, explainable accepted/rejected commands, cancellable virtual interactions, passive TEL1 parsing and end-to-end synthetic-camera/virtual-Uno/UDP/PyBullet regressions. Experimental smoothing remains off after measured lag tradeoffs. [Validation](VALIDATION.md) distinguishes CI evidence from hardware acceptance.
+
+Next: qualify real Pi camera/dependencies and measure resources; recover CAD joint constraints/masses and investigate remaining self-contact; then independently qualify power/OE/disconnect, Uno local watchdog/sensor safety and supported per-servo calibration. No free walking or physical autonomous exploration until those gates pass. Future interaction/vision phases should build on the existing arbiter rather than adding competing motion controllers.
