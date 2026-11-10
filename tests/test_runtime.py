@@ -11,12 +11,12 @@ from types import SimpleNamespace
 import cv2
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "Dev/Quadruped107-connect/python"))
-from camera import Camera
-from controller import MotionController
-from main import Runtime, create_app
-from serial_link import Pending, SerialLink, SimulatedLink
-from vision import choose_blue_ball_motion, detect_blue_ball
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "software/pi"))
+from quadruped.camera import Camera
+from quadruped.controller import MotionController
+from quadruped.main import Runtime, create_app
+from quadruped.serial_link import Pending, SerialLink, SimulatedLink
+from quadruped.vision import choose_blue_ball_motion, detect_blue_ball
 
 
 def wait_for(predicate, timeout=2):

@@ -6,7 +6,8 @@ import sys
 import time
 import unittest
 from pathlib import Path
-from urllib.request import Request, urlopen
+from http.cookiejar import CookieJar
+from urllib.request import Request, urlopen, build_opener, HTTPCookieProcessor
 
 
 class HttpSmokeTests(unittest.TestCase):
@@ -14,22 +15,24 @@ class HttpSmokeTests(unittest.TestCase):
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             port = probe.getsockname()[1]
-        main = Path(__file__).resolve().parents[1] / "Dev/Quadruped107-connect/python/main.py"
+        app_dir = Path(__file__).resolve().parents[1] / "software/pi"
         process = subprocess.Popen(
-            [sys.executable, str(main), "--simulate", "--host", "127.0.0.1", "--port", str(port)],
+            [sys.executable, "-m", "quadruped.main", "--simulate", "--host", "127.0.0.1", "--port", str(port)],
+            cwd=app_dir,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         base = f"http://127.0.0.1:{port}"
+        opener = build_opener(HTTPCookieProcessor(CookieJar()))
         def call(path, data=None):
             request = Request(base + path, data=json.dumps(data).encode() if data is not None else None,
                               headers={"Content-Type": "application/json"})
-            with urlopen(request, timeout=2) as response:
+            with opener.open(request, timeout=2) as response:
                 return json.load(response)
         try:
             deadline = time.monotonic() + 10
             while True:
                 try:
                     state = call("/api/state")
-                    if state["camera"]["available"]: break
+                    if state["camera"]["available"] and state["link"]["connected"]: break
                 except OSError: pass
                 if time.monotonic() > deadline: self.fail("Simulation server did not become ready")
                 time.sleep(0.05)

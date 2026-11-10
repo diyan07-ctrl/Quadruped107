@@ -10,3 +10,11 @@ Escuela/
 build/
 *.pyc
 *.task
+*.egg-info/
+dist/
+.env
+.env.*
+!.env.example
+
+# Isolated development/Pi environments; never commit installed packages.
+.venv*/

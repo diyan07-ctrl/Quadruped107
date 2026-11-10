@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "robot_id": "REPLACE_WITH_ASSEMBLY_ID",
+  "pwm_hz": 50,
+  "joints": [
+    {
+      "id": "shoulder_fl",
+      "channel": 0,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "leg_fl",
+      "channel": 1,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "shoulder_fr",
+      "channel": 2,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "leg_fr",
+      "channel": 3,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "shoulder_bl",
+      "channel": 4,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "leg_bl",
+      "channel": 5,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "shoulder_br",
+      "channel": 6,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    },
+    {
+      "id": "leg_br",
+      "channel": 7,
+      "direction": 1,
+      "min_tick": null,
+      "neutral_tick": null,
+      "max_tick": null,
+      "max_ticks_per_second": 50,
+      "qualified": false,
+      "evidence": ""
+    }
+  ]
+}
