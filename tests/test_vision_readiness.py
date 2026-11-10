@@ -164,3 +164,33 @@ class ConfigurationRaceTests(unittest.TestCase):
             finally:
                 release.set()
                 runtime.close()
+
+
+class SyntheticOperatorTests(unittest.TestCase):
+    def test_live_synthetic_circle_uses_camera_owner_and_color_detector(self):
+        runtime=Runtime(simulate=True)
+        api=create_app(runtime).test_client()
+        runtime.start()
+        try:
+            self.assertEqual(api.post("/api/vision",json={"revision":1,"target_color":"yellow"}).status_code,200)
+            self.assertEqual(api.post("/api/simulation/target",json={"visible":True,"color":"yellow","x":-.7}).status_code,200)
+            wait_for(lambda:runtime.vision.get("blueBall",{}).get("detected"))
+            self.assertEqual(runtime.vision["targetColor"],"yellow")
+            self.assertLess(runtime.vision["blueBall"]["offset"],0)
+            self.assertFalse(runtime.motion.snapshot()["enabled"])
+            self.assertEqual(api.post("/api/simulation/target",json={"visible":False,"color":"yellow","x":0}).status_code,200)
+            wait_for(lambda:not runtime.vision.get("blueBall",{}).get("detected"))
+        finally: runtime.close()
+
+    def test_real_camera_cannot_be_replaced_by_fixture(self):
+        runtime=Runtime(camera_backend="usb",actuator_backend="virtual")
+        response=create_app(runtime).test_client().post("/api/simulation/target",json={"visible":True,"color":"blue","x":0})
+        self.assertEqual(response.status_code,409)
+        self.assertEqual(runtime.camera.backend,"usb")
+
+    def test_other_browser_cannot_change_enabled_synthetic_scene(self):
+        runtime=Runtime(simulate=True)
+        app=create_app(runtime)
+        owner,other=app.test_client(),app.test_client()
+        owner.post("/api/arm",json={})
+        self.assertEqual(other.post("/api/simulation/target",json={"visible":True,"color":"blue","x":0}).status_code,409)

@@ -81,3 +81,9 @@ Servo battery fails while Pi survives: current software does not detect it; a pr
 Sensor/motion faults must inhibit their dependent moving behavior and latch locally; an invalid range is not permission to explore. These local drivers are not implemented. Optional OLED/inference failure may degrade presentation but must never block a safety path. All unresolved part-specific facts are in [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md); [calibration](CALIBRATION.md) and [Power](../hardware/Power/README.md) define commissioning gates.
 
 The host now rejects vision results over 500 ms publication age and independently expires the vision observation lease at 0.8 s, even when the image worker is blocked. Preview age uses the original publication time. These are software checks, not exposure timestamps or guaranteed physical stop times. Fault reason remains latched through repeated STOP until an explicit successful ARM.
+
+## Phase 3 demonstration restrictions
+
+Only explicitly virtual actuators are permitted. The suspected damaged PCA9685 stays isolated; Uno/servos remain disconnected and unpowered. No physical ARM, firmware upload, GPIO, power switching or automatic fallback is added. Target/color/settings changes stop/disarm before replacement; old detector results cannot continue the previous intent. Synthetic scene controls cannot replace a real camera. Interaction requests require explicit virtual enable and valid sensing, and remain subordinate to STOP, faults and obstacles.
+
+Camera/target loss, browser ownership loss and simulator reset/disconnect require fresh readiness and explicit re-enable. Passive TEL1 receive freshness is not proof of acquisition freshness or servo-output state. Simulation interpolation is not a physical calibration or stop-time guarantee. See [Phase 3 limitations](PHASE3.md) and [hardware checklist](HARDWARE_VERIFICATION.md).

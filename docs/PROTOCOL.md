@@ -63,3 +63,9 @@ JSON bodies, URLs and browser assets remain unchanged. POST /api/arm now sets an
 ## Telemetry
 
 Current v1 supplies identity, heartbeat, completion and fault status only; there are no range, touch, voltage or measured-position values. The optional negotiated CAPS/TELEM/TEL1 contract is specified in [EXTENSIONS](EXTENSIONS.md), including framing/ranges, sequence wrap, validity and expiry. It is not activated in Phase 0.1. Old peers retain existing behavior and must not arm or repeatedly retry because telemetry capability is absent.
+
+## Phase 3 passive telemetry preparation
+
+The host now passively recognizes the reserved [TEL1 record](EXTENSIONS.md). It bounds ASCII records to 63 characters, validates fields/flags, handles sequence and uptime wrap, rejects duplicates/backward records and expires receive freshness after 300 ms. A new serial session resets history. TEL lines cannot complete pending ARM/MOVE/STOP acknowledgments. No CAPS/TELEM command is sent and firmware remains unchanged.
+
+Diagnostics explicitly report controlQualified=false and acquisitionFreshnessKnown=false. TEL1 lacks an output-enable field, so servoOutputsEnabled is null, never inferred from voltage or armed intent. Distance, touch, voltage, inhibit, overload and watchdog flags are exposed only according to validity/freshness. A future negotiated revision must carry acquisition age and actual OE state before safety use; no reserved bit is assigned silently.

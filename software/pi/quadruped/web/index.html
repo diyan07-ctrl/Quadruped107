@@ -52,6 +52,13 @@
             <label><input id="targetSearch" type="checkbox"> Explicit bounded search</label>
             <p>Changing settings stops and disarms. HSV detects color/shape, not unique tennis-ball identity.</p>
           </section>
+          <section id="syntheticTargetControls" hidden aria-label="Synthetic camera fixture">
+            <p>SYNTHETIC input only: generate a circle in the selected color.</p>
+            <button type="button" data-synthetic-target="-0.7">Left</button>
+            <button type="button" data-synthetic-target="0">Center</button>
+            <button type="button" data-synthetic-target="0.7">Right</button>
+            <button type="button" data-synthetic-target="hide">Hide target</button>
+          </section>
           <div class="movement-section">
             <div class="section-label">Movement</div>
             <div class="dpad" aria-label="Hold directional controls to move">

@@ -542,6 +542,19 @@ def create_app(runtime):
         runtime.motion.servo(data.get("channel"), data.get("pulse"), expected_generation=generation)
         return jsonify(ok=True)
 
+    @app.post("/api/simulation/target")
+    def synthetic_target():
+        data=body()
+        if not runtime.actuators_simulated or not runtime.camera.simulate:
+            raise RuntimeError("Explicit synthetic camera and virtual actuators required")
+        with runtime.owner_lock:
+            if runtime.motion.snapshot()["enabled"] and request.cookies.get("quadruped_control")!=runtime.owner_token:
+                raise RuntimeError("Another browser owns control")
+            runtime.camera.set_synthetic_target(visible=data.get("visible"),color=data.get("color"),x=data.get("x"))
+        runtime.motion.events.record("synthetic_input",status="fixture_changed",
+            reason=str(data.get("color"))+" "+("visible" if data.get("visible") else "hidden"))
+        return jsonify(ok=True,synthetic=True,physical=False)
+
     @app.post("/api/simulation/obstacle")
     def obstacle():
         if not runtime.actuators_simulated: raise RuntimeError("Virtual sensor endpoint only")

@@ -136,3 +136,21 @@ Hidden waits remain: Picamera2 capture, JPEG encoding, inference, HTTP streaming
 Versioned offline [calibration profiles](CALIBRATION.md) preserve inherited targets. [EXTENSIONS](EXTENSIONS.md) freezes optional TEL1 telemetry, pins, freshness, local fault policy and SRAM budgets. Optional OLED moves to Pi's separate 3.3 V bus; camera pan stays reserved/off. Person/object inference remains a Pi worker publishing expiring motion intent.
 
 No ROS 2, cloud inference, paid APIs, database, heavyweight frontend or broker is required. [Power candidates A/D](../hardware/Power/README.md) preserve the same control topology when the source changes; no structural software redesign is needed.
+
+## Phase 3 integration
+
+[Phase 3](PHASE3.md) retains the single MotionController and virtual Uno output path. A revisioned target lock publishes fresh observations; bounded navigation/personality requests pass through existing ownership, sensor and simulator gates. Configuration changes stop/disarm and invalidate in-flight observations. No automatic re-arm follows a fault or preference change.
+
+```mermaid
+flowchart LR
+  Camera["USB camera or explicit synthetic owner"] --> Vision["Bounded HSV detection and target lock"]
+  Vision --> Arbitration["Navigation priorities and fresh observations"]
+  Sensors["Virtual sensors and simulator lease"] --> Arbitration
+  UI["Browser owner, configuration, STOP"] --> Controller["Single MotionController and decision history"]
+  Arbitration --> Controller
+  Controller --> Uno["Explicit virtual Uno: accepted output"]
+  Uno --> Bridge["Sequenced UDP, STOP epoch, freshness lease"]
+  Bridge --> Twin["Eight-joint CAD fixture on laptop"]
+  Twin --> Sensors
+  Controller -. "future qualified serial; currently inhibited" .-> Physical["Mandatory Uno, PCA9685 and servos disconnected"]
+```

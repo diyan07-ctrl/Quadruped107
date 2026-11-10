@@ -40,3 +40,18 @@ A higher gain slightly reduces gait RMS but worsens stand RMS; default 0.1 is re
 Using the original stand command and a 0.5-second settling interval before forward, then starting a separately labeled measurement segment, reduced forward active maximum from **0.507500 to 0.171078 rad** and active RMS from **0.057844 to 0.027441 rad**. Torque still reached 0.5 Nm and maximum self-contact remained four. The warm-up results are preserved in the report instead of being discarded. No servo target or mass changed.
 
 This supports using an **explicit virtual Stand followed by settling** for reproducible digital-twin demonstrations. ARM still commands no pose. It does not make a blind physical initialization safe, and no physical startup/calibration procedure is approved. Residual error, saturation and contacts remain visible rather than tuned away.
+
+## Phase 3 measured smoothing experiment
+
+[PR CI 42734353977](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42734353977), source cc085f3, executed fifteen experiments. [Full measurements](evidence/PHASE3_MODEL_STUDY.json) include contact-pair identities, raw target error and motor-target increments. Fixed fixture, gain 0.1, 0.5 Nm cap, collisions enabled and unchanged canonical geometry/gaits apply below.
+
+| Forward measurement | Active RMS (rad) | Active max (rad) | Max motor-target increment (rad/step) | Max self-contact count |
+| --- | ---: | ---: | ---: | ---: |
+| Cold, no smoothing | 0.057844 | 0.507500 | 0.520000 | 4 |
+| Explicit Stand/settle, no smoothing | 0.027441 | 0.171078 | 0.026316 | 4 |
+| Stand/settle, 2 rad/s smoothing | 0.055584 | 0.285013 | 0.008333 | 4 |
+| Stand/settle, 3 rad/s smoothing | 0.032423 | 0.188293 | 0.012500 | 4 |
+
+Cold Stand smoothing at 2 rad/s reduced peak applied torque from 0.117588 to 0.049367 Nm and limited motor steps, but raw-target RMS increased from 0.059680 to 0.073312 rad. Forward still saturated at 0.5 Nm, with four self-contacts in every compared setting. Smoothing therefore remains **disabled by default**, available only as an explicit simulation experiment (--smoothing-rate 2 or 3). Improved step size is not improved gait tracking or physical safety. No collision checks are disabled to hide interference.
+
+The step limiter advances at 240 Hz, replaces a single latest target vector and uses simulated joint positions when output becomes active. STOP removes motor force and cancels interpolation immediately; no queued interpolation survives the active mask. Original raw targets remain in error metrics. Remaining self-contact may involve provisional axes/pivots, collisions and gait geometry; these measurements cannot uniquely identify the cause or qualify masses. Recover assembly constraints and real calibration before changing production targets.

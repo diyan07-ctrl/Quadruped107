@@ -547,6 +547,8 @@ function renderDecisions(data) {
       search.checked = config.settings.search_enabled;
     }
   }
+  const synthetic = document.getElementById("syntheticTargetControls");
+  if (synthetic) synthetic.hidden = !data.simulation || data.camera?.backend !== "synthetic";
   const actions = document.getElementById("interactionActions");
   if (actions) {
     actions.hidden = !data.features?.virtualSensors;
@@ -598,6 +600,19 @@ document.querySelectorAll("[data-interaction]").forEach(button => {
       await fetchJson("/api/interaction",{method:"POST",body:JSON.stringify({name:button.dataset.interaction})});
       setResult("Interaction intent queued; execution is shown in command history.");
     } catch (error) {setResult(error.message);}
+    await loadState();
+  });
+});
+
+document.querySelectorAll("[data-synthetic-target]").forEach(button => {
+  button.addEventListener("click",async()=>{
+    try {
+      await fetchJson("/api/simulation/target",{method:"POST",body:JSON.stringify({
+        visible:button.dataset.syntheticTarget!=="hide",
+        x:button.dataset.syntheticTarget==="hide"?0:Number(button.dataset.syntheticTarget),
+        color:document.getElementById("targetColorSelect").value
+      })});
+    } catch(error) {setResult(error.message);}
     await loadState();
   });
 });
