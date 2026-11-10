@@ -16,6 +16,19 @@ from quadruped.controller import MotionController
 from test_safety import GateLink
 from quadruped.bridge import TraceReceiver,TraceClient,encode,decode
 
+class QualificationArtifactTests(unittest.TestCase):
+    def test_optional_preview_failure_is_recorded_without_terminating_control(self):
+        spec=importlib.util.spec_from_file_location('hil_artifact_test',Path(__file__).resolve().parents[1]/'tools/phase4-hil.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        class Journal:
+            def __init__(self): self.rows=[]
+            def put(self,row): self.rows.append(row)
+        journal=Journal()
+        with patch.object(module,'atomic',side_effect=PermissionError('sharing violation')):
+            self.assertFalse(module.optional_snapshot(Path('latest.json'),{},journal))
+        self.assertEqual(journal.rows[0]['kind'],'artifact_error')
+        self.assertIn('sharing violation',journal.rows[0]['error'])
+
 class SnapshotGate:
     """Pause one reader immediately before it acquires the actual state lock."""
     def __init__(self,lock):

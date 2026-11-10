@@ -26,6 +26,14 @@ def atomic(path,value):
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_suffix('.tmp');temp.write_text(json.dumps(value),encoding='utf-8');temp.replace(path)
 
+def optional_snapshot(path,value,journal):
+    """A convenience preview cannot terminate the safety-supervised simulator."""
+    try: atomic(path,value)
+    except OSError as error:
+        journal.put(dict(kind='artifact_error',path=str(path),error=repr(error)))
+        return False
+    return True
+
 class Journal:
     """Bounded nonblocking producer; disk work belongs to a separate thread."""
     def __init__(self,path,clock=time.monotonic):
@@ -98,7 +106,7 @@ def twin(args):
                     receiver=frame,actualJointRad=list(positions),requestedTicks=frame['targets'],
                     ranges=[r for r in batch['observations'] if r['kind']=='range'],
                     tickMaxS=max(intervals),tickMeanS=sum(intervals)/len(intervals),control=control))
-                atomic(args.output/'latest.json',dict(utc=utc(),receiver=frame,actualJointRad=list(positions)))
+                optional_snapshot(args.output/'latest.json',dict(utc=utc(),receiver=frame,actualJointRad=list(positions)),journal)
                 intervals=[];last_sample=now
             if control.get('image') and now-last_image>=.5:
                 # Optional slow preview, separately measured; endurance need not render it.
