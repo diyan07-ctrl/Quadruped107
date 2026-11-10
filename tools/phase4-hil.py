@@ -134,6 +134,7 @@ def pi(args):
         return jsonify(available=True,sequence=seq,capturedAtReceiverMonotonic=captured,
             frameAgeS=time.monotonic()-captured,targetColor=settings.target_color,settings=settings.to_dict(),
             rawJpeg=encode(frame,'.jpg'),maskPng=encode(mask,'.png'),annotatedJpeg=base64.b64encode(annotated).decode(),
+            rawPng=encode(frame,'.png'),
             detection=detection,overexposedFraction=float((hsv[:,:,2]>=250).mean()))
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
     server=make_server('127.0.0.1',7000,app,threaded=True)

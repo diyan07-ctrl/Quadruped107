@@ -88,6 +88,8 @@ class SensorManager:
         self.rejection_reasons={}
         self.recent_batches=deque(maxlen=32)
         self.last_fault=None
+        self.fault_events=deque(maxlen=8)
+        self.was_fault=False
 
     @property
     def registry(self):
@@ -102,6 +104,7 @@ class SensorManager:
             self.events.clear()
             self.touch.clear()
             self.last_received=None
+            self.was_fault=False
 
     def ingest(self,batch,*,session="fixture",transport_age=0.0):
         now=self.clock()
@@ -209,6 +212,8 @@ class SensorManager:
                     receivedAgeS=None if self.last_received is None else now-self.last_received,
                     transportAgeBoundS=self.last_transport_age,
                     observations={k:dict(v) for k,v in records.items()})
+                if not self.was_fault: self.fault_events.append(self.last_fault)
+            self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
             return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
@@ -217,7 +222,7 @@ class SensorManager:
                         diagnostics=dict(clockDomain='receiver monotonic; source timestamps diagnostic only',
                             snapshotAtMonotonic=now,lastReceivedAtMonotonic=self.last_received,
                             lastTransportAgeBoundS=self.last_transport_age,rejectionReasons=dict(self.rejection_reasons),
-                            lastFault=self.last_fault,recentBatches=list(self.recent_batches)))
+                            lastFault=self.last_fault,faultEvents=list(self.fault_events),recentBatches=list(self.recent_batches)))
 
 
 def fixture_batch(seq=0,*,distance=2.0,touches=None,clearance=True,age=0.0,touch_count=5):
