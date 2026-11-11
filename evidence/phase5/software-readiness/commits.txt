@@ -1,0 +1,5 @@
+b84f48577c0e915384dcc335adc97a4e1b7fe29c Permit guarded manual virtual output with physical monitoring while inhibiting travel
+ff4b1abcee642167baab46138f461ec497628182 Verify touch wire-to-interaction flow and physical source isolation from PyBullet
+dae02f996596ef8fd7a445da1d033f48caae0e94 Guard telemetry age quantization and add reproducible firmware qualification runner
+d08651906a54a61f6c7d91b99113c25a6178b5c0 Bound touch capabilities and ages, test real wire records and document commissioning gates
+6c585637d6a9da6b40c3303439bd8e5d0c1faabc Add non-actuating sensor firmware, aged telemetry provider and optional OLED

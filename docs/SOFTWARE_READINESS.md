@@ -1,6 +1,6 @@
 # Software readiness before hardware commissioning
 
-Status: qualification in progress; physical verification PENDING. PR [#7](https://github.com/diyan07-ctrl/Quadruped107/pull/7) remains unmerged. No hardware upload, PWM output, physical ARM, wiring change, Pi deployment or servo power operation is part of this qualification.
+Status: **PARTIAL milestone; all applicable compile/mock/software checks PASS, physical timing/resource/commissioning verification PENDING.** PR [#7](https://github.com/diyan07-ctrl/Quadruped107/pull/7) remains unmerged. No hardware upload, PWM output, physical ARM, wiring change, Pi deployment or servo power operation is part of this qualification. See the [frozen evidence and resource matrix](../evidence/phase5/software-readiness/README.md).
 
 ## Baseline and source audit
 
@@ -52,7 +52,7 @@ Native tests use g++ on CI; Windows can supply `--zig build/phase5/native-tools/
 
 Arduino AVR core 1.8.8 and existing Adafruit dependencies remain pinned in sketch profiles. Shared local library paths use Arduino CLI profile `dir:` entries; use sketch directories, not `.ino` filenames. Direct calibration pins Servo 1.3.0. OLED is optional: install `software/pi/requirements-oled.txt` only when using its hardware backend. No OLED framebuffer exists on the Uno.
 
-Final resource values, test counts, CI results and exact source commits are recorded in the evidence matrix linked here after qualification. Global SRAM headroom is a compile result; measured worst-case stack margin is still PENDING.
+Final source `b84f485` passes 215 tests (0 failures/errors/skips), all 14 existing checks, eight native mock executables and six AVR compile configurations. Both source CI runs pass, including the Python 3.13 subset. See the [evidence matrix](../evidence/phase5/software-readiness/README.md) for exact commands, logs, commits, versions and memory use. Global SRAM headroom is a compile result; measured worst-case stack margin is still PENDING.
 
 ## First sensor-only hardware session (not performed)
 
