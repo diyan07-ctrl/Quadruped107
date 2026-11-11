@@ -1,0 +1,47 @@
+{"started_utc": "2026-11-10T11:09:07.452495+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\deploy-v3.sh"}
+﻿set -eu
+cd ~/Quadruped107-phase4-qualification
+printf '{"action_id":"upgrade-transport","shutdown":true}' > build/phase4-remediation/pi-v2/control.tmp
+mv build/phase4-remediation/pi-v2/control.tmp build/phase4-remediation/pi-v2/control.json
+sleep 2
+git status --short
+git fetch origin phase4/pi-hil-qualification
+git merge --ff-only origin/phase4/pi-hil-qualification
+mkdir -p build/phase4-remediation/pi-v3
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi-v3 --control build/phase4-remediation/pi-v3/control.json > build/phase4-remediation/pi-v3/console.log 2>&1 < /dev/null &
+echo APP_PID=$!
+git rev-parse HEAD
+/usr/sbin/iw dev wlan0 get power_save
+~/Quadruped107/.venv-pi-virtual/bin/python -m unittest discover -s tests -p test_phase4_remediation.py -v
+
+--- OBSERVED OUTPUT ---
+bash: line 1: ﻿set: command not found
+From https://github.com/diyan07-ctrl/Quadruped107
+ * branch            phase4/pi-hil-qualification -> FETCH_HEAD
+   9803e3b..379a7ad  phase4/pi-hil-qualification -> origin/phase4/pi-hil-qualification
+Updating 9803e3b..379a7ad
+Fast-forward
+ software/pi/quadruped/bridge.py  | 29 +++++++++++++++++++-------
+ tests/test_phase4_remediation.py | 45 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+), 8 deletions(-)
+APP_PID=16653
+379a7ad0068e5dc386959f052a3afb8ff66d3bab
+Power save: off
+test_sensor_acquisition_continues_between_udp_sensor_requests (test_phase4_remediation.AcquisitionCadenceTests.test_sensor_acquisition_continues_between_udp_sensor_requests) ... skipped 'PyBullet not installed'
+test_explicit_cancellation_prevents_further_renewals (test_phase4_remediation.IntentFreshnessTests.test_explicit_cancellation_prevents_further_renewals) ... ok
+test_failed_renewal_is_latched_and_never_retried (test_phase4_remediation.IntentFreshnessTests.test_failed_renewal_is_latched_and_never_retried) ... ok
+test_generic_heartbeat_does_not_extend_a_held_direction (test_phase4_remediation.IntentFreshnessTests.test_generic_heartbeat_does_not_extend_a_held_direction) ... ok
+test_matching_renewals_survive_slow_independent_telemetry (test_phase4_remediation.IntentFreshnessTests.test_matching_renewals_survive_slow_independent_telemetry) ... ok
+test_one_lost_datagram_does_not_force_full_challenge_timeout (test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) ... ok
+test_repeated_hello_preserves_inflight_nonce_and_original_expiry (test_phase4_remediation.LossRecoveryTests.test_repeated_hello_preserves_inflight_nonce_and_original_expiry) ... ok
+test_fresh_packet_cannot_refresh_stale_individual_range (test_phase4_remediation.SensorAtomicTimeTests.test_fresh_packet_cannot_refresh_stale_individual_range) ... ok
+test_new_fresh_sample_cannot_appear_from_future_to_safety_reader (test_phase4_remediation.SensorAtomicTimeTests.test_new_fresh_sample_cannot_appear_from_future_to_safety_reader) ... ok
+test_packet_loss_and_reordering_do_not_renew_measurements (test_phase4_remediation.SensorAtomicTimeTests.test_packet_loss_and_reordering_do_not_renew_measurements) ... ok
+test_reader_wait_does_not_hide_genuine_measurement_expiry (test_phase4_remediation.SensorAtomicTimeTests.test_reader_wait_does_not_hide_genuine_measurement_expiry) ... ok
+test_repeated_identical_new_measurements_remain_healthy (test_phase4_remediation.SensorAtomicTimeTests.test_repeated_identical_new_measurements_remain_healthy) ... ok
+test_restart_missing_and_invalid_values_fail_closed (test_phase4_remediation.SensorAtomicTimeTests.test_restart_missing_and_invalid_values_fail_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.042s
+
+OK (skipped=1)

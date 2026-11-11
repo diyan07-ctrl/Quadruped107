@@ -1,0 +1,275 @@
+{
+  "id": "F-CAMERA-ACQUISITION-STOP",
+  "classification": "REAL CAMERA; SOFTWARE CAPTURE-WORKER FAULT INJECTION, NOT USB UNPLUG",
+  "before": {
+    "camera": {
+      "actualFps": 8.31,
+      "available": true,
+      "backend": "usb",
+      "captureMs": 120.05,
+      "device": "/dev/video0",
+      "errors": 0,
+      "frameAge": 0.22420272300041688,
+      "height": 240,
+      "lastError": null,
+      "mjpegEndpoint": "/video-feed",
+      "ownerAlive": true,
+      "reconnects": 1,
+      "requestedFps": 30,
+      "snapshotEndpoint": "/api/camera-frame",
+      "status": "usb camera connected",
+      "syntheticTarget": null,
+      "unchangedFor": 0.10416424799950619,
+      "width": 320
+    },
+    "vision": {
+      "behavior": "TARGET_TRACKING",
+      "blueBall": {
+        "area": 9756,
+        "bbox": [
+          135,
+          118,
+          117,
+          109
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              135,
+              118,
+              117,
+              109
+            ],
+            "circleArea": 10868,
+            "circularity": 0.88,
+            "contourArea": 9756,
+            "fillRatio": 0.898,
+            "radius": 59,
+            "x": 193,
+            "y": 171
+          }
+        ],
+        "circleArea": 10868,
+        "circularity": 0.88,
+        "contourArea": 9756,
+        "detected": true,
+        "fillRatio": 0.898,
+        "frameAge": 0.1444630980004149,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "lockId": 1,
+        "lockState": "locked",
+        "maskArea": 9865,
+        "observed_at": 8880.981761636,
+        "offset": 0.20625,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 59,
+        "rawOffset": 0.20625,
+        "rejectReason": null,
+        "revision": 5,
+        "targetColor": "blue",
+        "x": 193,
+        "y": 171
+      },
+      "hand": {},
+      "handGesture": "Not configured",
+      "observationAge": 0.22342529500019737,
+      "opencv": "TARGET_TRACKING",
+      "processingFps": 8.43,
+      "processingMs": 9.6,
+      "targetColor": "blue",
+      "targetFresh": true,
+      "transitions": []
+    },
+    "motion": {
+      "appMode": "opencv",
+      "busy": true,
+      "currentMotion": "stand",
+      "desiredMotion": "stand",
+      "enabled": true,
+      "executedGeneration": 3,
+      "fault": null,
+      "generation": 4,
+      "lastError": null,
+      "lastRequest": {
+        "generation": 4,
+        "motion": "stand",
+        "reason": "Awaiting serial dispatch",
+        "status": "intent_accepted"
+      },
+      "lastResult": "Selected opencv",
+      "session": 1,
+      "stopping": false
+    },
+    "link": {
+      "activeMask": 85,
+      "activeMotion": "stand",
+      "armed": true,
+      "connected": true,
+      "epoch": 1,
+      "error": null,
+      "kind": "virtual-uno",
+      "port": "virtual://uno",
+      "queued": 0,
+      "samples": 5,
+      "stopping": false,
+      "targets": [
+        278,
+        300,
+        325,
+        300,
+        295,
+        300,
+        283,
+        300
+      ],
+      "telemetry": {
+        "age": null,
+        "errors": 0,
+        "receiveFresh": false,
+        "record": null,
+        "supported": false
+      },
+      "virtual": true,
+      "virtualFault": null
+    }
+  },
+  "result": "PASS",
+  "injection_to_output_off_ms": 1146.0736520002683,
+  "after": {
+    "camera": {
+      "actualFps": 8.31,
+      "available": true,
+      "backend": "usb",
+      "captureMs": 120.68,
+      "device": "/dev/video0",
+      "errors": 0,
+      "frameAge": 0.530029903000468,
+      "height": 240,
+      "lastError": null,
+      "mjpegEndpoint": "/video-feed",
+      "ownerAlive": false,
+      "reconnects": 1,
+      "requestedFps": 30,
+      "snapshotEndpoint": "/api/camera-frame",
+      "status": "usb camera connected",
+      "syntheticTarget": null,
+      "unchangedFor": 0.40936501500073064,
+      "width": 320
+    },
+    "vision": {
+      "behavior": "EMERGENCY_STOP",
+      "blueBall": {
+        "area": 9770,
+        "bbox": [
+          135,
+          117,
+          117,
+          110
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              135,
+              117,
+              117,
+              110
+            ],
+            "circleArea": 10909,
+            "circularity": 0.87,
+            "contourArea": 9770,
+            "fillRatio": 0.896,
+            "radius": 59,
+            "x": 193,
+            "y": 172
+          }
+        ],
+        "circleArea": 10909,
+        "circularity": 0.87,
+        "contourArea": 9770,
+        "detected": true,
+        "fillRatio": 0.896,
+        "frameAge": 0.13651252199997543,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "lockId": 1,
+        "lockState": "locked",
+        "maskArea": 9898,
+        "observed_at": 8881.821886259,
+        "offset": 0.20664048242187497,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 59,
+        "rawOffset": 0.20625,
+        "rejectReason": null,
+        "revision": 5,
+        "targetColor": "blue",
+        "x": 193,
+        "y": 172
+      },
+      "hand": {},
+      "handGesture": "Not configured",
+      "observationAge": 0.5292529929993179,
+      "opencv": "Disarmed; explicit enable required",
+      "processingFps": 8.38,
+      "processingMs": 5.57,
+      "targetColor": "blue",
+      "targetFresh": false,
+      "transitions": []
+    },
+    "motion": {
+      "appMode": "manual",
+      "busy": false,
+      "currentMotion": "none",
+      "desiredMotion": "none",
+      "enabled": false,
+      "executedGeneration": 5,
+      "fault": "Stale vision result",
+      "generation": 5,
+      "lastError": null,
+      "lastRequest": {
+        "generation": 4,
+        "motion": "stand",
+        "reason": "Awaiting serial dispatch",
+        "status": "intent_accepted"
+      },
+      "lastResult": "Stale vision result",
+      "session": 1,
+      "stopping": false
+    },
+    "link": {
+      "activeMask": 0,
+      "activeMotion": null,
+      "armed": false,
+      "connected": true,
+      "epoch": 1,
+      "error": null,
+      "kind": "virtual-uno",
+      "port": "virtual://uno",
+      "queued": 0,
+      "samples": 46,
+      "stopping": false,
+      "targets": [
+        278,
+        110,
+        328,
+        500,
+        295,
+        495,
+        283,
+        110
+      ],
+      "telemetry": {
+        "age": null,
+        "errors": 0,
+        "receiveFresh": false,
+        "record": null,
+        "supported": false
+      },
+      "virtual": true,
+      "virtualFault": null
+    }
+  },
+  "automatic_rearm": false
+}

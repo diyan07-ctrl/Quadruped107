@@ -1,0 +1,21 @@
+{"started_utc": "2026-11-10T10:50:24.908918+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-upgrade.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+printf '%s' '{"action_id":2,"shutdown":true}' > build/phase4-remediation/pi/control.json
+sleep 4
+test -z "$(git status --porcelain --untracked-files=no)"
+git fetch origin
+git switch --detach 9803e3bb1794f38c7971c85b5cc34581d2ba3677
+mkdir -p build/phase4-remediation/pi-v2
+cp build/phase4-remediation/pi/vision.json build/phase4-remediation/pi-v2/vision.json
+nohup env PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi-v2 --control build/phase4-remediation/pi-v2/control.json > build/phase4-remediation/pi-v2/console.log 2>&1 < /dev/null &
+echo PI_V2_PID=$!
+/usr/sbin/iw dev wlan0 get power_save
+
+--- OBSERVED OUTPUT ---
+From https://github.com/diyan07-ctrl/Quadruped107
+   3a8a1fd..9803e3b  phase4/pi-hil-qualification -> origin/phase4/pi-hil-qualification
+Previous HEAD position was 3a8a1fd Fix sensor snapshot timing and independent virtual acquisition cadence
+HEAD is now at 9803e3b Use high-resolution monotonic timing for the Windows simulator cadence
+PI_V2_PID=16582
+Power save: on

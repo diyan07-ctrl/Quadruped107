@@ -1,0 +1,18 @@
+{"started_utc": "2026-11-10T10:25:07.406588+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-network.sh"}
+date -u --iso-8601=seconds
+iw dev wlan0 get power_save || true
+ip -o link show wlan0
+ip -s link show wlan0
+cat /sys/class/net/wlan0/power/control || true
+
+--- OBSERVED OUTPUT ---
+2026-11-10T10:25:09+00:00
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DORMANT group default qlen 1000\    link/ether dc:a6:32:52:27:d8 brd ff:ff:ff:ff:ff:ff
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DORMANT group default qlen 1000
+    link/ether dc:a6:32:52:27:d8 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+     158380957  333901      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+     221843767  365221      0       0       0       0 
+auto
+bash: line 2: iw: command not found

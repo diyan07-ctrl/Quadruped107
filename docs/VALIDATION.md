@@ -1,5 +1,13 @@
 # Validation evidence
 
+## Current Phase 4 hardware checkpoint
+
+The [10 November 2026 Phase 4 report](PHASE4_VALIDATION.md) records authenticated
+Pi access, real USB-camera measurements, actual LAN virtual-actuator testing and
+the failed endurance/yellow-vision gates. Status: **PARTIALLY VERIFIED**. Its
+[evidence index](../evidence/phase4/2026-11-10/README.md) supersedes the earlier
+SSH-blocked observations below, which remain historical Phase 3 evidence.
+
 ## Phase 3 integrated checkpoint
 
 [PR run 42734353977](https://github.com/diyan07-ctrl/Quadruped107/actions/runs/42734353977), source cc085f3c7acecb8ad6437509c7e4b2a7529087bb, passed **154 tests in 59.428 s**, retaining the 128-test incoming Phase 3 baseline. All three jobs passed: Python 3.11, selected Python 3.13 vision/telemetry checks and production/virtual Uno compilation. The final synthetic operator controls and documentation receive their own head checks before PR readiness.

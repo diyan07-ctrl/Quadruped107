@@ -1,0 +1,1 @@
+{"result": "FAIL", "requiredSeconds": 90.0, "durationS": 0, "samples": 0, "failure": {"error": "RuntimeError: Qualification readiness timeout"}, "automaticRearm": false, "heartbeatRecords": [], "journalDrops": 0}

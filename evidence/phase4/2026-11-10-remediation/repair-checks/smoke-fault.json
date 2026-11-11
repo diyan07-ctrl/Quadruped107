@@ -1,0 +1,926 @@
+{
+  "lastFault": {
+    "atMonotonic": 18950.262733468,
+    "observations": {
+      "hcsr04": {
+        "age": 0.7922219860010955,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "hcsr04",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": false,
+        "virtual": true
+      },
+      "sweep_forward": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "sweep_forward",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "sweep_left": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "sweep_left",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "sweep_reverse": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "sweep_reverse",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "sweep_right": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "sweep_right",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "touch_back": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "touch_back",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "touch_body": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "touch_body",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "touch_head": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "touch_head",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "touch_left": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "touch_left",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "touch_right": {
+        "age": 0.7142219859997567,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "touch_right",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": false,
+        "virtual": true
+      },
+      "urm37": {
+        "age": 0.7922219860010955,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "urm37",
+        "kind": "range",
+        "measurement": 2.7700000000000005,
+        "unit": "m",
+        "valid": false,
+        "virtual": true
+      }
+    },
+    "reason": "Missing, invalid or stale front range",
+    "receivedAgeS": 0.7042672649986343,
+    "seq": 1455,
+    "session": "4bcf49d112a98671565bf0b6987a9047",
+    "transportAgeBoundS": 0.00995472100112238
+  },
+  "recentBatches": [
+    {
+      "committedAtMonotonic": 18951.200499923,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1181,
+          "sampledAtSenderMonotonic": 2596.781,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1181,
+          "sampledAtSenderMonotonic": 2596.781,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.200064934,
+      "seq": 1472,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.017727419999573613
+    },
+    {
+      "committedAtMonotonic": 18951.264877097,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1182,
+          "sampledAtSenderMonotonic": 2596.89,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1182,
+          "sampledAtSenderMonotonic": 2596.89,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18951.264389313,
+      "seq": 1473,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011527849001140567
+    },
+    {
+      "committedAtMonotonic": 18951.33334795,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1182,
+          "sampledAtSenderMonotonic": 2596.89,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1182,
+          "sampledAtSenderMonotonic": 2596.89,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18951.332857147,
+      "seq": 1474,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.01684171899978537
+    },
+    {
+      "committedAtMonotonic": 18951.391146488,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1183,
+          "sampledAtSenderMonotonic": 2597.0,
+          "senderAgeS": 0.04599999999982174,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1183,
+          "sampledAtSenderMonotonic": 2597.0,
+          "senderAgeS": 0.04599999999982174,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.390589298,
+      "seq": 1475,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.0071597149981244
+    },
+    {
+      "committedAtMonotonic": 18951.459010262,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1183,
+          "sampledAtSenderMonotonic": 2597.0,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1183,
+          "sampledAtSenderMonotonic": 2597.0,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.458504756,
+      "seq": 1476,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.009348827999929199
+    },
+    {
+      "committedAtMonotonic": 18951.535616546,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1184,
+          "sampledAtSenderMonotonic": 2597.109,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1184,
+          "sampledAtSenderMonotonic": 2597.109,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.535161816,
+      "seq": 1477,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.01119607900182018
+    },
+    {
+      "committedAtMonotonic": 18951.643817709,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1185,
+          "sampledAtSenderMonotonic": 2597.218,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1185,
+          "sampledAtSenderMonotonic": 2597.218,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.643330758,
+      "seq": 1478,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.005829303001519293
+    },
+    {
+      "committedAtMonotonic": 18951.70122246,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1186,
+          "sampledAtSenderMonotonic": 2597.328,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1186,
+          "sampledAtSenderMonotonic": 2597.328,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.700693973,
+      "seq": 1479,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.00801376800154685
+    },
+    {
+      "committedAtMonotonic": 18951.78425544,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1186,
+          "sampledAtSenderMonotonic": 2597.328,
+          "senderAgeS": 0.1089999999999236,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1186,
+          "sampledAtSenderMonotonic": 2597.328,
+          "senderAgeS": 0.1089999999999236,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18951.7837416,
+      "seq": 1480,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.02224853200095822
+    },
+    {
+      "committedAtMonotonic": 18951.905136221,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1187,
+          "sampledAtSenderMonotonic": 2597.437,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1187,
+          "sampledAtSenderMonotonic": 2597.437,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18951.904600975,
+      "seq": 1481,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.012032484999508597
+    },
+    {
+      "committedAtMonotonic": 18952.008050846,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1188,
+          "sampledAtSenderMonotonic": 2597.546,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1188,
+          "sampledAtSenderMonotonic": 2597.546,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18952.007542748,
+      "seq": 1482,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.009450714002014138
+    },
+    {
+      "committedAtMonotonic": 18952.071021259,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1189,
+          "sampledAtSenderMonotonic": 2597.656,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1189,
+          "sampledAtSenderMonotonic": 2597.656,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.070518752,
+      "seq": 1483,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011014009000064107
+    },
+    {
+      "committedAtMonotonic": 18952.152619421,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1190,
+          "sampledAtSenderMonotonic": 2597.765,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1190,
+          "sampledAtSenderMonotonic": 2597.765,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18952.152102582,
+      "seq": 1484,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.025779762003367068
+    },
+    {
+      "committedAtMonotonic": 18952.199259435,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1190,
+          "sampledAtSenderMonotonic": 2597.765,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1190,
+          "sampledAtSenderMonotonic": 2597.765,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18952.198760428,
+      "seq": 1485,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.016891922998183873
+    },
+    {
+      "committedAtMonotonic": 18952.269034033,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1191,
+          "sampledAtSenderMonotonic": 2597.875,
+          "senderAgeS": 0.04599999999982174,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1191,
+          "sampledAtSenderMonotonic": 2597.875,
+          "senderAgeS": 0.04599999999982174,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18952.268513861,
+      "seq": 1486,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.010317341002519242
+    },
+    {
+      "committedAtMonotonic": 18952.337035249,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1191,
+          "sampledAtSenderMonotonic": 2597.875,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1191,
+          "sampledAtSenderMonotonic": 2597.875,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18952.336589834,
+      "seq": 1487,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011237299997446826
+    },
+    {
+      "committedAtMonotonic": 18952.397633923,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1192,
+          "sampledAtSenderMonotonic": 2597.984,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1192,
+          "sampledAtSenderMonotonic": 2597.984,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.397176897,
+      "seq": 1488,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011299484001938254
+    },
+    {
+      "committedAtMonotonic": 18952.472365734,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1193,
+          "sampledAtSenderMonotonic": 2598.093,
+          "senderAgeS": 0.032000000000152795,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1193,
+          "sampledAtSenderMonotonic": 2598.093,
+          "senderAgeS": 0.032000000000152795,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.471891875,
+      "seq": 1489,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.01268069100115099
+    },
+    {
+      "committedAtMonotonic": 18952.583710951,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1193,
+          "sampledAtSenderMonotonic": 2598.093,
+          "senderAgeS": 0.1570000000001528,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1193,
+          "sampledAtSenderMonotonic": 2598.093,
+          "senderAgeS": 0.1570000000001528,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.583207334,
+      "seq": 1490,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.00523420599711244
+    },
+    {
+      "committedAtMonotonic": 18952.621191632,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1194,
+          "sampledAtSenderMonotonic": 2598.203,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1194,
+          "sampledAtSenderMonotonic": 2598.203,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.620692459,
+      "seq": 1491,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.006692134000331862
+    },
+    {
+      "committedAtMonotonic": 18952.68491034,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1195,
+          "sampledAtSenderMonotonic": 2598.312,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1195,
+          "sampledAtSenderMonotonic": 2598.312,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.684481277,
+      "seq": 1492,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.013437562000035541
+    },
+    {
+      "committedAtMonotonic": 18952.748055211,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1195,
+          "sampledAtSenderMonotonic": 2598.312,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1195,
+          "sampledAtSenderMonotonic": 2598.312,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.747516095,
+      "seq": 1493,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.012904371000331594
+    },
+    {
+      "committedAtMonotonic": 18952.836702147,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1196,
+          "sampledAtSenderMonotonic": 2598.421,
+          "senderAgeS": 0.07900000000017826,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1196,
+          "sampledAtSenderMonotonic": 2598.421,
+          "senderAgeS": 0.07900000000017826,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.83625464,
+      "seq": 1494,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.012977758000488393
+    },
+    {
+      "committedAtMonotonic": 18952.947027,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1197,
+          "sampledAtSenderMonotonic": 2598.531,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1197,
+          "sampledAtSenderMonotonic": 2598.531,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18952.946596585,
+      "seq": 1495,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011292447998130228
+    },
+    {
+      "committedAtMonotonic": 18953.013892948,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1198,
+          "sampledAtSenderMonotonic": 2598.64,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1198,
+          "sampledAtSenderMonotonic": 2598.64,
+          "senderAgeS": 0.03099999999994907,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.01344444,
+      "seq": 1496,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.008199430001695873
+    },
+    {
+      "committedAtMonotonic": 18953.077580973,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1198,
+          "sampledAtSenderMonotonic": 2598.64,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1198,
+          "sampledAtSenderMonotonic": 2598.64,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.077094855,
+      "seq": 1497,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.010683573000278557
+    },
+    {
+      "committedAtMonotonic": 18953.157963684,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1199,
+          "sampledAtSenderMonotonic": 2598.75,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.770000000000001
+        },
+        "urm37": {
+          "sampleSeq": 1199,
+          "sampledAtSenderMonotonic": 2598.75,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.770000000000001
+        }
+      },
+      "receivedAtMonotonic": 18953.157458418,
+      "seq": 1498,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.01550065999981598
+    },
+    {
+      "committedAtMonotonic": 18953.267678792,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1200,
+          "sampledAtSenderMonotonic": 2598.859,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1200,
+          "sampledAtSenderMonotonic": 2598.859,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.26715099,
+      "seq": 1499,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.010256565998133738
+    },
+    {
+      "committedAtMonotonic": 18953.329765152,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1200,
+          "sampledAtSenderMonotonic": 2598.859,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1200,
+          "sampledAtSenderMonotonic": 2598.859,
+          "senderAgeS": 0.125,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.329255313,
+      "seq": 1500,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.007139399996958673
+    },
+    {
+      "committedAtMonotonic": 18953.403858054,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1201,
+          "sampledAtSenderMonotonic": 2598.968,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1201,
+          "sampledAtSenderMonotonic": 2598.968,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.403348381,
+      "seq": 1501,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.011773843001719797
+    },
+    {
+      "committedAtMonotonic": 18953.505665855,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1202,
+          "sampledAtSenderMonotonic": 2599.078,
+          "senderAgeS": 0.0929999999998472,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1202,
+          "sampledAtSenderMonotonic": 2599.078,
+          "senderAgeS": 0.0929999999998472,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.505180366,
+      "seq": 1502,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.01164621700081625
+    },
+    {
+      "committedAtMonotonic": 18953.623387917,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1203,
+          "sampledAtSenderMonotonic": 2599.187,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1203,
+          "sampledAtSenderMonotonic": 2599.187,
+          "senderAgeS": 0.09400000000005093,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18953.622884373,
+      "seq": 1503,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.004978248998668278
+    }
+  ],
+  "motion": {
+    "appMode": "manual",
+    "busy": false,
+    "currentMotion": "none",
+    "desiredMotion": "none",
+    "enabled": false,
+    "executedGeneration": 5,
+    "fault": "Missing, invalid or stale front range",
+    "generation": 5,
+    "heartbeatAgeS": 13.77329563999956,
+    "heartbeatCount": 7,
+    "intentAgeS": 13.77329563999956,
+    "lastError": null,
+    "lastRequest": null,
+    "lastResult": "Stopped; servos disabled",
+    "lastStopContext": {
+      "atMonotonic": 18939.914852997,
+      "busy": true,
+      "currentMotion": "forward",
+      "desiredMotion": "forward",
+      "generation": 3,
+      "heartbeatAgeS": 0.01676822100125719,
+      "heartbeatCount": 7,
+      "intentAgeS": 0.01676822100125719,
+      "maxHeartbeatGapS": 0.1037802479986567,
+      "reason": "Missing, invalid or stale front range"
+    },
+    "maxHeartbeatGapS": 0.1037802479986567,
+    "session": 1,
+    "stopping": false
+  },
+  "bridge": {
+    "ackAge": 0.04873294400022132,
+    "connected": true,
+    "epoch": 0,
+    "errors": 0,
+    "fault": null,
+    "maxRoundTripS": 0.14736052400257904,
+    "physical": false,
+    "readyToArm": true,
+    "roundTripS": 0.004978248998668278,
+    "sensorCallbackMs": 0.9369580002385192,
+    "transport": "UDP challenge/lease"
+  }
+}

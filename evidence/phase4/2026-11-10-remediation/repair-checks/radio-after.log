@@ -1,0 +1,20 @@
+{"started_utc": "2026-11-10T12:31:38.074256+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\radio-after.sh"}
+set -eu
+date -u --iso-8601=seconds
+/usr/sbin/iw dev wlan0 get power_save
+/usr/sbin/iw dev wlan0 link | sed -E '/Connected to|SSID:/d'
+journalctl -u NetworkManager --since '2026-11-10 12:15:00 UTC' --no-pager -n 50 2>&1
+
+--- OBSERVED OUTPUT ---
+2026-11-10T12:31:39+00:00
+Power save: off
+	freq: 5180.0
+	RX: 352645543 bytes (623381 packets)
+	TX: 377973149 bytes (649552 packets)
+	signal: -73 dBm
+	rx bitrate: 65.0 MBit/s
+	tx bitrate: 130.0 MBit/s
+	bss flags: short-slot-time
+	dtim period: 1
+	beacon int: 100
+-- No entries --

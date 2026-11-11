@@ -1,0 +1,297 @@
+{"started_utc": "2026-11-10T10:20:54.114246+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-read-smoke.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import json
+from pathlib import Path
+r=json.loads(Path('build/phase4-remediation/smoke/result.json').read_text())
+s=r.get('failure',{}).get('state',{})
+print(json.dumps(dict(result=r['result'],durationS=r['durationS'],failureElapsed=r.get('failure',{}).get('elapsedS'),motion=s.get('motion'),bridge=s.get('bridge'),sensorFault=s.get('sensors',{}).get('diagnostics',{}).get('lastFault'),lastBatches=s.get('sensors',{}).get('diagnostics',{}).get('recentBatches',[])[-4:]),indent=2))
+PY
+
+--- OBSERVED OUTPUT ---
+{
+  "result": "FAIL",
+  "durationS": 0.6558925080025801,
+  "failureElapsed": 0.6437969700018584,
+  "motion": {
+    "appMode": "manual",
+    "busy": false,
+    "currentMotion": "none",
+    "desiredMotion": "none",
+    "enabled": false,
+    "executedGeneration": 4,
+    "fault": "Missing, invalid or stale front range",
+    "generation": 4,
+    "heartbeatAgeS": 0.025523378000798402,
+    "heartbeatCount": 7,
+    "intentAgeS": 0.025523378000798402,
+    "lastError": null,
+    "lastRequest": null,
+    "lastResult": "Missing, invalid or stale front range",
+    "lastStopContext": {
+      "atMonotonic": 18939.914852997,
+      "busy": true,
+      "currentMotion": "forward",
+      "desiredMotion": "forward",
+      "generation": 3,
+      "heartbeatAgeS": 0.01676822100125719,
+      "heartbeatCount": 7,
+      "intentAgeS": 0.01676822100125719,
+      "maxHeartbeatGapS": 0.1037802479986567,
+      "reason": "Missing, invalid or stale front range"
+    },
+    "maxHeartbeatGapS": 0.1037802479986567,
+    "session": 1,
+    "stopping": false
+  },
+  "bridge": {
+    "ackAge": 0.18218933699972695,
+    "connected": true,
+    "epoch": 0,
+    "errors": 0,
+    "fault": null,
+    "maxRoundTripS": 0.14736052400257904,
+    "physical": false,
+    "readyToArm": false,
+    "roundTripS": 0.01562539599763113,
+    "sensorCallbackMs": 0.4556929998216219,
+    "transport": "UDP challenge/lease"
+  },
+  "sensorFault": {
+    "atMonotonic": 18939.923673615,
+    "observations": {
+      "hcsr04": {
+        "age": 0.31445222299953457,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "hcsr04",
+        "kind": "range",
+        "measurement": 2.769999354361873,
+        "unit": "m",
+        "valid": false,
+        "virtual": true
+      },
+      "sweep_forward": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_forward",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_left": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_left",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_reverse": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_reverse",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "sweep_right": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "sweep_right",
+        "kind": "clearance",
+        "measurement": true,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_back": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_back",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_body": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_body",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_head": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_head",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_left": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_left",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "touch_right": {
+        "age": 0.23545222299799207,
+        "error": null,
+        "fresh": true,
+        "health": "OK",
+        "id": "touch_right",
+        "kind": "touch",
+        "measurement": false,
+        "unit": "boolean",
+        "valid": true,
+        "virtual": true
+      },
+      "urm37": {
+        "age": 0.31445222299953457,
+        "error": "Observation expired",
+        "fresh": false,
+        "health": "STALE",
+        "id": "urm37",
+        "kind": "range",
+        "measurement": 2.769999354361873,
+        "unit": "m",
+        "valid": false,
+        "virtual": true
+      }
+    },
+    "reason": "Missing, invalid or stale front range",
+    "receivedAgeS": 0.21097126400127308,
+    "seq": 1344,
+    "session": "4bcf49d112a98671565bf0b6987a9047",
+    "transportAgeBoundS": 0.024480958996718982
+  },
+  "lastBatches": [
+    {
+      "committedAtMonotonic": 18939.383932312,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1073,
+          "sampledAtSenderMonotonic": 2584.968,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        },
+        "urm37": {
+          "sampleSeq": 1073,
+          "sampledAtSenderMonotonic": 2584.968,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7700000000000005
+        }
+      },
+      "receivedAtMonotonic": 18939.383673911,
+      "seq": 1341,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.013665573998878244
+    },
+    {
+      "committedAtMonotonic": 18939.486857228,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1074,
+          "sampledAtSenderMonotonic": 2585.078,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.7700000061774315
+        },
+        "urm37": {
+          "sampleSeq": 1074,
+          "sampledAtSenderMonotonic": 2585.078,
+          "senderAgeS": 0.06199999999989814,
+          "valid": true,
+          "value": 2.7700000061774315
+        }
+      },
+      "receivedAtMonotonic": 18939.486596938,
+      "seq": 1342,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.009196775998134399
+    },
+    {
+      "committedAtMonotonic": 18939.655350527,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1075,
+          "sampledAtSenderMonotonic": 2585.187,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7699999940255458
+        },
+        "urm37": {
+          "sampleSeq": 1075,
+          "sampledAtSenderMonotonic": 2585.187,
+          "senderAgeS": 0.07799999999997453,
+          "valid": true,
+          "value": 2.7699999940255458
+        }
+      },
+      "receivedAtMonotonic": 18939.655104496,
+      "seq": 1343,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.055407093997928314
+    },
+    {
+      "committedAtMonotonic": 18939.712957197,
+      "ranges": {
+        "hcsr04": {
+          "sampleSeq": 1076,
+          "sampledAtSenderMonotonic": 2585.296,
+          "senderAgeS": 0.07900000000017826,
+          "valid": true,
+          "value": 2.769999354361873
+        },
+        "urm37": {
+          "sampleSeq": 1076,
+          "sampledAtSenderMonotonic": 2585.296,
+          "senderAgeS": 0.07900000000017826,
+          "valid": true,
+          "value": 2.769999354361873
+        }
+      },
+      "receivedAtMonotonic": 18939.712702351,
+      "seq": 1344,
+      "session": "4bcf49d112a98671565bf0b6987a9047",
+      "transportAgeBoundS": 0.024480958996718982
+    }
+  ]
+}

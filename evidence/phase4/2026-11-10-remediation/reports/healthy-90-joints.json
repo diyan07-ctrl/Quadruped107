@@ -1,0 +1,17 @@
+{
+  "alignment": "Pi-logged source acquisition timestamps matched within the same Windows monotonic clock; no cross-host clock subtraction",
+  "sourceStart": 9786.9064543,
+  "sourceEnd": 9876.7812003,
+  "samples": 876,
+  "measuredJointRangesRad": [
+    0.46381440722167633,
+    0.223445933783677,
+    0.4934267491686206,
+    0.24052400691077022,
+    0.48421210866037534,
+    0.22940470665049564,
+    0.4787412906399131,
+    0.22047393530255402
+  ],
+  "maximumPhysicsTickS": 0.00513890000001993
+}

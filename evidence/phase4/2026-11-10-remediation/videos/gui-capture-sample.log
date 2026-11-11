@@ -1,0 +1,138 @@
+ffmpeg-win-x86_64-v7.1.exe : ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg 
+developers
+At line:8 char:1
++ & 'build/phase4/recording-tools/imageio_ffmpeg/binaries/ffmpeg-win-x8 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ffmpeg version ...mpeg developers:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  built with gcc 14.2.0 (Rev1, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect 
+--enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma 
+--enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp 
+--enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx 
+--enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz 
+--enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 
+--enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi 
+--enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora 
+--enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex 
+--enable-libvorbis --enable-librubberband
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+[gdigrab @ 0000017348614d00] Found window Quadruped107 - REAL Pi camera / VIRTUAL actuators, capturing 1686x981x32 at 
+(0,0)
+[gdigrab @ 0000017348614d00] Stream #0: not enough frames to estimate rate; consider increasing probesize
+Input #0, gdigrab, from 'title=Quadruped107 - REAL Pi camera / VIRTUAL actuators':
+  Duration: N/A, start: 1794329483.669374, bitrate: 529273 kb/s
+  Stream #0:0: Video: bmp, bgr0, 1686x981, 529273 kb/s, 10 fps, 1000k tbr, 1000k tbn
+[gdigrab @ 0000017348613f80] Found window Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build, capturing 
+1536x1152x32 at (0,0)
+[gdigrab @ 0000017348613f80] Stream #0: not enough frames to estimate rate; consider increasing probesize
+Input #1, gdigrab, from 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build':
+  Duration: N/A, start: 1794329483.775884, bitrate: 566235 kb/s
+  Stream #1:0: Video: bmp, bgr0, 1536x1152, 566235 kb/s, 10 fps, 1000k tbr, 1000k tbn
+Stream mapping:
+  Stream #0:0 (bmp) -> scale:default
+  Stream #1:0 (bmp) -> scale:default
+  hstack:default -> Stream #0:0 (libx264)
+Press [q] to stop, [?] for help
+[libx264 @ 00000173485f8c00] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 00000173485f8c00] profile Constrained Baseline, level 3.2, 4:2:0, 8-bit
+[libx264 @ 00000173485f8c00] 264 - core 164 r3192 c24e06c - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - 
+http://www.videolan.org/x264.html - options: cabac=0 ref=1 deblock=0:0:0 analyse=0:0 me=dia subme=0 psy=1 
+psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=0 cqm=0 deadzone=21,11 fast_pskip=1 
+chroma_qp_offset=0 threads=20 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 
+constrained_intra=0 bframes=0 weightp=0 keyint=250 keyint_min=10 scenecut=0 intra_refresh=0 rc=crf mbtree=0 crf=23.0 
+qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=0
+Output #0, mp4, to 'build/phase4-remediation/gui-capture-sample.mp4':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1920x640, q=2-31, 10 fps, 10240 tbn
+      Metadata:
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+frame=    0 fps=0.0 q=0.0 size=       0KiB time=N/A bitrate=N/A dup=0 drop=3 speed=N/A    
+frame=    0 fps=0.0 q=0.0 size=       0KiB time=N/A bitrate=N/A dup=0 drop=8 speed=N/A    
+frame=    0 fps=0.0 q=0.0 size=       0KiB time=N/A bitrate=N/A dup=0 drop=13 speed=N/A    
+frame=    1 fps=0.5 q=9.0 size=       0KiB time=00:00:00.10 bitrate=   3.8kbits/s dup=0 drop=18 speed=0.0484x    
+frame=    6 fps=2.3 q=9.0 size=       0KiB time=00:00:00.50 bitrate=   0.8kbits/s dup=0 drop=23 speed=0.194x    
+frame=   11 fps=3.5 q=11.0 size=       0KiB time=00:00:01.00 bitrate=   0.4kbits/s dup=0 drop=28 speed=0.322x    
+frame=   17 fps=4.7 q=9.0 size=       0KiB time=00:00:01.60 bitrate=   0.2kbits/s dup=0 drop=34 speed=0.442x    
+frame=   22 fps=5.3 q=9.0 size=       0KiB time=00:00:02.10 bitrate=   0.2kbits/s dup=0 drop=39 speed=0.508x    
+frame=   27 fps=5.8 q=10.0 size=       0KiB time=00:00:02.60 bitrate=   0.1kbits/s dup=0 drop=44 speed=0.559x    
+[out#0/mp4 @ 00000173485efdc0] video:145KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing 
+overhead: 0.697127%
+frame=   50 fps= 10 q=-1.0 Lsize=     146KiB time=00:00:04.90 bitrate= 243.8kbits/s dup=0 drop=49 speed=0.977x    
+[libx264 @ 00000173485f8c00] frame I:1     Avg QP:20.00  size: 26297
+[libx264 @ 00000173485f8c00] frame P:49    Avg QP: 9.96  size:  2478
+[libx264 @ 00000173485f8c00] mb I  I16..4: 100.0%  0.0%  0.0%
+[libx264 @ 00000173485f8c00] mb P  I16..4:  1.8%  0.0%  0.0%  P16..4:  3.8%  0.0%  0.0%  0.0%  0.0%    skip:94.4%
+[libx264 @ 00000173485f8c00] coded y,uvDC,uvAC intra: 14.1% 32.1% 29.8% inter: 1.5% 1.6% 0.7%
+[libx264 @ 00000173485f8c00] i16 v,h,dc,p: 85%  9%  5%  1%
+[libx264 @ 00000173485f8c00] i8c dc,h,v,p: 71%  6% 22%  1%
+[libx264 @ 00000173485f8c00] kb/s:236.36
+ffmpeg-win-x86_64-v7.1.exe : ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg 
+developers
+At line:9 char:1
++ & 'build/phase4/recording-tools/imageio_ffmpeg/binaries/ffmpeg-win-x8 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ffmpeg version ...mpeg developers:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  built with gcc 14.2.0 (Rev1, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect 
+--enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma 
+--enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp 
+--enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx 
+--enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz 
+--enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 
+--enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi 
+--enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora 
+--enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex 
+--enable-libvorbis --enable-librubberband
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'build/phase4-remediation/gui-capture-sample.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:05.00, start: 0.000000, bitrate: 238 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1920x640, 237 
+kb/s, 10 fps, 10 tbr, 10240 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> png (native))
+Press [q] to stop, [?] for help
+Output #0, image2, to 'evidence/phase4/2026-11-10-remediation/screenshots/gui-capture-sample.png':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: png, rgb24(pc, gbr/unknown/unknown, progressive), 1920x640, q=2-31, 200 kb/s, 10 fps, 10 
+tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 png
+[out#0/image2 @ 000002acbf7c4780] video:127KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing 
+overhead: unknown
+frame=    1 fps=0.0 q=-0.0 Lsize=N/A time=00:00:00.10 bitrate=N/A speed=2.72x    

@@ -48,6 +48,7 @@ class SimulatedUltrasonicSensor:
         self.pending=deque(maxlen=8)
         self.current=None
         self.last_rays=[]
+        self.sample_seq=0
 
     def sample(self,now):
         if now>=self.next_poll:
@@ -67,7 +68,9 @@ class SimulatedUltrasonicSensor:
             blocked_self=any(hit[0]==self.world.robot for _,_,hit in rays)
             value=min(self.settings.max_m*hit[2] if hit[0]>=0 else self.settings.max_m for _,_,hit in rays)
             value+=self.random.uniform(-self.settings.noise_m,self.settings.noise_m)
-            record=dict(id=self.identity,kind="range",value=value,valid=not blocked_self,error="Self obstruction" if blocked_self else None)
+            self.sample_seq+=1
+            record=dict(id=self.identity,kind="range",value=value,valid=not blocked_self,error="Self obstruction" if blocked_self else None,
+                        sampleSeq=self.sample_seq,sampledAtMonotonic=now)
             if self.mode in ("invalid","disconnected","no_echo"): record.update(valid=False,value=None,error=self.mode)
             if self.mode=="out_of_range": record["value"]=self.settings.max_m+1
             capture=now-1 if self.mode=="timeout" else now
@@ -95,7 +98,7 @@ class SimulatedTouchSensor:
 
 class Scene:
     """Sensor rays use PyBullet. Swept-clearance is extra simulator geometry evidence."""
-    def __init__(self,world,scenario="empty",*,seed=0,clock=time.monotonic,latency=.02,noise=0.0,proxy=False,show_rays=False,sensor_config=None,profiles=None):
+    def __init__(self,world,scenario="empty",*,seed=0,clock=time.perf_counter,latency=.02,noise=0.0,proxy=False,show_rays=False,sensor_config=None,profiles=None):
         if scenario not in SCENARIOS: raise ValueError("Unknown scenario")
         if proxy and not world.fixed: raise ValueError("Navigation proxy requires the fixed-base articulated fixture")
         config=sensor_config or SensorConfig()
@@ -176,12 +179,17 @@ class Scene:
 
     def telemetry(self):
         now=self.clock()
-        if now>=self.next_batch:
+        ranges=[record for sensor in self.ultrasonic.values() if (record:=sensor.sample(now)) is not None]
+        # A newly available acquisition must supersede a cached batch immediately.
+        # Its own age remains intact; repeated reads never renew the measurement.
+        previous={r['id']:r.get('sampleSeq') for r in (self.last_batch or {}).get('observations',[]) if r['kind']=='range'}
+        changed={r['id']:r.get('sampleSeq') for r in ranges}!=previous
+        if now>=self.next_batch or changed:
             self.next_batch=now+.05
             self.seq+=1
             if self.scenario=="touch":
                 self.touches["head"].pressed=self.armed_at is not None and 1.0<=now-self.armed_at<1.2
-            records=[record for sensor in self.ultrasonic.values() if (record:=sensor.sample(now)) is not None]
+            records=ranges
             records += [sensor.sample(now) for sensor in self.touches.values()]
             records += [dict(id=k,kind="clearance",value=value,valid=True,age=0.0) for k,value in self.clearance().items()]
             self.last_batch=dict(schema=1,seq=self.seq,observations=records)
@@ -195,6 +203,11 @@ class Scene:
 
     def advance(self,frame,dt=1/240):
         if not number(dt,.0001,.02): raise ValueError("Bounded simulation step required")
+        # Acquisition follows the owner/physics cadence, independently of UDP
+        # requests. Polling only while encoding an ACK aliases the sample rate
+        # to network jitter and can return the previous delayed measurement.
+        now=self.clock()
+        for sensor in self.ultrasonic.values(): sensor.sample(now)
         armed=bool(frame.get("armed"))
         if armed and not self.was_armed: self.armed_at=self.clock()
         elif not armed: self.armed_at=None

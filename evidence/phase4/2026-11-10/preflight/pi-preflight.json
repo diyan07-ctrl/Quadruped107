@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-10T06:18:53.505919+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "free"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}

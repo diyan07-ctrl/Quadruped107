@@ -291,7 +291,9 @@ def main():
             engine.feed(b"HELLO\nARM 1\n")
             engine.feed(("MOVE 2 "+args.demo+"\n").encode())
         else: server=TraceServer(args.host,args.port,sensors=scene.telemetry if scene else None)
-        started=time.monotonic()
+        # QPC on Windows: monotonic, with enough resolution for the 240 Hz step.
+        # Python 3.11's Windows monotonic clock can have a 15.625 ms tick.
+        started=time.perf_counter()
         while not args.steps or world.frames<args.steps:
             if not args.headless and scene and server:
                 events=world.p.getKeyboardEvents(physicsClientId=world.client)
@@ -309,7 +311,7 @@ def main():
                 for i,index in enumerate(world.joints):
                     point=world.p.getLinkState(world.robot,index,physicsClientId=world.client)[0]
                     world.p.addUserDebugText(str(i),point,lifeTime=.12,physicsClientId=world.client)
-            time.sleep(max(0,started+world.frames/240-time.monotonic()))
+            time.sleep(max(0,started+world.frames/240-time.perf_counter()))
     except KeyboardInterrupt: pass
     except SimulationFault:
         failed=True

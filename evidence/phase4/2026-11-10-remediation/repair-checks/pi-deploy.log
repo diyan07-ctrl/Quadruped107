@@ -1,0 +1,44 @@
+{"started_utc": "2026-11-10T10:16:38.941546+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-deploy.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+test -z "$(git status --porcelain --untracked-files=no)"
+git fetch origin
+git switch --detach 3a8a1fdcd00814fbe8c6bf45a621c7f831a24422
+git rev-parse HEAD
+mkdir -p build/phase4-remediation/pi
+PYTHONPATH=software/pi:tests ~/Quadruped107/.venv-pi-virtual/bin/python -m unittest test_pi_preflight test_telemetry test_phase4_remediation -v
+nohup env PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi --control build/phase4-remediation/pi/control.json > build/phase4-remediation/pi/console.log 2>&1 < /dev/null &
+echo PI_QUALIFICATION_PID=$!
+
+--- OBSERVED OUTPUT ---
+From https://github.com/diyan07-ctrl/Quadruped107
+   d29dfdb..3a8a1fd  phase4/pi-hil-qualification -> origin/phase4/pi-hil-qualification
+ * [new tag]         phase4-hil-evidence-2026-11-10 -> phase4-hil-evidence-2026-11-10
+Previous HEAD position was d29dfdb Fix stale simulator guard observations across explicit re-enable
+HEAD is now at 3a8a1fd Fix sensor snapshot timing and independent virtual acquisition cadence
+3a8a1fdcd00814fbe8c6bf45a621c7f831a24422
+test_missing_ss_reports_unknown (test_pi_preflight.PreflightTests.test_missing_ss_reports_unknown) ... ok
+test_observational_contract (test_pi_preflight.PreflightTests.test_observational_contract) ... ok
+test_duplicate_out_of_order_expiration_and_wrap (test_telemetry.TelemetryTests.test_duplicate_out_of_order_expiration_and_wrap) ... ok
+test_fields_and_unknown_output_enable (test_telemetry.TelemetryTests.test_fields_and_unknown_output_enable) ... ok
+test_history_is_bounded_and_records_actual_outcomes (test_telemetry.TelemetryTests.test_history_is_bounded_and_records_actual_outcomes) ... ok
+test_invalid_and_reserved_fields (test_telemetry.TelemetryTests.test_invalid_and_reserved_fields) ... ok
+test_reset_requires_new_session (test_telemetry.TelemetryTests.test_reset_requires_new_session) ... ok
+test_tel_cannot_complete_motion_or_arm (test_telemetry.TelemetryTests.test_tel_cannot_complete_motion_or_arm) ... ok
+test_sensor_acquisition_continues_between_udp_sensor_requests (test_phase4_remediation.AcquisitionCadenceTests.test_sensor_acquisition_continues_between_udp_sensor_requests) ... skipped 'PyBullet not installed'
+test_explicit_cancellation_prevents_further_renewals (test_phase4_remediation.IntentFreshnessTests.test_explicit_cancellation_prevents_further_renewals) ... ok
+test_failed_renewal_is_latched_and_never_retried (test_phase4_remediation.IntentFreshnessTests.test_failed_renewal_is_latched_and_never_retried) ... ok
+test_generic_heartbeat_does_not_extend_a_held_direction (test_phase4_remediation.IntentFreshnessTests.test_generic_heartbeat_does_not_extend_a_held_direction) ... ok
+test_matching_renewals_survive_slow_independent_telemetry (test_phase4_remediation.IntentFreshnessTests.test_matching_renewals_survive_slow_independent_telemetry) ... ok
+test_fresh_packet_cannot_refresh_stale_individual_range (test_phase4_remediation.SensorAtomicTimeTests.test_fresh_packet_cannot_refresh_stale_individual_range) ... ok
+test_new_fresh_sample_cannot_appear_from_future_to_safety_reader (test_phase4_remediation.SensorAtomicTimeTests.test_new_fresh_sample_cannot_appear_from_future_to_safety_reader) ... ok
+test_packet_loss_and_reordering_do_not_renew_measurements (test_phase4_remediation.SensorAtomicTimeTests.test_packet_loss_and_reordering_do_not_renew_measurements) ... ok
+test_reader_wait_does_not_hide_genuine_measurement_expiry (test_phase4_remediation.SensorAtomicTimeTests.test_reader_wait_does_not_hide_genuine_measurement_expiry) ... ok
+test_repeated_identical_new_measurements_remain_healthy (test_phase4_remediation.SensorAtomicTimeTests.test_repeated_identical_new_measurements_remain_healthy) ... PI_QUALIFICATION_PID=16394
+ok
+test_restart_missing_and_invalid_values_fail_closed (test_phase4_remediation.SensorAtomicTimeTests.test_restart_missing_and_invalid_values_fail_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 2.941s
+
+OK (skipped=1)

@@ -1,0 +1,21 @@
+{
+  "laptopBandGHz": 5,
+  "channel": 36,
+  "linkMbps": 866.7,
+  "laptopIPv4": "192.168.1.43",
+  "piIPv4": "192.168.1.42",
+  "piPowerSave": "off; operator set runtime radio state",
+  "firewall": {
+    "direction": "Inbound",
+    "action": "Allow",
+    "protocol": "UDP",
+    "localPort": 7002,
+    "localAddress": "192.168.1.43",
+    "remoteAddress": "192.168.1.42",
+    "profile": "Public"
+  },
+  "ruleVerified": true,
+  "handshakeObserved": true,
+  "automaticRearm": false,
+  "credentialsRecorded": false
+}

@@ -1,0 +1,67 @@
+{"started_utc": "2026-11-10T12:38:13.777867+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\pi-final-checks.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+mkdir -p build/phase4-remediation/final
+PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python tools/pi-preflight.py --output build/phase4-remediation/final/preflight.json
+uname -a
+free -m
+df -h /
+vcgencmd get_throttled
+cd ~/Quadruped107
+git rev-parse HEAD
+git diff --cached --binary | sha256sum
+git diff --binary | sha256sum
+cd ~/Quadruped107-phase4-qualification
+git rev-parse HEAD
+PYTHONPATH=software/pi:tests ~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY' > build/phase4-remediation/final/pi-regression.log 2>&1
+import unittest,sys
+from pathlib import Path
+names=[p.stem for p in sorted(Path('tests').glob('test_*.py')) if p.name!='test_demonstration.py']
+print('Modules:',names,flush=True)
+suite=unittest.TestLoader().loadTestsFromNames(names)
+r=unittest.TextTestRunner(verbosity=2).run(suite)
+raise SystemExit(not r.wasSuccessful())
+PY
+tail -n 6 build/phase4-remediation/final/pi-regression.log
+
+--- OBSERVED OUTPUT ---
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-10T12:38:15.545969+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "occupied"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}
+Linux diyan07 6.18.60+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.18.60-1+rpt1 (2026-11-03) aarch64 GNU/Linux
+               total        used        free      shared  buff/cache   available
+Mem:            1844         411          45          27        1482        1432
+Swap:           1843           0        1843
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G  9.9G   18G  37% /
+throttled=0x0
+a15c39775a4063b396c3cd844f66324cd250021c
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  -
+ff3827690b635510198d16516237dc77d98013e3
+client_loop: send disconnect: Connection reset

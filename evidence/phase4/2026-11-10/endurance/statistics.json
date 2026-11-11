@@ -1,0 +1,39 @@
+{
+  "camera.actualFps": {
+    "mean": 8.32243654822335,
+    "minimum": 8.23,
+    "maximum": 8.35
+  },
+  "vision.processingFps": {
+    "mean": 8.332131979695431,
+    "minimum": 7.94,
+    "maximum": 8.69
+  },
+  "system.processCpuPercent": {
+    "mean": 35.324073604060914,
+    "minimum": 21.77,
+    "maximum": 44.11
+  },
+  "system.rssBytes": {
+    "mean": 173042277.3604061,
+    "minimum": 172376064,
+    "maximum": 173592576
+  },
+  "camera.frameAge": {
+    "mean": 0.181961409535529,
+    "minimum": 0.12205311999969126,
+    "maximum": 0.24419577000116988
+  },
+  "bridge.errors": {
+    "mean": 0,
+    "minimum": 0,
+    "maximum": 0
+  },
+  "duration_s": 900.2186163370006,
+  "samples": 788,
+  "enabled_samples": 26,
+  "camera_errors": 0,
+  "http_errors": 0,
+  "result": "FAIL",
+  "first_fault_elapsed_s": 29.62504058200102
+}

@@ -1,0 +1,22 @@
+{"started_utc": "2026-11-10T10:27:08.263020+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-radio-check.sh"}
+set -u
+for candidate in /usr/sbin/iw /sbin/iw; do
+    if test -x "$candidate"; then "$candidate" dev wlan0 get power_save; fi
+done
+dpkg-query -W iw 2>/dev/null || true
+sudo -n true
+printf 'SUDO_NONINTERACTIVE_EXIT=%s\n' "$?"
+dmesg | tail -n 250 | sed -n '/power save\|power management\|brcmf/p'
+
+--- OBSERVED OUTPUT ---
+Power save: on
+Power save: on
+iw	6.9-1+b1
+SUDO_NONINTERACTIVE_EXIT=1
+sudo: a password is required
+[    6.997144] brcmfmac: F1 signature read @0x18000000=0x15264345
+[    7.018712] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    7.025902] usbcore: registered new interface driver brcmfmac
+[    7.258796] brcmfmac: brcmf_c_process_txcap_blob: no txcap_blob available (err=-2)
+[    7.259305] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: Aug 29 2023 01:47:08 version 7.45.265 (28bca26 CY) FWID 01-b677b91b
+[   18.849966] brcmfmac: brcmf_cfg80211_set_power_mgmt: power save enabled

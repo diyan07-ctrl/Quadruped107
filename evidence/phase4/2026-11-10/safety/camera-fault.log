@@ -1,0 +1,363 @@
+{"started_utc": "2026-11-10T07:30:45.678476+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\camera-fault.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+mkdir -p build/phase4
+cat > build/hil-retest/live-client.py <<'PYHELP'
+"""Operator-driven client for the actual Pi dashboard, through an SSH tunnel.
+
+Cookies stay in ignored build/. No credentials are retained in evidence.
+"""
+import http.cookiejar
+import json
+from pathlib import Path
+import time
+import urllib.request
+import urllib.error
+
+cookie=http.cookiejar.LWPCookieJar('build/phase4/control-cookies.txt')
+if Path(cookie.filename).exists(): cookie.load(ignore_discard=True)
+opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),urllib.request.HTTPCookieProcessor(cookie))
+def api(path,data=None):
+    req=urllib.request.Request('http://127.0.0.1:7000/api/'+path,
+      data=None if data is None else json.dumps(data).encode(),headers={'Content-Type':'application/json'})
+    started=time.monotonic()
+    try:
+        with opener.open(req,timeout=5) as response: result=json.load(response); status=response.status
+    except urllib.error.HTTPError as error: result=json.load(error); status=error.code
+    cookie.save(ignore_discard=True)
+    if data is not None and path!='heartbeat':
+        with Path('build/phase4/http-actions.jsonl').open('a') as log:
+            log.write(json.dumps(dict(local_monotonic_s=started,path=path,body=data,status=status,
+               duration_ms=1000*(time.monotonic()-started),response=result))+'\n')
+    return status,result
+
+def wait(predicate,timeout=8,motion=None):
+    deadline=time.monotonic()+timeout
+    while time.monotonic()<deadline:
+        api('heartbeat',dict(motion=motion))
+        _,state=api('state')
+        if predicate(state): return state
+        time.sleep(.07)
+    raise AssertionError(json.dumps({k:state.get(k) for k in ('motion','bridge','link','sensors','vision')}))
+
+def ready():
+    return wait(lambda s:s['bridge']['connected'] and s['bridge']['readyToArm'] and
+      not s['motion']['stopping'] and not s['motion']['busy'] and not s['sensors']['fault'])
+
+def stop():
+    status,result=api('stop',{})
+    assert status==200,(status,result)
+    return wait(lambda s:not s['motion']['enabled'] and not s['link']['armed'] and s['link']['activeMask']==0)
+
+PYHELP
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PYFAULT'
+"""Inject stopped real-camera acquisition; never opens a physical actuator."""
+import json,runpy,time
+from pathlib import Path
+c=runpy.run_path('build/hil-retest/live-client.py')
+api,wait,ready,stop=[c[k] for k in ('api','wait','ready','stop')]
+path=Path('build/hil-retest/control.json')
+def control(**changes):
+    temporary=path.with_suffix('.tmp')
+    temporary.write_text(json.dumps(dict(action_id=time.time_ns(),**changes))); temporary.replace(path)
+result=dict(id='F-CAMERA-ACQUISITION-STOP',classification='REAL CAMERA; SOFTWARE CAPTURE-WORKER FAULT INJECTION, NOT USB UNPLUG')
+try:
+    stop(); ready()
+    wait(lambda s:s['vision']['blueBall'].get('detected'),timeout=12)
+    assert api('arm',{})[0]==200
+    assert api('mode',dict(mode='opencv'))[0]==200
+    before=wait(lambda s:s['link']['activeMask']!=0 and s['motion']['enabled'])
+    result['before']={k:before[k] for k in ('camera','vision','motion','link')}
+    started=time.monotonic(); control(camera_stop=True)
+    state=wait(lambda s:not s['motion']['enabled'] and not s['link']['armed'] and s['link']['activeMask']==0,timeout=4)
+    result.update(result='PASS',injection_to_output_off_ms=1000*(time.monotonic()-started),
+                  after={k:state[k] for k in ('camera','vision','motion','link')})
+    control(camera_resume=True)
+    wait(lambda s:s['camera']['available'])
+    state=ready(); assert not state['motion']['enabled']
+    result['automatic_rearm']=False
+except Exception as error:
+    result.update(result='FAIL',error=str(error))
+finally:
+    stop(); control(camera_resume=True)
+    Path('build/hil-retest/camera-fault.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(result,indent=2))
+
+PYFAULT
+
+--- OBSERVED OUTPUT ---
+{
+  "id": "F-CAMERA-ACQUISITION-STOP",
+  "classification": "REAL CAMERA; SOFTWARE CAPTURE-WORKER FAULT INJECTION, NOT USB UNPLUG",
+  "before": {
+    "camera": {
+      "actualFps": 8.31,
+      "available": true,
+      "backend": "usb",
+      "captureMs": 120.05,
+      "device": "/dev/video0",
+      "errors": 0,
+      "frameAge": 0.22420272300041688,
+      "height": 240,
+      "lastError": null,
+      "mjpegEndpoint": "/video-feed",
+      "ownerAlive": true,
+      "reconnects": 1,
+      "requestedFps": 30,
+      "snapshotEndpoint": "/api/camera-frame",
+      "status": "usb camera connected",
+      "syntheticTarget": null,
+      "unchangedFor": 0.10416424799950619,
+      "width": 320
+    },
+    "vision": {
+      "behavior": "TARGET_TRACKING",
+      "blueBall": {
+        "area": 9756,
+        "bbox": [
+          135,
+          118,
+          117,
+          109
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              135,
+              118,
+              117,
+              109
+            ],
+            "circleArea": 10868,
+            "circularity": 0.88,
+            "contourArea": 9756,
+            "fillRatio": 0.898,
+            "radius": 59,
+            "x": 193,
+            "y": 171
+          }
+        ],
+        "circleArea": 10868,
+        "circularity": 0.88,
+        "contourArea": 9756,
+        "detected": true,
+        "fillRatio": 0.898,
+        "frameAge": 0.1444630980004149,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "lockId": 1,
+        "lockState": "locked",
+        "maskArea": 9865,
+        "observed_at": 8880.981761636,
+        "offset": 0.20625,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 59,
+        "rawOffset": 0.20625,
+        "rejectReason": null,
+        "revision": 5,
+        "targetColor": "blue",
+        "x": 193,
+        "y": 171
+      },
+      "hand": {},
+      "handGesture": "Not configured",
+      "observationAge": 0.22342529500019737,
+      "opencv": "TARGET_TRACKING",
+      "processingFps": 8.43,
+      "processingMs": 9.6,
+      "targetColor": "blue",
+      "targetFresh": true,
+      "transitions": []
+    },
+    "motion": {
+      "appMode": "opencv",
+      "busy": true,
+      "currentMotion": "stand",
+      "desiredMotion": "stand",
+      "enabled": true,
+      "executedGeneration": 3,
+      "fault": null,
+      "generation": 4,
+      "lastError": null,
+      "lastRequest": {
+        "generation": 4,
+        "motion": "stand",
+        "reason": "Awaiting serial dispatch",
+        "status": "intent_accepted"
+      },
+      "lastResult": "Selected opencv",
+      "session": 1,
+      "stopping": false
+    },
+    "link": {
+      "activeMask": 85,
+      "activeMotion": "stand",
+      "armed": true,
+      "connected": true,
+      "epoch": 1,
+      "error": null,
+      "kind": "virtual-uno",
+      "port": "virtual://uno",
+      "queued": 0,
+      "samples": 5,
+      "stopping": false,
+      "targets": [
+        278,
+        300,
+        325,
+        300,
+        295,
+        300,
+        283,
+        300
+      ],
+      "telemetry": {
+        "age": null,
+        "errors": 0,
+        "receiveFresh": false,
+        "record": null,
+        "supported": false
+      },
+      "virtual": true,
+      "virtualFault": null
+    }
+  },
+  "result": "PASS",
+  "injection_to_output_off_ms": 1146.0736520002683,
+  "after": {
+    "camera": {
+      "actualFps": 8.31,
+      "available": true,
+      "backend": "usb",
+      "captureMs": 120.68,
+      "device": "/dev/video0",
+      "errors": 0,
+      "frameAge": 0.530029903000468,
+      "height": 240,
+      "lastError": null,
+      "mjpegEndpoint": "/video-feed",
+      "ownerAlive": false,
+      "reconnects": 1,
+      "requestedFps": 30,
+      "snapshotEndpoint": "/api/camera-frame",
+      "status": "usb camera connected",
+      "syntheticTarget": null,
+      "unchangedFor": 0.40936501500073064,
+      "width": 320
+    },
+    "vision": {
+      "behavior": "EMERGENCY_STOP",
+      "blueBall": {
+        "area": 9770,
+        "bbox": [
+          135,
+          117,
+          117,
+          110
+        ],
+        "candidates": [
+          {
+            "bbox": [
+              135,
+              117,
+              117,
+              110
+            ],
+            "circleArea": 10909,
+            "circularity": 0.87,
+            "contourArea": 9770,
+            "fillRatio": 0.896,
+            "radius": 59,
+            "x": 193,
+            "y": 172
+          }
+        ],
+        "circleArea": 10909,
+        "circularity": 0.87,
+        "contourArea": 9770,
+        "detected": true,
+        "fillRatio": 0.896,
+        "frameAge": 0.13651252199997543,
+        "frameHeight": 240,
+        "frameWidth": 320,
+        "lockId": 1,
+        "lockState": "locked",
+        "maskArea": 9898,
+        "observed_at": 8881.821886259,
+        "offset": 0.20664048242187497,
+        "processingHeight": 240,
+        "processingWidth": 320,
+        "radius": 59,
+        "rawOffset": 0.20625,
+        "rejectReason": null,
+        "revision": 5,
+        "targetColor": "blue",
+        "x": 193,
+        "y": 172
+      },
+      "hand": {},
+      "handGesture": "Not configured",
+      "observationAge": 0.5292529929993179,
+      "opencv": "Disarmed; explicit enable required",
+      "processingFps": 8.38,
+      "processingMs": 5.57,
+      "targetColor": "blue",
+      "targetFresh": false,
+      "transitions": []
+    },
+    "motion": {
+      "appMode": "manual",
+      "busy": false,
+      "currentMotion": "none",
+      "desiredMotion": "none",
+      "enabled": false,
+      "executedGeneration": 5,
+      "fault": "Stale vision result",
+      "generation": 5,
+      "lastError": null,
+      "lastRequest": {
+        "generation": 4,
+        "motion": "stand",
+        "reason": "Awaiting serial dispatch",
+        "status": "intent_accepted"
+      },
+      "lastResult": "Stale vision result",
+      "session": 1,
+      "stopping": false
+    },
+    "link": {
+      "activeMask": 0,
+      "activeMotion": null,
+      "armed": false,
+      "connected": true,
+      "epoch": 1,
+      "error": null,
+      "kind": "virtual-uno",
+      "port": "virtual://uno",
+      "queued": 0,
+      "samples": 46,
+      "stopping": false,
+      "targets": [
+        278,
+        110,
+        328,
+        500,
+        295,
+        495,
+        283,
+        110
+      ],
+      "telemetry": {
+        "age": null,
+        "errors": 0,
+        "receiveFresh": false,
+        "record": null,
+        "supported": false
+      },
+      "virtual": true,
+      "virtualFault": null
+    }
+  },
+  "automatic_rearm": false
+}

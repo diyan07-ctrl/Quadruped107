@@ -1,0 +1,1037 @@
+{
+  "overall": "PARTIALLY VERIFIED",
+  "tests": [
+    {
+      "id": "ENV-SSH",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Authenticated Pi execution",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python tools/phase4-ssh.py --script build/phase4/pi-audit.sh --log evidence/phase4/2026-11-10/preflight/pi-audit.log",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Real SSH commands executed; public-key handoff repaired access",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "preflight/pi-audit.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "ENV-GIT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Preserve original edits and select Phase 4",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "git remote set-branches --add origin phase4/pi-hil-qualification; git fetch origin; git worktree add --detach ~/Quadruped107-phase4-qualification origin/phase4/pi-hil-qualification",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Added missing refspec; isolated d29dfdb worktree; original patch hashes unchanged",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "udp/pi-protocol-and-tests.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "A-PREFLIGHT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Pi environment and project dependencies",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python tools/pi-preflight.py --output build/preflight.json",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Required imports/dependencies, camera permissions, memory/disk/network and 0x0 throttling verified",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "preflight/pi-isolated-checkout.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "B-640",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "a15c39775a4063b396c3cd844f66324cd250021c",
+      "objective": "Five-minute real camera benchmark",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "PYTHONPATH=software/pi .venv-pi-virtual/bin/python build/phase4-qualification/camera-benchmark.py --output build/phase4-qualification/camera.json",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "5952 frames / 300.008 s = 19.839 FPS; zero failed reads",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "camera/benchmark.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence",
+      "dirty": true,
+      "notes": "Original Pi checkout with preserved staged Phase 4 overlay; benchmark script subsequently committed as d29dfdb."
+    },
+    {
+      "id": "B-320",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "a15c39775a4063b396c3cd844f66324cd250021c",
+      "objective": "Five-minute lower-resolution benchmark",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Same benchmark command; 320x240 interval",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "5953 frames / 300.029 s = 19.841 FPS; detector 5.080 ms; CPU 27.64%",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "camera/benchmark.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence",
+      "dirty": true,
+      "notes": "Original Pi checkout with preserved staged Phase 4 overlay; benchmark script subsequently committed as d29dfdb."
+    },
+    {
+      "id": "C01-BLUE-CENTER",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Real centered blue observation",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python build/phase4/tune-blue.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Session HSV saturation floor 40: 54/55 detected samples over 12 s",
+      "classification": "REAL CAMERA / SESSION HSV TRIAL",
+      "logs": [
+        "vision/blue-tuned-center.json.gz"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C02-BLUE-LEFT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Real horizontal blue candidate observation",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi app-probe.py continuous 1 Hz state logging",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Operator moved physical blue object; locked left candidates retained with coordinates; continuous closed-loop pursuit remains unqualified",
+      "classification": "REAL CAMERA / POSITIONAL OBSERVATION",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C03-BLUE-RIGHT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Real horizontal blue candidate observation",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi app-probe.py continuous 1 Hz state logging",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Operator moved physical blue object; locked right candidates retained with coordinates; continuous closed-loop pursuit remains unqualified",
+      "classification": "REAL CAMERA / POSITIONAL OBSERVATION",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C04-YELLOW-CENTER",
+      "result": "FAIL",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Reliable real yellow target detection",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python build/phase4/tune-yellow.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Genuine locks occurred, but controlled tuned interval had 0/68 detections; overexposure/low saturation unresolved",
+      "classification": "REAL CAMERA / FAILED HSV TRIAL",
+      "logs": [
+        "vision/yellow-tuned-center.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Genuine locks occurred, but controlled tuned interval had 0/68 detections; overexposure/low saturation unresolved"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C05-YELLOW-LEFT",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Confirmed physical yellow target at left",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Not completed with controlled physical targets",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "No complete controlled qualifying run; incidental/background candidates are not credited",
+      "classification": "REAL CAMERA / INCOMPLETE",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "No complete controlled qualifying run; incidental/background candidates are not credited"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C06-YELLOW-RIGHT",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Confirmed physical yellow target at right",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Not completed with controlled physical targets",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "No complete controlled qualifying run; incidental/background candidates are not credited",
+      "classification": "REAL CAMERA / INCOMPLETE",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "No complete controlled qualifying run; incidental/background candidates are not credited"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C07-PERSISTENCE",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Controlled continuous identity/smoothing through sweep",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Not completed with controlled physical targets",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "No complete controlled qualifying run; incidental/background candidates are not credited",
+      "classification": "REAL CAMERA / INCOMPLETE",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "No complete controlled qualifying run; incidental/background candidates are not credited"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C09-MULTIPLE",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Controlled multiple physical candidate selection",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Not completed with controlled physical targets",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "No complete controlled qualifying run; incidental/background candidates are not credited",
+      "classification": "REAL CAMERA / INCOMPLETE",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "No complete controlled qualifying run; incidental/background candidates are not credited"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C08-TARGET-LOSS",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Physical target removal during accepted tracking",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi: python build/hil-retest/blue-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Operator removal was logged in perception; later controlled active sweep could not establish all prerequisites",
+      "classification": "REAL CAMERA / INCOMPLETE ACTIVE REMOVAL",
+      "logs": [
+        "vision/blue-live-result.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Operator removal was logged in perception; later controlled active sweep could not establish all prerequisites"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C10-NO-TARGET",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Real no-target perception",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi app-probe.py continuous state logging",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Searching/mask_too_small observations occurred during operator removal; this is perception evidence",
+      "classification": "REAL CAMERA / PERCEPTION ONLY",
+      "logs": [
+        "endurance/pi-state.jsonl.gz"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C11-STALE",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Stale actual acquisition inhibits tracking",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python tools/phase4-ssh.py --script build/phase4/camera-fault.sh --log evidence/phase4/2026-11-10/safety/camera-fault.log",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Stopped capture owner during blue tracking; stale vision caused disarm/mask zero; recovery stayed disarmed",
+      "classification": "REAL CAMERA / SOFTWARE FAULT INJECTION",
+      "logs": [
+        "safety/camera-fault.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "C12-COLOR-SWITCH",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Real-camera color mode selection",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "POST /api/vision with current revision and target_color",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Blue/yellow revisions persisted; color changes disarmed and old detector context was replaced",
+      "classification": "REAL CAMERA / CONFIGURATION",
+      "logs": [
+        "vision/blue-center.json.gz"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "D-UDP",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Cross-machine challenge/lease transport",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/pybullet/twin-probe.py --gui --port 17012 --output build/phase4/gui-twin --control build/phase4/gui-control.json",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed peer 192.168.1.42 and accepted/rejected traces on Windows LAN receiver",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "pybullet/packets.jsonl.gz"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "D-VUNO",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Accepted and rejected virtual commands on Pi",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "PYTHONPATH=software/pi Pi python: VirtualUno.feed(HELLO/MOVE/ARM/STOP/SERVO) as preserved in log",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Separate virtual Uno accepted forward, rejected disarmed/out-of-range commands, ended disarmed",
+      "classification": "PI VIRTUAL PROTOCOL INSTANCE",
+      "logs": [
+        "udp/pi-protocol-and-tests.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "D-JOINTS",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Actual motion on all eight virtual joints",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Windows twin-probe.py records World.step() joint positions",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Measured armed joint ranges 0.205-0.493 rad; requested ticks separately retained",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "D-DASHBOARD",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Live real-camera and virtual status dashboard",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "SSH -L 127.0.0.1:17000:127.0.0.1:7000; browser http://127.0.0.1:17000",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed live camera, rates, target mode, decisions, sensors, bridge and output-mask status",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "screenshots/pi-dashboard.png"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-STAND",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-STAND",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-FORWARD",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-FORWARD",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-BACKWARD",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-BACKWARD",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-TURN_LEFT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-TURN_LEFT",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-TURN_RIGHT",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-TURN_RIGHT",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-GREETING",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute E-GREETING",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-INVALID",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Execute F-INVALID",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/autonomy/manual-lan-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Virtual command accepted and STOP mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-UDP-LOSS",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "F-UDP-LOSS",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-SIM-RESET",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "F-SIM-RESET",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-SENSOR-STALE",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "F-SENSOR-STALE",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-OBSTACLE",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "F-OBSTACLE",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-VIRTUAL-TOUCH",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "E-VIRTUAL-TOUCH",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-INTERACTION",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "E-INTERACTION",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/safety/lan-fault-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Observed required short-case assertion; deliberate re-enable between cases; virtual sensors only",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-EXPLORE",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Existing exploration state",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "lan-fault-probe.py: enable(explore)",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Explore produced accepted forward before the simulated touch case",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/lan-faults.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "E-AVOIDANCE",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Existing bounded virtual recovery policy",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python -m unittest discover -s tests -v",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Automated known-geometry/navigation cases passed; this is simulated coverage, not physical sensing or a qualified real-target pursuit",
+      "classification": "AUTOMATED SIMULATED COVERAGE",
+      "logs": [
+        "retest/reports/REG-PY.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-STOP",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "STOP preempts active virtual routines",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "POST /api/stop; poll /api/state",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Six manual routines ended with output mask zero; observed RTT 125-235 ms",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "autonomy/manual-lan.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-APP-RESTART",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Startup/restart does not re-enable",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Safe shutdown and restart script preserved in safety/app-restart.log",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Fresh process session 0, disarmed, mask zero, ready handshake",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/restart-state.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-SIM-PROCESS-RESTART",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Actual simulator process restart",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Restart twin-probe.py process on UDP 7002; pi-cleanup.sh inspects state and issues final STOP",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "New receiver accepted a disarmed Pi trace; no automatic enable; final mask zero",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "safety/final-cleanup.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "F-VIRTUAL-ONLY",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Keep physical interfaces inactive",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Runtime(... actuator_backend=virtual, virtual_sensors=True)",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Runtime physicalActuationAllowed=false, virtual://uno; compilation only; no physical upload/GPIO/PCA9685 operations",
+      "classification": "SOFTWARE INHIBITION; NO ELECTRICAL MEASUREMENT",
+      "logs": [
+        "safety/restart-state.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "G-GUI",
+      "result": "FAIL",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Uninterrupted healthy endurance",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi app-probe.py + Windows GUI twin-probe.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Initial 3167 s log snapshot; longest fully healthy segment only 560.807 s",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "reports/runtime-analysis.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Initial 3167 s log snapshot; longest fully healthy segment only 560.807 s"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "G-WINDOWS-CONTROL",
+      "result": "FAIL",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Windows-owned manual-forward endurance",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python evidence/phase4/2026-11-10/endurance/run-endurance.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Stale motion intent at about 6.4 s; attempt interrupted; not a full successful run",
+      "classification": "REAL PI / VIRTUAL ACTUATORS",
+      "logs": [
+        "endurance/windows-attempt.jsonl.gz"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Stale motion intent at about 6.4 s; attempt interrupted; not a full successful run"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "G-PI-CONTROL",
+      "result": "FAIL",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "15-minute Pi-owned integration retest",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "Pi: nohup python -u build/hil-retest/run-endurance.py",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Completed 900.219 s monitoring; unexpected stale front range at 29.625 s; no automatic re-arm",
+      "classification": "REAL PI CAMERA/LAN; VIRTUAL MANUAL FORWARD",
+      "logs": [
+        "endurance/pi-headless-result.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Completed 900.219 s monitoring; unexpected stale front range at 29.625 s; no automatic re-arm"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "REG-PY",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Full repaired Python regression",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python -m unittest discover -s tests -v",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "163/163 passed; original 160/161 failure retained separately",
+      "classification": "SOFTWARE / SIMULATED ONLY",
+      "logs": [
+        "retest/reports/REG-PY.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "REG-PI-SUBSET",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Pi Python 3.13 preflight/telemetry subset",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "PYTHONPATH=software/pi:tests Pi python -m unittest test_pi_preflight test_telemetry -v",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "8/8 passed on the actual Pi",
+      "classification": "ACTUAL PI / SOFTWARE SUBSET",
+      "logs": [
+        "udp/pi-protocol-and-tests.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "REG-UNO",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Compile both firmware variants",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "arduino-cli compile --profile uno firmware/uno/sketch; generate-virtual-firmware.py; arduino-cli compile --profile uno build/virtual/sketch",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Production 10198/998 bytes; virtual 6756/831 bytes; no upload",
+      "classification": "COMPILE ONLY",
+      "logs": [
+        "reports/uno-production.log"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "REG-CHECKS",
+      "result": "PASS",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "CAD, configuration, simulation, DOM and repository checks",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "python tools/phase4-local-checks.py --output evidence/phase4/2026-11-10/retest",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "All 14 checks passed in the repaired local-checks run",
+      "classification": "SOFTWARE / SIMULATED ONLY",
+      "logs": [
+        "retest/reports/local-checks.json"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    },
+    {
+      "id": "VIDEO-SET",
+      "result": "BLOCKED",
+      "date_utc": "2026-11-10",
+      "commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+      "objective": "Seven complete demonstration recordings",
+      "environment": "Pi 4 Debian 13.7 Python 3.13.5; Windows Python 3.11.18/PyBullet 3.2.5",
+      "command": "FFmpeg gdigrab / HTTP MJPEG commands in recording manifest",
+      "preconditions": "Physical outputs prohibited; explicit virtual backend; deliberate enable per movement test",
+      "expected": "Fresh, correct observations/decisions and safe explicit control; all required assertions pass",
+      "actual": "Genuine USB/GUI captures retained; black dashboard capture and incomplete synchronized/target/endurance demonstrations are explicitly identified",
+      "classification": "GENUINE CAPTURES; INCOMPLETE SET",
+      "logs": [
+        "videos/README.md"
+      ],
+      "measurements": "See linked original JSON/log; units retained",
+      "screenshots": [],
+      "recordings": [],
+      "issues": [
+        "Genuine USB/GUI captures retained; black dashboard capture and incomplete synchronized/target/endurance demonstrations are explicitly identified"
+      ],
+      "fixes": "See PHASE4_VALIDATION.md and before/after guard evidence"
+    }
+  ]
+}

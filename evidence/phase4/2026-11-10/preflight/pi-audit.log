@@ -1,0 +1,286 @@
+{"started_utc": "2026-11-10T06:16:07.836254+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-audit.sh"}
+set -u
+date -u --iso-8601=seconds
+cd ~/Quadruped107 || exit 1
+git status --short --branch
+git rev-parse HEAD
+git config --get-all remote.origin.fetch
+cat /etc/os-release
+free -m
+df -h /
+vcgencmd get_throttled
+ls -l /dev/video*
+id
+ip -br -4 address
+ss -ltnp
+pgrep -af 'quadruped.main' || true
+v4l2-ctl --list-devices
+v4l2-ctl -d /dev/video0 --list-formats-ext
+.venv-pi-virtual/bin/python tools/pi-preflight.py
+.venv-pi-virtual/bin/python -c 'import sys,cv2,numpy,flask,serial,quadruped; print(sys.version,cv2.__version__,numpy.__version__,quadruped.__file__)'
+.venv-pi-virtual/bin/python -m pip check
+git diff --stat
+git diff --cached --stat
+git worktree list
+
+--- OBSERVED OUTPUT ---
+2026-11-10T06:16:09+00:00
+## phase1/software-vision-digital-twin...origin/phase1/software-vision-digital-twin [behind 29]
+M  .github/workflows/validate.yml
+M  .gitignore
+M  README.md
+A  deploy/navigation.example.json
+A  deploy/sensors.example.json
+M  deploy/vision.example.json
+A  deploy/vision.yellow.json
+M  docs/ARCHITECTURE.md
+M  docs/DECISIONS.md
+M  docs/EXTENSIONS.md
+M  docs/HARDWARE.md
+M  docs/HARDWARE_VERIFICATION.md
+A  docs/MODEL_STUDY.md
+A  docs/PHASE2.md
+A  docs/PHASE3.md
+A  docs/PHASE4.md
+M  docs/PROJECT.md
+M  docs/PROTOCOL.md
+M  docs/ROADMAP.md
+M  docs/SAFETY.md
+A  docs/SENSORS.md
+M  docs/SOFTWARE.md
+M  docs/VALIDATION.md
+M  docs/WIRING.md
+A  docs/evidence/PHASE2_MODEL_STUDY.json
+A  docs/evidence/PHASE2_NAVIGATION.json
+A  docs/evidence/PHASE3_INTEGRATION.json
+A  docs/evidence/PHASE3_MODEL_STUDY.json
+A  simulation/PHASE2.md
+M  simulation/README.md
+A  simulation/environment.py
+A  simulation/model_study.py
+A  simulation/proxy_probe.py
+M  simulation/twin.py
+M  software/pi/README.md
+M  software/pi/quadruped/autonomy.py
+M  software/pi/quadruped/bridge.py
+M  software/pi/quadruped/camera.py
+M  software/pi/quadruped/controller.py
+A  software/pi/quadruped/explain.py
+M  software/pi/quadruped/main.py
+A  software/pi/quadruped/navigation.py
+A  software/pi/quadruped/sensors.py
+M  software/pi/quadruped/serial_link.py
+A  software/pi/quadruped/telemetry.py
+M  software/pi/quadruped/virtual_uno.py
+M  software/pi/quadruped/vision.py
+A  software/pi/quadruped/vision_config.py
+M  software/pi/quadruped/web/app.js
+M  software/pi/quadruped/web/index.html
+M  software/pi/quadruped/web/styles.css
+A  tests/test_demonstration.py
+A  tests/test_phase2.py
+A  tests/test_phase3.py
+A  tests/test_pi_preflight.py
+M  tests/test_simulation.py
+A  tests/test_telemetry.py
+A  tests/test_vision_readiness.py
+A  tools/check-dashboard.mjs
+M  tools/check-installed.py
+A  tools/generate-blue-video.py
+A  tools/pi-preflight.py
+A  tools/qualify-demo.py
+A  tools/record-usb-camera.py
+a15c39775a4063b396c3cd844f66324cd250021c
++refs/heads/phase1/software-vision-digital-twin:refs/remotes/origin/phase1/software-vision-digital-twin
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.7
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+               total        used        free      shared  buff/cache   available
+Mem:            1844         334         797          25         802        1509
+Swap:           1843           0        1843
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G  7.4G   20G  28% /
+throttled=0x0
+crw-rw----+ 1 root video 81, 14 Nov 10 08:30 /dev/video0
+crw-rw----+ 1 root video 81, 15 Nov 10 08:30 /dev/video1
+crw-rw----+ 1 root video 81,  1 Nov 10 08:30 /dev/video10
+crw-rw----+ 1 root video 81,  2 Nov 10 08:30 /dev/video11
+crw-rw----+ 1 root video 81,  4 Nov 10 08:30 /dev/video12
+crw-rw----+ 1 root video 81,  3 Nov 10 08:30 /dev/video13
+crw-rw----+ 1 root video 81,  5 Nov 10 08:30 /dev/video14
+crw-rw----+ 1 root video 81,  6 Nov 10 08:30 /dev/video15
+crw-rw----+ 1 root video 81,  8 Nov 10 08:30 /dev/video16
+crw-rw----+ 1 root video 81,  7 Nov 10 08:30 /dev/video18
+crw-rw----+ 1 root video 81,  0 Nov 10 08:30 /dev/video19
+crw-rw----+ 1 root video 81,  9 Nov 10 08:30 /dev/video20
+crw-rw----+ 1 root video 81, 10 Nov 10 08:30 /dev/video21
+crw-rw----+ 1 root video 81, 12 Nov 10 08:30 /dev/video22
+crw-rw----+ 1 root video 81, 13 Nov 10 08:30 /dev/video23
+crw-rw----+ 1 root video 81, 11 Nov 10 08:30 /dev/video31
+uid=1000(diyan07) gid=1000(diyan07) groups=1000(diyan07),4(adm),20(dialout),24(cdrom),27(sudo),29(audio),44(video),46(plugdev),60(games),100(users),102(netdev),108(lpadmin),986(gpio),988(i2c),989(spi),992(render),996(input)
+lo               UNKNOWN        127.0.0.1/8 
+wlan0            UP             192.168.1.42/24 
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      128          0.0.0.0:22        0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:111       0.0.0.0:*          
+LISTEN 0      128             [::]:22           [::]:*          
+LISTEN 0      4096            [::]:111          [::]:*          
+bcm2835-codec-decode (platform:bcm2835-codec):
+	/dev/video10
+	/dev/video11
+	/dev/video12
+	/dev/video18
+	/dev/video31
+
+bcm2835-isp (platform:bcm2835-isp):
+	/dev/video13
+	/dev/video14
+	/dev/video15
+	/dev/video16
+	/dev/video20
+	/dev/video21
+	/dev/video22
+	/dev/video23
+	/dev/media2
+	/dev/media4
+
+unicam (platform:fe801000.csi):
+	/dev/media1
+
+rpi-hevc-dec (platform:rpi-hevc-dec):
+	/dev/video19
+	/dev/media0
+
+USB2.0 PC CAMERA: USB2.0 PC CAM (usb-0000:01:00.0-1.1):
+	/dev/video0
+	/dev/video1
+	/dev/media5
+
+bcm2835-codec (vchiq:bcm2835-codec):
+	/dev/media3
+ioctl: VIDIOC_ENUM_FMT
+	Type: Video Capture
+
+	[0]: 'YUYV' (YUYV 4:2:2)
+		Size: Discrete 640x480
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 352x288
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 320x240
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 176x144
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 160x120
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-10T06:16:09.637212+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "free"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}
+3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0] 4.10.0 2.2.4 /home/diyan07/Quadruped107/software/pi/quadruped/__init__.py
+apt-listchanges 4.8 requires debconf, which is not installed.
+types-flask-migrate 4.0 requires flask-sqlalchemy, which is not installed.
+types-seaborn 0.13.2 requires matplotlib, which is not installed.
+types-seaborn 0.13.2 requires pandas-stubs, which is not installed.
+types-tree-sitter-languages 1.10 requires tree-sitter, which is not installed.
+ .github/workflows/validate.yml         |   42 +-
+ .gitignore                             |    3 +
+ README.md                              |    9 +-
+ deploy/navigation.example.json         |   10 +
+ deploy/sensors.example.json            |   11 +
+ deploy/vision.example.json             |    3 +-
+ deploy/vision.yellow.json              |   11 +
+ docs/ARCHITECTURE.md                   |   25 +
+ docs/DECISIONS.md                      |   14 +
+ docs/EXTENSIONS.md                     |    2 +-
+ docs/HARDWARE.md                       |    5 +
+ docs/HARDWARE_VERIFICATION.md          |   18 +
+ docs/MODEL_STUDY.md                    |   57 ++
+ docs/PHASE2.md                         |   80 ++
+ docs/PHASE3.md                         |   97 ++
+ docs/PHASE4.md                         |   24 +
+ docs/PROJECT.md                        |    2 +-
+ docs/PROTOCOL.md                       |   13 +
+ docs/ROADMAP.md                        |   13 +
+ docs/SAFETY.md                         |   15 +
+ docs/SENSORS.md                        |   53 ++
+ docs/SOFTWARE.md                       |   17 +
+ docs/VALIDATION.md                     |  129 +++
+ docs/WIRING.md                         |    5 +
+ docs/evidence/PHASE2_MODEL_STUDY.json  |  924 ++++++++++++++++++
+ docs/evidence/PHASE2_NAVIGATION.json   |   17 +
+ docs/evidence/PHASE3_INTEGRATION.json  |   27 +
+ docs/evidence/PHASE3_MODEL_STUDY.json  | 1600 ++++++++++++++++++++++++++++++++
+ simulation/PHASE2.md                   |   70 ++
+ simulation/README.md                   |    2 +
+ simulation/environment.py              |  228 +++++
+ simulation/model_study.py              |   73 ++
+ simulation/proxy_probe.py              |   27 +
+ simulation/twin.py                     |  154 ++-
+ software/pi/README.md                  |    2 +
+ software/pi/quadruped/autonomy.py      |   55 +-
+ software/pi/quadruped/bridge.py        |   51 +-
+ software/pi/quadruped/camera.py        |   18 +-
+ software/pi/quadruped/controller.py    |   75 +-
+ software/pi/quadruped/explain.py       |   26 +
+ software/pi/quadruped/main.py          |  259 +++++-
+ software/pi/quadruped/navigation.py    |  184 ++++
+ software/pi/quadruped/sensors.py       |  197 ++++
+ software/pi/quadruped/serial_link.py   |    8 +-
+ software/pi/quadruped/telemetry.py     |   70 ++
+ software/pi/quadruped/virtual_uno.py   |    4 +-
+ software/pi/quadruped/vision.py        |   90 +-
+ software/pi/quadruped/vision_config.py |   31 +
+ software/pi/quadruped/web/app.js       |  108 ++-
+ software/pi/quadruped/web/index.html   |   44 +-
+ software/pi/quadruped/web/styles.css   |   11 +
+ tests/test_demonstration.py            |  207 +++++
+ tests/test_phase2.py                   |  624 +++++++++++++
+ tests/test_phase3.py                   |   55 ++
+ tests/test_pi_preflight.py             |   28 +
+ tests/test_simulation.py               |   11 +-
+ tests/test_telemetry.py                |   59 ++
+ tests/test_vision_readiness.py         |  196 ++++
+ tools/check-dashboard.mjs              |   69 ++
+ tools/check-installed.py               |    9 +
+ tools/generate-blue-video.py           |   26 +
+ tools/pi-preflight.py                  |   62 ++
+ tools/qualify-demo.py                  |   55 ++
+ tools/record-usb-camera.py             |   61 ++
+ 64 files changed, 6374 insertions(+), 101 deletions(-)
+/home/diyan07/Quadruped107  a15c397 [phase1/software-vision-digital-twin]

@@ -600,7 +600,8 @@ class LifecycleRegressionTests(unittest.TestCase):
             pump(lambda:runtime.link.engine.snapshot()["activeMotion"]=="forward")
             server.receiver.reset()
             pump(lambda:not runtime.motion.snapshot()["enabled"])
-            pump(lambda:not runtime.link.engine.snapshot()["armed"] and runtime.bridge.snapshot()["readyToArm"])
+            pump(lambda:not runtime.motion.snapshot()["stopping"] and
+                 not runtime.link.engine.snapshot()["armed"] and runtime.bridge.snapshot()["readyToArm"])
             self.assertFalse(runtime.motion.snapshot()["enabled"])
             self.assertEqual(api.post("/api/arm",json={}).status_code,200)
             api.post("/api/mode",json={"mode":"explore"})

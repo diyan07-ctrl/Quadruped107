@@ -380,9 +380,11 @@ class Runtime:
 
     def _bridge_guard(self):
         while not self.stop_event.wait(.05):
+            state=self.motion.snapshot()
             health=self.bridge.snapshot()
-            if self.motion.snapshot()["enabled"] and (not health["connected"] or health["fault"]):
-                self.motion.stop(health["fault"] or "Simulator disconnected; explicit enable required")
+            if state["enabled"] and (not health["connected"] or health["fault"]):
+                self.motion.stop(health["fault"] or "Simulator disconnected; explicit enable required",
+                                 expected_generation=state["generation"])
 
     def _fresh_observation(self, state, published_at):
         if time.monotonic() - published_at > .5:

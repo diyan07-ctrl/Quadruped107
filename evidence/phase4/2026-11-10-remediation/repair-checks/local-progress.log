@@ -1,0 +1,8 @@
+{"started_utc": "2026-11-10T11:14:09.903714+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\progress.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+cat build/phase4-remediation/retry-local/console.log | head -c 1000
+
+--- OBSERVED OUTPUT ---
+{"elapsedS": 0.009586216001480352, "enabled": true, "sensorSeq": 3560, "front": 2.7700000000000005, "intentAgeS": 0.012770998000632972}
+{"result": "FAIL", "requiredSeconds": 90.0, "durationS": 1.6982857520015386, "samples": 9, "failure": {"elapsedS": 1.691143705000286, "state": {"autonomy": {"deadline": null, "lastRequestedMotion": null, "obstacle": "UNKNOWN", "reason": "", "recoveryAttempts": 0, "state": "MANUAL_OVERRIDE", "transitions": [{"at": 21989.681219074, "previous": "IDLE", "reason": "Disarmed; explicit enable required", "state": "EMERGENCY_STOP"}, {"at": 22028.110263148, "previous": "EMERGENCY_STOP", "reason": "", "state": "MANUAL_OVERRIDE"}, {"at": 22057.817621715, "previous": "MANUAL_OVERRIDE", "reason": "Disarmed; explicit enable required", "state": "EMERGENCY_STOP"}, {"at": 22265.278123253, "previous": "EMERGENCY_STOP", "reason": "", "state": "MANUAL_OVERRIDE"}], "virtual": true}, "bridge": {"ackAge": 0.11710765700263437, "connected": true, "epoch": 0, "errors": 0, "fault

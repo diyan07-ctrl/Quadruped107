@@ -1,0 +1,9 @@
+{"started_utc": "2026-11-10T11:13:49.362589+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\local-smoke.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+mkdir -p build/phase4-remediation/retry-local
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py run --seconds 90 --output build/phase4-remediation/retry-local > build/phase4-remediation/retry-local/console.log 2>&1 < /dev/null &
+echo RUN_PID=$!
+
+--- OBSERVED OUTPUT ---
+RUN_PID=17038

@@ -1,0 +1,113 @@
+{"started_utc": "2026-11-10T06:18:49.457048+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-isolate.sh"}
+set -eu
+cd ~/Quadruped107
+git diff --binary > build/phase4-qualification/original-unstaged.patch
+git diff --cached --binary > build/phase4-qualification/original-staged.patch
+git status --porcelain=v1 > build/phase4-qualification/original-status.txt
+git remote set-branches --add origin phase4/pi-hil-qualification
+git fetch origin
+git worktree add --detach ~/Quadruped107-phase4-qualification origin/phase4/pi-hil-qualification
+cd ~/Quadruped107-phase4-qualification
+git rev-parse HEAD
+git status --short --branch
+git -C ~/Quadruped107 config --get-all remote.origin.fetch
+PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python tools/pi-preflight.py --output build/preflight.json
+PYTHONPATH=software/pi ~/Quadruped107/.venv-pi-virtual/bin/python - <<'PYCHECK'
+import sys,cv2,numpy,flask,serial,quadruped,json
+from importlib.metadata import version, requires
+from packaging.requirements import Requirement
+from packaging.version import Version
+checks=[]
+for package in ['Flask','pyserial']:
+    for text in requires(package) or []:
+        dep=Requirement(text)
+        if dep.marker is None or dep.marker.evaluate():
+            installed=version(dep.name)
+            checks.append(dict(package=package,dependency=dep.name,version=installed,ok=Version(installed) in dep.specifier))
+print(json.dumps(dict(python=sys.version,cv2=cv2.__version__,numpy=numpy.__version__,flask=version('Flask'),serial=version('pyserial'),application=quadruped.__file__,dependencies=checks),indent=2))
+assert all(check['ok'] for check in checks)
+PYCHECK
+
+--- OBSERVED OUTPUT ---
+From https://github.com/diyan07-ctrl/Quadruped107
+   bf22a79..d29dfdb  phase4/pi-hil-qualification -> origin/phase4/pi-hil-qualification
+Preparing worktree (detached HEAD d29dfdb)
+HEAD is now at d29dfdb Fix stale simulator guard observations across explicit re-enable
+d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e
+## HEAD (no branch)
++refs/heads/phase1/software-vision-digital-twin:refs/remotes/origin/phase1/software-vision-digital-twin
++refs/heads/phase4/pi-hil-qualification:refs/remotes/origin/phase4/pi-hil-qualification
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-10T06:18:53.505919+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "free"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}
+{
+  "python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]",
+  "cv2": "4.10.0",
+  "numpy": "2.2.4",
+  "flask": "3.1.2",
+  "serial": "3.5",
+  "application": "/home/diyan07/Quadruped107-phase4-qualification/software/pi/quadruped/__init__.py",
+  "dependencies": [
+    {
+      "package": "Flask",
+      "dependency": "blinker",
+      "version": "1.9.0",
+      "ok": true
+    },
+    {
+      "package": "Flask",
+      "dependency": "click",
+      "version": "8.5.1",
+      "ok": true
+    },
+    {
+      "package": "Flask",
+      "dependency": "itsdangerous",
+      "version": "2.2.0",
+      "ok": true
+    },
+    {
+      "package": "Flask",
+      "dependency": "jinja2",
+      "version": "3.1.6",
+      "ok": true
+    },
+    {
+      "package": "Flask",
+      "dependency": "markupsafe",
+      "version": "2.1.5",
+      "ok": true
+    },
+    {
+      "package": "Flask",
+      "dependency": "werkzeug",
+      "version": "3.1.9",
+      "ok": true
+    }
+  ]
+}

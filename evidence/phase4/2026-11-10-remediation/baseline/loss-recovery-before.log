@@ -1,0 +1,70 @@
+./build/phase4-toolchain/python311/python.exe : test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) ... 
+At line:2 char:40
++ ... i;tests;.'; ./build/phase4-toolchain/python311/python.exe -m unittest ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_one_lost_d...e_timeout) ... :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='challenge') ... FAIL
+  test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='trace') ... FAIL
+  test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='ack') ... FAIL
+test_repeated_hello_preserves_inflight_nonce_and_original_expiry 
+(test_phase4_remediation.LossRecoveryTests.test_repeated_hello_preserves_inflight_nonce_and_original_expiry) ... FAIL
+
+======================================================================
+FAIL: test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='challenge')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 221, in 
+test_one_lost_datagram_does_not_force_full_challenge_timeout
+    self.assertLessEqual(hello_times[1]-hello_times[0],.081)
+AssertionError: 0.15999999999999998 not less than or equal to 0.081
+
+======================================================================
+FAIL: test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='trace')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 221, in 
+test_one_lost_datagram_does_not_force_full_challenge_timeout
+    self.assertLessEqual(hello_times[1]-hello_times[0],.081)
+AssertionError: 0.15999999999999998 not less than or equal to 0.081
+
+======================================================================
+FAIL: test_one_lost_datagram_does_not_force_full_challenge_timeout 
+(test_phase4_remediation.LossRecoveryTests.test_one_lost_datagram_does_not_force_full_challenge_timeout) 
+(lost_type='ack')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 221, in 
+test_one_lost_datagram_does_not_force_full_challenge_timeout
+    self.assertLessEqual(hello_times[1]-hello_times[0],.081)
+AssertionError: 0.15999999999999998 not less than or equal to 0.081
+
+======================================================================
+FAIL: test_repeated_hello_preserves_inflight_nonce_and_original_expiry 
+(test_phase4_remediation.LossRecoveryTests.test_repeated_hello_preserves_inflight_nonce_and_original_expiry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 187, in 
+test_repeated_hello_preserves_inflight_nonce_and_original_expiry
+    self.assertEqual(first['nonce'],second['nonce'])
+AssertionError: '5b67dd03f0f29ef7fd04b501353c8eb2' != '3cf1fb44e81ad1015dc4e1d3909d5d8d'
+- 5b67dd03f0f29ef7fd04b501353c8eb2
++ 3cf1fb44e81ad1015dc4e1d3909d5d8d
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.005s
+
+FAILED (failures=4)

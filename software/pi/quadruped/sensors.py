@@ -52,6 +52,9 @@ class SensorObservation:
     unit: str
     valid: bool
     error: str | None=None
+    sender_age: float=0.0
+    source_seq: int | None=None
+    source_sampled_at: float | None=None
 
     def snapshot(self,now,expiration):
         age=now-self.observed_at
@@ -81,6 +84,12 @@ class SensorManager:
         self.touch={}
         self.rejected=0
         self.last_received=None
+        self.last_transport_age=0.0
+        self.rejection_reasons={}
+        self.recent_batches=deque(maxlen=32)
+        self.last_fault=None
+        self.fault_events=deque(maxlen=8)
+        self.was_fault=False
 
     @property
     def registry(self):
@@ -95,6 +104,7 @@ class SensorManager:
             self.events.clear()
             self.touch.clear()
             self.last_received=None
+            self.was_fault=False
 
     def ingest(self,batch,*,session="fixture",transport_age=0.0):
         now=self.clock()
@@ -126,19 +136,32 @@ class SensorManager:
                     valid=False
                     error="Acquisition timeout"
                 if not valid: value=None
+                source_seq=record.get('sampleSeq')
+                sampled_at=record.get('sampledAtMonotonic')
+                if source_seq is not None and (type(source_seq) is not int or source_seq<0): raise ValueError('Sensor sample sequence')
+                if sampled_at is not None and not number(sampled_at,0,1e12): raise ValueError('Sensor source clock')
                 parsed[identity]=SensorObservation(identity,kind,now-age-transport_age,value,
-                    "m" if kind=="range" else "boolean",valid,error)
+                    "m" if kind=="range" else "boolean",valid,error,age,source_seq,sampled_at)
             with self.lock:
                 if session!=self.session: self.reset(session)
                 if seq<=self.seq: raise ValueError("Duplicate/out-of-order telemetry")
                 self.seq=seq
                 self.last_received=now
+                self.last_transport_age=transport_age
                 # Missing records replace the batch and therefore cannot keep old evidence alive.
                 self.observations=parsed
                 self._update_touches(now)
+                self.recent_batches.append(dict(session=session,seq=seq,receivedAtMonotonic=now,
+                    transportAgeBoundS=transport_age,committedAtMonotonic=self.clock(),
+                    ranges={k:dict(senderAgeS=v.sender_age,valid=v.valid,value=v.measurement,
+                        sampleSeq=v.source_seq,sampledAtSenderMonotonic=v.source_sampled_at)
+                        for k,v in parsed.items() if k in RANGE_IDS}))
             return True
-        except (ValueError,TypeError,KeyError):
-            with self.lock: self.rejected+=1
+        except (ValueError,TypeError,KeyError) as error:
+            with self.lock:
+                self.rejected+=1
+                reason=str(error)[:80]
+                self.rejection_reasons[reason]=self.rejection_reasons.get(reason,0)+1
             return False
 
     def _event(self,identity,pressed,now):
@@ -164,8 +187,11 @@ class SensorManager:
                 self._event(identity,value,now)
 
     def snapshot(self):
-        now=self.clock()
         with self.lock:
+            # Clock and observations must belong to the same locked snapshot.
+            # Reading time first lets a concurrent newer sample appear future-dated,
+            # or lets a reader delayed on this lock hide genuine expiration.
+            now=self.clock()
             records={k:v.snapshot(now,self.config.expiration) for k,v in self.observations.items()}
             touches={}
             for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
@@ -181,11 +207,22 @@ class SensorManager:
             elif abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
                 fault="Conflicting front range observations"
             if not all(t["valid"] for t in touches.values()): fault=fault or "Missing, stale or stuck touch input"
+            if fault:
+                self.last_fault=dict(atMonotonic=now,session=self.session,seq=self.seq,reason=fault,
+                    receivedAgeS=None if self.last_received is None else now-self.last_received,
+                    transportAgeBoundS=self.last_transport_age,
+                    observations={k:dict(v) for k,v in records.items()})
+                if not self.was_fault: self.fault_events.append(self.last_fault)
+            self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
             return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
                         fault=fault,rejected=self.rejected,
-                        receivedAge=None if self.last_received is None else now-self.last_received)
+                        receivedAge=None if self.last_received is None else now-self.last_received,
+                        diagnostics=dict(clockDomain='receiver monotonic; source timestamps diagnostic only',
+                            snapshotAtMonotonic=now,lastReceivedAtMonotonic=self.last_received,
+                            lastTransportAgeBoundS=self.last_transport_age,rejectionReasons=dict(self.rejection_reasons),
+                            lastFault=self.last_fault,faultEvents=list(self.fault_events),recentBatches=list(self.recent_batches)))
 
 
 def fixture_batch(seq=0,*,distance=2.0,touches=None,clearance=True,age=0.0,touch_count=5):

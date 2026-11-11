@@ -1,0 +1,25 @@
+./build/phase4-toolchain/python311/python.exe : test_sensor_acquisition_continues_between_udp_sensor_requests 
+(test_phase4_remediation.AcquisitionCadenceTests.test_sensor_acquisition_continues_between_udp_sensor_requests) ... 
+pybullet build time: Oct 21 2025 11:46:21
+At line:2 char:40
++ ... i;tests;.'; ./build/phase4-toolchain/python311/python.exe -m unittest ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_sensor_acq...1 2025 11:46:21:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+FAIL
+
+======================================================================
+FAIL: test_sensor_acquisition_continues_between_udp_sensor_requests 
+(test_phase4_remediation.AcquisitionCadenceTests.test_sensor_acquisition_continues_between_udp_sensor_requests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 175, in 
+test_sensor_acquisition_continues_between_udp_sensor_requests
+    self.assertLess(records[identity]['age'],.13)
+AssertionError: 0.2 not less than 0.13
+
+----------------------------------------------------------------------
+Ran 1 test in 0.078s
+
+FAILED (failures=1)

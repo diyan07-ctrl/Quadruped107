@@ -1,0 +1,11 @@
+{"id": "ENV-WIN", "started_utc": "2026-11-10T17:04:30.956495+00:00", "commit": "ff3827690b635510198d16516237dc77d98013e3", "argv": ["git", "status", "--short", "--branch"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107"}
+## phase4/pi-hil-qualification...origin/phase4/pi-hil-qualification
+ M docs/PHASE4.md
+ M docs/PHASE4_PERFORMANCE.md
+ M docs/PHASE4_REMAINING_ISSUES.md
+ M docs/PHASE4_SAFETY.md
+ M docs/PHASE4_TEST_MATRIX.md
+ M docs/PHASE4_VALIDATION.md
+?? evidence/phase4/2026-11-10-remediation/
+?? tools/phase4-analyze-run.py
+?? tools/phase4-live-view.py

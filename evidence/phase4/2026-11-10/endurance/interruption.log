@@ -1,0 +1,43 @@
+{"started_utc": "2026-11-10T06:51:45.449155+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-diagnose.sh"}
+date -u --iso-8601=seconds
+uptime
+free -m
+pgrep -af 'app-probe|quadruped.main' || true
+ss -ltnp
+tail -c 1800 ~/Quadruped107-phase4-qualification/build/hil/state.jsonl
+tail -n 5 ~/Quadruped107-phase4-qualification/build/hil/app.log
+dmesg --level=err,warn | tail -n 15
+
+--- OBSERVED OUTPUT ---
+2026-11-10T06:51:46+00:00
+ 12:21:46 up  1:49,  7 users,  load average: 0.50, 0.53, 0.47
+               total        used        free      shared  buff/cache   available
+Mem:            1844         403         626          25         906        1441
+Swap:           1843           0        1843
+2136 /home/diyan07/Quadruped107/.venv-pi-virtual/bin/python -u build/hil/app-probe.py
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                          
+LISTEN 0      128        127.0.0.1:7000      0.0.0.0:*    users:(("python",pid=2136,fd=5))
+LISTEN 0      128          0.0.0.0:22        0.0.0.0:*                                    
+LISTEN 0      4096         0.0.0.0:111       0.0.0.0:*                                    
+LISTEN 0      128             [::]:22           [::]:*                                    
+LISTEN 0      4096            [::]:111          [::]:*                                    
+ason": ""}, {"at": 5608.742852518, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}, {"at": 5609.250495424, "previous": "EMERGENCY_STOP", "state": "MANUAL_OVERRIDE", "reason": ""}, {"at": 5612.731741046, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}, {"at": 5613.299447064, "previous": "EMERGENCY_STOP", "state": "MANUAL_OVERRIDE", "reason": ""}, {"at": 5616.714038442, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}, {"at": 5617.0609534, "previous": "EMERGENCY_STOP", "state": "MANUAL_OVERRIDE", "reason": ""}, {"at": 5620.405497747, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}, {"at": 5620.909620199, "previous": "EMERGENCY_STOP", "state": "MANUAL_OVERRIDE", "reason": ""}, {"at": 5621.950387524, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}, {"at": 5624.524352111, "previous": "EMERGENCY_STOP", "state": "MANUAL_OVERRIDE", "reason": ""}, {"at": 5624.64454405, "previous": "MANUAL_OVERRIDE", "state": "EMERGENCY_STOP", "reason": "Disarmed; explicit enable required"}]}, "sensors": {"front_m": 2.7700000000000005, "fault": null, "receivedAge": 0.014958419000322465, "rejected": 4881, "touches": {"touch_head": {"pressed": false, "stuck": false, "valid": true}, "touch_back": {"pressed": false, "stuck": false, "valid": true}, "touch_left": {"pressed": false, "stuck": false, "valid": true}, "touch_right": {"pressed": false, "stuck": false, "valid": true}, "touch_body": {"pressed": false, "stuck": false, "valid": true}}}, "utc": "2026-11-10T06:51:46.470172+00:00", "elapsed_s": 1435.5565661780001}
+INFO:werkzeug:127.0.0.1 - - [10/Nov/2026 12:07:32] "GET /api/camera-frame HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Nov/2026 12:07:32] "GET /api/state HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Nov/2026 12:07:33] "POST /api/heartbeat HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Nov/2026 12:07:33] "GET /api/camera-frame HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Nov/2026 12:07:33] "GET /api/camera-frame HTTP/1.1" 200 -
+[    0.911714] pci_bus 0000:01: supply vpcie3v3 not found, using dummy regulator
+[    0.911797] pci_bus 0000:01: supply vpcie3v3aux not found, using dummy regulator
+[    0.911820] pci_bus 0000:01: supply vpcie12v not found, using dummy regulator
+[    6.376932] snd_bcm2835: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.462293] vc_sm_cma: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.471472] bcm2835_mmal_vchiq: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.506488] bcm2835_v4l2: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.507445] bcm2835_codec: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.532456] hci_uart_bcm serial0-0: supply vbat not found, using dummy regulator
+[    6.534920] bcm2835_isp: module is from the staging directory, the quality is unknown, you have been warned.
+[    6.545264] hci_uart_bcm serial0-0: supply vddio not found, using dummy regulator
+[    7.807434] imx219 10-0010: Error reading reg 0x0000: -121
+[    7.807462] imx219 10-0010: error -EREMOTEIO: failed to read chip id 219
+[    7.808136] imx219 10-0010: probe with driver imx219 failed with error -121

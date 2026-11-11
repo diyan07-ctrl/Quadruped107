@@ -1,0 +1,44 @@
+./build/phase4-toolchain/python311/python.exe : test_fresh_packet_cannot_refresh_stale_individual_range 
+(test_phase4_remediation.SensorAtomicTimeTests.test_fresh_packet_cannot_refresh_stale_individual_range) ... ok
+At line:2 char:1
++ ./build/phase4-toolchain/python311/python.exe -m unittest discover -s ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_fresh_pack...l_range) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_new_fresh_sample_cannot_appear_from_future_to_safety_reader 
+(test_phase4_remediation.SensorAtomicTimeTests.test_new_fresh_sample_cannot_appear_from_future_to_safety_reader) ... 
+FAIL
+test_packet_loss_and_reordering_do_not_renew_measurements 
+(test_phase4_remediation.SensorAtomicTimeTests.test_packet_loss_and_reordering_do_not_renew_measurements) ... ok
+test_reader_wait_does_not_hide_genuine_measurement_expiry 
+(test_phase4_remediation.SensorAtomicTimeTests.test_reader_wait_does_not_hide_genuine_measurement_expiry) ... FAIL
+test_repeated_identical_new_measurements_remain_healthy 
+(test_phase4_remediation.SensorAtomicTimeTests.test_repeated_identical_new_measurements_remain_healthy) ... ok
+test_restart_missing_and_invalid_values_fail_closed 
+(test_phase4_remediation.SensorAtomicTimeTests.test_restart_missing_and_invalid_values_fail_closed) ... ok
+
+======================================================================
+FAIL: test_new_fresh_sample_cannot_appear_from_future_to_safety_reader 
+(test_phase4_remediation.SensorAtomicTimeTests.test_new_fresh_sample_cannot_appear_from_future_to_safety_reader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 48, in 
+test_new_fresh_sample_cannot_appear_from_future_to_safety_reader
+    self.assertIsNone(state['fault'])
+AssertionError: 'Missing, invalid or stale front range' is not None
+
+======================================================================
+FAIL: test_reader_wait_does_not_hide_genuine_measurement_expiry 
+(test_phase4_remediation.SensorAtomicTimeTests.test_reader_wait_does_not_hide_genuine_measurement_expiry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tests\test_phase4_remediation.py", line 55, in 
+test_reader_wait_does_not_hide_genuine_measurement_expiry
+    self.assertIsNotNone(state['fault'])
+AssertionError: unexpectedly None
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.401s
+
+FAILED (failures=2)
