@@ -28,9 +28,13 @@ class Pending:
 
 
 class SerialLink:
-    def __init__(self, port="auto", *, factory=serial.Serial, discover=None):
+    def __init__(self, port="auto", *, factory=serial.Serial, discover=None, sensor_only=False):
         from .telemetry import TelemetryStream
         self.telemetry=TelemetryStream()
+        self.sensor_only=sensor_only
+        self.capability=None
+        self.telemetry_rate=0
+        self.sensor_touch_count=0
         self.port = port
         self.factory = factory
         self.discover = discover or list_ports.comports
@@ -57,7 +61,10 @@ class SerialLink:
         with self.lock:
             return dict(connected=self.connected, armed=self.armed, error=self.error,
                         stopping=self.stop_pending is not None, epoch=self.epoch,
-                        queued=self.outgoing.qsize(), port=self.selected_port,telemetry=self.telemetry.snapshot())
+                        queued=self.outgoing.qsize(), port=self.selected_port,telemetry=self.telemetry.snapshot(),
+                        firmwareIdentity=self.capability,telemetryRate=self.telemetry_rate,
+                        sensorTouchCount=self.sensor_touch_count,
+                        sensorOnly=self.capability=='caps_sensor2',physicalActuationAllowed=False)
 
     def _find_port(self):
         if self.port != "auto":
@@ -78,6 +85,8 @@ class SerialLink:
         """Enqueue without waiting for acknowledgment; never waits for queue space."""
         if verb not in {"MOVE", "ARM", "STOP", "SERVO"}:
             raise ValueError("Invalid serial command")
+        if verb!='STOP' and (self.sensor_only or self.capability=='caps_sensor2'):
+            raise RuntimeError('Sensor monitoring link prohibits actuation')
         if isinstance(timeout, bool) or not isinstance(timeout, (int, float)) or not math.isfinite(timeout) or timeout <= 0:
             raise ValueError("timeout must be finite and positive")
         tokens = [str(a) for a in arguments]
@@ -138,6 +147,10 @@ class SerialLink:
             self.reset_event.set()
             self.connected = self.armed = False
             self.error = error
+            self.telemetry.reset()
+            self.capability=None
+            self.telemetry_rate=0
+            self.sensor_touch_count=0
             self.epoch += 1
             self.barrier += 1
             for pending in self.pending.values():
@@ -152,6 +165,13 @@ class SerialLink:
             self.telemetry.ingest(line)
             return
         fields = line.split(maxsplit=2)
+        if len(fields)==3 and fields[1]=='0' and 0 not in self.pending:
+            if fields[0]=='DONE' and fields[2] in {'caps_sensor2_t0','caps_sensor2_t3','caps_sensor2_t4','caps_sensor2_t5'}:
+                self.capability='caps_sensor2'
+                self.sensor_touch_count=int(fields[2][-1])
+            elif fields[0]=='DONE' and fields[2]=='telemetry' and self.capability=='caps_sensor2':
+                self.telemetry_rate=5
+            return  # Reserved negotiation replies cannot acknowledge motion.
         if line.startswith("FAULT ") or line.startswith("READY "):
             raise RuntimeError(line)
         if len(fields) < 2 or fields[0] not in {"DONE", "ERR"}:
@@ -213,6 +233,20 @@ class SerialLink:
                     if time.monotonic() > deadline or self.stop_event.is_set():
                         raise RuntimeError("Quadruped107 firmware handshake failed")
                 self.telemetry.reset()
+                # Optional, bounded negotiation. Legacy ERR is accepted; never ARM.
+                self.capability=None
+                self.telemetry_rate=0
+                self.sensor_touch_count=0
+                connection.write(b'CAPS 0\n')
+                negotiate_until=time.monotonic()+.3
+                while time.monotonic()<negotiate_until:
+                    raw=connection.readline(64)
+                    if raw:
+                        self._receive(raw.decode('ascii',errors='strict').strip())
+                        if self.capability=='caps_sensor2':
+                            connection.write(b'TELEM 0 5 2\n')
+                            break
+                        if raw.startswith(b'ERR 0 '): break
                 with self.lock:
                     self.selected_port = selected
                     self.connected = True
@@ -222,12 +256,17 @@ class SerialLink:
                     self.reset_event.clear()
                 last_ping = 0.0
                 last_pong = time.monotonic()
+                last_poll=0.0
                 while not self.stop_event.is_set() and not self.reset_event.is_set():
                     self._send_next(connection)  # urgent STOP precedes heartbeat/ordinary work
                     now = time.monotonic()
                     if now - last_ping >= 0.3:
                         connection.write(b"PING\n")
                         last_ping = now
+                    if self.capability=='caps_sensor2' and now-last_poll>=.2:
+                        token=self.telemetry.poll()
+                        connection.write(f'POLL 0 {token}\n'.encode('ascii'))
+                        last_poll=now
                     raw = connection.readline(128)
                     if raw:
                         if not raw.endswith(b"\n"): raise RuntimeError("Truncated serial response")

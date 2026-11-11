@@ -1,0 +1,158 @@
+[
+  {
+    "id": "native",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/test-firmware.py",
+      "--zig",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\native-tools\\ziglang\\zig.exe"
+    ],
+    "startedUtc": "2026-11-11T16:02:24.281327+00:00",
+    "durationS": 2.079,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "native.log"
+  },
+  {
+    "id": "virtual-generate",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/generate-virtual-firmware.py"
+    ],
+    "startedUtc": "2026-11-11T16:02:26.347252+00:00",
+    "durationS": 0.046,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual-generate.log"
+  },
+  {
+    "id": "sensor-default",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\sensor-default",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-11T16:02:26.401358+00:00",
+    "durationS": 0.625,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-default.log"
+  },
+  {
+    "id": "sensor-configured",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\sensor-configured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-11T16:02:27.022536+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-configured.log"
+  },
+  {
+    "id": "sensor-three-low",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\sensor-three-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-11T16:02:27.671292+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-three-low.log"
+  },
+  {
+    "id": "calibration",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\calibration",
+      "firmware/uno/direct_calibration"
+    ],
+    "startedUtc": "2026-11-11T16:02:28.306700+00:00",
+    "durationS": 0.64,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "calibration.log"
+  },
+  {
+    "id": "production",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\production",
+      "firmware/uno/sketch"
+    ],
+    "startedUtc": "2026-11-11T16:02:28.943801+00:00",
+    "durationS": 0.735,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "production.log"
+  },
+  {
+    "id": "virtual",
+    "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+    "dirtyPathsAtStart": [],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\compiled\\virtual",
+      "build/virtual/sketch"
+    ],
+    "startedUtc": "2026-11-11T16:02:29.678714+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual.log"
+  }
+]

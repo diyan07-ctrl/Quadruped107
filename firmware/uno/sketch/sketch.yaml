@@ -4,6 +4,7 @@ profiles:
     platforms:
       - platform: arduino:avr (1.8.8)
     libraries:
+      - dir: ../libraries/QuadrupedSafety
       - Adafruit PWM Servo Driver Library (3.0.2)
       - Adafruit BusIO (1.17.4)
 default_profile: uno

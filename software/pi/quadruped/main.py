@@ -19,6 +19,7 @@ from .autonomy import Behavior, VisionSettings, Decision
 from .diagnostics import ProcessStats
 from .controller import CONTINUOUS, MODES, MOTIONS, MotionController
 from .serial_link import SerialLink, SimulatedLink
+from .display import make_display_backend
 from .vision import choose_blue_ball_motion, detect_blue_ball, encode_vision_frame, TargetLock
 
 APP_DIR = Path(__file__).resolve().parent
@@ -28,7 +29,8 @@ class Runtime:
     def __init__(self, *, simulate=False, port="auto", camera_index=0, gesture_model="", link=None,
                  camera_backend=None, camera_device=None, width=640, height=480, fps=8,
                  actuator_backend=None, vision_config=None, virtual_speed=1.0,
-                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None, sensor_config=None, vision_state=None):
+                 simulator_host=None, simulator_port=7002, virtual_sensors=False, sensor_backend=None, navigation_config=None, sensor_config=None, vision_state=None,
+                 sensor_source=None, sensor_port=None, sensor_link=None, display_backend=None):
         self.simulate = simulate
         self.actuators_simulated = simulate or actuator_backend == "virtual"
         if link is not None:
@@ -61,14 +63,32 @@ class Runtime:
         self.nav_lock = threading.RLock()
         self.nav_wake = threading.Event()
         self.sensor_backend = sensor_backend
-        if virtual_sensors:
+        self.sensor_source=sensor_source or ('test' if virtual_sensors and sensor_backend else 'virtual' if virtual_sensors else 'none')
+        if self.sensor_source not in {'none','virtual','test','physical_uno'}:
+            raise ValueError('Unknown sensor source')
+        if virtual_sensors and self.sensor_source=='physical_uno':
+            raise ValueError('Select one authoritative sensor source')
+        self.sensor_link=None
+        self.physical_provider=None
+        if self.sensor_source!='none':
             if not self.actuators_simulated or not hasattr(self.link, "engine"):
-                raise ValueError("Virtual sensing requires explicit protocol virtual actuators")
-            if not simulator_host and sensor_backend is None:
+                raise ValueError("Sensor readiness requires explicit protocol virtual actuators")
+            if self.sensor_source=='virtual' and not simulator_host and sensor_backend is None:
                 raise ValueError("Virtual sensing requires simulator telemetry or an explicit test backend")
+            if self.sensor_source=='test' and sensor_backend is None:
+                raise ValueError('Test sensors require an explicit deterministic backend')
+            if self.sensor_source=='physical_uno' and sensor_backend is not None:
+                raise ValueError('Physical sensing cannot also use a test backend')
             from .sensors import SensorManager, SensorConfig
             from .navigation import Navigation, NavigationSettings, motion_inhibition
-            self.sensors = SensorManager(SensorConfig.load(sensor_config))
+            self.sensors = SensorManager(SensorConfig.load(sensor_config),source=self.sensor_source)
+            if self.sensor_source=='physical_uno':
+                from .physical_sensors import PhysicalSensorProvider
+                if sensor_link is None and not sensor_port: raise ValueError('Physical sensor port must be explicit')
+                if sensor_link is not None and not getattr(sensor_link,'sensor_only',False):
+                    raise ValueError('Physical sensor link must prohibit actuation')
+                self.sensor_link=sensor_link or SerialLink(sensor_port,sensor_only=True)
+                self.physical_provider=PhysicalSensorProvider(self.sensor_link,self.sensors)
             self.navigation = Navigation(NavigationSettings.load(navigation_config),self.vision_settings)
             self.motion.safety_check = self._sensor_inhibition
         self.bridge = None
@@ -77,7 +97,7 @@ class Runtime:
                 raise ValueError("Network bridge requires explicitly selected protocol virtual actuators")
             from .bridge import TraceClient
             self.bridge = TraceClient(simulator_host, simulator_port, self._trace_state,
-                                      on_sensors=self._sensor_update if self.sensors else None)
+                                      on_sensors=self._sensor_update if self.sensors and self.sensor_source!='physical_uno' else None)
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
         self.owner_lock = threading.Lock()
@@ -101,11 +121,15 @@ class Runtime:
         self.worker = threading.Thread(target=self._vision_loop, name="vision", daemon=True)
         self.nav_worker = threading.Thread(target=self._navigation_loop, name="virtual-autonomy", daemon=True)
         self.bridge_guard = threading.Thread(target=self._bridge_guard, name="bridge-safety", daemon=True)
+        from .display import DisplayService
+        self.display=DisplayService(display_backend,self.state)
 
     def start(self):
         self.link.start(); self.camera.start(); self.motion.start(); self.worker.start()
         if self.bridge: self.bridge.start(); self.bridge_guard.start()
         if self.sensors: self.nav_worker.start()
+        if self.sensor_link: self.sensor_link.start()
+        self.display.start()
 
     def claim_control(self, token):
         with self.owner_lock:
@@ -158,11 +182,13 @@ class Runtime:
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted({'manual','idle','sensor_test'} if self.sensor_source=='physical_uno' else MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
+                    sensorSource=self.sensor_source,sensorLink=self.sensor_link.snapshot() if self.sensor_link else None,
+                    oled=self.display.snapshot(),
                     autonomy=self.navigation_state(),visionConfig=config,
                     decisionHistory=self.motion.events.snapshot(),
-                    features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None), vision=vision,
+                    features=dict(handGesture=self.detector is not None and self.sensors is None,virtualSensors=self.sensors is not None and self.sensor_source!='physical_uno'), vision=vision,
                     camera=dict(**self.camera.diagnostics(),
                                 snapshotEndpoint="/api/camera-frame", mjpegEndpoint="/video-feed"))
 
@@ -351,6 +377,7 @@ class Runtime:
             self.nav_wake.wait(.02)
             self.nav_wake.clear()
             try:
+                if self.physical_provider: self.physical_provider.update()
                 if self.sensor_backend:
                     batch=self.sensor_backend.sample(time.monotonic())
                     if batch is not None: self._sensor_update(batch,session="explicit-test-backend",notify=False)
@@ -397,6 +424,8 @@ class Runtime:
         self.nav_wake.set()
         if self.nav_worker.is_alive(): self.nav_worker.join(1)
         self.motion.close()
+        self.display.close()
+        if self.sensor_link: self.sensor_link.close()
         if self.bridge: self.bridge.close()
         if self.bridge_guard.is_alive(): self.bridge_guard.join(1)
         self.link.close()
@@ -455,6 +484,8 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
+        if runtime.sensor_source=='physical_uno' and mode not in {'manual','idle','sensor_test'}:
+            raise RuntimeError('Physical monitoring only; navigation clearance unavailable')
         if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
         if mode == "hand_gesture" and runtime.sensors:
@@ -616,6 +647,11 @@ def main():
     parser.add_argument("--virtual-sensors", action="store_true", help="Explicit Phase 2 virtual autonomy; simulator telemetry required")
     parser.add_argument("--navigation-config")
     parser.add_argument("--sensor-config")
+    parser.add_argument('--sensor-source',choices=('none','virtual','test','physical_uno'))
+    parser.add_argument('--sensor-port',help='Separate non-actuating Uno USB port; explicit selection required')
+    parser.add_argument('--oled',choices=('off','mock','ssd1306'),default='off')
+    parser.add_argument('--oled-address',type=lambda v:int(v,0),default=0x3c)
+    parser.add_argument('--oled-bus',type=int,default=1)
     args = parser.parse_args()
     if args.simulate and args.camera_backend not in (None, "synthetic"):
         parser.error("--simulate means synthetic camera; use --camera-backend usb --actuator-backend virtual for mixed mode")
@@ -633,7 +669,9 @@ def main():
                       actuator_backend=args.actuator_backend or ("virtual" if args.simulate else "serial-monitor"),
                       vision_config=args.vision_config, virtual_speed=args.virtual_speed,
                       simulator_host=args.simulator, simulator_port=args.simulator_port,
-                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config,sensor_config=args.sensor_config,vision_state=args.vision_state)
+                      virtual_sensors=args.virtual_sensors,navigation_config=args.navigation_config,sensor_config=args.sensor_config,vision_state=args.vision_state,
+                      sensor_source=args.sensor_source,sensor_port=args.sensor_port,
+                      display_backend=make_display_backend(args.oled,args.oled_bus,args.oled_address))
     server = None
     try:
         server = make_server(args.host, args.port, create_app(runtime), threaded=True)

@@ -2,6 +2,13 @@
 #include "motion.h"
 #include <stdlib.h>
 #include <string.h>
+#include <QuadrupedSafety.h>
+#include <avr/wdt.h>
+
+uint8_t resetCause __attribute__((section(".noinit")));
+void earlyReset() __attribute__((naked, section(".init3")));
+void earlyReset() { resetCause=MCUSR; MCUSR=0; wdt_disable(); }
+bool localFaultLatched=false;
 
 constexpr unsigned long WatchdogMs = 1500;
 constexpr uint8_t OutputEnablePin = 8;  // PCA9685 OE, with external 10k pull-up to 5V
@@ -57,8 +64,21 @@ void handleLine(char *line) {
   if (!strcmp(command, "STOP")) {
     outputsOff(); reply(F("DONE"), id, "stopped"); return;
   }
+  if (!strcmp(command,"CAPS")) {
+    reply(F("DONE"),id,"caps_actuator_gated"); return;
+  }
+  if (!strcmp(command,"STATUS")) {
+    reply(F("DONE"),id,localFaultLatched ? "fault_latched" :
+      !driverReady ? "driver_missing" : "oe_off_stop_unknown_uncalibrated"); return;
+  }
   if (!driverReady) { reply(F("ERR"), id, "pca9685_missing"); return; }
   if (!strcmp(command, "ARM")) {
+#ifndef QUADRUPED_VIRTUAL_BUILD
+    // No measured profile, qualified electrical STOP feedback or gait rate gate
+    // exists yet. Keep production physically inhibited throughout readiness.
+    reply(F("ERR"),id,"commissioning_unqualified"); return;
+#endif
+    if (localFaultLatched) { reply(F("ERR"),id,"fault_latched"); return; }
     if (motionActive) { reply(F("ERR"), id, "busy"); return; }
     abortMotion = false; armed = true; lastPing = millis();
     digitalWrite(OutputEnablePin, LOW);
@@ -102,8 +122,9 @@ void handleLine(char *line) {
 }
 
 void serviceControl() {
+  wdt_reset();
   if (armed && millis() - lastPing > WatchdogMs) {
-    outputsOff(); Serial.println(F("FAULT watchdog"));
+    localFaultLatched=true; outputsOff(); Serial.println(F("FAULT watchdog"));
   }
   uint8_t budget = 64;
   while (Serial.available() && budget--) {
@@ -142,6 +163,8 @@ void setup() {
   if (driverReady) { pwm.setPWMFreq(ServoFrequencyHz); outputsOff(); }
   Serial.println(F("READY Quadruped107 1"));
   if (!driverReady) Serial.println(F("FAULT pca9685_missing"));
+  localFaultLatched=bool(resetCause&_BV(WDRF));
+  wdt_enable(WDTO_1S);
 }
 
 void loop() { serviceControl(); }

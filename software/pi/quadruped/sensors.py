@@ -1,4 +1,4 @@
-"""Unified bounded observations. No GPIO, I2C, serial telemetry or hardware drivers."""
+"""One bounded observation manager shared by explicitly selected sensor providers."""
 from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, asdict
@@ -72,8 +72,12 @@ class SensorBackend(Protocol):
 
 class SensorManager:
     """One atomic latest batch; sender age + round-trip age bound, never receive-time relabeling."""
-    def __init__(self,config=None,*,clock=time.monotonic):
+    def __init__(self,config=None,*,clock=time.monotonic,source='virtual'):
+        if source not in {'virtual','physical_uno','test'}: raise ValueError('Unknown sensor source')
+        self.source=source
         self.config=config or SensorConfig()
+        if source=='physical_uno' and (self.config.expiration>.3 or self.config.timeout>.3):
+            raise ValueError('Physical monitoring cannot loosen the 300 ms freshness limit')
         self.clock=clock
         self.lock=threading.RLock()
         self.session=None
@@ -193,6 +197,7 @@ class SensorManager:
             # or lets a reader delayed on this lock hide genuine expiration.
             now=self.clock()
             records={k:v.snapshot(now,self.config.expiration) for k,v in self.observations.items()}
+            for record in records.values(): record['virtual']=self.source!='physical_uno'
             touches={}
             for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
                 record=records.get(identity)
@@ -201,10 +206,11 @@ class SensorManager:
                 stuck=bool(pressed and now-state["held_since"]>=self.config.stuck_seconds)
                 if stuck and record: record.update(valid=False,health="STUCK",error="Touch held beyond limit")
                 touches[identity]=dict(pressed=pressed,stuck=stuck,valid=bool(record and record["valid"]))
-            ranges=[records.get(k) for k in RANGE_IDS]
+            required_ranges=('urm37',) if self.source=='physical_uno' else RANGE_IDS
+            ranges=[records.get(k) for k in required_ranges]
             fault=None
             if not all(r and r["valid"] for r in ranges): fault="Missing, invalid or stale front range"
-            elif abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
+            elif len(ranges)==2 and abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
                 fault="Conflicting front range observations"
             if not all(t["valid"] for t in touches.values()): fault=fault or "Missing, stale or stuck touch input"
             if fault:
@@ -215,7 +221,11 @@ class SensorManager:
                 if not self.was_fault: self.fault_events.append(self.last_fault)
             self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
-            return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
+            return dict(virtual=self.source!='physical_uno',source=self.source,
+                        monitoringOnly=self.source=='physical_uno',
+                        safetyInhibits=([fault] if fault else []) +
+                            (['Physical monitoring: unmeasured HC-SR04 and swept clearance; navigation inhibited'] if self.source=='physical_uno' else []),
+                        session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
                         fault=fault,rejected=self.rejected,
                         receivedAge=None if self.last_received is None else now-self.last_received,

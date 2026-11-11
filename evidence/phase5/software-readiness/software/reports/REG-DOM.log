@@ -1,0 +1,2 @@
+{"id": "REG-DOM", "started_utc": "2026-11-11T16:02:52.263816+00:00", "commit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c", "argv": ["node", "tools/check-dashboard.mjs"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107"}
+Dashboard DOM passed: virtual/legacy modes, text escaping, disabled motion and available STOP.
