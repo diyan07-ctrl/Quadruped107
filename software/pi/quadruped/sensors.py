@@ -206,10 +206,11 @@ class SensorManager:
                 stuck=bool(pressed and now-state["held_since"]>=self.config.stuck_seconds)
                 if stuck and record: record.update(valid=False,health="STUCK",error="Touch held beyond limit")
                 touches[identity]=dict(pressed=pressed,stuck=stuck,valid=bool(record and record["valid"]))
-            ranges=[records.get(k) for k in RANGE_IDS]
+            required_ranges=('urm37',) if self.source=='physical_uno' else RANGE_IDS
+            ranges=[records.get(k) for k in required_ranges]
             fault=None
             if not all(r and r["valid"] for r in ranges): fault="Missing, invalid or stale front range"
-            elif abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
+            elif len(ranges)==2 and abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
                 fault="Conflicting front range observations"
             if not all(t["valid"] for t in touches.values()): fault=fault or "Missing, stale or stuck touch input"
             if fault:

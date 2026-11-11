@@ -102,7 +102,8 @@ class ProviderTests(unittest.TestCase):
         self.assertTrue(state['monitoringOnly'])
         self.assertNotIn('hcsr04',state['observations'])
         self.assertNotIn('sweep_forward',state['observations'])
-        self.assertIsNotNone(state['fault'])
+        self.assertIsNone(state['fault'])
+        self.assertTrue(state['safetyInhibits'])
     def test_no_retimestamp_of_same_record(self):
         self.feed(0)
         self.now[0]+=.31; self.provider.update()
@@ -193,6 +194,33 @@ class ProviderTests(unittest.TestCase):
             self.assertIsNotNone(runtime.link.engine)
             self.assertEqual(runtime.state()['sensorSource'],'physical_uno')
             self.assertFalse(runtime.state()['physicalActuationAllowed'])
+        finally: runtime.close()
+
+    def test_explicit_manual_virtual_output_then_invalid_sensor_stops(self):
+        from test_runtime import wait_for
+        runtime=Runtime(simulate=True,actuator_backend='virtual',sensor_source='physical_uno',sensor_link=self.link)
+        runtime.link.start(); runtime.motion.start()
+        api=create_app(runtime).test_client()
+        try:
+            wait_for(lambda:runtime.link.snapshot()['connected'],4)
+            def feed(seq,valid=True):
+                token=self.link.telemetry.poll()
+                self.link._receive(tel(seq=seq,uptime=100+seq*200,token=token,
+                    distance=1000 if valid else -1,flags=19 if valid else 18,faults=0 if valid else 2))
+                runtime.physical_provider.update()
+            feed(0)
+            self.assertEqual(api.post('/api/arm',json={}).status_code,200)
+            self.assertFalse(self.link.armed)
+            self.assertIsNotNone(runtime._sensor_inhibition('forward'))
+            self.assertEqual(api.post('/api/mode',json={'mode':'explore'}).status_code,409)
+            self.assertEqual(api.post('/api/servo',json={'channel':0,'pulse':300}).status_code,200)
+            self.assertTrue(runtime.link.engine.snapshot()['activeMask'])
+            feed(1,valid=False)
+            wait_for(lambda:not runtime.motion.snapshot()['enabled'])
+            wait_for(lambda:not runtime.link.engine.snapshot()['activeMask'])
+            feed(2)
+            self.assertFalse(runtime.motion.snapshot()['enabled'])
+            self.assertFalse(self.link.armed)
         finally: runtime.close()
 
 

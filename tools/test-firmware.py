@@ -53,7 +53,8 @@ def main():
             state=manager.snapshot()
             assert state['observations']['urm37']['valid']==(name!='sensor-default')
             if name!='sensor-default': assert state['observations']['urm37']['measurement']==.4
-            assert state['fault'] and not state['virtual'] and not link.armed
+            assert state['safetyInhibits'] and not state['virtual'] and not link.armed
+            if name=='sensor-default': assert state['fault']
             assert len(state['touches'])==5  # Missing configured inputs stay invalid.
             if name=='sensor-configured':
                 now=[1.]

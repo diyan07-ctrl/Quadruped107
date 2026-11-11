@@ -352,8 +352,6 @@ class Runtime:
             return self.navigation.snapshot() if self.navigation else None
 
     def _sensor_inhibition(self,motion):
-        if self.sensor_source=='physical_uno':
-            return 'Physical monitoring only: HC-SR04 and swept-clearance evidence unavailable'
         from .navigation import motion_inhibition
         sensors=self.sensors.snapshot()
         reason=motion_inhibition(sensors,motion,self.navigation.settings)
