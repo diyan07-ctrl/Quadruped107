@@ -46,7 +46,9 @@ for (const line of oldEntries) {
   else if (oldName.startsWith('Design/')) newName = oldName.replace('Design/', 'hardware/cad/');
   else if (oldName.startsWith('Dev/Tools/') && oldName.endsWith('.xlsx')) newName = oldName.replace('Dev/Tools/', 'hardware/calibration/');
   else if (oldName.startsWith('docs/images/') || oldName.endsWith('.mp4') || oldName === 'LICENSE') newName = oldName;
-  else if (oldName.startsWith('Dev/Quadruped107-connect/sketch/')) newName = oldName.replace('Dev/Quadruped107-connect/sketch/', 'firmware/uno/sketch/');
+  // Active command firmware evolves; retain strict byte preservation for gait data.
+  // The historical sketch remains available at baseline in Git history.
+  else if (oldName.startsWith('Dev/Quadruped107-connect/sketch/') && !oldName.endsWith('/sketch.ino')) newName = oldName.replace('Dev/Quadruped107-connect/sketch/', 'firmware/uno/sketch/');
   else if (oldName.startsWith('Dev/Quadruped107-connect/assets/poses/')) newName = oldName.replace('Dev/Quadruped107-connect/assets/', 'software/pi/quadruped/web/');
   if (!newName) continue;
   if (!fs.existsSync(path.join(root, newName))) fail(`Missing preserved asset: ${newName}`);

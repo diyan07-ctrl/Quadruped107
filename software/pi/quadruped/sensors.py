@@ -72,7 +72,9 @@ class SensorBackend(Protocol):
 
 class SensorManager:
     """One atomic latest batch; sender age + round-trip age bound, never receive-time relabeling."""
-    def __init__(self,config=None,*,clock=time.monotonic):
+    def __init__(self,config=None,*,clock=time.monotonic,source='virtual'):
+        if source not in {'virtual','physical_uno','test'}: raise ValueError('Unknown sensor source')
+        self.source=source
         self.config=config or SensorConfig()
         self.clock=clock
         self.lock=threading.RLock()
@@ -193,6 +195,7 @@ class SensorManager:
             # or lets a reader delayed on this lock hide genuine expiration.
             now=self.clock()
             records={k:v.snapshot(now,self.config.expiration) for k,v in self.observations.items()}
+            for record in records.values(): record['virtual']=self.source!='physical_uno'
             touches={}
             for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
                 record=records.get(identity)
@@ -215,7 +218,11 @@ class SensorManager:
                 if not self.was_fault: self.fault_events.append(self.last_fault)
             self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
-            return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
+            return dict(virtual=self.source!='physical_uno',source=self.source,
+                        monitoringOnly=self.source=='physical_uno',
+                        safetyInhibits=([fault] if fault else []) +
+                            (['Physical monitoring: unmeasured HC-SR04 and swept clearance; navigation inhibited'] if self.source=='physical_uno' else []),
+                        session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
                         fault=fault,rejected=self.rejected,
                         receivedAge=None if self.last_received is None else now-self.last_received,
