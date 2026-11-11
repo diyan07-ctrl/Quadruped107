@@ -78,4 +78,3 @@ A pull-up to Uno 5V is insufficient proof of safety when logic is absent and ser
 # Phase 5 sensor-only software boundary
 
 The D4/D2 URM37, D6/D7/D9/D10/D11 touch and Pi-owned OLED allocations below remain conditional on actual board revision, interface mode, polarity and voltage identification. Only the explicitly selected V5 PWM-trigger profile is implemented; other URM37 revisions/modes are not auto-detected. HC-SR04 has no enabled physical driver. The new sensor-only target initializes no unconfigured interfaces and has no actuator driver. Keep it isolated from servos/PCA during first tests. See [exact next-session sensor procedures](SOFTWARE_READINESS.md). No wiring changes were made during software qualification.
-
