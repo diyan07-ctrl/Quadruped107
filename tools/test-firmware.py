@@ -3,6 +3,7 @@ import argparse
 from pathlib import Path
 import subprocess
 import os
+import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -19,7 +20,9 @@ def main():
               ('sensor-configured','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=31']),
               ('sensor-active-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=7','-DTOUCH_ACTIVE_LOW_MASK=7']),
               ('calibration-disabled','firmware_calibration.cpp',[]),
-              ('calibration-reviewed-unknown','firmware_calibration.cpp',['-DDIRECT_COMMISSIONING_REVIEWED=1'])]
+              ('calibration-reviewed-unknown','firmware_calibration.cpp',['-DDIRECT_COMMISSIONING_REVIEWED=1']),
+              ('production-present','firmware_production.cpp',[]),
+              ('production-absent','firmware_production.cpp',['-DMOCK_PCA_PRESENT=0'])]
     for name,source,defines in variants:
         binary=out/(name+('.exe' if os.name=='nt' else ''))
         command=compiler+['-std=c++11','-Wall','-Wextra','-Werror','-Wno-unused-function',
@@ -28,7 +31,31 @@ def main():
             '-I'+str(ROOT/'firmware/uno/libraries/QuadrupedSafety/src'),*defines,
             str(ROOT/'tests'/source),'-o',str(binary)]
         subprocess.run(command,cwd=ROOT,env=env,check=True)
-        subprocess.run([str(binary)],cwd=ROOT,check=True)
+        result=subprocess.run([str(binary)],cwd=ROOT,check=True,capture_output=True,text=True)
+        print(result.stdout,end='')
+        if name.startswith('sensor-'):
+            # Consume the actual C++ sketch's wire record in the Pi provider.
+            sys.path.insert(0,str(ROOT/'software/pi'))
+            from quadruped.serial_link import SerialLink
+            from quadruped.telemetry import TelemetryStream
+            from quadruped.sensors import SensorManager
+            from quadruped.physical_sensors import PhysicalSensorProvider
+            line=next(row.split('=',1)[1] for row in result.stdout.splitlines() if row.startswith('WIRE_RECORD='))
+            link=SerialLink('mock',sensor_only=True)
+            link.connected=True
+            link.capability='caps_sensor2'
+            link.sensor_touch_count=3 if name=='sensor-active-low' else 5 if name=='sensor-configured' else 0
+            link.telemetry=TelemetryStream(clock=lambda:1.)
+            for _ in range(42): link.telemetry.poll()
+            assert link.telemetry.ingest(line),line
+            manager=SensorManager(source='physical_uno',clock=lambda:1.)
+            PhysicalSensorProvider(link,manager).update()
+            state=manager.snapshot()
+            assert state['observations']['urm37']['valid']==(name!='sensor-default')
+            if name!='sensor-default': assert state['observations']['urm37']['measurement']==.4
+            assert state['fault'] and not state['virtual'] and not link.armed
+            assert len(state['touches'])==5  # Missing configured inputs stay invalid.
+            print(name+' C++ wire -> Pi SensorManager PASS',flush=True)
         print(name+' PASS',flush=True)
     print(f'{len(variants)} firmware mock executables PASS')
 

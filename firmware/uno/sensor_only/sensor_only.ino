@@ -16,11 +16,11 @@ const uint8_t touchPins[5]={6,7,9,10,11};
 volatile uint32_t lowAt=0, pulseWidth=0, pulseAt=0;
 volatile bool capturing=false, captureEnabled=false, pulseReady=false;
 char input[64];
-uint8_t used=0, rate=0, intervalTouches=0;
+uint8_t used=0, rate=0, intervalTouches=0, formatVersion=1;
 bool overflow=false;
 uint16_t sequence=0, token=0;
-uint32_t lastReport=0, lastScan=0, lastPing=0;
-bool requested=false, watchdogFault=false;
+uint32_t lastReport=0, lastScan=0, lastPing=0, firstTouchAt=0;
+bool requested=false, watchdogFault=false, warmed=false;
 
 void echoEdge() {
   if (!captureEnabled) return;
@@ -47,14 +47,28 @@ void command(char *line) {
   char *id=strtok_r(nullptr," ",&context);
   if (!decimal(id,11)) { Serial.println(F("ERR 0 invalid_id")); return; }
   char *argument=strtok_r(nullptr," ",&context);
+  char *version=strtok_r(nullptr," ",&context);
   bool extra=strtok_r(nullptr," ",&context)!=nullptr;
   if (!strcmp(verb,"STOP")) { reply(F("DONE"),id,F("stopped")); return; }
-  if (!strcmp(verb,"CAPS") && !argument) { reply(F("DONE"),id,F("caps_sensor2")); return; }
-  if (!strcmp(verb,"TELEM") && decimal(argument,2) && !extra && atoi(argument)<=10) {
+  if (!strcmp(verb,"CAPS") && !argument && !version) {
+#if TOUCH_ENABLED_MASK == 31
+    reply(F("DONE"),id,F("caps_sensor2_t5"));
+#elif TOUCH_ENABLED_MASK == 15
+    reply(F("DONE"),id,F("caps_sensor2_t4"));
+#elif TOUCH_ENABLED_MASK == 7
+    reply(F("DONE"),id,F("caps_sensor2_t3"));
+#else
+    reply(F("DONE"),id,F("caps_sensor2_t0"));
+#endif
+    return;
+  }
+  if (!strcmp(verb,"TELEM") && decimal(argument,2) && !extra && atoi(argument)<=10 &&
+      (!version || !strcmp(version,"1") || !strcmp(version,"2"))) {
     rate=atoi(argument); requested=false; intervalTouches=0;
+    formatVersion=version ? atoi(version) : 1;
     reply(F("DONE"),id,F("telemetry")); return;
   }
-  if (!strcmp(verb,"POLL") && decimal(argument,5) && !extra && atol(argument)<=65535L && rate) {
+  if (!strcmp(verb,"POLL") && decimal(argument,5) && !version && !extra && atol(argument)<=65535L && rate && formatVersion==2) {
     token=atol(argument); requested=true; return;
   }
   reply(F("ERR"),id,F("sensor_only")); // ARM/MOVE/SERVO can never reach a signal generator.
@@ -65,7 +79,7 @@ uint16_t ageMs(uint32_t now, uint32_t acquired) {
 }
 void report(uint32_t now) {
   uint32_t ms=millis();
-  if (!rate || !requested || uint32_t(ms-lastReport)<1000UL/rate) return;
+  if (!rate || (formatVersion==2 && !requested) || uint32_t(ms-lastReport)<1000UL/rate) return;
   lastReport=ms; requested=false;
   uint8_t mask=intervalTouches, faults=(URM37_PROFILE==0 ? 1 : range.fault);
   bool touchValid=TOUCH_ENABLED_MASK!=0;
@@ -78,9 +92,13 @@ void report(uint32_t now) {
   bool rangeValid=URM37_PROFILE && range.valid && age<=300;
   uint8_t flags=16 | (rangeValid ? 1 : 0) | (touchValid ? 2 : 0) | ((resetCause&_BV(WDRF)) ? 64 : 0);
   char output[64];
-  int count=snprintf(output,sizeof(output),"TEL 2 %u %lu %d %u %u %u %u %u %u %u\n",
+  uint32_t touchAge=mask ? ms-firstTouchAt : ms-lastScan;
+  int count;
+  if (formatVersion==1) count=snprintf(output,sizeof(output),"TEL 1 %u %lu %d %u %u %u -1 -1\n",
+    sequence++,static_cast<unsigned long>(ms),rangeValid ? int(range.mm) : -1,URM37_PROFILE ? 1 : 0,flags,mask);
+  else count=snprintf(output,sizeof(output),"TEL 2 %u %lu %d %u %u %u %u %u %u %u\n",
     sequence++,static_cast<unsigned long>(ms),rangeValid ? int(range.mm) : -1,URM37_PROFILE ? 1 : 0,flags,mask,
-    age,uint16_t(uint32_t(ms-lastScan)>999 ? 999 : ms-lastScan),token,faults);
+    age,uint16_t(touchAge>999 ? 999 : touchAge),token,faults);
   intervalTouches=0; // Also clear on a dropped report; stale taps never replay.
   if (count>0 && count<int(sizeof(output)) && Serial.availableForWrite()>=count) Serial.write((uint8_t*)output,count);
 }
@@ -110,7 +128,8 @@ void loop() {
     }
   }
   uint32_t now=micros(), ms=millis();
-  if (URM37_PROFILE) {
+  if (ms>=500) warmed=true;
+  if (URM37_PROFILE && warmed) {
     if (range.due(now)) {
       range.start(now);
       ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { captureEnabled=false; capturing=false; pulseReady=false; }
@@ -131,7 +150,10 @@ void loop() {
       bool active=digitalRead(touchPins[i])!=0;
       if (TOUCH_ACTIVE_LOW_MASK & (1<<i)) active=!active;
       touches[i].scan(active,ms);
-      if (touches[i].pressed) intervalTouches|=1<<i;
+      if (touches[i].pressed) {
+        if (!intervalTouches) firstTouchAt=ms;
+        intervalTouches|=1<<i;
+      }
     }
   }
   if (rate && uint32_t(ms-lastPing)>1500) {

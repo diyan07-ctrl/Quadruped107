@@ -182,7 +182,7 @@ class Runtime:
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted(MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted({'manual','idle','sensor_test'} if self.sensor_source=='physical_uno' else MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
                     sensorSource=self.sensor_source,sensorLink=self.sensor_link.snapshot() if self.sensor_link else None,
                     oled=self.display.snapshot(),
@@ -486,6 +486,8 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
+        if runtime.sensor_source=='physical_uno' and mode not in {'manual','idle','sensor_test'}:
+            raise RuntimeError('Physical monitoring only; navigation clearance unavailable')
         if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
         if mode == "hand_gesture" and runtime.sensors:

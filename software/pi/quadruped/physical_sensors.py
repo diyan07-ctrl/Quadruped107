@@ -32,7 +32,8 @@ class PhysicalSensorProvider:
         observations = [dict(id='urm37', kind='range', value=snapshot.get('distanceM'),
             valid=bool(snapshot.get('rangeValid')), age=snapshot['rangeAge'],
             error=None if snapshot.get('rangeValid') else 'Physical range invalid/unconfigured')]
-        for index, name in enumerate(TOUCH_IDS[:self.manager.config.touch_count]):
+        count=min(self.manager.config.touch_count,self.link.sensor_touch_count)
+        for index, name in enumerate(TOUCH_IDS[:count]):
             observations.append(dict(id='touch_'+name, kind='touch',
                 value=bool(record['touch_mask'] & (1 << index)),
                 valid=bool(snapshot.get('touchValid')), age=snapshot['touchAge'],

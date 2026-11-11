@@ -48,7 +48,7 @@ for (const line of oldEntries) {
   else if (oldName.startsWith('docs/images/') || oldName.endsWith('.mp4') || oldName === 'LICENSE') newName = oldName;
   // Active command firmware evolves; retain strict byte preservation for gait data.
   // The historical sketch remains available at baseline in Git history.
-  else if (oldName.startsWith('Dev/Quadruped107-connect/sketch/') && !oldName.endsWith('/sketch.ino')) newName = oldName.replace('Dev/Quadruped107-connect/sketch/', 'firmware/uno/sketch/');
+  else if (oldName.startsWith('Dev/Quadruped107-connect/sketch/') && oldName.endsWith('/motion.h')) newName = oldName.replace('Dev/Quadruped107-connect/sketch/', 'firmware/uno/sketch/');
   else if (oldName.startsWith('Dev/Quadruped107-connect/assets/poses/')) newName = oldName.replace('Dev/Quadruped107-connect/assets/', 'software/pi/quadruped/web/');
   if (!newName) continue;
   if (!fs.existsSync(path.join(root, newName))) fail(`Missing preserved asset: ${newName}`);

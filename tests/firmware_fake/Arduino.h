@@ -25,6 +25,7 @@ static bool wdtEnabled=false;
 static unsigned watchdogServices=0;
 inline uint32_t micros() { return fakeUs; }
 inline uint32_t millis() { return fakeUs/1000; }
+inline void delay(unsigned long ms) { fakeUs+=ms*1000; }
 inline void digitalWrite(uint8_t pin,uint8_t state) { pins[pin]=state; }
 inline int digitalRead(uint8_t pin) { return pins[pin]; }
 inline void pinMode(uint8_t pin,uint8_t mode) { modes[pin]=mode; }

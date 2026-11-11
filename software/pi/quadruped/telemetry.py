@@ -1,4 +1,4 @@
-"""Passive TEL1 diagnostics. No capability negotiation or physical safety activation."""
+"""TEL1 diagnostics and poll-bounded TEL2 monitoring; never authorizes actuation."""
 from dataclasses import dataclass, asdict
 import threading
 import time

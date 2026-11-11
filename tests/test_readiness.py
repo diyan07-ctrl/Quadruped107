@@ -2,6 +2,8 @@
 import queue
 import sys
 import time
+import threading
+from types import SimpleNamespace
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -77,6 +79,7 @@ class ProviderTests(unittest.TestCase):
         self.link=SerialLink('mock',sensor_only=True)
         self.link.connected=True
         self.link.capability='caps_sensor2'
+        self.link.sensor_touch_count=5
         self.link.telemetry=TelemetryStream(clock=lambda:self.now[0])
         self.manager=SensorManager(clock=lambda:self.now[0],source='physical_uno')
         self.provider=PhysicalSensorProvider(self.link,self.manager)
@@ -125,7 +128,7 @@ class ProviderTests(unittest.TestCase):
     def test_negotiation_does_not_complete_motion(self):
         pending=Pending('ARM',identifier=9)
         self.link.pending[9]=pending
-        self.link._receive('DONE 0 caps_sensor2')
+        self.link._receive('DONE 0 caps_sensor2_t5')
         self.link._receive('DONE 0 telemetry')
         self.feed(9)
         self.assertFalse(pending.event.is_set())
@@ -150,6 +153,30 @@ class ProviderTests(unittest.TestCase):
     def test_conflicting_sensor_sources_rejected(self):
         with self.assertRaises(ValueError):
             Runtime(simulate=True,actuator_backend='virtual',virtual_sensors=True,sensor_source='physical_uno')
+
+    def test_three_configured_touches_do_not_fabricate_five_inputs(self):
+        self.link.sensor_touch_count=3
+        self.feed(0)
+        state=self.manager.snapshot()
+        self.assertNotIn('touch_right',state['observations'])
+        self.assertFalse(state['touches']['touch_right']['valid'])
+
+    def test_unknown_capability_does_not_enable_telemetry(self):
+        self.link.capability=None
+        self.link._receive('DONE 0 caps_sensor99_t5')
+        self.assertIsNone(self.link.capability)
+        self.assertEqual(self.link.telemetry_rate,0)
+
+    def test_physical_configuration_cannot_loosen_freshness(self):
+        from quadruped.sensors import SensorConfig
+        with self.assertRaises(ValueError): SensorManager(SensorConfig(expiration=1),source='physical_uno')
+
+    def test_exhausted_id_zero_stop_still_acknowledges(self):
+        from quadruped.serial_link import MAX_ID
+        self.link.sequence=MAX_ID
+        pending=self.link.submit('STOP')
+        self.link._receive('DONE 0 stopped')
+        self.assertTrue(pending.event.is_set())
 
 
 class DisplayTests(unittest.TestCase):
@@ -193,10 +220,44 @@ class DisplayTests(unittest.TestCase):
     def test_ssd1306_address_validation(self):
         with self.assertRaises(ValueError): SSD1306(address=0x40)
 
+    def test_ssd1306_i2c_exception_and_reconnect(self):
+        writes=[]
+        class Bus:
+            def write_byte_data(self,*args): writes.append(args)
+            def close(self): writes.append('close')
+        backend=SSD1306()
+        with patch.dict(sys.modules,{'smbus2':SimpleNamespace(SMBus=lambda bus:Bus())}):
+            backend.connect()
+            self.assertEqual(writes[0],(0x3c,0,0xae))
+            self.assertEqual(writes[-1],(0x3c,0,0xaf))
+            backend.close()
+            self.assertEqual(writes[-1],'close')
+        now=[0.]
+        class Broken(MockDisplay):
+            def show(self,frame): raise OSError('I2C transfer failed')
+        service=DisplayService(Broken(),lambda:{},clock=lambda:now[0])
+        service.step()
+        self.assertIn('I2C transfer',service.snapshot()['error'])
+
+    def test_blocked_oled_thread_does_not_block_stop(self):
+        entered=threading.Event(); release=threading.Event()
+        class Blocked(MockDisplay):
+            def show(self,frame): entered.set(); release.wait(2)
+        runtime=Runtime(simulate=True,display_backend=Blocked())
+        runtime.display.start()
+        try:
+            self.assertTrue(entered.wait(1))
+            started=time.monotonic()
+            response=create_app(runtime).test_client().post('/api/stop',json={})
+            self.assertEqual(response.status_code,200)
+            self.assertLess(time.monotonic()-started,.5)
+        finally:
+            release.set(); runtime.close()
+
 
 class NegotiationTests(unittest.TestCase):
     def test_real_worker_mock_usb_and_legacy(self):
-        for capability in ('caps_sensor2','unknown_command'):
+        for capability in ('caps_sensor2_t5','unknown_command'):
             with self.subTest(capability=capability):
                 class USB:
                     def __init__(self,**options): self.lines=queue.Queue(); self.writes=[]
@@ -204,8 +265,8 @@ class NegotiationTests(unittest.TestCase):
                     def write(self,data):
                         self.writes.append(data)
                         if data==b'HELLO\n': self.lines.put(b'READY Quadruped107 1\n')
-                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability=="caps_sensor2" else "ERR"} 0 {capability}\n'.encode())
-                        elif data==b'TELEM 0 5\n': self.lines.put(b'DONE 0 telemetry\n')
+                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability=="caps_sensor2_t5" else "ERR"} 0 {capability}\n'.encode())
+                        elif data==b'TELEM 0 5 2\n': self.lines.put(b'DONE 0 telemetry\n')
                         elif data==b'PING\n': self.lines.put(b'PONG\n')
                         elif data.startswith(b'POLL '):
                             token=int(data.split()[2]); self.lines.put((tel(token=token)+'\n').encode())
@@ -220,13 +281,13 @@ class NegotiationTests(unittest.TestCase):
                     deadline=time.monotonic()+4
                     while time.monotonic()<deadline:
                         snapshot=link.snapshot()
-                        if snapshot['connected'] and (capability!='caps_sensor2' or snapshot['telemetry']['record']): break
+                        if snapshot['connected'] and (capability!='caps_sensor2_t5' or snapshot['telemetry']['record']): break
                         time.sleep(.01)
                     self.assertTrue(snapshot['connected'])
                     self.assertFalse(link.armed)
                     self.assertFalse(any(data.startswith(b'ARM') for data in usb.writes))
-                    self.assertEqual(link.capability,'caps_sensor2' if capability=='caps_sensor2' else None)
-                    if capability=='caps_sensor2': self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
+                    self.assertEqual(link.capability,'caps_sensor2' if capability=='caps_sensor2_t5' else None)
+                    if capability=='caps_sensor2_t5': self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
                 finally: link.close()
 
 if __name__=='__main__': unittest.main()

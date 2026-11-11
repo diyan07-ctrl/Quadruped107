@@ -34,6 +34,7 @@ class SerialLink:
         self.sensor_only=sensor_only
         self.capability=None
         self.telemetry_rate=0
+        self.sensor_touch_count=0
         self.port = port
         self.factory = factory
         self.discover = discover or list_ports.comports
@@ -62,6 +63,7 @@ class SerialLink:
                         stopping=self.stop_pending is not None, epoch=self.epoch,
                         queued=self.outgoing.qsize(), port=self.selected_port,telemetry=self.telemetry.snapshot(),
                         firmwareIdentity=self.capability,telemetryRate=self.telemetry_rate,
+                        sensorTouchCount=self.sensor_touch_count,
                         sensorOnly=self.capability=='caps_sensor2',physicalActuationAllowed=False)
 
     def _find_port(self):
@@ -148,6 +150,7 @@ class SerialLink:
             self.telemetry.reset()
             self.capability=None
             self.telemetry_rate=0
+            self.sensor_touch_count=0
             self.epoch += 1
             self.barrier += 1
             for pending in self.pending.values():
@@ -162,9 +165,10 @@ class SerialLink:
             self.telemetry.ingest(line)
             return
         fields = line.split(maxsplit=2)
-        if len(fields)==3 and fields[1]=='0':
-            if fields[0]=='DONE' and fields[2]=='caps_sensor2':
+        if len(fields)==3 and fields[1]=='0' and 0 not in self.pending:
+            if fields[0]=='DONE' and fields[2] in {'caps_sensor2_t0','caps_sensor2_t3','caps_sensor2_t4','caps_sensor2_t5'}:
                 self.capability='caps_sensor2'
+                self.sensor_touch_count=int(fields[2][-1])
             elif fields[0]=='DONE' and fields[2]=='telemetry' and self.capability=='caps_sensor2':
                 self.telemetry_rate=5
             return  # Reserved negotiation replies cannot acknowledge motion.
@@ -232,6 +236,7 @@ class SerialLink:
                 # Optional, bounded negotiation. Legacy ERR is accepted; never ARM.
                 self.capability=None
                 self.telemetry_rate=0
+                self.sensor_touch_count=0
                 connection.write(b'CAPS 0\n')
                 negotiate_until=time.monotonic()+.3
                 while time.monotonic()<negotiate_until:
@@ -239,7 +244,7 @@ class SerialLink:
                     if raw:
                         self._receive(raw.decode('ascii',errors='strict').strip())
                         if self.capability=='caps_sensor2':
-                            connection.write(b'TELEM 0 5\n')
+                            connection.write(b'TELEM 0 5 2\n')
                             break
                         if raw.startswith(b'ERR 0 '): break
                 with self.lock:

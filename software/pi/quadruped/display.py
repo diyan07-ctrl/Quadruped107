@@ -20,7 +20,7 @@ def render(state, tick=0):
     screen,text,eyes='idle','ROBOT IDLE','neutral'
     if not state:
         screen,text='startup','STARTING'
-    elif motion.get('stopping') or motion.get('appMode')=='stop':
+    elif motion.get('stopping') or motion.get('appMode')=='stop' or motion.get('lastStopContext') and not motion.get('enabled'):
         screen,text,eyes='stop','STOP','closed'
     elif link.get('connected') is False or sensors.get('fault'):
         screen,text,eyes='fault','FAULT / LINK','closed'
@@ -117,7 +117,7 @@ class DisplayService:
             if not self.connected:
                 self.backend.connect()
                 self.connected=True
-            frame=render(self.state(),self.status['frames'])
+            frame=render({} if not self.status['frames'] else self.state(),self.status['frames'])
             self.backend.show(frame)
             with self.lock:
                 self.status.update(connected=True,screen=frame.screen,error=None,frames=self.status['frames']+1)

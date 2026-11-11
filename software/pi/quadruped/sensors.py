@@ -1,4 +1,4 @@
-"""Unified bounded observations. No GPIO, I2C, serial telemetry or hardware drivers."""
+"""One bounded observation manager shared by explicitly selected sensor providers."""
 from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, asdict
@@ -76,6 +76,8 @@ class SensorManager:
         if source not in {'virtual','physical_uno','test'}: raise ValueError('Unknown sensor source')
         self.source=source
         self.config=config or SensorConfig()
+        if source=='physical_uno' and (self.config.expiration>.3 or self.config.timeout>.3):
+            raise ValueError('Physical monitoring cannot loosen the 300 ms freshness limit')
         self.clock=clock
         self.lock=threading.RLock()
         self.session=None
