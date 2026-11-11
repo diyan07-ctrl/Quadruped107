@@ -185,6 +185,16 @@ class ProviderTests(unittest.TestCase):
         self.link._receive('DONE 0 stopped')
         self.assertTrue(pending.event.is_set())
 
+    def test_pybullet_bridge_cannot_replace_physical_sensor_source(self):
+        runtime=Runtime(simulate=True,actuator_backend='virtual',sensor_source='physical_uno',
+                        sensor_link=self.link,simulator_host='127.0.0.1')
+        try:
+            self.assertIsNone(runtime.bridge.on_sensors)
+            self.assertIsNotNone(runtime.link.engine)
+            self.assertEqual(runtime.state()['sensorSource'],'physical_uno')
+            self.assertFalse(runtime.state()['physicalActuationAllowed'])
+        finally: runtime.close()
+
 
 class DisplayTests(unittest.TestCase):
     def test_screens(self):

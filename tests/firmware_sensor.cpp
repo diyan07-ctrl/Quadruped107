@@ -33,11 +33,23 @@ int main() {
   size_t pos=Serial.output.find("TEL 2 ");
   assert(Serial.output.find('\n',pos)-pos<=63);
   std::cout << "WIRE_RECORD=" << Serial.output.substr(pos,Serial.output.find('\n',pos)-pos) << '\n';
+  if (URM37_PROFILE && TOUCH_ENABLED_MASK==31 && TOUCH_ACTIVE_LOW_MASK==0) {
+    fakeUs=660000; pins[6]=HIGH; loop();
+    fakeUs=680000; loop();
+    assert(touches[0].pressed);
+    fakeUs=840000; send("POLL 0 43\n");
+    pos=Serial.output.rfind("TEL 2 ");
+    std::cout << "WIRE_TOUCH_RECORD=" << Serial.output.substr(pos,Serial.output.find('\n',pos)-pos) << '\n';
+    fakeUs=850000; loop();
+    fakeUs=1040000; send("POLL 0 44\n");
+    pos=Serial.output.rfind("TEL 2 ");
+    std::cout << "WIRE_TOUCH_RECORD=" << Serial.output.substr(pos,Serial.output.find('\n',pos)-pos) << '\n';
+  }
   // Drop a report rather than wait for UART space; never replay touch interval.
-  Serial.capacity=0; intervalTouches=31; fakeUs=850000;
-  send("POLL 0 43\n"); assert(intervalTouches==0);
+  Serial.capacity=0; intervalTouches=31; fakeUs=1250000;
+  send("POLL 0 45\n"); assert(intervalTouches==0);
   Serial.capacity=64;
-  fakeUs=1100000; send("TELEM 10 5\n");
+  fakeUs=1500000; send("TELEM 10 5\n");
   assert(Serial.output.find("TEL 1 ")!=std::string::npos && formatVersion==1);
   fakeUs=2000000; loop();
   assert(rate==0 && watchdogFault && Serial.output.find("FAULT watchdog")!=std::string::npos);

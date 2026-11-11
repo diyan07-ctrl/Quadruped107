@@ -55,6 +55,22 @@ def main():
             if name!='sensor-default': assert state['observations']['urm37']['measurement']==.4
             assert state['fault'] and not state['virtual'] and not link.armed
             assert len(state['touches'])==5  # Missing configured inputs stay invalid.
+            if name=='sensor-configured':
+                now=[1.]
+                link.telemetry.clock=manager.clock=lambda:now[0]
+                provider=PhysicalSensorProvider(link,manager)
+                provider.epoch=link.epoch
+                provider.last=(link.epoch,link.telemetry.record.seq)
+                provider.batch_seq=manager.seq
+                for row in result.stdout.splitlines():
+                    if not row.startswith('WIRE_TOUCH_RECORD='): continue
+                    now[0]+=.2
+                    link.telemetry.poll()
+                    assert link.telemetry.ingest(row.split('=',1)[1])
+                    provider.update()
+                assert any(e['pressed'] and e['id']=='touch_head' for e in manager.snapshot()['events'])
+                assert not link.armed
+                print('mock touch -> real C++ telemetry -> Pi interaction event; actuation inhibited PASS')
             print(name+' C++ wire -> Pi SensorManager PASS',flush=True)
         print(name+' PASS',flush=True)
     print(f'{len(variants)} firmware mock executables PASS')
