@@ -70,3 +70,6 @@ See [operator guide](PHASE3.md) for reproducible laptop/Pi commands. GET/POST /a
 Decision history holds at most 128 events, with requested/accepted/submitted/completed/rejected status. UI displays at most 32, using textContent. Personality is explicitly selected, sensor-gated and deadline-bounded; no new production poses. Optional simulation interpolation uses one latest eight-value vector and immediate STOP mask removal. Passive TEL1 diagnostics are never motion-qualified.
 
 CI executes the full suite on Python 3.11 and selected vision/telemetry checks on Python 3.13, checks dependency consistency and downloads cp313/abi3 aarch64 OpenCV/NumPy wheels. This does not validate Pi OS packages or native-device performance. tools/qualify-demo.py records read-only imports, pip-check and optional local application diagnostics; it captures no images or secrets.
+## Sensor-only software readiness
+
+The [software-readiness record](SOFTWARE_READINESS.md) describes the separate non-actuating Uno target, negotiated TEL1/TEL2 monitoring provider, optional Pi OLED and disabled calibration preparation. Select sensors explicitly with `--sensor-source`; actuator selection remains independent. Physical monitoring requires virtual actuators and does not permit navigation or physical ARM. Existing virtual/PyBullet behavior remains available with its original source selection.

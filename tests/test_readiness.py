@@ -72,6 +72,13 @@ class AgeTests(unittest.TestCase):
         self.assertTrue(self.stream.ingest(tel(token=token)))
         self.assertFalse(self.stream.ingest(tel(seq=1,token=token)))
 
+    def test_age_quantization_guard_and_invalid_last_acquisition(self):
+        self.assertTrue(self.ingest(range_age=299))
+        self.assertFalse(self.stream.snapshot()['rangeValid'])
+        self.assertIsNone(self.stream.snapshot()['lastValidAcquisitionMonotonic'])
+        self.assertTrue(self.ingest(seq=1,uptime=101,faults=2))
+        self.assertIsNone(self.stream.snapshot()['lastValidAcquisitionMonotonic'])
+
 
 class ProviderTests(unittest.TestCase):
     def setUp(self):

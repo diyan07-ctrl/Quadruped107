@@ -48,6 +48,8 @@ arduino-cli compile --profile uno build/virtual/sketch
 
 Native tests use g++ on CI; Windows can supply `--zig build/phase5/native-tools/ziglang/zig.exe` (tested 0.13.0). Eight executables exercise the real sketch parsers and fake pins/time/interrupts, plus acquisition/session policy. Actual mock-sketch wire records are ingested by the real Pi TelemetryStream and SensorManager. These mocks do not emulate AVR electrical timings, bootloader behavior or stack high-water. No test runner opens a serial device or uploads firmware.
 
+`python tools/qualify-firmware.py --arduino-cli <executable> [--zig <executable>]` captures exact commands, source commit, dirty paths, logs and six compile configurations under ignored `build/phase5/firmware-evidence`. It returns failure if any check fails.
+
 Arduino AVR core 1.8.8 and existing Adafruit dependencies remain pinned in sketch profiles. Shared local library paths use Arduino CLI profile `dir:` entries; use sketch directories, not `.ino` filenames. Direct calibration pins Servo 1.3.0. OLED is optional: install `software/pi/requirements-oled.txt` only when using its hardware backend. No OLED framebuffer exists on the Uno.
 
 Final resource values, test counts, CI results and exact source commits are recorded in the evidence matrix linked here after qualification. Global SRAM headroom is a compile result; measured worst-case stack margin is still PENDING.

@@ -107,8 +107,8 @@ class TelemetryStream:
                 self.record=record
                 self.received=now
                 self.age_bound=bound
-                if bound is not None and record.flags&1 and bound+record.range_age_ms/1000<=.3:
-                    self.last_valid_acquisition=now-bound-record.range_age_ms/1000
+                if bound is not None and record.flags&1 and not record.faults&11 and bound+record.range_age_ms/1000+.002<=.3:
+                    self.last_valid_acquisition=now-bound-record.range_age_ms/1000-.002
             return True
         except ValueError:
             with self.lock: self.errors+=1
@@ -121,8 +121,10 @@ class TelemetryStream:
             fresh=age is not None and 0<=age<=.3
             if record is None: return dict(supported=False,record=None,age=age,receiveFresh=False,errors=self.errors)
             if isinstance(record,SensorTelemetry):
-                range_age=age+self.age_bound+record.range_age_ms/1000
-                touch_age=age+self.age_bound+record.touch_age_ms/1000
+                # Millisecond truncation and AVR micros() resolution get a
+                # conservative 2 ms guard; never loosen the 300 ms policy.
+                range_age=age+self.age_bound+record.range_age_ms/1000+.002
+                touch_age=age+self.age_bound+record.touch_age_ms/1000+.002
                 range_valid=bool(record.flags&1 and range_age<=.3 and not record.faults&11)
                 touch_valid=bool(record.flags&2 and touch_age<=.3 and not record.faults&12)
                 return dict(supported=True,record=asdict(record),version=2,age=age,receiveFresh=fresh,
