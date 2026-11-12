@@ -34,6 +34,7 @@ class PhysicalSensorProvider:
                 return
         if (not health['connected'] or health.get('firmwareIdentity')!='caps_sensor2' or
             (self.manager.config.touch_profile==TWO_TOUCH_PROFILE and self.link.sensor_touch_count!=2) or
+            (self.link.sensor_touch_count==2 and self.manager.config.touch_profile!=TWO_TOUCH_PROFILE) or
             (record and record['touch_mask'] & ~((1 << self.link.sensor_touch_count)-1)) or
             not record or not snapshot.get('acquisitionFreshnessKnown')):
             self.manager.reset(f'uno-sensor:{epoch}')

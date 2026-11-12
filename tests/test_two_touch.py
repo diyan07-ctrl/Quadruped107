@@ -95,6 +95,9 @@ class TwoTouchTests(unittest.TestCase):
         self.assertEqual(self.manager.snapshot()['observations'],{})
         self.link.capability=None;self.link._receive('DONE 0 caps_sensor2_t1')
         self.assertIsNone(self.link.capability)
+        self.manager.config=SensorConfig()
+        self.link._receive('DONE 0 caps_sensor2_t2');self.feed(mask=1)
+        self.assertEqual(self.manager.snapshot()['observations'],{})
 
     def test_invalid_missing_and_stale_observations_stop(self):
         nav=Navigation();self.step(nav)
