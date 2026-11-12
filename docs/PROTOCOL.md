@@ -62,7 +62,9 @@ JSON bodies, URLs and browser assets remain unchanged. POST /api/arm now sets an
 
 ## Current sensor-only TEL2 contract (12 November 2026)
 
-The standalone sensor-only target negotiates `CAPS` → `caps_sensor2_t0/t3/t4/t5` and `TELEM <id> 5 2`. The Pi sends unique `POLL 0 <uint16-token>` requests at 5 Hz. Records are bounded to 63 ASCII characters plus newline:
+The standalone sensor-only target negotiates `CAPS` → `caps_sensor2_t0/t2/t3/t4/t5` and `TELEM <id> 5 2`. The Pi sends unique `POLL 0 <uint16-token>` requests at 5 Hz. Records are bounded to 63 ASCII characters plus newline:
+
+Phase 6 adds truthful `t2` for exactly D6/D7 and a validated Pi physical profile `back_front_bottom_v1`: bit 0 is BACK_TOUCH/REAR_LOWER, bit 1 FRONT_BOTTOM_TOUCH/FRONT_LOWER. This changes no TEL2 framing or acquisition timing and does not change legacy virtual head/back ordering. Profile/count/epoch changes clear events; unknown capability/count or unconfigured bits fail closed. See [the two-touch commissioning contract](PHASE6_SENSOR_COMMISSIONING.md).
 
 ```text
 TEL 2 seq uptime_ms range_mm source flags touch_mask range_age_ms touch_age_ms token faults

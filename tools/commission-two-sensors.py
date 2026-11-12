@@ -36,6 +36,7 @@ def collect(args,*,serial_factory=serial.Serial,clock=time.monotonic):
         physicalActuatorAllowed=False,uploadedByThisTool=False,referenceM=args.reference_m,samples=0,rejectedRecords=0)
     git=['git','-c','safe.directory='+str(ROOT)]
     result['source']=subprocess.check_output(git+['rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    result['dirtyPathsAtStart']=subprocess.check_output(git+['status','--porcelain'],cwd=ROOT,text=True).splitlines()
     connection=None
     with (args.output/'serial.jsonl').open('w',encoding='utf-8') as log:
         def record(**values):

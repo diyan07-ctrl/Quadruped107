@@ -1,5 +1,7 @@
 # Proposed wiring
 
+Phase 6 operator-reported connections: URM37 COMP/TRIG D4 and ECHO/PWM D2; **D6 BACK_TOUCH and D7 FRONT_BOTTOM_TOUCH only**. No third touch, OLED/LCD, HC-SR04, PCA or servo supply is part of this bench. Electrical identification is pending; these assignments do not qualify voltage, polarity or module presence. See [Phase 6](PHASE6_SENSOR_COMMISSIONING.md).
+
 Current checkpoint (12 November 2026): [executed non-actuating release report](SENSOR_COMMISSIONING_RELEASE.md) and [exact sensor-only bench procedure](SENSOR_BENCH.md). Interface allocations are not electrical qualification; physical ARM remains inhibited. Earlier checkpoints below retain their historical scope.
 
 ## Phase 2 virtual-only interfaces

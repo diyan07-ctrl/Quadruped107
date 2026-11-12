@@ -1,5 +1,7 @@
 # Sensor-only bench session — 12 November 2026
 
+**Phase 6 current configuration:** exactly two installed touches: D6 BACK, D7 FRONT_BOTTOM. Use `TOUCH_ENABLED_MASK=3`, the electrically verified polarity mask, and `deploy/sensors.two.json`. The [current Phase 6 gate, raw recorder and exact launch](PHASE6_SENSOR_COMMISSIONING.md) supersede the historical three-to-five-touch examples below for this assembly. OLED/LCD/HC-SR04/PCA/servo hardware is absent and out of scope; use displays off. No serial access or upload before electrical review and separate write authorization.
+
 This is a procedure for a separately authorized hardware session. No upload or physical sensor connection was performed by this release. Physical ARM remains inhibited; sensor records cannot authorize it. Read the [release report](SENSOR_COMMISSIONING_RELEASE.md) and [electrical gates](HARDWARE_VERIFICATION.md) first.
 
 1. Disconnect the PCA9685, every servo signal and supply, battery motor supply, D12 calibration output, unverified HC-SR04 and voltage circuits. Do not connect or power the suspected damaged PCA. Photograph the isolated bench. USB logic power is the only proposed Uno power source.
