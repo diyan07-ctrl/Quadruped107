@@ -1,0 +1,43 @@
+{
+  "status": "BLOCKED",
+  "operatorReported": {
+    "urm37": "V5",
+    "urm37Connections": [
+      "D4",
+      "D2",
+      "5V",
+      "GND"
+    ],
+    "touchModules": "TTP223B",
+    "unoHostConnection": "Raspberry Pi USB",
+    "sshUsername": "diyan07",
+    "sshAddress": "192.168.1.42"
+  },
+  "independentlyMeasuredSupplyV": null,
+  "verifiedTouchPolarity": null,
+  "verifiedTouchOutputTopology": null,
+  "verifiedTouchMomentaryMode": null,
+  "verifiedUrm37TtlPwmMode": null,
+  "explicitActuatorIsolationConfirmed": false,
+  "serialDeviceIdentity": null,
+  "uploadAuthorized": false,
+  "uploaded": false,
+  "actualRangeSamples": [],
+  "actualTouchSamples": [],
+  "pendingQuestions": [
+    "Current Pi hostname -I output",
+    "URM37 TTL/PWM mode and verified levels/supply",
+    "Actual touch supply/polarity/mode/topology/bias",
+    "Explicit PCA/servo/motor supply/D12 disconnection"
+  ],
+  "operatorReportedAbsent": [
+    "OLED",
+    "character LCD",
+    "HC-SR04",
+    "servo controller",
+    "servo power",
+    "LiPo/SMPS motor power"
+  ],
+  "isolationNote": "Initial operator-reported absence is recorded; no independent wiring audit. D12/servo-signal details remain unconfirmed.",
+  "networkDiscovery": "Prior Pi MAC dc:a6:32:52:27:d8 not found on current 192.168.1.0/24; no authentication or configuration changes during discovery."
+}

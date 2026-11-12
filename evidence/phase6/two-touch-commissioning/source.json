@@ -1,0 +1,51 @@
+{
+  "qualifiedSource": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+  "baseline": "b18e897e13baefc452606b37a1804ca9e672d2a5",
+  "branch": "phase6/two-touch-commissioning",
+  "pr": "https://github.com/diyan07-ctrl/Quadruped107/pull/9",
+  "identityChecks": [
+    {
+      "check": "historical-preservation",
+      "command": [
+        "git",
+        "-c",
+        "safe.directory=C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6",
+        "diff",
+        "--exit-code",
+        "b18e897",
+        "--",
+        "evidence/phase4",
+        "evidence/phase5",
+        "evidence/release-2026-11-12",
+        "hardware",
+        "firmware/uno/sketch/motion.h"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "check": "firmware-build-source",
+      "command": [
+        "git",
+        "-c",
+        "safe.directory=C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6",
+        "diff",
+        "--exit-code",
+        "07acf1f7cda9678bcf60c991419157b04e2dea65",
+        "HEAD",
+        "--",
+        "firmware",
+        "tests/firmware_two_touch.cpp",
+        "tools/test-firmware.py",
+        "tools/qualify-firmware.py"
+      ],
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "hardwareStatus": "BLOCKED: electrical evidence, current Pi address and separate upload authorization pending",
+  "physicalSerialOpened": false,
+  "uploaded": false,
+  "hardwareDistanceSamples": 0,
+  "hardwareTouchSamples": 0
+}

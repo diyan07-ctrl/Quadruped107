@@ -4,6 +4,10 @@
 
 Baseline: PR #8 head `b18e897e13baefc452606b37a1804ca9e672d2a5`. Work is isolated on `phase6/two-touch-commissioning`; prior evidence, CAD, calibration tables, authorship and all original checkouts are preserved. This report separates implemented/mock-tested software from actual hardware observations. The operator reports connected hardware; electrical identification has not passed. No serial port was opened and no firmware was uploaded during the blocked preflight.
 
+Qualified implementation: `07acf1f7cda9678bcf60c991419157b04e2dea65`; [draft PR #9](https://github.com/diyan07-ctrl/Quadruped107/pull/9). **PASS:** 248 Python tests, all 14 established checks, 16 native mocks, 15 AVR variants and push/PR CI including the new Python 3.13 tests. [Frozen logs, flags, resources, hashes and provenance](../evidence/phase6/two-touch-commissioning/README.md). This is software evidence only.
+
+Latest operator report identifies URM37 V5, D4/D2/5V/GND connections, TTP223B touch modules, Uno-to-Pi USB and login user `diyan07`. Supply measurements, TTL/PWM mode, touch output configuration/polarity and explicit actuator isolation remain unverified. The address `192.168.1.42` still times out before login; current `hostname -I` output is requested. These facts do not authorize serial access or upload.
+
 ## A–P commissioning record
 
 | Item | Status | Result / evidence boundary |
@@ -64,7 +68,7 @@ Before a hardware write, review the clean source, exact flags, actual device ide
 
 ```sh
 # FUTURE AUTHORIZED ACTION ONLY. Replace with verified device and exact reviewed HEX.
-arduino-cli upload --fqbn arduino:avr:uno --port /dev/serial/by-id/VERIFIED_UNO --input-file build/phase6/reviewed-two/sensor_only.ino.hex
+arduino-cli upload --verify --fqbn arduino:avr:uno --port /dev/serial/by-id/VERIFIED_UNO --input-file build/phase6/reviewed-two/sensor_only.ino.hex
 ```
 
 Retain the actual upload/verification log. Never substitute production or D12 calibration firmware. Compilation alone does not identify what is flashed.
