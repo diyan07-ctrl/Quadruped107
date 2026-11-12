@@ -28,3 +28,5 @@ software/pi/quadruped/vision.py -text whitespace=cr-at-eol
 evidence/phase4/** -text whitespace=cr-at-eol
 # Native command logs retain their original terminal alignment/padding.
 evidence/phase4/**/*.log -whitespace
+evidence/release-2026-11-12/** -text whitespace=cr-at-eol
+evidence/release-2026-11-12/**/*.log -whitespace

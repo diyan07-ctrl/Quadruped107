@@ -1,0 +1,10 @@
+{"commit": "1246f7af4be6d87fc5132ab323aa269ffdd2d223", "command": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "-m", "pip", "wheel", "--no-deps", "--no-build-isolation", "software/pi", "-w", "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\release\\extra\\wheels"], "startedUtc": "2026-11-12T08:06:35.940504+00:00"}
+Processing .\software\pi
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: quadruped107
+  Building wheel for quadruped107 (pyproject.toml): started
+  Building wheel for quadruped107 (pyproject.toml): finished with status 'done'
+  Created wheel for quadruped107: filename=quadruped107-0.1.0-py3-none-any.whl size=189550 sha256=3a631fcfb83968997dc5a9167b14c4691af0cca42fa03bdfd80a7ef3ad82fbec
+  Stored in directory: C:\Users\Diyan Patel\AppData\Local\Temp\pip-ephem-wheel-cache-xm6in770\wheels\4b\07\f0\4c0465bcd25aebcddd84269a57382a383ed128252c6123f664
+Successfully built quadruped107

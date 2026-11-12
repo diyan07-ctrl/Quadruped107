@@ -60,6 +60,18 @@ On timeout, disconnect or reset, no motion replays. Reconnection repeats HELLO, 
 
 JSON bodies, URLs and browser assets remain unchanged. POST /api/arm now sets an HttpOnly SameSite=Strict quadruped_control cookie. Non-browser clients must retain it for mode, calibration and heartbeat calls; first ARM claims ownership. Non-owners receive HTTP 409; STOP is available regardless of owner. Cookie values are not telemetry and must not be logged or committed. This is a deliberate safety tightening, not authentication or a new wire protocol.
 
+## Current sensor-only TEL2 contract (12 November 2026)
+
+The standalone sensor-only target negotiates `CAPS` → `caps_sensor2_t0/t3/t4/t5` and `TELEM <id> 5 2`. The Pi sends unique `POLL 0 <uint16-token>` requests at 5 Hz. Records are bounded to 63 ASCII characters plus newline:
+
+```text
+TEL 2 seq uptime_ms range_mm source flags touch_mask range_age_ms touch_age_ms token faults
+```
+
+Tokens and sequence wrap modulo 65536; uptime wraps modulo 2^32. Only an outstanding unconsumed poll within 300 ms accepts TEL2. Sequence/uptime ordering is independently validated. Pi freshness includes sender acquisition age, full local poll round trip, elapsed receive age and a 2 ms quantization guard; the 300 ms bound is unchanged. Missing echo, invalid distance, reset/disconnect, faults and stale data inhibit use. Invalid bytes cannot acknowledge commands. There is no packet checksum, so syntactically valid in-range corruption is not independently detectable; electrical/transport fault injection remains a qualification requirement.
+
+The Uno accepts STOP and rejects ARM/MOVE/SERVO as `sensor_only`. Pi marks `controlQualified=false` and cannot infer physical output permission from telemetry. No voltage, sweep clearance, measured joint position or electrical STOP feedback is fabricated. See [sensor bench commands](SENSOR_BENCH.md) and [release authority](SENSOR_COMMISSIONING_RELEASE.md). The following sections describe earlier protocol checkpoints.
+
 ## Telemetry
 
 Current v1 supplies identity, heartbeat, completion and fault status only; there are no range, touch, voltage or measured-position values. The optional negotiated CAPS/TELEM/TEL1 contract is specified in [EXTENSIONS](EXTENSIONS.md), including framing/ranges, sequence wrap, validity and expiry. It is not activated in Phase 0.1. Old peers retain existing behavior and must not arm or repeatedly retry because telemetry capability is absent.

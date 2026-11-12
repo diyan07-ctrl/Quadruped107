@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-12T07:49:37.777374+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "import_execution": {
+    "cv2": {
+      "ok": true,
+      "error": null
+    },
+    "numpy": {
+      "ok": true,
+      "error": null
+    },
+    "flask": {
+      "ok": true,
+      "error": null
+    },
+    "serial": {
+      "ok": true,
+      "error": null
+    },
+    "quadruped": {
+      "ok": true,
+      "error": null
+    }
+  },
+  "package_versions": {
+    "numpy": "2.2.4",
+    "opencv-python-headless": null,
+    "Flask": "3.1.2",
+    "pyserial": "3.5",
+    "smbus2": "0.4.3",
+    "Pillow": "11.1.0"
+  },
+  "serial": {
+    "selected": false
+  },
+  "serial_by_id_candidates": [],
+  "oled": {
+    "selected": false
+  },
+  "physical_actuation_allowed": false,
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "free"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}

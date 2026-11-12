@@ -1,0 +1,19 @@
+{
+  "defaultBranch": "main",
+  "mainAtAudit": "f625250",
+  "pr6": {
+    "state": "MERGED",
+    "base": "phase3/vision-recording-readiness",
+    "merge": "e5ac1be32c1b8211924b830fb4a148db5c568792",
+    "mergedAt": "2026-11-11T14:38:22Z"
+  },
+  "pr7": {
+    "state": "MERGED",
+    "base": "phase3/vision-recording-readiness",
+    "merge": "6e0d5781d870e654d17c9c3de153cb3d9a3fe58f",
+    "mergedAt": "2026-11-11T16:17:54Z"
+  },
+  "mainAheadOfPhase3": 6,
+  "phase3AheadOfMain": 23,
+  "mergeBase": "ffd2294ac2619e4fd3f9baf0de6ad295f74f66b7"
+}

@@ -1,0 +1,11 @@
+[INFO] Quadruped107: http://127.0.0.1:7001
+[INFO] Visual behavior IDLE -> CAMERA_FAULT: No valid observation
+[INFO] Visual behavior CAMERA_FAULT -> IDLE: 
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:20:40] "GET /api/state HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:20:57] "GET /api/camera-frame HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:22:36] "GET /api/camera-frame HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:22:36] "GET /api/state HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:25:20] "GET /api/camera-frame HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:25:20] "GET /api/state HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:27:12] "GET /api/camera-frame HTTP/1.1" 200 -
+[INFO] 127.0.0.1 - - [12/Nov/2026 13:27:12] "GET /api/state HTTP/1.1" 200 -

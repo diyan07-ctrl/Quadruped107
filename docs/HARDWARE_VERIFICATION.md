@@ -1,5 +1,7 @@
 # HARDWARE_VERIFICATION — sole physical qualification checklist
 
+Current checkpoint (12 November 2026): [executed non-actuating release report](SENSOR_COMMISSIONING_RELEASE.md) and [exact sensor-only bench procedure](SENSOR_BENCH.md). Interface allocations are not electrical qualification; physical ARM remains inhibited. Earlier checkpoints below retain their historical scope.
+
 ## Phase 2 deferral
 
 PHYSICAL HARDWARE TESTED: none. Pi deployment, SSH access, real sensors, Uno/PCA connection, power switching and servo movement are deliberately postponed; no connection is attempted.

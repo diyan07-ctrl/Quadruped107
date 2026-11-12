@@ -1,0 +1,14 @@
+{"commit": "1246f7af4be6d87fc5132ab323aa269ffdd2d223", "command": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "-m", "pip", "freeze"], "startedUtc": "2026-11-12T08:06:35.565700+00:00"}
+blinker==1.9.0
+click==8.5.1
+Flask==3.1.2
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.4
+numpy @ file:///D:/bld/bld/rattler-build_numpy_1779169235/work/dist/numpy-2.4.6-cp311-cp311-win_amd64.whl#sha256=1f5fa3c853dd01b13cacc0fd3cfdc827bb2f4cf73638f3949fcee463a6dc8304
+opencv-python-headless==4.11.0.86
+packaging @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_packaging_1785888127/work
+pybullet @ file:///D:/bld/bullet_1761040266940/work
+pyserial==3.5
+quadruped107==0.1.0
+Werkzeug==3.1.9

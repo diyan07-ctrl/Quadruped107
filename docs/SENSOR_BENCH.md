@@ -32,6 +32,15 @@ find firmware/uno/sensor_only/build -type f -name '*.hex' -exec sha256sum {} \;
 Use masks 7/15/31 for three/four/five boards, with active-low bits only where measured. Default profile 0 and mask 0 intentionally provide no valid physical readings. Record commit, clean/dirty status, exact flags, CLI/core/library versions, complete build log and HEX hash. Never substitute production or calibration binaries.
 
 6. Before uploading, independently review the isolated wiring, USB device identity, binary hash and build flags. **Upload requires separate physical-session authorization.** This release deliberately supplies no automatic upload script. Do not upload to a powered actuator system. After authorized upload, use one serial owner; close the terminal before starting the Pi application.
+
+Future authorized upload command template (do not run during this software-only release):
+
+```sh
+arduino-cli upload --fqbn arduino:avr:uno --port VERIFIED_SENSOR_ONLY_UNO_PORT --input-file PATH_TO_REVIEWED_SENSOR_ONLY_HEX
+```
+
+Confirm that the selected HEX hash matches step 5 and that every actuator signal/supply is disconnected before using this template. Retain upload output and subsequent capability identity. Never upload the production or D12 calibration target for the first sensor session.
+
 7. With a terminal or reviewed serial test client, verify `HELLO` → `READY Quadruped107 1`; `CAPS 1` → `caps_sensor2_t3`, `_t4`, `_t5` or `_t0` matching the build. `ARM 2`, `MOVE 3 stand`, and `SERVO 4 0 300` must return `sensor_only`; `STOP 5` must acknowledge. No servo/PWM pins may be connected.
 8. Request `TELEM 6 5 2`. Send a unique `POLL 0 <uint16 token>` every 200 ms and `PING` at least every 300 ms; token wraps modulo 65536. A missing heartbeat stops the stream after 1500 ms. Inspect TEL2 sequence, uptime, flags, acquisition ages and faults. A terminal without periodic PING is intentionally unsuitable for sustained collection.
 9. Measure known distances (for example 0.2, 0.5 and 1.0 m) against a ruler, including angled/soft targets and minimum/maximum range. Scope trigger/echo and record actual accuracy and latency. Firmware converts the documented profile at 5 us/mm, accepts 20–4000 mm, waits at least 200 ms between triggers and times out at 60 ms. These are implemented policies, not measured module calibration. Missing/invalid echo must be invalid, never free space.

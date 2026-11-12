@@ -1,0 +1,1 @@
+{"commit": "1246f7af4be6d87fc5132ab323aa269ffdd2d223", "command": ["git", "diff", "--exit-code", "a5d488c", "HEAD", "--", "firmware", "tools/test-firmware.py", "tools/qualify-firmware.py", "tests/firmware_sensor.cpp"], "startedUtc": "2026-11-12T08:06:41.913949+00:00"}

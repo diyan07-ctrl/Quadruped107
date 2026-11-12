@@ -1,0 +1,294 @@
+[
+  {
+    "id": "native",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/test-firmware.py",
+      "--zig",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\native-tools\\ziglang\\zig.exe"
+    ],
+    "startedUtc": "2026-11-12T07:46:32.403573+00:00",
+    "durationS": 5.313,
+    "result": "FAIL",
+    "exitCode": 1,
+    "physicalVerification": false,
+    "log": "native.log"
+  },
+  {
+    "id": "virtual-generate",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/generate-virtual-firmware.py"
+    ],
+    "startedUtc": "2026-11-12T07:46:37.715953+00:00",
+    "durationS": 0.062,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual-generate.log"
+  },
+  {
+    "id": "sensor-default",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-default",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:37.774958+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-default.log"
+  },
+  {
+    "id": "sensor-configured",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-configured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:38.425111+00:00",
+    "durationS": 0.64,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-configured.log"
+  },
+  {
+    "id": "sensor-three-low",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-three-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:39.069531+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-three-low.log"
+  },
+  {
+    "id": "sensor-four-high",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-four-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:39.710854+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-four-high.log"
+  },
+  {
+    "id": "sensor-four-low",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-four-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15 -DTOUCH_ACTIVE_LOW_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:40.362898+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-four-low.log"
+  },
+  {
+    "id": "sensor-three-high",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-three-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:41.012648+00:00",
+    "durationS": 1.437,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-three-high.log"
+  },
+  {
+    "id": "sensor-five-low",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\sensor-five-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31 -DTOUCH_ACTIVE_LOW_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T07:46:42.444057+00:00",
+    "durationS": 1.469,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-five-low.log"
+  },
+  {
+    "id": "calibration",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\calibration",
+      "firmware/uno/direct_calibration"
+    ],
+    "startedUtc": "2026-11-12T07:46:43.912514+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "calibration.log"
+  },
+  {
+    "id": "production",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\production",
+      "firmware/uno/sketch"
+    ],
+    "startedUtc": "2026-11-12T07:46:44.560515+00:00",
+    "durationS": 0.734,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "production.log"
+  },
+  {
+    "id": "virtual",
+    "commit": "4d7eaa4f85db9fe00a49dcface289b4e7cd61cd9",
+    "dirtyPathsAtStart": [
+      " M LICENSE",
+      " M tests/test_pi_preflight.py",
+      " M tools/pi-preflight.py"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\compiled\\virtual",
+      "build/virtual/sketch"
+    ],
+    "startedUtc": "2026-11-12T07:46:45.299329+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual.log"
+  }
+]

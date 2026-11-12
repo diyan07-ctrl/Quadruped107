@@ -2,7 +2,7 @@
 
 **SOFTWARE READINESS PARTIAL. Non-actuating candidate; physical locomotion is not qualified.**
 
-Candidate branch: `release/sensor-commissioning`. Integration merge `488b837a90cb214e07eaaa5846b4df3f1d364d85` combines the tested PR #7 merge with `origin/main`, preserving both parents, authorship, CAD, gait and calibration data. Implementation checkpoint `9fe42b1` contains the fixes described below. Final source/evidence identities and CI are recorded in the [release evidence](../evidence/release-2026-11-12/README.md).
+Candidate branch: `release/sensor-commissioning`. Integration merge `488b837a90cb214e07eaaa5846b4df3f1d364d85` combines the tested PR #7 merge with `origin/main`, preserving both parents, authorship, CAD, gait and calibration data. Qualified implementation `1246f7af4be6d87fc5132ab323aa269ffdd2d223` contains the fixes below; the Pi archive was `9fe42b1` with identical application/firmware/simulator source. Final source/evidence identities and CI are recorded in the [release evidence](../evidence/release-2026-11-12/README.md).
 
 ## Audited state and integration
 
@@ -30,7 +30,7 @@ No HSV, contour shape, freshness, challenge, watchdog, lease or mechanical limit
 | Check | Status | Actual scope |
 | --- | --- | --- |
 | Integrated baseline | PASS | 215 Python tests; initial three local validation failures diagnosed as missing Node dependencies and license checkout line endings |
-| Regression | PASS | 221 Python tests; all 14 established local checks after environment correction |
+| Regression | PASS | 222 Python tests; all 14 established local checks after environment correction |
 | Native firmware | PASS | 12 executable mock variants; real sketch parser and no-echo/valid TEL2 → actual Pi SensorManager |
 | AVR | PASS | 10 configurations compile, including 7 sensor variants, disabled calibration, inhibited production and generated virtual Uno; no upload |
 | Recorded vision | PASS | Same frozen real yellow source frames and background crops evaluated before/after; unknown screenshot labels remain unknown; no known false positives |
@@ -38,9 +38,10 @@ No HSV, contour shape, freshness, challenge, watchdog, lease or mechanical limit
 | Genuine visible GUI | PASS, bounded observation only | Foreground OpenGL robot observed and image retained; not a 900-second active run |
 | Initial disarmed GUI attempt | FAIL | Joint limit excursion at step 4474; this passive disarmed model case is retained as a failure, not physical instability evidence |
 | Subsequent disarmed GUI observation | PASS | 28800 steps completed without simulation fault; no active control/endurance claim |
-| Active visible GUI endurance / final live transport fault matrix | NOT TESTED | Requires coordinated active virtual source, sensing and held-intent trial; smoke observation does not substitute |
-| Pi 3.13 imports and selected tests | PASS | Existing isolated environment on actual aarch64 Pi; original worktree binary diff and status preserved |
-| Live yellow placement | NOT TESTED as successful tracking | Real camera available; initial image nearly black, detector correctly rejected it; awaiting illuminated fully visible target |
+| New headless 905-second attempt | FAIL at admission | HTTP 409 before active collection; zero active seconds/samples. The discarded response body prevents exact retrospective diagnosis; helper now retains endpoint/reason |
+| Active visible GUI endurance / final live transport fault matrix / Windows-owned heartbeat | NOT TESTED | Smoke observation and Pi-owned admission failure do not substitute; historical Windows-owned tunnel failure remains separate |
+| Actual Pi 3.13 imports and selected tests | PASS | 79 tests in six modules, zero skips, existing isolated environment on actual aarch64 Pi; original binary diff and staged status preserved |
+| Live yellow placement | FAIL | Operator-ready 8.078-second trial: 0/9 sampled frames detected. Earlier illuminated scene selected a tiny fragment rather than the ball. Actual frames and diagnostics preserved |
 | Physical sensors/OLED/AVR resources/electrical STOP | NOT TESTED | Software mocks and compiler results do not qualify connected devices, stack high-water, reset electrical behavior or physical stop |
 
 Recorded yellow images show both low saturation and incomplete outlines. Threshold changes alone do not establish a valid target. Offline evaluation reports source hash, category where known, rejection, coordinates, circularity/fill, runtime and false-positive observations. Live target trials still need centered/left/right, movement/loss/reacquisition, multiple objects, distractors and color switching with measured virtual joint output. The camera must be illuminated and the entire ball outline visible.
@@ -104,4 +105,6 @@ Rollback means STOP, confirm virtual active mask zero, terminate only candidate-
 
 ## Remaining release gates
 
-Complete the final candidate CI and evidence freeze, live illuminated target matrix, coordinated active GUI/endurance/fault tests and screenshot request where browser tooling permits. Any remaining software failure keeps **SOFTWARE READINESS PARTIAL**. Physical sensor identity/voltage/wiring, distance accuracy, touch bias/noise/presence, OLED compatibility, MCU stack/ISR/reset timing and independent electrical STOP remain separate hardware gates. Successful sensor commissioning will still not qualify servos, safe standing, gaits or physical autonomy.
+Frozen implementation CI passes on push and PR, including Linux full regression, Python 3.13, aarch64 wheels, native/AVR builds and packaging/web checks. Logs and SHA-256 manifest are frozen in the evidence index. Remaining gates are the live target matrix, new headless admission/transport diagnosis, coordinated active GUI/endurance/fault tests and dashboard screenshot where tooling permits. These remaining live software qualification failures keep **SOFTWARE READINESS PARTIAL**. Physical sensor identity/voltage/wiring, distance accuracy, touch bias/noise/presence, OLED compatibility, MCU stack/ISR/reset timing and independent electrical STOP remain separate hardware gates. Successful sensor commissioning will still not qualify servos, safe standing, gaits or physical autonomy.
+
+The candidate-owned Pi processes and temporary SSH tunnel were stopped. Three genuine images (real camera, OpenCV diagnostic rejection, visible PyBullet) were saved to Desktop `Quadruped107-LinkedIn-2026-11-12`, within the requested five-image maximum. The dashboard screenshot remains blocked by browser URL verification; its actual state JSON is saved separately. No LinkedIn post was made.

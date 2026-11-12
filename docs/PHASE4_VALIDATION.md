@@ -10,7 +10,7 @@
 - New controlled yellow trial: 3/19 sampled frames detected with a clipped ball; not a successful full-outline trial. Physical reposition was unavailable.
 - GUI endurance and full synchronized capture remain unqualified. Computer Use was stopped by operator Escape before active GUI testing. CLI cleanup verified STOP and released the webcam.
 
-No safety age/lease threshold was increased; no physical actuator was operated. PR #6 remains draft. The historical qualification report follows unchanged.
+No safety age/lease threshold was increased; no physical actuator was operated. Current status on 12 November: PR #6 is merged into Phase 3, followed by PR #7. See the [current release report](SENSOR_COMMISSIONING_RELEASE.md). The historical qualification report follows unchanged; its draft-status requirement describes that earlier snapshot.
 
 **PARTIALLY VERIFIED. Phase 4 is not complete; PR #6 must remain draft.**
 

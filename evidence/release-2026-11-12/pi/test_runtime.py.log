@@ -1,0 +1,22 @@
+test_commands_require_arm_and_post (test_runtime.ApiTests.test_commands_require_arm_and_post) ... ok
+test_heartbeat_corrects_lost_key_release (test_runtime.ApiTests.test_heartbeat_corrects_lost_key_release) ... ok
+test_missing_model_and_malformed_requests (test_runtime.ApiTests.test_missing_model_and_malformed_requests) ... ok
+test_static_assets_and_simulated_jpeg (test_runtime.ApiTests.test_static_assets_and_simulated_jpeg) ... ok
+test_autonomous_gait_is_one_step_per_request (test_runtime.ControllerTests.test_autonomous_gait_is_one_step_per_request) ... ok
+test_browser_lease_stops_and_disarms (test_runtime.ControllerTests.test_browser_lease_stops_and_disarms) ... ok
+test_invalid_servo_does_not_reach_uno (test_runtime.ControllerTests.test_invalid_servo_does_not_reach_uno) ... ok
+test_reset_does_not_resume_old_motion (test_runtime.ControllerTests.test_reset_does_not_resume_old_motion) ... ok
+test_startup_and_arm_do_not_move (test_runtime.ControllerTests.test_startup_and_arm_do_not_move) ... ok
+test_acknowledgement_does_not_complete_command (test_runtime.SerialTests.test_acknowledgement_does_not_complete_command) ... ok
+test_ambiguous_port_is_rejected (test_runtime.SerialTests.test_ambiguous_port_is_rejected) ... ok
+test_heartbeats_and_stop_work_during_pending_move (test_runtime.SerialTests.test_heartbeats_and_stop_work_during_pending_move) ... ok
+test_reconnect_fails_pending_and_discards_queue (test_runtime.SerialTests.test_reconnect_fails_pending_and_discards_queue) ... ok
+test_bgr_blue_ball_drives_correct_direction (test_runtime.VisionTests.test_bgr_blue_ball_drives_correct_direction) ... ok
+test_close_ball_stops (test_runtime.VisionTests.test_close_ball_stops) ... ok
+test_red_ball_is_not_blue (test_runtime.VisionTests.test_red_ball_is_not_blue) ... ok
+test_stale_camera_frames_are_not_returned (test_runtime.VisionTests.test_stale_camera_frames_are_not_returned) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.886s
+
+OK

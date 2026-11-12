@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107-release\tools\test-firmware.py", line 81, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107-release\tools\test-firmware.py", line 35, in main
+    subprocess.run(command,cwd=ROOT,env=env,check=True)
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase4-toolchain\python311\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase4-toolchain\python311\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase4-toolchain\python311\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied

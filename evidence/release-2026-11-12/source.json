@@ -1,0 +1,12 @@
+{
+  "qualifiedImplementation": "1246f7af4be6d87fc5132ab323aa269ffdd2d223",
+  "piArchiveSource": "9fe42b1",
+  "piRuntimeEquivalent": true,
+  "firmwareSourceIdentityCheck": "extra/firmware-source-identity.log",
+  "branch": "release/sensor-commissioning",
+  "pr": "https://github.com/diyan07-ctrl/Quadruped107/pull/8",
+  "ci": [
+    "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/43180688378",
+    "https://github.com/diyan07-ctrl/Quadruped107/actions/runs/43180680839"
+  ]
+}
