@@ -35,8 +35,10 @@ def main():
             '-I'+str(ROOT/'firmware/uno/libraries/QuadrupedSafety/src'),*defines,
             str(ROOT/'tests'/source),'-o',str(binary)]
         subprocess.run(command,cwd=ROOT,env=env,check=True)
-        result=subprocess.run([str(binary)],cwd=ROOT,check=True,capture_output=True,text=True)
+        result=subprocess.run([str(binary)],cwd=ROOT,capture_output=True,text=True)
         print(result.stdout,end='')
+        if result.stderr: print(result.stderr,end='',file=sys.stderr)
+        result.check_returncode()
         if name.startswith('sensor-'):
             # Consume the actual C++ sketch's wire record in the Pi provider.
             sys.path.insert(0,str(ROOT/'software/pi'))

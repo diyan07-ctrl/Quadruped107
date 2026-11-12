@@ -53,9 +53,10 @@ int main() {
   pos=Serial.output.rfind("TEL 2 ");
   std::cout << "WIRE_INVALID_RECORD=" << Serial.output.substr(pos,Serial.output.find('\n',pos)-pos) << '\n';
   assert(!range.valid);
-  fakeUs=1500000; send("TELEM 10 5\n");
+  send("PING\n");
+  fakeUs=1650000; send("TELEM 10 5\n");
   assert(Serial.output.find("TEL 1 ")!=std::string::npos && formatVersion==1);
-  fakeUs=2000000; loop();
+  fakeUs=3100000; loop();
   assert(rate==0 && watchdogFault && Serial.output.find("FAULT watchdog")!=std::string::npos);
   send("HELLO\n"); assert(intervalTouches==0 && !requested && rate==0);
   for (int i=0;i<5;++i) assert(!touches[i].initialized);
