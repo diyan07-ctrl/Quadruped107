@@ -26,6 +26,7 @@ def main():
     env['PYTHONPATH'] = str(ROOT/'software/pi')
     env['PYTHONIOENCODING'] = 'utf-8'
     commit = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    dirty = subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).splitlines()
     checks = [
         ('ENV-WIN','environment', ['git','status','--short','--branch']),
         ('ENV-DEPS','environment', [sys.executable,'-c',
@@ -51,7 +52,7 @@ def main():
         clock = time.monotonic()
         path = out/group/(ident+'.log')
         with path.open('w',encoding='utf-8') as log:
-            log.write(json.dumps(dict(id=ident,started_utc=started,commit=commit,
+            log.write(json.dumps(dict(id=ident,started_utc=started,commit=commit,dirtyPathsAtStart=dirty,
                                      argv=command,cwd=str(ROOT)))+'\n')
             log.flush()
             try:
@@ -61,7 +62,7 @@ def main():
             except (OSError,subprocess.TimeoutExpired) as error:
                 log.write(repr(error)+'\n')
                 code = -1
-        record = dict(id=ident,date_utc=started,commit=commit,command=command,
+        record = dict(id=ident,date_utc=started,commit=commit,dirtyPathsAtStart=dirty,command=command,
                       objective=ident,preconditions='Windows software environment; physical outputs unused',
                       expected='Exit 0',actual=f'Exit {code}',result='PASS' if code==0 else 'FAIL',
                       duration_s=round(time.monotonic()-clock,3),exit_code=code,

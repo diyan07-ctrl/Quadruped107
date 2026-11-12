@@ -24,5 +24,15 @@ class PreflightTests(unittest.TestCase):
         with patch.object(module.subprocess, "run", side_effect=FileNotFoundError):
             self.assertEqual(module.probe_port(7000)["state"], "unknown")
 
+    def test_explicit_missing_devices_and_failed_imports_are_reported(self):
+        from types import SimpleNamespace
+        with patch.object(module.subprocess,'run',return_value=SimpleNamespace(returncode=1,stderr='ABI failure')):
+            report=module.preflight('/missing/camera','/missing/uno',1)
+        self.assertFalse(report['serial']['exists'])
+        self.assertFalse(report['import_execution']['cv2']['ok'])
+        self.assertIn('ABI failure',report['import_execution']['cv2']['error'])
+        self.assertEqual(report['camera_device'],'/missing/camera')
+        self.assertFalse(report['physical_actuation_allowed'])
+
 if __name__ == "__main__":
     unittest.main()
