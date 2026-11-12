@@ -27,6 +27,10 @@ def main():
         ('sensor-default','firmware/uno/sensor_only',[]),
         ('sensor-configured','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31']),
         ('sensor-three-low','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7']),
+        ('sensor-four-high','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15']),
+        ('sensor-four-low','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15 -DTOUCH_ACTIVE_LOW_MASK=15']),
+        ('sensor-three-high','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7']),
+        ('sensor-five-low','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31 -DTOUCH_ACTIVE_LOW_MASK=31']),
         ('calibration','firmware/uno/direct_calibration',[]),
         ('production','firmware/uno/sketch',[]),
         ('virtual','build/virtual/sketch',[])):

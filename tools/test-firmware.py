@@ -19,6 +19,10 @@ def main():
               ('sensor-default','firmware_sensor.cpp',[]),
               ('sensor-configured','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=31']),
               ('sensor-active-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=7','-DTOUCH_ACTIVE_LOW_MASK=7']),
+              ('sensor-four-high','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=15']),
+              ('sensor-four-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=15','-DTOUCH_ACTIVE_LOW_MASK=15']),
+              ('sensor-three-high','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=7']),
+              ('sensor-five-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=31','-DTOUCH_ACTIVE_LOW_MASK=31']),
               ('calibration-disabled','firmware_calibration.cpp',[]),
               ('calibration-reviewed-unknown','firmware_calibration.cpp',['-DDIRECT_COMMISSIONING_REVIEWED=1']),
               ('production-present','firmware_production.cpp',[]),
@@ -44,7 +48,7 @@ def main():
             link=SerialLink('mock',sensor_only=True)
             link.connected=True
             link.capability='caps_sensor2'
-            link.sensor_touch_count=3 if name=='sensor-active-low' else 5 if name=='sensor-configured' else 0
+            link.sensor_touch_count=4 if name.startswith('sensor-four-') else 3 if name in ('sensor-active-low','sensor-three-high') else 5 if name in ('sensor-configured','sensor-five-low') else 0
             link.telemetry=TelemetryStream(clock=lambda:1.)
             for _ in range(42): link.telemetry.poll()
             assert link.telemetry.ingest(line),line
@@ -73,6 +77,20 @@ def main():
                 assert not link.armed
                 print('mock touch -> real C++ telemetry -> Pi interaction event; actuation inhibited PASS')
             print(name+' C++ wire -> Pi SensorManager PASS',flush=True)
+            # Replay the same sketch after missing echoes, not a Python-generated packet.
+            link.telemetry.reset()
+            for _ in range(46): link.telemetry.poll()
+            invalid=next(row.split('=',1)[1] for row in result.stdout.splitlines() if row.startswith('WIRE_INVALID_RECORD='))
+            assert link.telemetry.ingest(invalid),invalid
+            PhysicalSensorProvider(link,manager).update()
+            assert not manager.snapshot()['observations']['urm37']['valid']
+            assert not link.armed
+            try: link.submit('ARM')
+            except RuntimeError: pass
+            else: raise AssertionError('Sensor link accepted ARM')
+            stop=link.submit('STOP')
+            assert link.urgent is not None and not link.armed and stop.verb=='STOP'
+            print(name+' C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS',flush=True)
         print(name+' PASS',flush=True)
     print(f'{len(variants)} firmware mock executables PASS')
 

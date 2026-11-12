@@ -49,6 +49,10 @@ int main() {
   Serial.capacity=0; intervalTouches=31; fakeUs=1250000;
   send("POLL 0 45\n"); assert(intervalTouches==0);
   Serial.capacity=64;
+  fakeUs=1450000; send("POLL 0 46\n");
+  pos=Serial.output.rfind("TEL 2 ");
+  std::cout << "WIRE_INVALID_RECORD=" << Serial.output.substr(pos,Serial.output.find('\n',pos)-pos) << '\n';
+  assert(!range.valid);
   fakeUs=1500000; send("TELEM 10 5\n");
   assert(Serial.output.find("TEL 1 ")!=std::string::npos && formatVersion==1);
   fakeUs=2000000; loop();
