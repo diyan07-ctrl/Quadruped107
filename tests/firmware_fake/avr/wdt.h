@@ -1,0 +1,5 @@
+#pragma once
+#define WDTO_1S 1
+inline void wdt_disable() { wdtEnabled=false; }
+inline void wdt_enable(int) { wdtEnabled=true; }
+inline void wdt_reset() { ++watchdogServices; }

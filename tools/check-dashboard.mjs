@@ -65,5 +65,19 @@ try {
   assert.equal(w.document.getElementById('virtualAutonomy').hidden,true);
   assert.equal(w.document.getElementById('syntheticTargetControls').hidden,true);
   assert.equal(w.document.querySelector('[data-app-mode="explore"]').hidden,true);
+  data={...data,sensorSource:'physical_uno',controlModes:['manual','idle','sensor_test','interaction'],
+    sensorLink:{firmwareCapability:'caps_sensor2_t2',sensorTouchCount:2},
+    sensors:{configuredTouchCount:2,touchProfile:'back_front_bottom_v1',virtual:false,
+      touches:{touch_back:{pressed:true},touch_front_bottom:{pressed:false}},
+      touchMapping:[{bit:0,pin:6,id:'touch_back'},{bit:1,pin:7,id:'touch_front_bottom'}],observations:{},events:[]},
+    autonomy:{state:'TOUCH_GESTURE_PLACEHOLDER',touchGesture:{request:'REAR_LOWER',physicalCalibration:'PENDING'}}};
+  await w.loadState();
+  assert.match(w.document.getElementById('touchSensorReadout').textContent,/Configured touches: 2/);
+  assert.match(w.document.getElementById('touchSensorReadout').textContent,/touch_front_bottom/);
+  assert.match(w.document.getElementById('touchSensorReadout').textContent,/REAR_LOWER/);
+  assert.match(w.document.getElementById('physicalSensorReadout').textContent,/caps_sensor2_t2/);
+  assert.match(w.document.querySelector('[data-app-mode="interaction"]').textContent,/virtual placeholders/);
+  assert.equal(w.document.getElementById('interactionActions').hidden,true);
+  assert.equal(w.document.getElementById('stopButton').disabled,false);
   console.log('Dashboard DOM passed: virtual/legacy modes, text escaping, disabled motion and available STOP.');
 } finally {w.close();}

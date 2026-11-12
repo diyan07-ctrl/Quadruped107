@@ -1,0 +1,4 @@
+07acf1f Reject two-input telemetry without its explicit physical semantic profile
+e151236 Document two-touch electrical gate and extend Python 3.13 qualification
+9f05dcb Guard real sensor recording and permit reviewed manual virtual poses
+77a4be0 Support exact two-touch Uno profile and guarded semantic virtual requests

@@ -23,6 +23,8 @@ public:
 """
     header=header.replace('#include <Wire.h>','').replace('#include <Adafruit_PWMServoDriver.h>',stub)
     sketch=(source/"sketch.ino").read_text(encoding="utf-8")
+    sketch='#define QUADRUPED_VIRTUAL_BUILD 1\n'+sketch
+    sketch=sketch.replace('#include <QuadrupedSafety.h>','#include "QuadrupedSafety.h"')
     sketch=sketch.replace("Quadruped107 1","Quadruped107Virtual 1")
     sketch=sketch.replace("digitalWrite(","virtualDigitalWrite(").replace("pinMode(","virtualPinMode(")
     sketch=sketch.replace("  Wire.begin();","")
@@ -48,7 +50,8 @@ void emitVirtualTrace() {
         raise ValueError("Virtual generation retained a physical driver operation")
     (output/"motion.h").write_text(header,encoding="utf-8")
     (output/"sketch.ino").write_text(sketch,encoding="utf-8")
-    shutil.copyfile(source/"sketch.yaml",output/"sketch.yaml")
+    (output/'sketch.yaml').write_text((source/'sketch.yaml').read_text().replace('      - dir: ../libraries/QuadrupedSafety\n',''),encoding='utf-8')
+    shutil.copyfile(ROOT/"firmware/uno/libraries/QuadrupedSafety/src/QuadrupedSafety.h",output/"QuadrupedSafety.h")
     return output
 
 

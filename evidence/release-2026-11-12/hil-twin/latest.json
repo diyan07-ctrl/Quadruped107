@@ -1,0 +1,1 @@
+{"utc": "2026-11-12T08:10:13.364929+00:00", "receiver": {"virtual": true, "armed": false, "activeMask": 0, "targets": [300, 300, 300, 300, 300, 300, 300, 300], "activeMotion": null, "behavior": "EMERGENCY_STOP", "server": "6b44370605784dd792af58bf1c33c136", "seq": 6451, "invalid": 349, "fault": null, "ready": true}, "actualJointRad": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}

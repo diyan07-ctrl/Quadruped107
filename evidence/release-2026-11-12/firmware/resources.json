@@ -1,0 +1,172 @@
+[
+  {
+    "variant": "sensor-default",
+    "flashBytes": 5276,
+    "globalSramBytes": 410,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-default\\sensor_only.ino.hex",
+        "sha256": "6ef911511360bce7b3eed44ec2145aee05a8e50734de494e3f94ba294ea1152f"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-default\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "947b9c9263de5c3488c42ef8534aa6c33fcfe525556a33155879baa22d20d1f6"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-configured",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-configured\\sensor_only.ino.hex",
+        "sha256": "272ce0502011121823cd13d1368a91bf593ad767591cdce085a3d5e98ecde5ff"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-configured\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "71b01dc83291ec47fb9370b085e54153f683ae574abc5017038101d7a3040ea6"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-three-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-three-low\\sensor_only.ino.hex",
+        "sha256": "d52b101e41eed598e3445b3fb81438ae5f075adb9953c8adc8dbdfc59a01a45f"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-three-low\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "96ab3da58a57a800e48fab93b394e4773f9711759d003f742e12990701bf8b1b"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-four-high",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-four-high\\sensor_only.ino.hex",
+        "sha256": "356b9b8d82e11e18633cd398ed1e7e24cf16bb02e0706ab8c7b32e04208b1283"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-four-high\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "b84c3ea631270f45f80676b50abfd543c668c59f02b5dd38be3599c3951b8182"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-four-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-four-low\\sensor_only.ino.hex",
+        "sha256": "13429ca7980f10b8f76badcf191fa9a3ab38aad768b05aba7b2441d94ad3135e"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-four-low\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "3fa406f7bb8fbdf674845a9f4addb2b4d3e6c7d8c7edb3acd8c0c6dfd9bd8cdd"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-three-high",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-three-high\\sensor_only.ino.hex",
+        "sha256": "a19ba38f01afeaccc369558e19b21c824d1f6cb131590f0f955048c23e54989e"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-three-high\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "77eab5512ea00bac59fdba3ee19853e28f85b4fa7ebd455f627cf394e3ba3358"
+      }
+    ]
+  },
+  {
+    "variant": "sensor-five-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\sensor-five-low\\sensor_only.ino.hex",
+        "sha256": "ef3879eef9f62ad0eb7ebc76eab0d5b7a627b660fd45bdc9312778e275b114b1"
+      },
+      {
+        "path": "build\\phase5\\compiled\\sensor-five-low\\sensor_only.ino.with_bootloader.hex",
+        "sha256": "6ada653f3137dd6ac6193aaeec24b77ead7ccae22b6a0c168d181f4f12b14688"
+      }
+    ]
+  },
+  {
+    "variant": "calibration",
+    "flashBytes": 5012,
+    "globalSramBytes": 459,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\calibration\\direct_calibration.ino.hex",
+        "sha256": "c2e672e22e88194a4261c1e8ebed922b9be8c6f4b91c2a0a4818ca4c06520bbe"
+      },
+      {
+        "path": "build\\phase5\\compiled\\calibration\\direct_calibration.ino.with_bootloader.hex",
+        "sha256": "e078a26e3c8ccf31ec45cdb70e3c38fa47408ecbf7a7808dff19fd29ce687697"
+      }
+    ]
+  },
+  {
+    "variant": "production",
+    "flashBytes": 10430,
+    "globalSramBytes": 1120,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\production\\sketch.ino.hex",
+        "sha256": "2fc6f671bbfb910ef7dc813b02a28ee8e2770c95da3784e747ab2d6e051d6e68"
+      },
+      {
+        "path": "build\\phase5\\compiled\\production\\sketch.ino.with_bootloader.hex",
+        "sha256": "c0830d88eacf4cb8992eaad840b5d75cd39879be67dce0352499c1b75eaed99f"
+      }
+    ]
+  },
+  {
+    "variant": "virtual",
+    "flashBytes": 7002,
+    "globalSramBytes": 927,
+    "measuredStackMargin": null,
+    "physicalVerification": false,
+    "hexFiles": [
+      {
+        "path": "build\\phase5\\compiled\\virtual\\sketch.ino.hex",
+        "sha256": "e9e54e134e4118992729e6d766596221f96fa0cc81fb0b783e4c7d3e39bf5fa8"
+      },
+      {
+        "path": "build\\phase5\\compiled\\virtual\\sketch.ino.with_bootloader.hex",
+        "sha256": "bcc8e153c03f571d66902b2b130d5958fee14c052056673e815b90b5303e26bd"
+      }
+    ]
+  }
+]

@@ -38,6 +38,10 @@ def detect_blue_ball(frame: Any, *, lower=BLUE_HSV_LOWER, upper=BLUE_HSV_UPPER,
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
     mask_area = int(cv2.countNonZero(mask))
+    hue_mask=cv2.inRange(hsv[:,:,0],lower[0],upper[0])
+    hue_count=int(cv2.countNonZero(hue_mask))
+    saturation_ok=cv2.inRange(hsv[:,:,1],lower[1],upper[1])
+    value_ok=cv2.inRange(hsv[:,:,2],lower[2],upper[2])
 
     detection = {
         "detected": False,
@@ -58,6 +62,11 @@ def detect_blue_ball(frame: Any, *, lower=BLUE_HSV_LOWER, upper=BLUE_HSV_UPPER,
         "candidates": [],
         "processingWidth": work_width,
         "processingHeight": work_height,
+        "hsvDiagnostics": dict(hueAcceptedPixels=hue_count,
+            saturationRejectedWithinHue=hue_count-int(cv2.countNonZero(cv2.bitwise_and(hue_mask,saturation_ok))),
+            valueRejectedWithinHue=hue_count-int(cv2.countNonZero(cv2.bitwise_and(hue_mask,value_ok))),
+            note='Counts overlap; before morphology, processing resolution'),
+        "contourDiagnostics": [],
     }
     if mask_area < min_area:
         detection["rejectReason"] = "mask_too_small"
@@ -70,31 +79,48 @@ def detect_blue_ball(frame: Any, *, lower=BLUE_HSV_LOWER, upper=BLUE_HSV_UPPER,
         return detection
     max_radius = int(min(work_width, work_height) * max_radius_ratio)
 
-    for contour in contours:
+    for contour in sorted(contours,key=cv2.contourArea,reverse=True):
         contour_area = cv2.contourArea(contour)
+        bx,by,bw,bh=cv2.boundingRect(contour)
+        diagnostic=dict(area=round(contour_area/scale**2),bbox=[round(v/scale) for v in (bx,by,bw,bh)],
+            touchesFrameEdge=bx<=0 or by<=0 or bx+bw>=work_width or by+bh>=work_height,
+            rejectionReason=None)
+        if len(detection['contourDiagnostics'])<8: detection['contourDiagnostics'].append(diagnostic)
         if contour_area < min_area:
+            diagnostic['rejectionReason']='min_area'
             continue
 
         perimeter = cv2.arcLength(contour, True)
         if perimeter <= 0:
+            diagnostic['rejectionReason']='zero_perimeter'
             continue
 
         (x_float, y_float), radius_float = cv2.minEnclosingCircle(contour)
         radius = int(round(radius_float))
         if radius < min_radius:
+            diagnostic['rejectionReason']='min_radius'
             continue
         if radius > max_radius:
+            diagnostic['rejectionReason']='max_radius'
             continue
 
         circle_area = math.pi * radius_float * radius_float
         if circle_area <= 0:
+            diagnostic['rejectionReason']='zero_circle'
             continue
 
         circularity = (4 * math.pi * contour_area) / (perimeter * perimeter)
         fill_ratio = contour_area / circle_area
+        diagnostic.update(circularity=round(circularity,3),fillRatio=round(fill_ratio,3))
         if circularity < min_circularity:
+            diagnostic['rejectionReason']='circularity'
             continue
         if fill_ratio < BLUE_MIN_FILL_RATIO or fill_ratio > BLUE_MAX_FILL_RATIO:
+            diagnostic['rejectionReason']='fill_ratio'
+            continue
+
+        if diagnostic['touchesFrameEdge']:
+            diagnostic['rejectionReason']='frame_edge_clipped'
             continue
 
         x, y = int(round(x_float)), int(round(y_float))

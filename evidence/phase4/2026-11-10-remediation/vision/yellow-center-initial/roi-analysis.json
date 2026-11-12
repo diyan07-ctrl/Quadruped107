@@ -1,0 +1,270 @@
+{
+  "stats": {
+    "roi": "Visible ball interior circle: center (154,198), radius 40 px; selected from actual image; source JPEG decoded",
+    "hsv_percentiles": [
+      [
+        30.0,
+        57.0,
+        195.0
+      ],
+      [
+        30.0,
+        65.0,
+        226.0
+      ],
+      [
+        33.0,
+        80.0,
+        246.0
+      ],
+      [
+        35.0,
+        91.0,
+        255.0
+      ],
+      [
+        37.0,
+        98.0,
+        255.0
+      ]
+    ],
+    "overexposed_fraction": 0.43945741073209654
+  },
+  "representative_frame_trials": [
+    {
+      "frame": "frame-001-original.png",
+      "trials": [
+        {
+          "saturation_floor": 70,
+          "detected": false,
+          "x": null,
+          "y": null,
+          "radius": null,
+          "offset": null,
+          "maskArea": 4030,
+          "circleArea": 0,
+          "circularity": 0,
+          "fillRatio": 0,
+          "rejectReason": "no_circular_candidate",
+          "bbox": null,
+          "area": 0,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 60,
+          "detected": false,
+          "x": null,
+          "y": null,
+          "radius": null,
+          "offset": null,
+          "maskArea": 5725,
+          "circleArea": 0,
+          "circularity": 0,
+          "fillRatio": 0,
+          "rejectReason": "no_circular_candidate",
+          "bbox": null,
+          "area": 0,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 50,
+          "detected": true,
+          "x": 152,
+          "y": 197,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 7128,
+          "circleArea": 9366,
+          "circularity": 0.867,
+          "fillRatio": 0.874,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            106,
+            96
+          ],
+          "area": 8188,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 40,
+          "detected": true,
+          "x": 152,
+          "y": 197,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 8206,
+          "circleArea": 9366,
+          "circularity": 0.867,
+          "fillRatio": 0.875,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            106,
+            96
+          ],
+          "area": 8193,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 30,
+          "detected": true,
+          "x": 152,
+          "y": 197,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 8346,
+          "circleArea": 9366,
+          "circularity": 0.867,
+          "fillRatio": 0.875,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            106,
+            96
+          ],
+          "area": 8193,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        }
+      ]
+    },
+    {
+      "frame": "frame-010-original.png",
+      "trials": [
+        {
+          "saturation_floor": 70,
+          "detected": false,
+          "x": null,
+          "y": null,
+          "radius": null,
+          "offset": null,
+          "maskArea": 5921,
+          "circleArea": 0,
+          "circularity": 0,
+          "fillRatio": 0,
+          "rejectReason": "no_circular_candidate",
+          "bbox": null,
+          "area": 0,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 60,
+          "detected": true,
+          "x": 152,
+          "y": 198,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 7474,
+          "circleArea": 9358,
+          "circularity": 0.853,
+          "fillRatio": 0.867,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            105,
+            96
+          ],
+          "area": 8112,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 50,
+          "detected": true,
+          "x": 152,
+          "y": 198,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 8216,
+          "circleArea": 9358,
+          "circularity": 0.86,
+          "fillRatio": 0.868,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            105,
+            96
+          ],
+          "area": 8120,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 40,
+          "detected": true,
+          "x": 152,
+          "y": 198,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 8273,
+          "circleArea": 9358,
+          "circularity": 0.86,
+          "fillRatio": 0.868,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            105,
+            96
+          ],
+          "area": 8120,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        },
+        {
+          "saturation_floor": 30,
+          "detected": true,
+          "x": 152,
+          "y": 198,
+          "radius": 55,
+          "offset": -0.05,
+          "maskArea": 8273,
+          "circleArea": 9358,
+          "circularity": 0.86,
+          "fillRatio": 0.868,
+          "rejectReason": null,
+          "bbox": [
+            98,
+            144,
+            105,
+            96
+          ],
+          "area": 8120,
+          "frameWidth": 320,
+          "frameHeight": 240,
+          "processingWidth": 320,
+          "processingHeight": 240
+        }
+      ]
+    }
+  ]
+}

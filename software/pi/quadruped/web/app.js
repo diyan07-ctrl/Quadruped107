@@ -511,6 +511,23 @@ function renderDiagnostics(data) {
   const system = data.system || {};
   const link = data.link || {};
   const target = vision.blueBall || {};
+  const physicalLink = data.sensorLink || {};
+  const telemetry = physicalLink.telemetry || {};
+  const range = data.sensors?.observations?.urm37;
+  show('sensorSourceReadout', 'Sensor source: ' + (data.sensorSource || 'none') + ' / ' +
+    (data.sensors?.virtual === false ? 'physical monitoring only' : 'virtual or unavailable'));
+  show('physicalSensorReadout', (physicalLink.firmwareCapability || physicalLink.firmwareIdentity || 'no negotiated sensor firmware') + ' / ' +
+    (physicalLink.connected ? 'USB connected' : 'USB unavailable') + ' / ' + (physicalLink.telemetryRate || 0) + ' Hz / URM37 ' +
+    (range?.valid ? range.measurement.toFixed(3) + ' m' : 'INVALID / STALE') + ' / age ' +
+    (range ? Math.round(range.age * 1000) + ' ms' : 'unknown') + ' / faults ' + (telemetry.faults ?? 'unknown') +
+    ' / last valid acquisition ' + (telemetry.lastValidAcquisitionMonotonic ?? 'none') + ' / serial ' + (physicalLink.error || 'no reported error'));
+  show('touchSensorReadout', 'Configured touches: ' + (data.sensors?.configuredTouchCount ?? 'unknown') +
+    ' / profile ' + (data.sensors?.touchProfile || 'unknown') + ' / mapping ' + JSON.stringify(data.sensors?.touchMapping || []) +
+    ' / states ' + JSON.stringify(data.sensors?.touches || {}) + ' / events ' + JSON.stringify(data.sensors?.events || []) +
+    ' / virtual gesture ' + JSON.stringify(data.autonomy?.touchGesture || null));
+  show('oledReadout', 'OLED: ' + (data.oled?.enabled ? (data.oled.connected ? data.oled.screen : 'disconnected') : 'disabled') +
+    (data.oled?.error ? ' / ' + data.oled.error : ''));
+  show('sensorInhibits', 'Physical actuation DISABLED / ' + (data.sensors?.safetyInhibits || []).join(' / '));
   show("backendDiagnostics", `${camera.backend || "unknown"} / ${camera.actualFps || 0} FPS${camera.lastError ? " / " + camera.lastError : ""}`);
   show("visionDiagnostics", `${vision.processingFps || 0} FPS / ${camera.frameAge == null ? "no frame" : Math.round(camera.frameAge * 1000) + " ms"}`);
   show("resourceDiagnostics", `${system.processCpuPercent ?? "?"}% / ${system.rssBytes == null ? "RAM unavailable" : (system.rssBytes / 1048576).toFixed(1) + " MiB"}`);
@@ -518,6 +535,8 @@ function renderDiagnostics(data) {
   show("actuatorDiagnostics", `${link.kind || (data.simulation ? "unit stub" : "serial monitor")} / ${data.bridge ? (data.bridge.connected ? "simulator connected" : "simulator unavailable") : "local only"}`);
   show("safetyDiagnostics", data.motion?.enabled ? "VIRTUAL ENABLED — physical outputs prohibited" : (data.motion?.fault || "STOPPED"));
   const section = document.getElementById("virtualAutonomy");
+  const touchMode = document.querySelector('[data-app-mode="interaction"]');
+  if (touchMode) touchMode.textContent = data.sensorSource === 'physical_uno' ? 'Touch gestures (virtual placeholders)' : 'Interactions';
   if (section) section.hidden = !data.features?.virtualSensors;
   if (data.sensors && data.autonomy) {
     const sensors = data.sensors;

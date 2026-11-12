@@ -1,0 +1,8 @@
+test_explicit_missing_devices_and_failed_imports_are_reported (test_pi_preflight.PreflightTests.test_explicit_missing_devices_and_failed_imports_are_reported) ... ok
+test_missing_ss_reports_unknown (test_pi_preflight.PreflightTests.test_missing_ss_reports_unknown) ... ok
+test_observational_contract (test_pi_preflight.PreflightTests.test_observational_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 3.742s
+
+OK

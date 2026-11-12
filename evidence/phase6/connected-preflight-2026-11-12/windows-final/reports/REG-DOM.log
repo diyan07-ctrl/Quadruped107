@@ -1,0 +1,2 @@
+{"id": "REG-DOM", "started_utc": "2026-11-12T13:39:56.651954+00:00", "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7", "dirtyPathsAtStart": ["?? evidence/phase6/connected-preflight-2026-11-12/"], "argv": ["node", "tools/check-dashboard.mjs"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6"}
+Dashboard DOM passed: virtual/legacy modes, text escaping, disabled motion and available STOP.

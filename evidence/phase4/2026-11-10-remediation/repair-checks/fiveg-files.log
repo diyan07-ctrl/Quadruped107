@@ -1,0 +1,11 @@
+{"started_utc": "2026-11-10T16:47:51.027403+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\fiveg-files.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+stat -c '%n %s' build/phase4-remediation/pi-v4/state.jsonl
+ls -lh build/phase4-remediation/headless-fiveg-905/*
+
+--- OBSERVED OUTPUT ---
+build/phase4-remediation/pi-v4/state.jsonl 2889992107
+-rw-rw-r-- 1 diyan07 diyan07 4.2K Nov 10 20:36 build/phase4-remediation/headless-fiveg-905/console.log
+-rw-rw-r-- 1 diyan07 diyan07 693K Nov 10 20:36 build/phase4-remediation/headless-fiveg-905/result.json
+-rw-rw-r-- 1 diyan07 diyan07 273M Nov 10 20:36 build/phase4-remediation/headless-fiveg-905/samples.jsonl

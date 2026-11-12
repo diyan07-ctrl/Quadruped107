@@ -1,5 +1,9 @@
 # Virtual-actuator deployment
 
+For the current two-touch physical bench, follow [Phase 6](../docs/PHASE6_SENSOR_COMMISSIONING.md): `--actuator-backend virtual --sensor-source physical_uno --sensor-config deploy/sensors.two.json --sensor-port /dev/serial/by-id/VERIFIED_UNO --oled off`. Electrical review and separate sensor-only upload authorization/verification must precede serial access. No display dependency or I2C scan is required. The virtual-only instructions below are a separate launch.
+
+Current candidate procedures: [five explicit non-actuating launches and rollback](../docs/SENSOR_COMMISSIONING_RELEASE.md) and [sensor-only commissioning](../docs/SENSOR_BENCH.md). The existing virtual launch now explicitly selects virtual sensing and requires a simulator with a sensor scenario. No service installation or physical-actuation launch is provided.
+
 This branch deliberately inhibits physical ARM. Keep the Uno disconnected, all servos unpowered and the suspected damaged PCA9685 disconnected. No deployment command uploads firmware or switches power.
 
 On the Pi, review [software installation](../docs/SOFTWARE.md), then run `sh deploy/install-virtual-pi.sh` from the checkout. It creates a separate environment and does not change systemd, SSH, Telegram or existing services. It requires installed OS OpenCV/NumPy; the script prints the apt command if absent. No sudo commands execute automatically.

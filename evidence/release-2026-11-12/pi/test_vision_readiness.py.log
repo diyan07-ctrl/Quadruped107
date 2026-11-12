@@ -1,0 +1,22 @@
+test_bounded_same_target_reacquisition (test_vision_readiness.CandidateTests.test_bounded_same_target_reacquisition) ... ok
+test_disappearance_does_not_switch_to_unrelated_object (test_vision_readiness.CandidateTests.test_disappearance_does_not_switch_to_unrelated_object) ... ok
+test_duplicate_observation_does_not_satisfy_persistence (test_vision_readiness.CandidateTests.test_duplicate_observation_does_not_satisfy_persistence) ... ok
+test_invalid_settings_are_rejected (test_vision_readiness.CandidateTests.test_invalid_settings_are_rejected) ... ok
+test_offset_smoothing_and_workload_bound (test_vision_readiness.CandidateTests.test_offset_smoothing_and_workload_bound) ... ok
+test_same_color_candidates_stay_on_original_target (test_vision_readiness.CandidateTests.test_same_color_candidates_stay_on_original_target) ... ok
+test_yellow_green_and_false_positive_filters (test_vision_readiness.CandidateTests.test_yellow_green_and_false_positive_filters) ... ok
+test_inflight_old_color_result_cannot_publish_after_switch (test_vision_readiness.ConfigurationRaceTests.test_inflight_old_color_result_cannot_publish_after_switch) ... ok
+test_color_change_cancels_motion_and_requires_reenable (test_vision_readiness.PreferenceTests.test_color_change_cancels_motion_and_requires_reenable) ... ok
+test_failed_persistence_stays_disarmed_with_old_settings (test_vision_readiness.PreferenceTests.test_failed_persistence_stays_disarmed_with_old_settings) ... ok
+test_invalid_runtime_state_does_not_fallback (test_vision_readiness.PreferenceTests.test_invalid_runtime_state_does_not_fallback) ... ok
+test_other_browser_cannot_change_target (test_vision_readiness.PreferenceTests.test_other_browser_cannot_change_target) ... ok
+test_physical_target_configuration_is_rejected (test_vision_readiness.PreferenceTests.test_physical_target_configuration_is_rejected) ... ok
+test_safe_persistence_and_stale_revision (test_vision_readiness.PreferenceTests.test_safe_persistence_and_stale_revision) ... ok
+test_live_synthetic_circle_uses_camera_owner_and_color_detector (test_vision_readiness.SyntheticOperatorTests.test_live_synthetic_circle_uses_camera_owner_and_color_detector) ... ok
+test_other_browser_cannot_change_enabled_synthetic_scene (test_vision_readiness.SyntheticOperatorTests.test_other_browser_cannot_change_enabled_synthetic_scene) ... ok
+test_real_camera_cannot_be_replaced_by_fixture (test_vision_readiness.SyntheticOperatorTests.test_real_camera_cannot_be_replaced_by_fixture) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.185s
+
+OK

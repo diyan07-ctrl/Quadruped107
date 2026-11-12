@@ -1,0 +1,25 @@
+./build/phase4-toolchain/python311/python.exe : test_both_colors_motion_obstacle_camera_reset_and_stop 
+(test_demonstration.IntegratedDemonstrationTests.test_both_colors_motion_obstacle_camera_reset_and_stop) ... pybullet 
+build time: Oct 21 2025 11:46:21
+At line:2 char:1
++ ./build/phase4-toolchain/python311/python.exe -m unittest discover -s ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_both_color...1 2025 11:46:21:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ok
+test_explicit_personality_uses_virtual_uno_and_stop_cancels 
+(test_demonstration.InteractionRuntimeTests.test_explicit_personality_uses_virtual_uno_and_stop_cancels) ... ok
+test_interaction_needs_clearance_and_matching_generation 
+(test_demonstration.PersonalityTests.test_interaction_needs_clearance_and_matching_generation) ... ok
+test_overlapping_requests_and_stop_cancellation 
+(test_demonstration.PersonalityTests.test_overlapping_requests_and_stop_cancellation) ... ok
+test_invalid_smoothing_configuration (test_demonstration.SmoothingTests.test_invalid_smoothing_configuration) ... ok
+test_stop_discards_smoothing_residual_and_does_not_delay_output_off 
+(test_demonstration.SmoothingTests.test_stop_discards_smoothing_residual_and_does_not_delay_output_off) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 13.777s
+
+OK
+DEMONSTRATION_JSON={"source": "synthetic BGR camera fixture", "physicalValidation": false, "targets": [{"target": "blue", "acceptedLeft": true, "acceptedRight": true, "centered": true}, {"target": "yellow", "acceptedLeft": true, "acceptedRight": true, "centered": true}], "virtualJoints": 8, "distinctTargetVectors": 62, "stop": true, "obstacleOverride": true, "cameraFault": true, "simulatorReset": true, "automaticRearm": false}

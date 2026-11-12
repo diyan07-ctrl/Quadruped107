@@ -1,0 +1,21 @@
+{"started_utc": "2026-11-10T12:22:05.807126+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\start-headless.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import json,subprocess
+from pathlib import Path
+p=Path('build/phase4-remediation/robust-smoke/result.json')
+if not p.exists():
+ print(Path('build/phase4-remediation/robust-smoke/console.log').read_text()[-1200:]);raise SystemExit(0)
+r=json.loads(p.read_text());print(json.dumps({k:r[k] for k in ('result','durationS','samples','failure')}))
+if r['result']!='PASS': raise SystemExit(1)
+out=Path('build/phase4-remediation/headless-905');out.mkdir(parents=True,exist_ok=True)
+if (out/'console.log').exists(): raise SystemExit('Do not overwrite an existing qualification')
+with (out/'console.log').open('w') as log:
+ p=subprocess.Popen([str(Path.home()/'Quadruped107/.venv-pi-virtual/bin/python'),'-u','tools/phase4-hil.py','run','--seconds','905','--output',str(out)],stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+print('HEADLESS_905_PID',p.pid)
+PY
+
+--- OBSERVED OUTPUT ---
+{"result": "PASS", "durationS": 90.06037917999856, "samples": 407, "failure": null}
+HEADLESS_905_PID 18637

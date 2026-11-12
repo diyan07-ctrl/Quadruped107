@@ -1,4 +1,5 @@
 * text=auto
+LICENSE text eol=lf
 *.py text eol=lf
 *.md text eol=lf
 *.yml text eol=lf
@@ -22,3 +23,12 @@ software/pi/quadruped/vision.py -text whitespace=cr-at-eol
 
 # Foreground Linux launch scripts must retain LF on Windows checkouts.
 *.sh text eol=lf
+
+# Qualification manifests hash exact retained evidence bytes.
+evidence/phase4/** -text whitespace=cr-at-eol
+# Native command logs retain their original terminal alignment/padding.
+evidence/phase4/**/*.log -whitespace
+evidence/release-2026-11-12/** -text whitespace=cr-at-eol
+evidence/release-2026-11-12/**/*.log -whitespace
+evidence/phase6/** -text whitespace=cr-at-eol
+evidence/phase6/**/*.log -whitespace

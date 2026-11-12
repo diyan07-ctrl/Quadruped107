@@ -1,0 +1,2 @@
+{"id": "REG-POWER", "started_utc": "2026-11-10T10:37:48.011222+00:00", "commit": "0c067a3e57cfe76b595388b942f102cee95331ae", "argv": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "hardware/Power/power_budget.py", "--check"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107"}
+Power Markdown tables match calculator assumptions.

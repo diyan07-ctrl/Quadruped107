@@ -1,0 +1,879 @@
+{
+  "id": "operator-ready-yellow",
+  "result": "FAIL",
+  "source": "REAL PI USB CAMERA; operator declared target placement",
+  "color": "yellow",
+  "label": "operator-ready-yellow",
+  "startedUtc": "2026-11-12T07:58:24.421534+00:00",
+  "endedUtc": "2026-11-12T07:58:32.500140+00:00",
+  "durationS": 8.077999999999975,
+  "uniqueObservedFrames": 9,
+  "detectedFrames": 0,
+  "note": "Observed sampled frames, not camera capture FPS; original is decoded PNG when available, otherwise JPEG.",
+  "samples": [
+    {
+      "elapsedS": 2.7029999999999745,
+      "sequence": 555,
+      "frameAgeS": 0.16442776799999592,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 186,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 130,
+          "valueRejectedWithinHue": 186
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            130.0,
+            119.0,
+            9.0
+          ],
+          [
+            135.0,
+            207.0,
+            11.0
+          ],
+          [
+            139.0,
+            255.0,
+            12.0
+          ],
+          [
+            145.0,
+            255.0,
+            16.0
+          ],
+          [
+            150.0,
+            255.0,
+            17.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 3.4529999999999745,
+      "sequence": 574,
+      "frameAgeS": 0.16234295200001725,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 194,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 151,
+          "valueRejectedWithinHue": 194
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            131.0,
+            128.0,
+            10.0
+          ],
+          [
+            137.0,
+            184.0,
+            12.0
+          ],
+          [
+            142.0,
+            229.0,
+            16.0
+          ],
+          [
+            147.0,
+            255.0,
+            21.0
+          ],
+          [
+            154.0,
+            255.0,
+            26.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 4.2029999999999745,
+      "sequence": 580,
+      "frameAgeS": 0.16362318199992387,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 272,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 264,
+          "valueRejectedWithinHue": 272
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            77.0,
+            20.0
+          ],
+          [
+            138.0,
+            123.0,
+            23.0
+          ],
+          [
+            145.0,
+            162.0,
+            26.0
+          ],
+          [
+            150.0,
+            209.0,
+            29.0
+          ],
+          [
+            154.0,
+            234.0,
+            32.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 4.780999999999949,
+      "sequence": 586,
+      "frameAgeS": 0.2035325049999983,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 136,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 128,
+          "valueRejectedWithinHue": 136
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            85.0,
+            21.0
+          ],
+          [
+            138.0,
+            123.0,
+            24.0
+          ],
+          [
+            144.0,
+            162.0,
+            27.0
+          ],
+          [
+            148.0,
+            211.0,
+            30.0
+          ],
+          [
+            152.0,
+            233.0,
+            33.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 5.438000000000102,
+      "sequence": 591,
+      "frameAgeS": 0.18593217099999038,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 276,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 269,
+          "valueRejectedWithinHue": 276
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            80.0,
+            20.0
+          ],
+          [
+            138.0,
+            123.0,
+            23.0
+          ],
+          [
+            145.0,
+            162.0,
+            26.0
+          ],
+          [
+            150.0,
+            209.0,
+            30.0
+          ],
+          [
+            154.0,
+            235.0,
+            33.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 6.0779999999999745,
+      "sequence": 596,
+      "frameAgeS": 0.21465683399992486,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 219,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 218,
+          "valueRejectedWithinHue": 219
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            80.0,
+            20.0
+          ],
+          [
+            138.0,
+            123.0,
+            23.0
+          ],
+          [
+            145.0,
+            162.0,
+            26.0
+          ],
+          [
+            150.0,
+            211.0,
+            30.0
+          ],
+          [
+            154.0,
+            235.0,
+            33.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 6.875,
+      "sequence": 602,
+      "frameAgeS": 0.15852440600008322,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 298,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 296,
+          "valueRejectedWithinHue": 298
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            80.0,
+            19.0
+          ],
+          [
+            138.0,
+            123.0,
+            23.0
+          ],
+          [
+            145.0,
+            162.0,
+            26.0
+          ],
+          [
+            150.0,
+            213.0,
+            29.0
+          ],
+          [
+            154.0,
+            235.0,
+            32.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 7.358999999999924,
+      "sequence": 608,
+      "frameAgeS": 0.22870978699995703,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 97,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 95,
+          "valueRejectedWithinHue": 97
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            85.0,
+            19.0
+          ],
+          [
+            138.0,
+            124.0,
+            23.0
+          ],
+          [
+            144.0,
+            162.0,
+            25.0
+          ],
+          [
+            149.0,
+            213.0,
+            29.0
+          ],
+          [
+            154.0,
+            235.0,
+            32.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    },
+    {
+      "elapsedS": 7.938000000000102,
+      "sequence": 612,
+      "frameAgeS": 0.23135968499991577,
+      "detection": {
+        "area": 0,
+        "bbox": null,
+        "candidates": [],
+        "circleArea": 0,
+        "circularity": 0,
+        "contourDiagnostics": [],
+        "detected": false,
+        "fillRatio": 0,
+        "frameHeight": 480,
+        "frameWidth": 640,
+        "hsvDiagnostics": {
+          "hueAcceptedPixels": 308,
+          "note": "Counts overlap; before morphology, processing resolution",
+          "saturationRejectedWithinHue": 282,
+          "valueRejectedWithinHue": 308
+        },
+        "maskArea": 0,
+        "offset": null,
+        "processingHeight": 480,
+        "processingWidth": 640,
+        "radius": null,
+        "rejectReason": "mask_too_small",
+        "x": null,
+        "y": null
+      },
+      "stats": {
+        "centralRoi": [
+          160,
+          120,
+          320,
+          240
+        ],
+        "hsvPercentiles": [
+          [
+            132.0,
+            78.0,
+            20.0
+          ],
+          [
+            138.0,
+            123.0,
+            23.0
+          ],
+          [
+            145.0,
+            162.0,
+            26.0
+          ],
+          [
+            150.0,
+            211.0,
+            29.0
+          ],
+          [
+            155.0,
+            235.0,
+            32.0
+          ]
+        ],
+        "overexposedFraction": 0.0
+      },
+      "settings": {
+        "command_period": 0.6,
+        "enter_error": 0.32,
+        "exit_error": 0.2,
+        "hsv_lower": [
+          20,
+          70,
+          70
+        ],
+        "hsv_upper": [
+          45,
+          255,
+          255
+        ],
+        "lock_distance": 0.2,
+        "loss_seconds": 0.35,
+        "max_age": 0.5,
+        "max_radius_ratio": 0.38,
+        "min_area": 150,
+        "min_circularity": 0.55,
+        "min_frames": 2,
+        "min_radius": 8,
+        "reacquire_seconds": 0.6,
+        "search_enabled": false,
+        "search_seconds": 2.0,
+        "smoothing_alpha": 0.35,
+        "target_color": "yellow"
+      },
+      "contourDiagnostics": []
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{"started_utc": "2026-11-10T14:51:19.993474+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\headless-fiveg.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+mkdir -p build/phase4-remediation/headless-fiveg-905
+test ! -e build/phase4-remediation/headless-fiveg-905/console.log
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py run --seconds 905 --output build/phase4-remediation/headless-fiveg-905 > build/phase4-remediation/headless-fiveg-905/console.log 2>&1 < /dev/null &
+echo RUN_PID=$!
+
+--- OBSERVED OUTPUT ---
+RUN_PID=29796

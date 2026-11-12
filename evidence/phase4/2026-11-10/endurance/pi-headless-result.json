@@ -1,0 +1,188 @@
+{
+  "id": "G-ENDURANCE-HEADLESS",
+  "result": "FAIL",
+  "duration_s": 900.2186163370006,
+  "classification": "REAL PI CAMERA/LAN + VIRTUAL MANUAL FORWARD",
+  "samples": 788,
+  "errors": [
+    {
+      "elapsed_s": 29.62504058200102,
+      "error": "Unexpected loss of enabled/fresh/connected state",
+      "state": {
+        "utc": "2026-11-10T07:39:46.104713+00:00",
+        "elapsed_s": 29.62504058200102,
+        "camera": {
+          "actualFps": 8.33,
+          "available": true,
+          "backend": "usb",
+          "captureMs": 117.34,
+          "device": "/dev/video0",
+          "errors": 0,
+          "frameAge": 0.1453029559997958,
+          "height": 240,
+          "lastError": null,
+          "mjpegEndpoint": "/video-feed",
+          "ownerAlive": true,
+          "reconnects": 1,
+          "requestedFps": 30,
+          "snapshotEndpoint": "/api/camera-frame",
+          "status": "usb camera connected",
+          "syntheticTarget": null,
+          "unchangedFor": 0.027989461001197924,
+          "width": 320
+        },
+        "vision": {
+          "behavior": "EMERGENCY_STOP",
+          "blueBall": {
+            "area": 9576,
+            "bbox": [
+              136,
+              118,
+              117,
+              109
+            ],
+            "candidates": [
+              {
+                "bbox": [
+                  136,
+                  118,
+                  117,
+                  109
+                ],
+                "circleArea": 10731,
+                "circularity": 0.865,
+                "contourArea": 9576,
+                "fillRatio": 0.892,
+                "radius": 58,
+                "x": 194,
+                "y": 172
+              }
+            ],
+            "circleArea": 10731,
+            "circularity": 0.865,
+            "contourArea": 9576,
+            "detected": true,
+            "fillRatio": 0.892,
+            "frameAge": 0.13776661100018828,
+            "frameHeight": 240,
+            "frameWidth": 320,
+            "lockId": 1,
+            "lockState": "locked",
+            "maskArea": 9693,
+            "observed_at": 9419.7392124,
+            "offset": 0.21289048243021277,
+            "processingHeight": 240,
+            "processingWidth": 320,
+            "radius": 58,
+            "rawOffset": 0.2125,
+            "rejectReason": null,
+            "revision": 5,
+            "targetColor": "blue",
+            "x": 194,
+            "y": 172
+          },
+          "hand": {},
+          "handGesture": "Not configured",
+          "observationAge": 0.14367521200074407,
+          "opencv": "Disarmed; explicit enable required",
+          "processingFps": 8.26,
+          "processingMs": 16.68,
+          "targetColor": "blue",
+          "targetFresh": true,
+          "transitions": [
+            {
+              "at": 9390.202841143,
+              "previous": "IDLE",
+              "reason": "",
+              "state": "MANUAL_OVERRIDE"
+            },
+            {
+              "at": 9418.909827014,
+              "previous": "MANUAL_OVERRIDE",
+              "reason": "Explicit stop or latched fault",
+              "state": "STOPPED"
+            }
+          ]
+        },
+        "system": {
+          "architecture": "aarch64",
+          "availableMemoryBytes": 1495072768,
+          "measurementHost": "diyan07",
+          "pid": 8655,
+          "processCpuPercent": 35.78,
+          "rssBytes": 172412928
+        },
+        "motion": {
+          "appMode": "manual",
+          "busy": false,
+          "currentMotion": "none",
+          "desiredMotion": "none",
+          "enabled": false,
+          "executedGeneration": 46,
+          "fault": "Missing, invalid or stale front range",
+          "generation": 46,
+          "lastError": null,
+          "lastRequest": {
+            "generation": 36,
+            "motion": "greeting",
+            "reason": "Awaiting serial dispatch",
+            "status": "intent_accepted"
+          },
+          "lastResult": "Missing, invalid or stale front range",
+          "session": 9,
+          "stopping": false
+        },
+        "bridge": {
+          "ackAge": 0.07196566799939319,
+          "connected": true,
+          "epoch": 7,
+          "errors": 0,
+          "fault": null,
+          "physical": false,
+          "readyToArm": true,
+          "transport": "UDP challenge/lease"
+        },
+        "link": {
+          "activeMask": 0,
+          "activeMotion": null,
+          "armed": false,
+          "connected": true,
+          "epoch": 1,
+          "error": null,
+          "kind": "virtual-uno",
+          "port": "virtual://uno",
+          "queued": 0,
+          "samples": 128,
+          "stopping": false,
+          "targets": [
+            329,
+            110,
+            326,
+            410,
+            295,
+            410,
+            229,
+            110
+          ],
+          "telemetry": {
+            "age": null,
+            "errors": 0,
+            "receiveFresh": false,
+            "record": null,
+            "supported": false
+          },
+          "virtual": true,
+          "virtualFault": null
+        },
+        "sensors": {
+          "fault": null,
+          "front_m": 2.7700000000000005,
+          "receivedAge": 0.11099862499941082,
+          "rejected": 2597
+        }
+      }
+    }
+  ],
+  "automatic_rearm": false,
+  "note": "Actual camera/vision active; manual motion override. Not 15 minutes of autonomous ball pursuit."
+}

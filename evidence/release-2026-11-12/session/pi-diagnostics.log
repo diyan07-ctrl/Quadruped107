@@ -1,0 +1,103 @@
+{"started_utc": "2026-11-12T07:57:12.129788+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\release\\pi-diagnostics.sh"}
+set -eu
+cd /tmp/quadruped107-release.7S0kKt
+kill -TERM "$(cat app.pid)"
+sleep 2
+PY=/home/diyan07/Quadruped107/.venv-pi-virtual/bin/python
+export PYTHONPATH="$PWD/software/pi"
+nohup "$PY" live-diagnostics.py > diagnostics-app.log 2>&1 < /dev/null &
+echo $! > diagnostics-app.pid
+v4l2-ctl --device /dev/video0 --all > camera-driver.txt 2>&1 || true
+v4l2-ctl --device /dev/video0 --list-formats-ext >> camera-driver.txt 2>&1 || true
+cat camera-driver.txt
+
+--- OBSERVED OUTPUT ---
+Driver Info:
+	Driver name      : uvcvideo
+	Card type        : USB2.0 PC CAMERA: USB2.0 PC CAM
+	Bus info         : usb-0000:01:00.0-1.1
+	Driver version   : 6.18.60
+	Capabilities     : 0x84a00001
+		Video Capture
+		Metadata Capture
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04200001
+		Video Capture
+		Streaming
+		Extended Pix Format
+Media Driver Info:
+	Driver name      : uvcvideo
+	Model            : USB2.0 PC CAMERA: USB2.0 PC CAM
+	Serial           : 
+	Bus info         : usb-0000:01:00.0-1.1
+	Media version    : 6.18.60
+	Hardware revision: 0x00000100 (256)
+	Driver version   : 6.18.60
+Interface Info:
+	ID               : 0x03000002
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x00000001 (1)
+	Name             : USB2.0 PC CAMERA: USB2.0 PC CAM
+	Function         : V4L2 I/O
+	Flags            : default
+	Pad 0x01000007   : 0: Sink
+	  Link 0x0200000d: from remote pad 0x100000a of entity 'Processing 2' (Video Pixel Formatter): Data, Enabled, Immutable
+Priority: 2
+Video input : 0 (Camera 1: ok)
+Format Video Capture:
+	Width/Height      : 640/480
+	Pixel Format      : 'YUYV' (YUYV 4:2:2)
+	Field             : None
+	Bytes per Line    : 1280
+	Size Image        : 614400
+	Colorspace        : sRGB
+	Transfer Function : Default (maps to sRGB)
+	YCbCr/HSV Encoding: Default (maps to ITU-R 601)
+	Quantization      : Default (maps to Limited Range)
+	Flags             : 
+Crop Capability Video Capture:
+	Bounds      : Left 0, Top 0, Width 640, Height 480
+	Default     : Left 0, Top 0, Width 640, Height 480
+	Pixel Aspect: 1/1
+Selection Video Capture: crop_default, Left 0, Top 0, Width 640, Height 480, Flags: 
+Selection Video Capture: crop_bounds, Left 0, Top 0, Width 640, Height 480, Flags: 
+Streaming Parameters Video Capture:
+	Capabilities     : timeperframe
+	Frames per second: 15.000 (15/1)
+	Read buffers     : 0
+
+User Controls
+
+                     brightness 0x00980900 (int)    : min=0 max=255 step=1 default=128 value=128 flags=has-min-max
+                       contrast 0x00980901 (int)    : min=0 max=255 step=1 default=148 value=148 flags=has-min-max
+                     saturation 0x00980902 (int)    : min=0 max=255 step=1 default=90 value=90 flags=has-min-max
+                            hue 0x00980903 (int)    : min=-127 max=127 step=1 default=0 value=0 flags=has-min-max
+                          gamma 0x00980910 (int)    : min=1 max=8 step=1 default=4 value=4 flags=has-min-max
+           power_line_frequency 0x00980918 (menu)   : min=0 max=2 default=1 value=1 (50 Hz)
+				0: Disabled
+				1: 50 Hz
+				2: 60 Hz
+                      sharpness 0x0098091b (int)    : min=0 max=15 step=1 default=3 value=3 flags=has-min-max
+         backlight_compensation 0x0098091c (int)    : min=1 max=5 step=1 default=1 value=1 flags=has-min-max
+ioctl: VIDIOC_ENUM_FMT
+	Type: Video Capture
+
+	[0]: 'YUYV' (YUYV 4:2:2)
+		Size: Discrete 640x480
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 352x288
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 320x240
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 176x144
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)
+		Size: Discrete 160x120
+			Interval: Discrete 0.033s (30.000 fps)
+			Interval: Discrete 0.067s (15.000 fps)

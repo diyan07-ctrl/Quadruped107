@@ -59,7 +59,7 @@ The receiver handles at most eight datagrams per poll, retaining only the latest
 5. Manual STOP preempts motion. Stop the simulator or interrupt the network: the Pi disarms and the receiver lease removes forces. Restart must remain disarmed.
 6. Record actual Pi CPU/RSS, camera FPS/frame age and observed host response times from `/api/state`. No numbers from CI qualify Pi or electrical performance.
 
-Automated synthetic integration, UDP contracts and DIRECT model checks live in [tests](../tests/test_simulation.py). Physical webcam/Pi validation is blocked by SSH access in this development environment; see [validation](../docs/VALIDATION.md).
+Automated synthetic integration, UDP contracts and DIRECT model checks live in [tests](../tests/test_simulation.py). The [current Phase 4 report](../docs/PHASE4_VALIDATION.md) records authenticated Pi access, real USB capture and actual Pi-to-Windows joint traces. Qualification remains **PARTIALLY VERIFIED** because sustained freshness/endurance and the complete real-target matrix have not passed.
 
 The numerical fixture uses a 240 Hz step with four substeps, 100 solver iterations and an explicitly modeled 3 rad/s joint velocity cap, including passive joints. These stabilize provisional joint hard stops; they are not measured servo dynamics. The >1.3 rad excursion failure remains active.
 

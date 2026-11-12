@@ -1,0 +1,1717 @@
+{
+  "sensor_failure": {
+    "id": "G-ENDURANCE-HEADLESS",
+    "result": "FAIL",
+    "duration_s": 900.2186163370006,
+    "classification": "REAL PI CAMERA/LAN + VIRTUAL MANUAL FORWARD",
+    "samples": 788,
+    "errors": [
+      {
+        "elapsed_s": 29.62504058200102,
+        "error": "Unexpected loss of enabled/fresh/connected state",
+        "state": {
+          "utc": "2026-11-10T07:39:46.104713+00:00",
+          "elapsed_s": 29.62504058200102,
+          "camera": {
+            "actualFps": 8.33,
+            "available": true,
+            "backend": "usb",
+            "captureMs": 117.34,
+            "device": "/dev/video0",
+            "errors": 0,
+            "frameAge": 0.1453029559997958,
+            "height": 240,
+            "lastError": null,
+            "mjpegEndpoint": "/video-feed",
+            "ownerAlive": true,
+            "reconnects": 1,
+            "requestedFps": 30,
+            "snapshotEndpoint": "/api/camera-frame",
+            "status": "usb camera connected",
+            "syntheticTarget": null,
+            "unchangedFor": 0.027989461001197924,
+            "width": 320
+          },
+          "vision": {
+            "behavior": "EMERGENCY_STOP",
+            "blueBall": {
+              "area": 9576,
+              "bbox": [
+                136,
+                118,
+                117,
+                109
+              ],
+              "candidates": [
+                {
+                  "bbox": [
+                    136,
+                    118,
+                    117,
+                    109
+                  ],
+                  "circleArea": 10731,
+                  "circularity": 0.865,
+                  "contourArea": 9576,
+                  "fillRatio": 0.892,
+                  "radius": 58,
+                  "x": 194,
+                  "y": 172
+                }
+              ],
+              "circleArea": 10731,
+              "circularity": 0.865,
+              "contourArea": 9576,
+              "detected": true,
+              "fillRatio": 0.892,
+              "frameAge": 0.13776661100018828,
+              "frameHeight": 240,
+              "frameWidth": 320,
+              "lockId": 1,
+              "lockState": "locked",
+              "maskArea": 9693,
+              "observed_at": 9419.7392124,
+              "offset": 0.21289048243021277,
+              "processingHeight": 240,
+              "processingWidth": 320,
+              "radius": 58,
+              "rawOffset": 0.2125,
+              "rejectReason": null,
+              "revision": 5,
+              "targetColor": "blue",
+              "x": 194,
+              "y": 172
+            },
+            "hand": {},
+            "handGesture": "Not configured",
+            "observationAge": 0.14367521200074407,
+            "opencv": "Disarmed; explicit enable required",
+            "processingFps": 8.26,
+            "processingMs": 16.68,
+            "targetColor": "blue",
+            "targetFresh": true,
+            "transitions": [
+              {
+                "at": 9390.202841143,
+                "previous": "IDLE",
+                "reason": "",
+                "state": "MANUAL_OVERRIDE"
+              },
+              {
+                "at": 9418.909827014,
+                "previous": "MANUAL_OVERRIDE",
+                "reason": "Explicit stop or latched fault",
+                "state": "STOPPED"
+              }
+            ]
+          },
+          "system": {
+            "architecture": "aarch64",
+            "availableMemoryBytes": 1495072768,
+            "measurementHost": "diyan07",
+            "pid": 8655,
+            "processCpuPercent": 35.78,
+            "rssBytes": 172412928
+          },
+          "motion": {
+            "appMode": "manual",
+            "busy": false,
+            "currentMotion": "none",
+            "desiredMotion": "none",
+            "enabled": false,
+            "executedGeneration": 46,
+            "fault": "Missing, invalid or stale front range",
+            "generation": 46,
+            "lastError": null,
+            "lastRequest": {
+              "generation": 36,
+              "motion": "greeting",
+              "reason": "Awaiting serial dispatch",
+              "status": "intent_accepted"
+            },
+            "lastResult": "Missing, invalid or stale front range",
+            "session": 9,
+            "stopping": false
+          },
+          "bridge": {
+            "ackAge": 0.07196566799939319,
+            "connected": true,
+            "epoch": 7,
+            "errors": 0,
+            "fault": null,
+            "physical": false,
+            "readyToArm": true,
+            "transport": "UDP challenge/lease"
+          },
+          "link": {
+            "activeMask": 0,
+            "activeMotion": null,
+            "armed": false,
+            "connected": true,
+            "epoch": 1,
+            "error": null,
+            "kind": "virtual-uno",
+            "port": "virtual://uno",
+            "queued": 0,
+            "samples": 128,
+            "stopping": false,
+            "targets": [
+              329,
+              110,
+              326,
+              410,
+              295,
+              410,
+              229,
+              110
+            ],
+            "telemetry": {
+              "age": null,
+              "errors": 0,
+              "receiveFresh": false,
+              "record": null,
+              "supported": false
+            },
+            "virtual": true,
+            "virtualFault": null
+          },
+          "sensors": {
+            "fault": null,
+            "front_m": 2.7700000000000005,
+            "receivedAge": 0.11099862499941082,
+            "rejected": 2597
+          }
+        }
+      }
+    ],
+    "automatic_rearm": false,
+    "note": "Actual camera/vision active; manual motion override. Not 15 minutes of autonomous ball pursuit."
+  },
+  "windows_motion_failure_samples": [
+    {
+      "utc": "2026-11-10T07:33:39.506735+00:00",
+      "elapsed_s": 0.0,
+      "camera": {
+        "actualFps": 8.32,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 117.1,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.22285871200074325,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.10578672199881112,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9584,
+          "bbox": [
+            135,
+            118,
+            117,
+            108
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                135,
+                118,
+                117,
+                108
+              ],
+              "circleArea": 10852,
+              "circularity": 0.873,
+              "contourArea": 9584,
+              "fillRatio": 0.883,
+              "radius": 59,
+              "x": 193,
+              "y": 170
+            }
+          ],
+          "circleArea": 10852,
+          "circularity": 0.873,
+          "contourArea": 9584,
+          "detected": true,
+          "fillRatio": 0.883,
+          "frameAge": 0.13504710000052,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9743,
+          "observed_at": 9053.99780587,
+          "offset": 0.20625,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.20625,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 193,
+          "y": 170
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.22155614599978435,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 8.46,
+        "processingMs": 15.73,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511198720,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 40.18,
+        "rssBytes": 171339776
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 39,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Selected forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.01076029700016079,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 130,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          278,
+          165,
+          328,
+          500,
+          295,
+          495,
+          283,
+          165
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.7700000000000005,
+        "receivedAge": 0.010643816998708644,
+        "rejected": 1195
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:40.593475+00:00",
+      "elapsed_s": 1.062999999994645,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 116.34,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.2181793639992975,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.10187265500098874,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9619,
+          "bbox": [
+            136,
+            118,
+            116,
+            108
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                108
+              ],
+              "circleArea": 10853,
+              "circularity": 0.878,
+              "contourArea": 9619,
+              "fillRatio": 0.886,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10853,
+          "circularity": 0.878,
+          "contourArea": 9619,
+          "detected": true,
+          "fillRatio": 0.886,
+          "frameAge": 0.1359137669987831,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9746,
+          "observed_at": 9055.078967277,
+          "offset": 0.20882798242187497,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.2166970059988671,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 8.23,
+        "processingMs": 9.64,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511198720,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 35.85,
+        "rssBytes": 171339776
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 40,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Completed forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.01435342599870637,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 255,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          234,
+          200,
+          271,
+          500,
+          350,
+          495,
+          324,
+          200
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.7699999833642392,
+        "receivedAge": 0.014222873000107938,
+        "rejected": 1200
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:41.645673+00:00",
+      "elapsed_s": 2.1089999999967404,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 116.66,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.20290978999946674,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.08627082900056848,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9594,
+          "bbox": [
+            136,
+            118,
+            116,
+            109
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                109
+              ],
+              "circleArea": 10842,
+              "circularity": 0.867,
+              "contourArea": 9594,
+              "fillRatio": 0.885,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10842,
+          "circularity": 0.867,
+          "contourArea": 9594,
+          "detected": true,
+          "fillRatio": 0.885,
+          "frameAge": 0.14657712099869968,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9714,
+          "observed_at": 9056.158731732,
+          "offset": 0.2119354495417019,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.20163227999910305,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 8.19,
+        "processingMs": 12.07,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511198720,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 37.23,
+        "rssBytes": 171343872
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 40,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Completed forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.02360317899911024,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 255,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          200,
+          271,
+          500,
+          350,
+          495,
+          336,
+          200
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.7699999516802403,
+        "receivedAge": 0.023531420998551766,
+        "rejected": 1205
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:42.748707+00:00",
+      "elapsed_s": 3.187999999994645,
+      "camera": {
+        "actualFps": 8.32,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 116.46,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.21552071400037676,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.09908674899998005,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9628,
+          "bbox": [
+            135,
+            117,
+            118,
+            110
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                135,
+                117,
+                118,
+                110
+              ],
+              "circleArea": 10838,
+              "circularity": 0.856,
+              "contourArea": 9628,
+              "fillRatio": 0.888,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10838,
+          "circularity": 0.856,
+          "contourArea": 9628,
+          "detected": true,
+          "fillRatio": 0.888,
+          "frameAge": 0.14631440300036047,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9748,
+          "observed_at": 9057.242858931,
+          "offset": 0.2122344935058964,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.21408054099993024,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 7.99,
+        "processingMs": 11.37,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1510940672,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 36.25,
+        "rssBytes": 171352064
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 40,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Completed forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.060131535999971675,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 255,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          145,
+          271,
+          500,
+          350,
+          495,
+          336,
+          145
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.769999979697162,
+        "receivedAge": 0.09462960100063356,
+        "rejected": 1210
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:43.812495+00:00",
+      "elapsed_s": 4.280999999988126,
+      "camera": {
+        "actualFps": 8.32,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 117.34,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.19601354400037962,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.07870537500093633,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9584,
+          "bbox": [
+            136,
+            118,
+            116,
+            109
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                109
+              ],
+              "circleArea": 10861,
+              "circularity": 0.873,
+              "contourArea": 9584,
+              "fillRatio": 0.882,
+              "radius": 59,
+              "x": 194,
+              "y": 173
+            }
+          ],
+          "circleArea": 10861,
+          "circularity": 0.873,
+          "contourArea": 9584,
+          "detected": true,
+          "fillRatio": 0.882,
+          "frameAge": 0.13111427299918432,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9701,
+          "observed_at": 9058.322945435,
+          "offset": 0.21157028210263623,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 173
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.1943798930005869,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 8.13,
+        "processingMs": 9.41,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1510940672,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 36.73,
+        "rssBytes": 171352064
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 40,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Completed forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.03472307899937732,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 255,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          120,
+          271,
+          500,
+          350,
+          495,
+          336,
+          120
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.7699999845976406,
+        "receivedAge": 0.034538861000328325,
+        "rejected": 1215
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:44.866027+00:00",
+      "elapsed_s": 5.3439999999973224,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 116.53,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.17459659699852637,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.05809474400120962,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "MANUAL_OVERRIDE",
+        "blueBall": {
+          "area": 9559,
+          "bbox": [
+            136,
+            118,
+            116,
+            109
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                109
+              ],
+              "circleArea": 10800,
+              "circularity": 0.874,
+              "contourArea": 9559,
+              "fillRatio": 0.885,
+              "radius": 59,
+              "x": 194,
+              "y": 173
+            }
+          ],
+          "circleArea": 10800,
+          "circularity": 0.874,
+          "contourArea": 9559,
+          "detected": true,
+          "fillRatio": 0.885,
+          "frameAge": 0.13212562299850106,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9647,
+          "observed_at": 9059.40319577,
+          "offset": 0.21248074376394596,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 173
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.17329780899854086,
+        "opencv": "MANUAL_OVERRIDE",
+        "processingFps": 8.28,
+        "processingMs": 11.02,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511034880,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 36.7,
+        "rssBytes": 171364352
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": true,
+        "currentMotion": "forward",
+        "desiredMotion": "forward",
+        "enabled": true,
+        "executedGeneration": 40,
+        "fault": null,
+        "generation": 40,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Completed forward",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.0518739099989034,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": false,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 255,
+        "activeMotion": "forward",
+        "armed": true,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          226,
+          110,
+          271,
+          500,
+          350,
+          495,
+          336,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.769999983344233,
+        "receivedAge": 0.05171933899873693,
+        "rejected": 1218
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:46.885410+00:00",
+      "elapsed_s": 6.390999999988708,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 117.23,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.14739703000122972,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.030191968999133678,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "EMERGENCY_STOP",
+        "blueBall": {
+          "area": 9561,
+          "bbox": [
+            136,
+            118,
+            116,
+            108
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                108
+              ],
+              "circleArea": 10768,
+              "circularity": 0.873,
+              "contourArea": 9561,
+              "fillRatio": 0.888,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10768,
+          "circularity": 0.873,
+          "contourArea": 9561,
+          "detected": true,
+          "fillRatio": 0.888,
+          "frameAge": 0.13325345100020058,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9721,
+          "observed_at": 9061.44681267,
+          "offset": 0.2118713883279163,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.1461775919997308,
+        "opencv": "Disarmed; explicit enable required",
+        "processingFps": 8.27,
+        "processingMs": 13.1,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 9061.351629747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Explicit stop or latched fault",
+            "state": "STOPPED"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511063552,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 35.2,
+        "rssBytes": 171384832
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 41,
+        "fault": "Stale motion intent",
+        "generation": 41,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Stale motion intent",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.004108008000912378,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          329,
+          110,
+          271,
+          500,
+          350,
+          495,
+          229,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.770000000000015,
+        "receivedAge": 0.017369956000038655,
+        "rejected": 1229
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:47.279664+00:00",
+      "elapsed_s": 7.7189999999973224,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 117.18,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.17167456500101252,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.05452463300025556,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "EMERGENCY_STOP",
+        "blueBall": {
+          "area": 9603,
+          "bbox": [
+            135,
+            118,
+            117,
+            109
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                135,
+                118,
+                117,
+                109
+              ],
+              "circleArea": 10825,
+              "circularity": 0.867,
+              "contourArea": 9603,
+              "fillRatio": 0.887,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10825,
+          "circularity": 0.867,
+          "contourArea": 9603,
+          "detected": true,
+          "fillRatio": 0.887,
+          "frameAge": 0.13902684999993653,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9762,
+          "observed_at": 9061.806910603,
+          "offset": 0.210905492519554,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.17013417099951766,
+        "opencv": "Disarmed; explicit enable required",
+        "processingFps": 7.97,
+        "processingMs": 11.39,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 9061.351629747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Explicit stop or latched fault",
+            "state": "STOPPED"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511063552,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 35.2,
+        "rssBytes": 171393024
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 42,
+        "fault": "Stale motion intent",
+        "generation": 42,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Stopped; servos disabled",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.05815790999986348,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          329,
+          110,
+          271,
+          500,
+          350,
+          495,
+          229,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.7700000000000053,
+        "receivedAge": 0.11856608800007962,
+        "rejected": 1231
+      }
+    },
+    {
+      "utc": "2026-11-10T07:33:48.335123+00:00",
+      "elapsed_s": 8.812999999994645,
+      "camera": {
+        "actualFps": 8.33,
+        "available": true,
+        "backend": "usb",
+        "captureMs": 116.89,
+        "device": "/dev/video0",
+        "errors": 0,
+        "frameAge": 0.16094532399984018,
+        "height": 240,
+        "lastError": null,
+        "mjpegEndpoint": "/video-feed",
+        "ownerAlive": true,
+        "reconnects": 1,
+        "requestedFps": 30,
+        "snapshotEndpoint": "/api/camera-frame",
+        "status": "usb camera connected",
+        "syntheticTarget": null,
+        "unchangedFor": 0.04408675599916023,
+        "width": 320
+      },
+      "vision": {
+        "behavior": "EMERGENCY_STOP",
+        "blueBall": {
+          "area": 9616,
+          "bbox": [
+            136,
+            118,
+            116,
+            109
+          ],
+          "candidates": [
+            {
+              "bbox": [
+                136,
+                118,
+                116,
+                109
+              ],
+              "circleArea": 10810,
+              "circularity": 0.863,
+              "contourArea": 9616,
+              "fillRatio": 0.889,
+              "radius": 59,
+              "x": 194,
+              "y": 172
+            }
+          ],
+          "circleArea": 10810,
+          "circularity": 0.863,
+          "contourArea": 9616,
+          "detected": true,
+          "fillRatio": 0.889,
+          "frameAge": 0.1405399489995034,
+          "frameHeight": 240,
+          "frameWidth": 320,
+          "lockId": 1,
+          "lockState": "locked",
+          "maskArea": 9743,
+          "observed_at": 9062.887303751,
+          "offset": 0.21246697470004564,
+          "processingHeight": 240,
+          "processingWidth": 320,
+          "radius": 59,
+          "rawOffset": 0.2125,
+          "rejectReason": null,
+          "revision": 5,
+          "targetColor": "blue",
+          "x": 194,
+          "y": 172
+        },
+        "hand": {},
+        "handGesture": "Not configured",
+        "observationAge": 0.15962636899894278,
+        "opencv": "Disarmed; explicit enable required",
+        "processingFps": 8.26,
+        "processingMs": 10.78,
+        "targetColor": "blue",
+        "targetFresh": true,
+        "transitions": [
+          {
+            "at": 9054.13285297,
+            "previous": "IDLE",
+            "reason": "",
+            "state": "MANUAL_OVERRIDE"
+          },
+          {
+            "at": 9061.351629747,
+            "previous": "MANUAL_OVERRIDE",
+            "reason": "Explicit stop or latched fault",
+            "state": "STOPPED"
+          }
+        ]
+      },
+      "system": {
+        "architecture": "aarch64",
+        "availableMemoryBytes": 1511063552,
+        "measurementHost": "diyan07",
+        "pid": 8655,
+        "processCpuPercent": 35.47,
+        "rssBytes": 171405312
+      },
+      "motion": {
+        "appMode": "manual",
+        "busy": false,
+        "currentMotion": "none",
+        "desiredMotion": "none",
+        "enabled": false,
+        "executedGeneration": 42,
+        "fault": "Stale motion intent",
+        "generation": 42,
+        "lastError": null,
+        "lastRequest": {
+          "generation": 36,
+          "motion": "greeting",
+          "reason": "Awaiting serial dispatch",
+          "status": "intent_accepted"
+        },
+        "lastResult": "Stopped; servos disabled",
+        "session": 8,
+        "stopping": false
+      },
+      "bridge": {
+        "ackAge": 0.007725913999820477,
+        "connected": true,
+        "epoch": 7,
+        "errors": 0,
+        "fault": null,
+        "physical": false,
+        "readyToArm": true,
+        "transport": "UDP challenge/lease"
+      },
+      "link": {
+        "activeMask": 0,
+        "activeMotion": null,
+        "armed": false,
+        "connected": true,
+        "epoch": 1,
+        "error": null,
+        "kind": "virtual-uno",
+        "port": "virtual://uno",
+        "queued": 0,
+        "samples": 128,
+        "stopping": false,
+        "targets": [
+          329,
+          110,
+          271,
+          500,
+          350,
+          495,
+          229,
+          110
+        ],
+        "telemetry": {
+          "age": null,
+          "errors": 0,
+          "receiveFresh": false,
+          "record": null,
+          "supported": false
+        },
+        "virtual": true,
+        "virtualFault": null
+      },
+      "sensors": {
+        "fault": null,
+        "front_m": 2.770000000000279,
+        "receivedAge": 0.0076163989997439785,
+        "rejected": 1235
+      }
+    }
+  ],
+  "limitations": [
+    "Historical sensor failure snapshot omits individual acquisition ages at disarm. Later healthy receive age does not identify historical cause.",
+    "Windows collector performs matching intent heartbeat, cookie disk save and potentially blocking state GET serially. Historical logs lack subsecond heartbeat receipt/body trace."
+  ]
+}

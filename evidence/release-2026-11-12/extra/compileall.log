@@ -1,0 +1,1 @@
+{"commit": "1246f7af4be6d87fc5132ab323aa269ffdd2d223", "command": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "-m", "compileall", "-q", "software/pi/quadruped", "tools", "tests", "simulation"], "startedUtc": "2026-11-12T08:06:35.429959+00:00"}

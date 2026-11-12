@@ -1,6 +1,6 @@
 # Sensor and accessory extension contracts
 
-Physical sensor drivers and TEL1 firmware emission/negotiation remain unimplemented. Phase 3 adds passive, diagnostic-only host TEL1 parsing; it sends no capability commands and does not qualify telemetry for motion. Phase 2 implements only [virtual sensing and behaviors](PHASE2.md); its [UDP observation schema](SENSORS.md) is separate from this reserved physical contract. Uno owns range/touch acquisition and local safety policy; Pi owns display, tracking, telemetry presentation and high-level scheduling. All future motion requests use the same controller; local inhibition outranks them.
+Phase 5 implements a separate non-actuating Uno sensor target, optional TEL1/TEL2 negotiation and physical monitoring through the existing SensorManager. The original production target remains separate and rejects physical ARM pending commissioning. Phase 2 [virtual sensing and behaviors](PHASE2.md) and its [UDP observation schema](SENSORS.md) remain intact. Uno owns range/touch acquisition; Pi owns display, tracking and scheduling. Physical monitoring never qualifies actuator control. See [software-readiness qualification](SOFTWARE_READINESS.md) for tests and hardware procedures.
 
 | Extension | Proposed ownership / wiring | Rate / freshness | Invalid/failure behavior |
 | --- | --- | --- | --- |
@@ -14,9 +14,9 @@ Physical sensor drivers and TEL1 firmware emission/negotiation remain unimplemen
 
 ## TEL1, an additive protocol-v1 extension
 
-Future firmware must continue the exact READY Quadruped107 1 handshake and all v1 commands. After HELLO, an upgraded host can optionally request CAPS <id>. An upgraded Uno accepts this while disarmed and replies DONE <id> caps_tel1. An old Uno can reply ERR (including disarmed/unknown_command); the host then disables telemetry features, does not arm, and does not retry motion or disconnect solely for missing capability.
+The sensor target preserves the exact `READY Quadruped107 1` handshake, HELLO, PING and STOP; ARM/MOVE/SERVO always return `sensor_only`. After HELLO, the host requests `CAPS 0`. This target replies `DONE 0 caps_sensor2_tN`, where N is 0, 3, 4 or 5 configured touch inputs. Gated production replies `caps_actuator_gated`. Old firmware may reply ERR (including disarmed/unknown_command); the host disables telemetry negotiation without arming, retrying motion or disconnecting solely for missing capability. Unknown capability tokens grant nothing. Request ID 0 is reserved for negotiation during normal operation; exhaustion STOP 0 still completes normally.
 
-An upgraded host may then request TELEM <id> <rate_hz>, with rate 0 to disable or 1–10. Uno replies DONE <id> telemetry. Default is disabled after boot/HELLO. This negotiation and these verbs are reserved contracts; current SerialLink/firmware do not send or accept them.
+`TELEM <id> <rate_hz>` enables diagnostic TEL1 emission (0 disables; 1–10 selects maximum reports/s). `TELEM <id> <rate_hz> 2` selects poll-bounded TEL2. The response is `DONE <id> telemetry`. Boot/HELLO disables both. Current SerialLink selects TEL2 at 5 Hz only after the exact sensor capability token. The sensor target emits both versions; production does not emit sensor telemetry. The host never sends ARM during negotiation.
 
 Unsolicited LF-terminated ASCII record:
 
@@ -30,6 +30,23 @@ seq is uint16 with wrap; uptime_ms is uint32 milliseconds with wrap. range_mm is
 Worst-case defined fields fit within 63 characters before LF. At 5 Hz and about 60 bytes/line, telemetry is roughly 300 bytes/s, small relative to 115200 8N1 capacity (11,520 bytes/s). Use a bounded fixed buffer and transmit only if UART space is available; drop telemetry instead of blocking STOP/gait service. Critical faults still emit the existing FAULT line and latch locally, even when telemetry is disabled.
 
 Host timestamps complete records with monotonic receive time, rejects malformed/out-of-range fields and duplicates, handles unsigned wrap deltas, and expires range/power/touch status after 300 ms. A new session resets sequence history. Local policy uses acquisition age, not host receive age; link latency must not turn an old reading into fresh motion evidence. Current v1 hosts ignore unrelated lines, so TEL1 cannot complete a motion acknowledgment.
+
+## TEL2 acquisition-age monitoring extension
+
+After exact `caps_sensor2_tN` negotiation and `TELEM 0 5 2`, the Pi sends `POLL 0 <token>` at 5 Hz. Tokens are uint16, scoped to the HELLO/connection session; only outstanding polls no older than 300 ms can validate a record. The firmware responds at no more than the negotiated rate, uses the latest pending token, and never blocks to wait for UART space:
+
+```text
+TEL 2 seq uptime_ms range_mm source flags touch_mask range_age_ms touch_age_ms token faults
+TEL 2 0 640 400 1 19 0 37 0 42 0
+```
+
+TEL2 keeps sequence/uptime/range/source/flags/touch definitions above, omits unavailable voltages, and adds ages (0–999 ms, saturating at 999), echoed token (0–65535) and fault byte. Flag bit4 is always set: this target is permanently locally inhibited. Fault bits: 0 unconfigured URM37, 1 timeout/invalid/out-of-range acquisition, 2 stuck touch, 3 latched heartbeat watchdog. AVR watchdog reset indication retains flag bit6 where bootloader/reset-cause retention allows it. Unconfigured range is source 0, value -1, validity false. No pack, rail or calibrated-profile validity is asserted. Touch capability N prevents an absent fourth/fifth configured input from being invented by the host.
+
+Range age is measured from captured echo completion, including foreground service delay. Touch age is measured from the oldest coalesced assertion in the report interval, or the latest scan for an empty mask. Interval history clears on every scheduled report including drop, HELLO and TELEM reconfiguration. Pressed-at-boot inputs require debounced release before touch validity; held inputs become invalid at two seconds. POLL replacement is bounded; telemetry remains best effort and does not guarantee every tap.
+
+The host bounds total age by `firmware_age + full_poll_round_trip + elapsed_since_receive + 2 ms quantization guard`. It does not assume clock synchronization or halve the round trip. Duplicate/reused/expired tokens, duplicate/backward sequence, uptime resets outside a new session, malformed/reserved values and version changes in a stream are rejected. Sequence gaps count dropped frames. Poll tokens are freshness correlation, not authentication; the serial peer and ordered USB session are trusted and must be reset/drained on reconnect. Every reconnect clears observations/polls and stays disarmed. Unknown capabilities cannot authorize telemetry features or motion. Rates above 5 Hz do not increase the 5 Hz range acquisition cadence, and the 300 ms limit is unchanged.
+
+TEL1 reception still exposes receive freshness only and remains diagnostic-only. TEL2 exposes acquisition bounds but **always** reports `controlQualified=false`: missing swept-clearance/fallback and electrical safety evidence prevent physical navigation. Passive TEL1 records cannot qualify the physical SensorManager source. Telemetry and capability records cannot complete motion ACKs or authorize ARM.
 
 ## Uno resource gate
 

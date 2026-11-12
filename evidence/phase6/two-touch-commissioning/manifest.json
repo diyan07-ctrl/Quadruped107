@@ -1,0 +1,782 @@
+[
+  {
+    "path": "arduino-cli-version.log",
+    "bytes": 77,
+    "sha256": "481e2beae47bef1f0109d9b45f579cac7948f0abcf326cdc5ab3c0a91a53cf85"
+  },
+  {
+    "path": "ci-pr.json",
+    "bytes": 12401,
+    "sha256": "8c87bc110bba0c8aee1cfc3cd3718c94c82bf2fe1a8afd93bf10ef4ddeebd6b7"
+  },
+  {
+    "path": "ci-profile-pr.json",
+    "bytes": 12401,
+    "sha256": "9847ca945090683e0b72c58a2bafc29ac9b5494cfc8b880a4f4efb029d6c2205"
+  },
+  {
+    "path": "ci-profile-push.json",
+    "bytes": 12401,
+    "sha256": "075d505abea919e04395d35e71d8ca98d8d5b49765e4ef297c2491213bcb31c5"
+  },
+  {
+    "path": "ci-push.json",
+    "bytes": 12401,
+    "sha256": "94bf0b3a3ac0ed710c2bbd3e532ebab3c723e1dca7debc0f5a295e95b7ec02ee"
+  },
+  {
+    "path": "commits.txt",
+    "bytes": 325,
+    "sha256": "d75a31cbbd7b558271d1e7477a136541508de1235073c0bc29db9ee1742dc79d"
+  },
+  {
+    "path": "firmware/calibration.log",
+    "bytes": 316,
+    "sha256": "221d2bc7a6e360e56d3038409d8c8005586bb2f4048d5e4d7c78575dda32fb0a"
+  },
+  {
+    "path": "firmware/matrix.json",
+    "bytes": 13084,
+    "sha256": "3bc6e576a49368d62702f9146504905ce6031f21a9006b90da8d8e6473fd22fe"
+  },
+  {
+    "path": "firmware/native.log",
+    "bytes": 6465,
+    "sha256": "ae36647f7c81e6a22ed560f47619df940f5dd2c153cca91cc5be277cd6444376"
+  },
+  {
+    "path": "firmware/production.log",
+    "bytes": 408,
+    "sha256": "3f2a9b6c83705b54a5eb66792203d1a9644cacf39b9b82abf3661fd613584993"
+  },
+  {
+    "path": "firmware/sensor-configured.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-default.log",
+    "bytes": 198,
+    "sha256": "9d774562bad0112d6a6150b992df3afdc6b47ed1c8517278ed972107bc466558"
+  },
+  {
+    "path": "firmware/sensor-five-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-four-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-four-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-three-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-three-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-two-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-two-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware/sensor-two-mixed-a.log",
+    "bytes": 198,
+    "sha256": "4a10e98ca1951231e374a1547bfa46ef978a36d343205a71a89a3004cf58539b"
+  },
+  {
+    "path": "firmware/sensor-two-mixed-b.log",
+    "bytes": 198,
+    "sha256": "b59e033fb3f1ac3d064cd918b95a7a895ff4bbf0bda6e215cdd1f112c1f430ea"
+  },
+  {
+    "path": "firmware/sensor-two-unconfigured.log",
+    "bytes": 198,
+    "sha256": "3d3961b07fcab2361c13bf49eb69d7ce19be241cd2c2658299525504bee4fff8"
+  },
+  {
+    "path": "firmware/virtual-generate.log",
+    "bytes": 119,
+    "sha256": "9f48fd04c93aea3f4886ef6b836bf0154bb220e5d5f3297d10e5026208932519"
+  },
+  {
+    "path": "firmware/virtual.log",
+    "bytes": 198,
+    "sha256": "ced0b08c6803dc70157d0a6d0733bb43f1f7c1876db289d32a61693c05781ef7"
+  },
+  {
+    "path": "firmware-initial/calibration.log",
+    "bytes": 316,
+    "sha256": "221d2bc7a6e360e56d3038409d8c8005586bb2f4048d5e4d7c78575dda32fb0a"
+  },
+  {
+    "path": "firmware-initial/matrix.json",
+    "bytes": 23168,
+    "sha256": "c6021d24e8f8625b3b1f22d34e1323468534f75af8691813fd204de575074fe9"
+  },
+  {
+    "path": "firmware-initial/native.log",
+    "bytes": 26772,
+    "sha256": "94f6da05e150cb3a3ba2401446e58929f1c4a79e8489a120f086f6077108d642"
+  },
+  {
+    "path": "firmware-initial/production.log",
+    "bytes": 408,
+    "sha256": "3f2a9b6c83705b54a5eb66792203d1a9644cacf39b9b82abf3661fd613584993"
+  },
+  {
+    "path": "firmware-initial/sensor-configured.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-default.log",
+    "bytes": 198,
+    "sha256": "9d774562bad0112d6a6150b992df3afdc6b47ed1c8517278ed972107bc466558"
+  },
+  {
+    "path": "firmware-initial/sensor-five-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-four-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-four-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-three-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-three-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-two-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-two-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "firmware-initial/sensor-two-mixed-a.log",
+    "bytes": 198,
+    "sha256": "4a10e98ca1951231e374a1547bfa46ef978a36d343205a71a89a3004cf58539b"
+  },
+  {
+    "path": "firmware-initial/sensor-two-mixed-b.log",
+    "bytes": 198,
+    "sha256": "b59e033fb3f1ac3d064cd918b95a7a895ff4bbf0bda6e215cdd1f112c1f430ea"
+  },
+  {
+    "path": "firmware-initial/sensor-two-unconfigured.log",
+    "bytes": 198,
+    "sha256": "3d3961b07fcab2361c13bf49eb69d7ce19be241cd2c2658299525504bee4fff8"
+  },
+  {
+    "path": "firmware-initial/virtual-generate.log",
+    "bytes": 119,
+    "sha256": "9f48fd04c93aea3f4886ef6b836bf0154bb220e5d5f3297d10e5026208932519"
+  },
+  {
+    "path": "firmware-initial/virtual.log",
+    "bytes": 198,
+    "sha256": "ced0b08c6803dc70157d0a6d0733bb43f1f7c1876db289d32a61693c05781ef7"
+  },
+  {
+    "path": "firmware-resources.json",
+    "bytes": 12097,
+    "sha256": "bad9ce46e9c67153bc90ab84df4ad997df4fbd5baf582ad50af6c80b5a5faefa"
+  },
+  {
+    "path": "operator-preflight.json",
+    "bytes": 1388,
+    "sha256": "594b07e3fd414ea30adc1fd12c09e660d2fc4f6ab3aec4695326f29c4cdb725f"
+  },
+  {
+    "path": "preflight/alternate-host.json",
+    "bytes": 87,
+    "sha256": "ac7d1d56058a1e9211f663aaa93c4c37ceb25674eff11bc47768a13fbc658279"
+  },
+  {
+    "path": "preflight/discover-pi.py",
+    "bytes": 1539,
+    "sha256": "bf0efcf4311731f907fc36e6e1eda0ce04bba13d1c003d082df487819d950001"
+  },
+  {
+    "path": "preflight/network-discovery.json",
+    "bytes": 272,
+    "sha256": "cea3aecb8663d99329757c8b1640b2a48704af2ccde729a73416f4eb5fd6089e"
+  },
+  {
+    "path": "preflight/pi-audit-operator-endpoint.log",
+    "bytes": 1472,
+    "sha256": "a62af755cd17660dc28525bb083a8e9fca14ed15d0b19829e3eec4e276f843b8"
+  },
+  {
+    "path": "preflight/pi-audit.log",
+    "bytes": 1442,
+    "sha256": "c1a7e6454024f181334f6965043c368e9a63d21575769b7c0b13068143d42a16"
+  },
+  {
+    "path": "preflight/pi-audit.sh",
+    "bytes": 1160,
+    "sha256": "e691ccb698cc4b9724700f8516ea45a3eb5897eb81a80b43dca8a61bdd184d08"
+  },
+  {
+    "path": "preflight/pi-retry.log",
+    "bytes": 413,
+    "sha256": "49b44a8ffb3ae48db407da9b2688de7369b08e0271eca84a836174237389cf51"
+  },
+  {
+    "path": "profile-qualified-firmware/calibration.log",
+    "bytes": 316,
+    "sha256": "221d2bc7a6e360e56d3038409d8c8005586bb2f4048d5e4d7c78575dda32fb0a"
+  },
+  {
+    "path": "profile-qualified-firmware/matrix.json",
+    "bytes": 14991,
+    "sha256": "2fca00feed5abd27bafe010e78bf6d4c5ccb6213996a9f545e82e576b1d15fd0"
+  },
+  {
+    "path": "profile-qualified-firmware/native.log",
+    "bytes": 6465,
+    "sha256": "ae36647f7c81e6a22ed560f47619df940f5dd2c153cca91cc5be277cd6444376"
+  },
+  {
+    "path": "profile-qualified-firmware/production.log",
+    "bytes": 408,
+    "sha256": "3f2a9b6c83705b54a5eb66792203d1a9644cacf39b9b82abf3661fd613584993"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-configured.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-default.log",
+    "bytes": 198,
+    "sha256": "9d774562bad0112d6a6150b992df3afdc6b47ed1c8517278ed972107bc466558"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-five-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-four-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-four-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-three-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-three-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-two-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-two-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-two-mixed-a.log",
+    "bytes": 198,
+    "sha256": "4a10e98ca1951231e374a1547bfa46ef978a36d343205a71a89a3004cf58539b"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-two-mixed-b.log",
+    "bytes": 198,
+    "sha256": "b59e033fb3f1ac3d064cd918b95a7a895ff4bbf0bda6e215cdd1f112c1f430ea"
+  },
+  {
+    "path": "profile-qualified-firmware/sensor-two-unconfigured.log",
+    "bytes": 198,
+    "sha256": "3d3961b07fcab2361c13bf49eb69d7ce19be241cd2c2658299525504bee4fff8"
+  },
+  {
+    "path": "profile-qualified-firmware/virtual-generate.log",
+    "bytes": 119,
+    "sha256": "9f48fd04c93aea3f4886ef6b836bf0154bb220e5d5f3297d10e5026208932519"
+  },
+  {
+    "path": "profile-qualified-firmware/virtual.log",
+    "bytes": 198,
+    "sha256": "ced0b08c6803dc70157d0a6d0733bb43f1f7c1876db289d32a61693c05781ef7"
+  },
+  {
+    "path": "profile-qualified-software/autonomy/REG-MOTION.log",
+    "bytes": 542,
+    "sha256": "53b333667dd03ec6d7efcd23eabe835809cfe92f43cc563d5c8b1f1c52034743"
+  },
+  {
+    "path": "profile-qualified-software/autonomy/REG-PROXY.log",
+    "bytes": 18049,
+    "sha256": "46beec41fa6b8bb0f30629859e2c211cb849c1bebf6c107a35f0c7f7d99cf150"
+  },
+  {
+    "path": "profile-qualified-software/environment/ENV-DEPS.log",
+    "bytes": 1233,
+    "sha256": "7704949230c5eadebd363c0e29465d247f686a56e138d5c7cb4c8ce7e379e639"
+  },
+  {
+    "path": "profile-qualified-software/environment/ENV-WIN.log",
+    "bytes": 525,
+    "sha256": "0e352b62b52f4c81e1cf3ad1f6b8e565dbb719f5dc5f15bb63973ae41e3ddb76"
+  },
+  {
+    "path": "profile-qualified-software/environment/REG-PIP.log",
+    "bytes": 492,
+    "sha256": "f1dfced8d0c566b93bf5bd84a751b3003575fcbb2968e3893dec0e995c466b06"
+  },
+  {
+    "path": "profile-qualified-software/pybullet/REG-CAD.log",
+    "bytes": 526,
+    "sha256": "6c979f67671f36044a88f0390526eb0cd277083ad7f77595d43a11d315116f46"
+  },
+  {
+    "path": "profile-qualified-software/pybullet/REG-MODEL.log",
+    "bytes": 32554,
+    "sha256": "e529832c3b883d71f4e6034f868dc6b82f9a13fa2f21067b63f46db76c18ce14"
+  },
+  {
+    "path": "profile-qualified-software/pybullet/REG-SIM.log",
+    "bytes": 25871,
+    "sha256": "cf908a92d7dddb0dbd798076db0d69f20b43a2078bf6cb94416db32c685df086"
+  },
+  {
+    "path": "profile-qualified-software/reports/local-checks.json",
+    "bytes": 12364,
+    "sha256": "e933005311228411c7fd0b565bc5f7433b7248c2f629993adf35f082cedb26f4"
+  },
+  {
+    "path": "profile-qualified-software/reports/REG-DIAGRAM.log",
+    "bytes": 442,
+    "sha256": "51b80d75fc2781f29a027483bdc904f977e80471a1a162913d0b426984141b00"
+  },
+  {
+    "path": "profile-qualified-software/reports/REG-DOM.log",
+    "bytes": 456,
+    "sha256": "fcd664895d5b502ffa335a86932c54b043f7fa319c9821757a2c7509dec4a336"
+  },
+  {
+    "path": "profile-qualified-software/reports/REG-JS.log",
+    "bytes": 378,
+    "sha256": "4a52a9cd9656cf17926573099f4cc54f534bddb95ca8ef0a93acb857512c263a"
+  },
+  {
+    "path": "profile-qualified-software/reports/REG-PY.log",
+    "bytes": 34955,
+    "sha256": "da9d2c14d52d5aa29dc86103b6c5e05cca3da2e90aa534b9eb62963770c240ff"
+  },
+  {
+    "path": "profile-qualified-software/reports/REG-REPO.log",
+    "bytes": 456,
+    "sha256": "05d8621336cc8d1d309555e417684026de9526e0f235a53257d116dc23138f45"
+  },
+  {
+    "path": "profile-qualified-software/safety/REG-POWER.log",
+    "bytes": 539,
+    "sha256": "be502b0a8e1cd2168ffa0bf490a03f9e5057a2254708dfb00cd9ba0fb718687c"
+  },
+  {
+    "path": "qualified-firmware/calibration.log",
+    "bytes": 316,
+    "sha256": "221d2bc7a6e360e56d3038409d8c8005586bb2f4048d5e4d7c78575dda32fb0a"
+  },
+  {
+    "path": "qualified-firmware/matrix.json",
+    "bytes": 13086,
+    "sha256": "813259a895bdf1d9f5c617b1359d0e7a0bdfc7490e5ba678158e672f22a8ea18"
+  },
+  {
+    "path": "qualified-firmware/native.log",
+    "bytes": 6465,
+    "sha256": "ae36647f7c81e6a22ed560f47619df940f5dd2c153cca91cc5be277cd6444376"
+  },
+  {
+    "path": "qualified-firmware/production.log",
+    "bytes": 408,
+    "sha256": "3f2a9b6c83705b54a5eb66792203d1a9644cacf39b9b82abf3661fd613584993"
+  },
+  {
+    "path": "qualified-firmware/sensor-configured.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-default.log",
+    "bytes": 198,
+    "sha256": "9d774562bad0112d6a6150b992df3afdc6b47ed1c8517278ed972107bc466558"
+  },
+  {
+    "path": "qualified-firmware/sensor-five-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-four-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-four-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-three-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-three-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-two-high.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-two-low.log",
+    "bytes": 198,
+    "sha256": "beb12d6c4a2537a5f7ba05143d2372cc4614916609e46abb727396acece5cfa8"
+  },
+  {
+    "path": "qualified-firmware/sensor-two-mixed-a.log",
+    "bytes": 198,
+    "sha256": "4a10e98ca1951231e374a1547bfa46ef978a36d343205a71a89a3004cf58539b"
+  },
+  {
+    "path": "qualified-firmware/sensor-two-mixed-b.log",
+    "bytes": 198,
+    "sha256": "b59e033fb3f1ac3d064cd918b95a7a895ff4bbf0bda6e215cdd1f112c1f430ea"
+  },
+  {
+    "path": "qualified-firmware/sensor-two-unconfigured.log",
+    "bytes": 198,
+    "sha256": "3d3961b07fcab2361c13bf49eb69d7ce19be241cd2c2658299525504bee4fff8"
+  },
+  {
+    "path": "qualified-firmware/virtual-generate.log",
+    "bytes": 119,
+    "sha256": "9f48fd04c93aea3f4886ef6b836bf0154bb220e5d5f3297d10e5026208932519"
+  },
+  {
+    "path": "qualified-firmware/virtual.log",
+    "bytes": 198,
+    "sha256": "ced0b08c6803dc70157d0a6d0733bb43f1f7c1876db289d32a61693c05781ef7"
+  },
+  {
+    "path": "qualified-software/autonomy/REG-MOTION.log",
+    "bytes": 458,
+    "sha256": "a345e923764fa28eeaf9de46f7583d74e3b222d3cb948fff79a50ebb8a6e6d3a"
+  },
+  {
+    "path": "qualified-software/autonomy/REG-PROXY.log",
+    "bytes": 17965,
+    "sha256": "da8d1a7ca73ee281ceafb64a27e5a774e2d7174818ecc8157f1ac8bb305aa64d"
+  },
+  {
+    "path": "qualified-software/environment/ENV-DEPS.log",
+    "bytes": 1149,
+    "sha256": "811e4eaa495985fc84978f5ad080418ac77941b8ebdd070fe9d300692d9aaaaf"
+  },
+  {
+    "path": "qualified-software/environment/ENV-WIN.log",
+    "bytes": 354,
+    "sha256": "c56a40a2c6572be5b97ef4ad3147e6cb79bd399ebc4a721999f74faf8ba66cd0"
+  },
+  {
+    "path": "qualified-software/environment/REG-PIP.log",
+    "bytes": 408,
+    "sha256": "9c25b79057711d41b1e1496ca3d3fdf08f4ad6433550f78ccb70eb26dae28d1e"
+  },
+  {
+    "path": "qualified-software/pybullet/REG-CAD.log",
+    "bytes": 442,
+    "sha256": "b164dea931f6e787c781c891160f64c3af5c10636aeac7f3d466977260753053"
+  },
+  {
+    "path": "qualified-software/pybullet/REG-MODEL.log",
+    "bytes": 32470,
+    "sha256": "d2f745e5f270a6097b51551797344abc5b85971ef28153712be32eb9788b95e3"
+  },
+  {
+    "path": "qualified-software/pybullet/REG-SIM.log",
+    "bytes": 25787,
+    "sha256": "562877a5700e87e5a026f4bfd2075a193f22fdd61a319993313948c2b38a2009"
+  },
+  {
+    "path": "qualified-software/reports/local-checks.json",
+    "bytes": 10798,
+    "sha256": "26b28d2d978a1acfde57d3a4e027c8cdb3ee191199716912cfac091ac2abb7ed"
+  },
+  {
+    "path": "qualified-software/reports/REG-DIAGRAM.log",
+    "bytes": 358,
+    "sha256": "b798a2846d7a9f3335d3d96b608dd2c6c7c9a7a87f2a28738d92b385c71e7547"
+  },
+  {
+    "path": "qualified-software/reports/REG-DOM.log",
+    "bytes": 372,
+    "sha256": "71bd9193e10d8547668d07b69c817b6e3707cd51bad214da77a6474b04813a2d"
+  },
+  {
+    "path": "qualified-software/reports/REG-JS.log",
+    "bytes": 294,
+    "sha256": "8f405a82742d115171656a83f005a721d1afa91ed534c4b24b09e021bf1eeeb4"
+  },
+  {
+    "path": "qualified-software/reports/REG-PY.log",
+    "bytes": 34870,
+    "sha256": "4e2f05f66a75208fab96fbea94dbbaee18f897479199257ffef4287d6f5dc139"
+  },
+  {
+    "path": "qualified-software/reports/REG-REPO.log",
+    "bytes": 372,
+    "sha256": "7857e2fbe834029397ff11850398bd93eb70a234a19b0ea56b145f5415c56d60"
+  },
+  {
+    "path": "qualified-software/safety/REG-POWER.log",
+    "bytes": 455,
+    "sha256": "e910e00368b4b7a01698dd75c91b0a5136a01efd1941a6259b5310caa9c9b88e"
+  },
+  {
+    "path": "README.md",
+    "bytes": 7656,
+    "sha256": "41b6790c08d8067f5a8f52216ce593d793ce6f4ccfdc94cc6e9785de20b56af2"
+  },
+  {
+    "path": "sensor-only-link-audit.json",
+    "bytes": 783,
+    "sha256": "1f6ef1a3646051dace611e92b64b411908f16df6c84ca7e001fee30267ab18d5"
+  },
+  {
+    "path": "sensor-two-high-symbols.log",
+    "bytes": 4833,
+    "sha256": "0c4ba3b4b1f7aed852df2252490f0a52063f792de19870c2751052def38ca329"
+  },
+  {
+    "path": "sensor-two-low-symbols.log",
+    "bytes": 4833,
+    "sha256": "0c4ba3b4b1f7aed852df2252490f0a52063f792de19870c2751052def38ca329"
+  },
+  {
+    "path": "sensor-two-mixed-a-symbols.log",
+    "bytes": 4833,
+    "sha256": "2dff9757ff17a662d7f2b5f31385175205aae4150e2d5bbf289b663f274d54dd"
+  },
+  {
+    "path": "sensor-two-mixed-b-symbols.log",
+    "bytes": 4833,
+    "sha256": "8775f207ea8569d874c95e7c35757f49a9da3769e845d7e482e762dcb74458dd"
+  },
+  {
+    "path": "sensor-two-unconfigured-symbols.log",
+    "bytes": 4608,
+    "sha256": "a35275640a95b365f07830d1d687173f14ba861c5811fcf3f05f278f9f51e824"
+  },
+  {
+    "path": "software/autonomy/REG-MOTION.log",
+    "bytes": 458,
+    "sha256": "4a23e61ad1371b0c2ca0f3bb9f7020fabc7d0ec2ecc579bbf98f228c57d1ae10"
+  },
+  {
+    "path": "software/autonomy/REG-PROXY.log",
+    "bytes": 17965,
+    "sha256": "df7641c70cca82383c74f7abe5dd0c1c24ad489ed544b3eeac4b9a70164e4c5e"
+  },
+  {
+    "path": "software/environment/ENV-DEPS.log",
+    "bytes": 1149,
+    "sha256": "88b6ec5a28a805da825cf00477296dfc1b1e152c487ddaefcc788ca7e3192db9"
+  },
+  {
+    "path": "software/environment/ENV-WIN.log",
+    "bytes": 314,
+    "sha256": "e0c524c51d7eabf5c2c24d07b8259871b53e081318353f02c444adc86472664d"
+  },
+  {
+    "path": "software/environment/REG-PIP.log",
+    "bytes": 408,
+    "sha256": "8dab50cd9243d88ab98c36647092efb36012e672b74f42849b4e1ad3e750eb41"
+  },
+  {
+    "path": "software/pybullet/REG-CAD.log",
+    "bytes": 442,
+    "sha256": "029f3ce123ab9cff4d7af2a0d21ca089531b33f9e17d637a19fa6f9d4cf3bb65"
+  },
+  {
+    "path": "software/pybullet/REG-MODEL.log",
+    "bytes": 32470,
+    "sha256": "10c5f6a4841b7b571f3fddb9133db58ed8a96434257956fb2842db942b6f73d5"
+  },
+  {
+    "path": "software/pybullet/REG-SIM.log",
+    "bytes": 25787,
+    "sha256": "8e0f2d658745c17f7dfdc9c1161bd7eaddbaf8bb78c1757def9470cf36573a74"
+  },
+  {
+    "path": "software/reports/local-checks.json",
+    "bytes": 10797,
+    "sha256": "4957dab03141f11a08c8d95a06df24aac179a0ebd0c6b833ec569bf992dbd524"
+  },
+  {
+    "path": "software/reports/REG-DIAGRAM.log",
+    "bytes": 358,
+    "sha256": "54680894f3d34542dcb81ad0ec92f7985a64e5c2f39c25369fb9a55e5f588bb0"
+  },
+  {
+    "path": "software/reports/REG-DOM.log",
+    "bytes": 372,
+    "sha256": "cca96863e02994e9da1ffa33fcac02d9d86ae3510b82c7069e9ddec09b0dd185"
+  },
+  {
+    "path": "software/reports/REG-JS.log",
+    "bytes": 294,
+    "sha256": "9b4f7b40dc46d34732f217f4b94b5f4f46425796ff3c962482f2ac7a3f79cefc"
+  },
+  {
+    "path": "software/reports/REG-PY.log",
+    "bytes": 34865,
+    "sha256": "32e2d266f901f9f78a8eda41f4ec01236f1a4622845b0a5383c6f648fe3fcad6"
+  },
+  {
+    "path": "software/reports/REG-REPO.log",
+    "bytes": 372,
+    "sha256": "c30557fbc5b7a5004a2a7a4115b5a2169f622ffb850240e008e0776963003cd5"
+  },
+  {
+    "path": "software/safety/REG-POWER.log",
+    "bytes": 455,
+    "sha256": "7e8013b2a0a1ab02e07df083767b6e2fba861252f764f62b40cbe890a7e82f70"
+  },
+  {
+    "path": "software-initial/autonomy/REG-MOTION.log",
+    "bytes": 1045,
+    "sha256": "a5b8bb5dfd6ee329fc5af6d83ce9ab760e3ebdf5d79f3d28f660b4ee72cfbcbc"
+  },
+  {
+    "path": "software-initial/autonomy/REG-PROXY.log",
+    "bytes": 18552,
+    "sha256": "4568df3a58f56515d023b3b9aac95f1b62b3fd37c63711bfa6513f313c393a3b"
+  },
+  {
+    "path": "software-initial/environment/ENV-DEPS.log",
+    "bytes": 1736,
+    "sha256": "63f0b67650a6550f5852052ba018e4b2210eef70e49ed447af028431cd98812d"
+  },
+  {
+    "path": "software-initial/environment/ENV-WIN.log",
+    "bytes": 1442,
+    "sha256": "f1a38f0e7c67fd02db133df687ffe6da9f2f5f5e9a27b94c1522efeaa2089a53"
+  },
+  {
+    "path": "software-initial/environment/REG-PIP.log",
+    "bytes": 995,
+    "sha256": "fb46182a77fe254699aa794c2db36f171e9e20ab50057d3a2cb792106ab3e14d"
+  },
+  {
+    "path": "software-initial/pybullet/REG-CAD.log",
+    "bytes": 1029,
+    "sha256": "c06b5dc4344ce17ded16b13b4f3f5907ffc07276f1808ebc733a3e9d3545ff51"
+  },
+  {
+    "path": "software-initial/pybullet/REG-MODEL.log",
+    "bytes": 33057,
+    "sha256": "50df9c090f1a01b5f0157f10002b30468f6f459daea5da1e80399051cefb4a32"
+  },
+  {
+    "path": "software-initial/pybullet/REG-SIM.log",
+    "bytes": 26374,
+    "sha256": "7c03d0764361e2267628ea0f6a6dda5c8e73139a00376e7c85e24f5c0aeee1c8"
+  },
+  {
+    "path": "software-initial/reports/local-checks.json",
+    "bytes": 20682,
+    "sha256": "5db1dd7c10909e8788aabb771660ac075fe7ecb6ddbd52c094ae72509a8f4751"
+  },
+  {
+    "path": "software-initial/reports/REG-DIAGRAM.log",
+    "bytes": 945,
+    "sha256": "8242cb845312125b6114d167b105b59603c30b69f5582bdbf639539bb9dda89a"
+  },
+  {
+    "path": "software-initial/reports/REG-DOM.log",
+    "bytes": 959,
+    "sha256": "dcdfde7b6a8329af44e2872f0dd6394d20803188bba6099bae21cacb3b94c06c"
+  },
+  {
+    "path": "software-initial/reports/REG-JS.log",
+    "bytes": 881,
+    "sha256": "725ad36709e729c702a7171cecdc9b45081ab4a451a917b06eb3f5aadadd9a23"
+  },
+  {
+    "path": "software-initial/reports/REG-PY.log",
+    "bytes": 34134,
+    "sha256": "db3204ee0b5b5bebfded52d9841b8cec76e971d40e2077b41acf0bcbeb70d014"
+  },
+  {
+    "path": "software-initial/reports/REG-REPO.log",
+    "bytes": 959,
+    "sha256": "5de17814a85ea3413aa3b37aa0da6437f83d64c4b4d4ff9d50ae3e3d65d2912a"
+  },
+  {
+    "path": "software-initial/safety/REG-POWER.log",
+    "bytes": 1042,
+    "sha256": "0f18313491b43ef345ac4c8504eaa115828e53d9a87c45f6b294d3cb50efbf6d"
+  },
+  {
+    "path": "source.json",
+    "bytes": 1512,
+    "sha256": "f48aa73d7c105aa332c294ad8816b84d234577a9eed08bad754a5769a3817732"
+  },
+  {
+    "path": "zig-version.log",
+    "bytes": 11,
+    "sha256": "4f07e6122d9561a2e92cddaa8ea07d5fa69675fd109c9a1ad3c08ed795226f6c"
+  }
+]

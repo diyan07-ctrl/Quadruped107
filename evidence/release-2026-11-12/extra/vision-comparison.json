@@ -1,0 +1,1084 @@
+{
+  "classification": "OFFLINE RECORDED FRAMES ONLY",
+  "physicalTrackingQualified": false,
+  "commit": "1246f7af4be6d87fc5132ab323aa269ffdd2d223",
+  "after": [
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 4.727,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 11677,
+        "saturationRejectedWithinHue": 7619,
+        "valueRejectedWithinHue": 7742,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 88,
+          "bbox": [
+            0,
+            0,
+            16,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 53,
+          "bbox": [
+            0,
+            44,
+            5,
+            17
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 39,
+          "bbox": [
+            0,
+            150,
+            7,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            24,
+            132,
+            7,
+            7
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            0,
+            23,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 21,
+          "bbox": [
+            0,
+            163,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            81,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.825,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 9650,
+        "saturationRejectedWithinHue": 4978,
+        "valueRejectedWithinHue": 1126,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 3739,
+          "bbox": [
+            136,
+            144,
+            68,
+            96
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "circularity",
+          "circularity": 0.435,
+          "fillRatio": 0.427
+        },
+        {
+          "area": 123,
+          "bbox": [
+            117,
+            230,
+            23,
+            10
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.34,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 6679,
+        "saturationRejectedWithinHue": 5109,
+        "valueRejectedWithinHue": 4926,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 88,
+          "bbox": [
+            0,
+            0,
+            16,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 53,
+          "bbox": [
+            0,
+            44,
+            5,
+            17
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            0,
+            23,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            81,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.241,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 237,
+        "saturationRejectedWithinHue": 237,
+        "valueRejectedWithinHue": 237,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.552,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 10895,
+        "saturationRejectedWithinHue": 5354,
+        "valueRejectedWithinHue": 10185,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 33,
+          "bbox": [
+            0,
+            165,
+            5,
+            13
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 30,
+          "bbox": [
+            0,
+            14,
+            4,
+            16
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 21,
+          "bbox": [
+            0,
+            145,
+            4,
+            10
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 15,
+          "bbox": [
+            0,
+            96,
+            4,
+            8
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            179,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.701,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 9522,
+        "saturationRejectedWithinHue": 3098,
+        "valueRejectedWithinHue": 1093,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 5699,
+          "bbox": [
+            99,
+            144,
+            104,
+            96
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "circularity",
+          "circularity": 0.277,
+          "fillRatio": 0.609
+        }
+      ],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.596,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 5293,
+        "saturationRejectedWithinHue": 3194,
+        "valueRejectedWithinHue": 5011,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.284,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 380,
+        "saturationRejectedWithinHue": 364,
+        "valueRejectedWithinHue": 380,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10\\screenshots\\blue-real-center.jpg",
+      "sha256": "9127081b9b667524d024288a2d5e14055ba4c48720ad4ed737eb09aa5dc7e8f0",
+      "crop": "full",
+      "expectedCategory": null,
+      "note": "unknown; annotated historical screenshot",
+      "color": "blue",
+      "detected": true,
+      "rejectionReason": null,
+      "position": [
+        165,
+        167
+      ],
+      "circularity": 0.66,
+      "fillRatio": 0.752,
+      "runtimeMs": 0.538,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 10326,
+        "saturationRejectedWithinHue": 530,
+        "valueRejectedWithinHue": 1433,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 8904,
+          "bbox": [
+            104,
+            106,
+            123,
+            94
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": null,
+          "circularity": 0.66,
+          "fillRatio": 0.752
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10\\screenshots\\blue-real-center.jpg",
+      "sha256": "9127081b9b667524d024288a2d5e14055ba4c48720ad4ed737eb09aa5dc7e8f0",
+      "crop": "full",
+      "expectedCategory": null,
+      "note": "unknown; annotated historical screenshot",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.591,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 4303,
+        "saturationRejectedWithinHue": 176,
+        "valueRejectedWithinHue": 1970,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 44,
+          "bbox": [
+            0,
+            229,
+            8,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 40,
+          "bbox": [
+            216,
+            111,
+            9,
+            8
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 40,
+          "bbox": [
+            107,
+            111,
+            9,
+            8
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            162,
+            164,
+            7,
+            7
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    }
+  ],
+  "compareRef": "488b837",
+  "before": [
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.629,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 11677,
+        "saturationRejectedWithinHue": 7619,
+        "valueRejectedWithinHue": 7742,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 88,
+          "bbox": [
+            0,
+            0,
+            16,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 53,
+          "bbox": [
+            0,
+            44,
+            5,
+            17
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 39,
+          "bbox": [
+            0,
+            150,
+            7,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            24,
+            132,
+            7,
+            7
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            0,
+            23,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 21,
+          "bbox": [
+            0,
+            163,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            81,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.72,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 9650,
+        "saturationRejectedWithinHue": 4978,
+        "valueRejectedWithinHue": 1126,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 3739,
+          "bbox": [
+            136,
+            144,
+            68,
+            96
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "circularity",
+          "circularity": 0.435,
+          "fillRatio": 0.427
+        },
+        {
+          "area": 123,
+          "bbox": [
+            117,
+            230,
+            23,
+            10
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.333,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 6679,
+        "saturationRejectedWithinHue": 5109,
+        "valueRejectedWithinHue": 4926,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 88,
+          "bbox": [
+            0,
+            0,
+            16,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 53,
+          "bbox": [
+            0,
+            44,
+            5,
+            17
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            0,
+            23,
+            5,
+            9
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            81,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-001-original.png",
+      "sha256": "e0781cf8b279012e28beab0a69a9ffae0f43104827b8b96ec53edf6916b79334",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.248,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 237,
+        "saturationRejectedWithinHue": 237,
+        "valueRejectedWithinHue": 237,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.59,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 10895,
+        "saturationRejectedWithinHue": 5354,
+        "valueRejectedWithinHue": 10185,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 33,
+          "bbox": [
+            0,
+            165,
+            5,
+            13
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 30,
+          "bbox": [
+            0,
+            14,
+            4,
+            16
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 21,
+          "bbox": [
+            0,
+            145,
+            4,
+            10
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 15,
+          "bbox": [
+            0,
+            96,
+            4,
+            8
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 12,
+          "bbox": [
+            0,
+            179,
+            4,
+            7
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "full",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.673,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 9522,
+        "saturationRejectedWithinHue": 3098,
+        "valueRejectedWithinHue": 1093,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 5699,
+          "bbox": [
+            99,
+            144,
+            104,
+            96
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "circularity",
+          "circularity": 0.277,
+          "fillRatio": 0.609
+        }
+      ],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "blue",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.317,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 5293,
+        "saturationRejectedWithinHue": 3194,
+        "valueRejectedWithinHue": 5011,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10-remediation\\vision\\yellow-center-initial\\frame-010-original.png",
+      "sha256": "3bdf2e0548a63bf4fad54ce97831f2a36f8287444a74cbc9c385d2ad4892cc1f",
+      "crop": "background_top_120",
+      "expectedCategory": "yellow",
+      "note": "clipped yellow target; rejection expected",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "mask_too_small",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.291,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 380,
+        "saturationRejectedWithinHue": 364,
+        "valueRejectedWithinHue": 380,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [],
+      "expectedDetection": false,
+      "falsePositiveObservation": false
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10\\screenshots\\blue-real-center.jpg",
+      "sha256": "9127081b9b667524d024288a2d5e14055ba4c48720ad4ed737eb09aa5dc7e8f0",
+      "crop": "full",
+      "expectedCategory": null,
+      "note": "unknown; annotated historical screenshot",
+      "color": "blue",
+      "detected": true,
+      "rejectionReason": null,
+      "position": [
+        165,
+        167
+      ],
+      "circularity": 0.66,
+      "fillRatio": 0.752,
+      "runtimeMs": 0.508,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 10326,
+        "saturationRejectedWithinHue": 530,
+        "valueRejectedWithinHue": 1433,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 8904,
+          "bbox": [
+            104,
+            106,
+            123,
+            94
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": null,
+          "circularity": 0.66,
+          "fillRatio": 0.752
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    },
+    {
+      "source": "evidence\\phase4\\2026-11-10\\screenshots\\blue-real-center.jpg",
+      "sha256": "9127081b9b667524d024288a2d5e14055ba4c48720ad4ed737eb09aa5dc7e8f0",
+      "crop": "full",
+      "expectedCategory": null,
+      "note": "unknown; annotated historical screenshot",
+      "color": "yellow",
+      "detected": false,
+      "rejectionReason": "no_circular_candidate",
+      "position": [
+        null,
+        null
+      ],
+      "circularity": 0,
+      "fillRatio": 0,
+      "runtimeMs": 0.627,
+      "hsvDiagnostics": {
+        "hueAcceptedPixels": 4303,
+        "saturationRejectedWithinHue": 176,
+        "valueRejectedWithinHue": 1970,
+        "note": "Counts overlap; before morphology, processing resolution"
+      },
+      "contours": [
+        {
+          "area": 44,
+          "bbox": [
+            0,
+            229,
+            8,
+            11
+          ],
+          "touchesFrameEdge": true,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 40,
+          "bbox": [
+            216,
+            111,
+            9,
+            8
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 40,
+          "bbox": [
+            107,
+            111,
+            9,
+            8
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        },
+        {
+          "area": 24,
+          "bbox": [
+            162,
+            164,
+            7,
+            7
+          ],
+          "touchesFrameEdge": false,
+          "rejectionReason": "min_area"
+        }
+      ],
+      "expectedDetection": null,
+      "falsePositiveObservation": null
+    }
+  ]
+}

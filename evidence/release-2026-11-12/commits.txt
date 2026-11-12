@@ -1,0 +1,30 @@
+1246f7a Preserve live qualification HTTP rejection stage and controller reason
+c0ce422 Reconcile merged PR status and document sensor commissioning release boundaries
+9fe42b1 Prepare explicit sensor-only Pi preflight and non-actuating bench procedure
+a5d488c Retain mock assertion diagnostics and correct no-echo replay timeline
+4d7eaa4 Qualify every sensor touch profile and replay native no-echo faults into Pi
+a307c8e Reject clipped vision targets and preserve validated simulation recording evidence
+488b837 Merge remote-tracking branch 'origin/main' into release/sensor-commissioning
+6e0d578 Merge pull request #7 from diyan07-ctrl/phase5/software-hardware-readiness
+edf08eb Normalize software readiness document endings
+bb2370f Freeze Phase 5 software qualification evidence and pending physical gates
+b84f485 Permit guarded manual virtual output with physical monitoring while inhibiting travel
+ff4b1ab Verify touch wire-to-interaction flow and physical source isolation from PyBullet
+dae02f9 Guard telemetry age quantization and add reproducible firmware qualification runner
+d086519 Bound touch capabilities and ages, test real wire records and document commissioning gates
+6c58563 Add non-actuating sensor firmware, aged telemetry provider and optional OLED
+e5ac1be Merge pull request #6 from diyan07-ctrl/phase4/pi-hil-qualification
+cb05e92 Record passing headless HIL endurance and remaining qualification blockers
+ff38276 Record optional preview write failures without terminating the HIL loop
+e20acdd Publish acquired ranges promptly and order STOP before recovery handshake
+379a7ad Recover lost simulation datagrams without extending challenge lifetime
+9803e3b Use high-resolution monotonic timing for the Windows simulator cadence
+0c067a3 Retain sensor fault edges and lossless real-camera qualification frames
+3a8a1fd Fix sensor snapshot timing and independent virtual acquisition cadence
+1cb9a0e Link current hardware qualification from validation and simulation guides
+32dc6e5 Record real Pi HIL qualification, measurements, and release blockers
+d29dfdb Fix stale simulator guard observations across explicit re-enable
+be9fe3f Fix Windows UDP recovery and document Phase 4 qualification
+bf22a79 Phase 4: docs/PHASE4.md
+928c66c Phase 4: tests/test_pi_preflight.py
+79adc7a Phase 4: tools/pi-preflight.py

@@ -1,0 +1,5 @@
+{"id": "ENV-WIN", "started_utc": "2026-11-10T10:55:34.951432+00:00", "commit": "9803e3bb1794f38c7971c85b5cc34581d2ba3677", "argv": ["git", "status", "--short", "--branch"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107"}
+## phase4/pi-hil-qualification...origin/phase4/pi-hil-qualification
+ M software/pi/quadruped/bridge.py
+ M tests/test_phase4_remediation.py
+?? evidence/phase4/2026-11-10-remediation/

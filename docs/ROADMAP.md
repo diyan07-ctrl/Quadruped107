@@ -1,5 +1,7 @@
 # Roadmap
 
+Current checkpoint (12 November 2026): [executed non-actuating release report](SENSOR_COMMISSIONING_RELEASE.md) and [exact sensor-only bench procedure](SENSOR_BENCH.md). Interface allocations are not electrical qualification; physical ARM remains inhibited. Earlier checkpoints below retain their historical scope.
+
 ## Phase 2 software checkpoint and Phase 3 candidates
 
 Phase 2 implements virtual sensing, conservative exploration, touch fragments, tracking priority, bidirectional simulation telemetry and deterministic scenario tests. These are SIMULATED / AUTOMATED TESTED when supported by CI; they do not complete physical obstacle avoidance or interaction acceptance.

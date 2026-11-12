@@ -1,0 +1,27 @@
+test_bad_packet_cancels_current_placeholder_and_cannot_rearm (test_two_touch.TwoTouchRuntimeTests.test_bad_packet_cancels_current_placeholder_and_cannot_rearm) ... ok
+test_d6_back_and_d7_front_requests_reach_controller_without_physical_commands (test_two_touch.TwoTouchRuntimeTests.test_d6_back_and_d7_front_requests_reach_controller_without_physical_commands) ... ok
+test_explicit_stop_held_release_and_reconnect_never_reenable (test_two_touch.TwoTouchRuntimeTests.test_explicit_stop_held_release_and_reconnect_never_reenable) ... ok
+test_front_bottom_contact_stops_manual_virtual_output (test_two_touch.TwoTouchRuntimeTests.test_front_bottom_contact_stops_manual_virtual_output) ... ok
+test_manual_takeover_and_dashboard_match_actual_profile (test_two_touch.TwoTouchRuntimeTests.test_manual_takeover_and_dashboard_match_actual_profile) ... ok
+test_no_echo_and_timeout_cancel_without_recovery_arm (test_two_touch.TwoTouchRuntimeTests.test_no_echo_and_timeout_cancel_without_recovery_arm) ... ok
+test_simultaneous_contact_cancels_interaction (test_two_touch.TwoTouchRuntimeTests.test_simultaneous_contact_cancels_interaction) ... ok
+test_back_and_front_are_independent_semantic_events (test_two_touch.TwoTouchTests.test_back_and_front_are_independent_semantic_events) ... ok
+test_boot_held_and_reset_do_not_create_activation (test_two_touch.TwoTouchTests.test_boot_held_and_reset_do_not_create_activation) ... ok
+test_both_semantic_requests_use_labeled_bounded_placeholders (test_two_touch.TwoTouchTests.test_both_semantic_requests_use_labeled_bounded_placeholders) ... ok
+test_bounce_held_release_and_repeated_activation (test_two_touch.TwoTouchTests.test_bounce_held_release_and_repeated_activation) ... ok
+test_capability_mismatch_and_absent_bits_fail_closed (test_two_touch.TwoTouchTests.test_capability_mismatch_and_absent_bits_fail_closed) ... ok
+test_corrupt_or_duplicate_packet_invalidates_until_new_valid_record (test_two_touch.TwoTouchTests.test_corrupt_or_duplicate_packet_invalidates_until_new_valid_record) ... ok
+test_exact_mapping_and_no_fictitious_coverage (test_two_touch.TwoTouchTests.test_exact_mapping_and_no_fictitious_coverage) ... ok
+test_explicit_config_and_unchanged_virtual_defaults (test_two_touch.TwoTouchTests.test_explicit_config_and_unchanged_virtual_defaults) ... ok
+test_front_contact_is_protective_outside_explicit_placeholder_mode (test_two_touch.TwoTouchTests.test_front_contact_is_protective_outside_explicit_placeholder_mode) ... ok
+test_invalid_missing_and_stale_observations_stop (test_two_touch.TwoTouchTests.test_invalid_missing_and_stale_observations_stop) ... ok
+test_manual_takeover_disarmed_fault_and_old_events_never_execute (test_two_touch.TwoTouchTests.test_manual_takeover_disarmed_fault_and_old_events_never_execute) ... ok
+test_mapping_changes_reset_existing_event_state (test_two_touch.TwoTouchTests.test_mapping_changes_reset_existing_event_state) ... ok
+test_placeholder_context_never_waives_body_safety_or_range_clearance (test_two_touch.TwoTouchTests.test_placeholder_context_never_waives_body_safety_or_range_clearance) ... ok
+test_simultaneous_contacts_stop_and_never_choose_an_order (test_two_touch.TwoTouchTests.test_simultaneous_contacts_stop_and_never_choose_an_order) ... ok
+test_stuck_input_and_release_recovery_do_not_arm (test_two_touch.TwoTouchTests.test_stuck_input_and_release_recovery_do_not_arm) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 16.838s
+
+OK

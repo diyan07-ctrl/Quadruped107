@@ -1,0 +1,12 @@
+driver/policy: timeout, invalid, recovery, wrap, debounce, stuck, uncalibrated, direction, limits, rate, lease, STOP PASS
+policy PASS
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107-release\tools\test-firmware.py", line 97, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107-release\tools\test-firmware.py", line 38, in main
+    result=subprocess.run([str(binary)],cwd=ROOT,check=True,capture_output=True,text=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase4-toolchain\python311\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-release\\build\\phase5\\native\\sensor-default.exe']' returned non-zero exit status 3221226505.

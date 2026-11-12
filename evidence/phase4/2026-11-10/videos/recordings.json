@@ -1,0 +1,87 @@
+{
+  "release": "https://github.com/diyan07-ctrl/Quadruped107/releases/tag/phase4-hil-evidence-2026-11-10",
+  "archive": "phase4-hil-recordings.zip",
+  "archive_sha256": "84e9a8320615b09b1a4e3694932759315976a06a60c1a272d1e4c6d9a92d2372",
+  "recordings": [
+    {
+      "asset": "real-usb-camera.mp4",
+      "source": "build\\phase4\\real-usb-camera.mp4",
+      "note": "REAL Pi USB annotated MJPEG; encoded FPS includes duplicate frames",
+      "bytes": 1136009,
+      "sha256": "e4d11a80bbbeed3c2c64db179c82a08587fa4275fc569d981cdd5b06d328e71d",
+      "decoded_first_frame": true,
+      "frame_count": 625.0,
+      "container_fps": 25.0,
+      "duration_s": 25.0,
+      "capture_commands": [
+        "ffmpeg -f gdigrab -framerate 10 -i 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build' -t 45 -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' -c:v libx264 -preset ultrafast -crf 28 -pix_fmt yuv420p build/phase4/pybullet-manual-lan.mp4",
+        "ffmpeg -i http://127.0.0.1:17000/video-feed -t 25 -an -c:v libx264 -preset ultrafast -crf 25 -pix_fmt yuv420p build/phase4/real-usb-camera.mp4",
+        "twin-probe.py control record=true: World.render_bgr() -> MJPEG AVI at 5 FPS; actual executed World state"
+      ]
+    },
+    {
+      "asset": "pybullet-manual-lan.mp4",
+      "source": "build\\phase4\\pybullet-manual-lan.mp4",
+      "note": "Actual Windows PyBullet GUI LAN-session capture; partial demonstration",
+      "bytes": 561172,
+      "sha256": "0a085d1f04fb929a6d514df9b23fd6c174b0f1b382c43d82680089946a5e6ba1",
+      "decoded_first_frame": true,
+      "frame_count": 450.0,
+      "container_fps": 10.0,
+      "duration_s": 45.0,
+      "capture_commands": [
+        "ffmpeg -f gdigrab -framerate 10 -i 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build' -t 45 -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' -c:v libx264 -preset ultrafast -crf 28 -pix_fmt yuv420p build/phase4/pybullet-manual-lan.mp4",
+        "ffmpeg -i http://127.0.0.1:17000/video-feed -t 25 -an -c:v libx264 -preset ultrafast -crf 25 -pix_fmt yuv420p build/phase4/real-usb-camera.mp4",
+        "twin-probe.py control record=true: World.render_bgr() -> MJPEG AVI at 5 FPS; actual executed World state"
+      ]
+    },
+    {
+      "asset": "real-camera-dashboard.mp4",
+      "source": "build\\phase4\\real-camera-dashboard.mp4",
+      "note": "FAILED near-black browser GDI capture; not qualifying evidence",
+      "bytes": 9457,
+      "sha256": "9c36bd7c8b5fffc8d1681fc697b2a9dc861507402473590161b6a34a262e2da3",
+      "decoded_first_frame": true,
+      "frame_count": 125.0,
+      "container_fps": 5.0,
+      "duration_s": 25.0,
+      "capture_commands": [
+        "ffmpeg -f gdigrab -framerate 10 -i 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build' -t 45 -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' -c:v libx264 -preset ultrafast -crf 28 -pix_fmt yuv420p build/phase4/pybullet-manual-lan.mp4",
+        "ffmpeg -i http://127.0.0.1:17000/video-feed -t 25 -an -c:v libx264 -preset ultrafast -crf 25 -pix_fmt yuv420p build/phase4/real-usb-camera.mp4",
+        "twin-probe.py control record=true: World.render_bgr() -> MJPEG AVI at 5 FPS; actual executed World state"
+      ]
+    },
+    {
+      "asset": "headless-attempt.avi",
+      "source": "build\\phase4\\headless-attempt.avi",
+      "note": "Earlier actual TinyRenderer receiver capture; failed attempt, mostly disarmed",
+      "bytes": 26674872,
+      "sha256": "06500c374612a4c6911da63accccba12239183af925e4c01edb9d14eac39222f",
+      "decoded_first_frame": true,
+      "frame_count": 970.0,
+      "container_fps": 5.0,
+      "duration_s": 194.0,
+      "capture_commands": [
+        "ffmpeg -f gdigrab -framerate 10 -i 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build' -t 45 -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' -c:v libx264 -preset ultrafast -crf 28 -pix_fmt yuv420p build/phase4/pybullet-manual-lan.mp4",
+        "ffmpeg -i http://127.0.0.1:17000/video-feed -t 25 -an -c:v libx264 -preset ultrafast -crf 25 -pix_fmt yuv420p build/phase4/real-usb-camera.mp4",
+        "twin-probe.py control record=true: World.render_bgr() -> MJPEG AVI at 5 FPS; actual executed World state"
+      ]
+    },
+    {
+      "asset": "headless-blue-attempt.avi",
+      "source": "build\\phase4\\headless-twin\\virtual-network.avi",
+      "note": "Later actual TinyRenderer blue-test attempt; not a successful synchronized demonstration",
+      "bytes": 179636664,
+      "sha256": "923c033dc7595ec62a56573f30c3d8f2badd5583ff4c4719ebf78faf002afa12",
+      "decoded_first_frame": true,
+      "frame_count": 6520.0,
+      "container_fps": 5.0,
+      "duration_s": 1304.0,
+      "capture_commands": [
+        "ffmpeg -f gdigrab -framerate 10 -i 'title=Bullet Physics ExampleBrowser using OpenGL3+ [btgl] Release build' -t 45 -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' -c:v libx264 -preset ultrafast -crf 28 -pix_fmt yuv420p build/phase4/pybullet-manual-lan.mp4",
+        "ffmpeg -i http://127.0.0.1:17000/video-feed -t 25 -an -c:v libx264 -preset ultrafast -crf 25 -pix_fmt yuv420p build/phase4/real-usb-camera.mp4",
+        "twin-probe.py control record=true: World.render_bgr() -> MJPEG AVI at 5 FPS; actual executed World state"
+      ]
+    }
+  ]
+}

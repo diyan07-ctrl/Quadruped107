@@ -1,0 +1,82 @@
+ffmpeg-win-x86_64-v7.1.exe : ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg 
+developers
+At line:2 char:1
++ & 'build/phase4/recording-tools/imageio_ffmpeg/binaries/ffmpeg-win-x8 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ffmpeg version ...mpeg developers:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  built with gcc 14.2.0 (Rev1, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect 
+--enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma 
+--enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp 
+--enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx 
+--enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz 
+--enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 
+--enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi 
+--enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora 
+--enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex 
+--enable-libvorbis --enable-librubberband
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+[gdigrab @ 0000022b1fc6fb40] Found window Quadruped107 - REAL Pi camera / VIRTUAL actuators, capturing 1686x981x32 at 
+(0,0)
+[gdigrab @ 0000022b1fc6fb40] Stream #0: not enough frames to estimate rate; consider increasing probesize
+Input #0, gdigrab, from 'title=Quadruped107 - REAL Pi camera / VIRTUAL actuators':
+  Duration: N/A, start: 1794313734.796594, bitrate: 529273 kb/s
+  Stream #0:0: Video: bmp, bgr0, 1686x981, 529273 kb/s, 10 fps, 1000k tbr, 1000k tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (bmp (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0000022b1fc74f80] height not divisible by 2 (1686x981)
+[vost#0:0/libx264 @ 0000022b1fc74c00] Error while opening encoder - maybe incorrect parameters such as bit_rate, rate, 
+width or height.
+[vf#0:0 @ 0000022b1fc77000] Error sending frames to consumers: Generic error in an external library
+[vf#0:0 @ 0000022b1fc77000] Task finished with error code: -542398533 (Generic error in an external library)
+[vf#0:0 @ 0000022b1fc77000] Terminating thread with return code -542398533 (Generic error in an external library)
+[vost#0:0/libx264 @ 0000022b1fc74c00] Could not open encoder before EOF
+[vost#0:0/libx264 @ 0000022b1fc74c00] Task finished with error code: -22 (Invalid argument)
+[vost#0:0/libx264 @ 0000022b1fc74c00] Terminating thread with return code -22 (Invalid argument)
+[out#0/mp4 @ 0000022b1fc73840] Nothing was written into output file, because at least one of its streams received no 
+packets.
+frame=    0 fps=0.0 q=0.0 Lsize=       0KiB time=N/A bitrate=N/A speed=N/A    
+Conversion failed!
+ffmpeg-win-x86_64-v7.1.exe : ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg 
+developers
+At line:2 char:327
++ ... e.log 2>&1; & 'build/phase4/recording-tools/imageio_ffmpeg/binaries/f ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ffmpeg version ...mpeg developers:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  built with gcc 14.2.0 (Rev1, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect 
+--enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma 
+--enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp 
+--enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx 
+--enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz 
+--enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 
+--enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi 
+--enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora 
+--enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex 
+--enable-libvorbis --enable-librubberband
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+[mov,mp4,m4a,3gp,3g2,mj2 @ 00000266f013f900] Format mov,mp4,m4a,3gp,3g2,mj2 detected only with low score of 1, 
+misdetection possible!
+[mov,mp4,m4a,3gp,3g2,mj2 @ 00000266f013f900] moov atom not found
+[in#0 @ 00000266f013f500] Error opening input: Invalid data found when processing input
+Error opening input file build/phase4-remediation/recording-sample.mp4.
+Error opening input files: Invalid data found when processing input

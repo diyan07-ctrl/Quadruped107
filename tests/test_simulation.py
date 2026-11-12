@@ -6,6 +6,7 @@ import sys
 import threading
 import time
 import unittest
+from unittest.mock import Mock, patch
 import cv2
 import numpy as np
 
@@ -135,6 +136,44 @@ class BridgeContractTests(unittest.TestCase):
             stop.set()
             thread.join(1)
             if server.socket.fileno()!=-1: server.close()
+
+    def test_client_recovers_when_simulator_starts_late(self):
+        server=TraceServer(port=0)
+        address=server.address
+        server.close()
+        state=dict(armed=False,targets=[300]*8,activeMask=0)
+        client=TraceClient(*address,lambda:state)
+        client.start()
+        try:
+            time.sleep(2*LEASE)  # Probe the closed port before binding the receiver.
+            self.assertFalse(client.snapshot()["connected"])
+            server=TraceServer(*address)
+
+            def ready():
+                server.poll()
+                return client.snapshot()["readyToArm"]
+
+            wait_for(ready)
+            self.assertFalse(server.receiver.snapshot()["armed"])
+            self.assertEqual(server.receiver.snapshot()["activeMask"],0)
+        finally:
+            client.close()
+            if server.socket.fileno()!=-1: server.close()
+
+    def test_receiver_continues_after_udp_reset(self):
+        server=TraceServer(port=0)
+        packet=encode(dict(v=1,type="hello",client=self.client))
+        udp=Mock()
+        udp.recvfrom.side_effect=[ConnectionResetError, (packet,self.peer), BlockingIOError]
+        try:
+            with patch.object(server,"socket",udp):
+                state=server.poll()
+            reply,peer=udp.sendto.call_args.args
+            self.assertEqual(peer,self.peer)
+            self.assertEqual(decode(reply)["type"],"challenge")
+            self.assertFalse(state["armed"])
+        finally:
+            server.close()
 
 
 @unittest.skipUnless(importlib.util.find_spec("pybullet"),"NOT TESTED: install simulation/requirements.txt")

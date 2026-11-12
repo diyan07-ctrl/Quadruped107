@@ -1,0 +1,104 @@
+{
+  "provisional": true,
+  "fixedBase": true,
+  "steps": 4474,
+  "basePosition": [
+    -0.07450840461009828,
+    -0.08222478463194131,
+    0.15360040079781195
+  ],
+  "baseEuler": [
+    0.0020022847228765954,
+    0.10951353269255841,
+    0.0023718623583088285
+  ],
+  "jointCount": 8,
+  "jointNames": [
+    "shoulder_fl",
+    "leg_fl",
+    "shoulder_fr",
+    "leg_fr",
+    "shoulder_bl",
+    "leg_bl",
+    "shoulder_br",
+    "leg_br"
+  ],
+  "maxJointErrorRad": 1.7747133479918744,
+  "maxContactCount": 16,
+  "maxSelfCollisionContacts": 0,
+  "fault": "Joint limit excursion",
+  "physicalLocomotionValidated": false,
+  "solverIterations": 100,
+  "subSteps": 4,
+  "modeledVelocityLimitRadS": 3.0,
+  "positionGain": 0.1,
+  "maxActiveJointErrorRad": 0.0,
+  "measurementStartStep": 0,
+  "activeJointRmsErrorRad": null,
+  "maxAppliedMotorTorqueNm": 0.0,
+  "currentJointPositions": [
+    1.223167065135365,
+    -1.3094072255428948,
+    1.1836472664364375,
+    -1.2140468679747003,
+    1.0933261408602788,
+    -1.103157133799441,
+    1.093221479823469,
+    -1.1034596526892728
+  ],
+  "currentJointTargets": [
+    0.08198757763975155,
+    0.46530612244897956,
+    -0.12086330935251798,
+    -0.5333333333333333,
+    0.019672131147540985,
+    -0.5258426966292135,
+    0.06435331230283911,
+    0.46530612244897956
+  ],
+  "activeMask": 0,
+  "smoothingRateRadS": 0.0,
+  "motorTargets": [
+    1.2233816945816098,
+    -1.2969072255428946,
+    1.1834391594712987,
+    -1.2116657346472237,
+    1.105826140860279,
+    -1.1156571337994412,
+    1.1057214798234691,
+    -1.115959652689273
+  ],
+  "maxRawTargetJumpRad": 0.0,
+  "maxMotorTargetJumpRad": 0.0,
+  "selfContactPairs": {},
+  "baseMassKg": 0.08,
+  "fixtureConstraint": true,
+  "rendering": {
+    "renderer": "TinyRenderer",
+    "guiRequested": true,
+    "frames": 0,
+    "error": null
+  },
+  "fixturePositionErrorM": 0.14160258138884524,
+  "bridge": {
+    "virtual": true,
+    "armed": false,
+    "activeMask": 0,
+    "targets": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "activeMotion": null,
+    "server": "f684d8716522b56c9298d591ce4ce816",
+    "seq": -1,
+    "invalid": 0,
+    "fault": "Waiting for explicit virtual connection",
+    "ready": false
+  }
+}

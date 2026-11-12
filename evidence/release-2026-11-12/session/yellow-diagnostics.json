@@ -1,0 +1,60 @@
+{
+  "available": true,
+  "detection": {
+    "area": 0,
+    "bbox": null,
+    "candidates": [],
+    "circleArea": 0,
+    "circularity": 0,
+    "contourDiagnostics": [],
+    "detected": false,
+    "fillRatio": 0,
+    "frameHeight": 480,
+    "frameWidth": 640,
+    "hsvDiagnostics": {
+      "hueAcceptedPixels": 9563,
+      "note": "Counts overlap; before morphology, processing resolution",
+      "saturationRejectedWithinHue": 8898,
+      "valueRejectedWithinHue": 797
+    },
+    "maskArea": 144,
+    "offset": null,
+    "processingHeight": 480,
+    "processingWidth": 640,
+    "radius": null,
+    "rejectReason": "mask_too_small",
+    "x": null,
+    "y": null
+  },
+  "frameAgeS": 0.19467398799997682,
+  "sequence": 124,
+  "settings": {
+    "command_period": 0.6,
+    "enter_error": 0.32,
+    "exit_error": 0.2,
+    "hsv_lower": [
+      20,
+      70,
+      70
+    ],
+    "hsv_upper": [
+      45,
+      255,
+      255
+    ],
+    "lock_distance": 0.2,
+    "loss_seconds": 0.35,
+    "max_age": 0.5,
+    "max_radius_ratio": 0.38,
+    "min_area": 150,
+    "min_circularity": 0.55,
+    "min_frames": 2,
+    "min_radius": 8,
+    "reacquire_seconds": 0.6,
+    "search_enabled": false,
+    "search_seconds": 2.0,
+    "smoothing_alpha": 0.35,
+    "target_color": "yellow"
+  },
+  "targetColor": "yellow"
+}

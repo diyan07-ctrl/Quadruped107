@@ -1,5 +1,9 @@
 # Proposed wiring
 
+Phase 6 operator-reported connections: URM37 COMP/TRIG D4 and ECHO/PWM D2; **D6 BACK_TOUCH and D7 FRONT_BOTTOM_TOUCH only**. No third touch, OLED/LCD, HC-SR04, PCA or servo supply is part of this bench. Electrical identification is pending; these assignments do not qualify voltage, polarity or module presence. See [Phase 6](PHASE6_SENSOR_COMMISSIONING.md).
+
+Current checkpoint (12 November 2026): [executed non-actuating release report](SENSOR_COMMISSIONING_RELEASE.md) and [exact sensor-only bench procedure](SENSOR_BENCH.md). Interface allocations are not electrical qualification; physical ARM remains inhibited. Earlier checkpoints below retain their historical scope.
+
 ## Phase 2 virtual-only interfaces
 
 No sensor wiring is performed or validated. Virtual URM37/HC-SR04 identities describe configurable ray approximations, not known module revisions. Proposed physical assignments below remain unverified and must be checked against actual pin labels/mode/supply/logic levels before use. Real ultrasonic triggers must be scheduled to avoid acoustic crosstalk; simultaneous virtual rays do not qualify that behavior. See [sensor contract](SENSORS.md).
@@ -75,3 +79,6 @@ Use the [final architecture diagram](ARCHITECTURE.md) and [Power distribution](.
 A0/A1 are reserved for pack/rail sense; no raw battery connection is permitted. Divider ratio, ADC reference, maximum fault voltage, leakage/clamps and logic-absent behavior require HV13 qualification. The independent power-good/UV/OV latch must inhibit OE and require explicit restart after servo-rail restoration. D12 is stop status only; it does not provide the independent power disconnect.
 
 A pull-up to Uno 5V is insufficient proof of safety when logic is absent and servo power remains. Verify breakout partial-power behavior and a qualified fail-safe buffer/supervisor circuit. [HARDWARE_VERIFICATION](HARDWARE_VERIFICATION.md) is the single unresolved-hardware register.
+# Phase 5 sensor-only software boundary
+
+The D4/D2 URM37, D6/D7/D9/D10/D11 touch and Pi-owned OLED allocations below remain conditional on actual board revision, interface mode, polarity and voltage identification. Only the explicitly selected V5 PWM-trigger profile is implemented; other URM37 revisions/modes are not auto-detected. HC-SR04 has no enabled physical driver. The new sensor-only target initializes no unconfigured interfaces and has no actuator driver. Keep it isolated from servos/PCA during first tests. See [exact next-session sensor procedures](SOFTWARE_READINESS.md). No wiring changes were made during software qualification.

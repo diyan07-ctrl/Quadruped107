@@ -1,4 +1,4 @@
-"""Unified bounded observations. No GPIO, I2C, serial telemetry or hardware drivers."""
+"""One bounded observation manager shared by explicitly selected sensor providers."""
 from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, asdict
@@ -9,6 +9,8 @@ import time
 from typing import Protocol
 
 TOUCH_IDS=("head","back","left","right","body")
+TWO_TOUCH_PROFILE='back_front_bottom_v1'
+TWO_TOUCH_IDS=('back','front_bottom')
 RANGE_IDS=("urm37","hcsr04")
 CLEARANCE_IDS=("sweep_forward","sweep_left","sweep_right","sweep_reverse")
 
@@ -28,14 +30,23 @@ class SensorConfig:
     stuck_seconds: float=2.0
     conflict_m: float=.2
     touch_count: int=5
+    touch_profile: str='legacy'
 
     def __post_init__(self):
         for key in ("min_m","max_m","rate_hz","timeout","expiration","debounce","stuck_seconds","conflict_m"):
             if not number(getattr(self,key),.001,120): raise ValueError("Invalid sensor "+key)
         if not self.min_m<self.max_m or not self.debounce<self.stuck_seconds:
             raise ValueError("Invalid sensor limits")
-        if type(self.touch_count) is not int or not 3<=self.touch_count<=5:
-            raise ValueError("Require three to five virtual touches")
+        if type(self.touch_count) is not int or not 2<=self.touch_count<=5:
+            raise ValueError("Require two to five touches")
+        if self.touch_profile not in ('legacy',TWO_TOUCH_PROFILE):
+            raise ValueError('Unknown touch profile')
+        if (self.touch_count==2)!=(self.touch_profile==TWO_TOUCH_PROFILE):
+            raise ValueError('Two physical touches require the explicit back/front-bottom profile')
+
+    @property
+    def touch_ids(self):
+        return TWO_TOUCH_IDS if self.touch_profile==TWO_TOUCH_PROFILE else TOUCH_IDS[:self.touch_count]
 
     @classmethod
     def load(cls,path):
@@ -52,6 +63,9 @@ class SensorObservation:
     unit: str
     valid: bool
     error: str | None=None
+    sender_age: float=0.0
+    source_seq: int | None=None
+    source_sampled_at: float | None=None
 
     def snapshot(self,now,expiration):
         age=now-self.observed_at
@@ -69,8 +83,14 @@ class SensorBackend(Protocol):
 
 class SensorManager:
     """One atomic latest batch; sender age + round-trip age bound, never receive-time relabeling."""
-    def __init__(self,config=None,*,clock=time.monotonic):
+    def __init__(self,config=None,*,clock=time.monotonic,source='virtual'):
+        if source not in {'virtual','physical_uno','test'}: raise ValueError('Unknown sensor source')
+        self.source=source
         self.config=config or SensorConfig()
+        if self.config.touch_profile==TWO_TOUCH_PROFILE and source!='physical_uno':
+            raise ValueError('Back/front-bottom wiring profile requires physical_uno source')
+        if source=='physical_uno' and (self.config.expiration>.3 or self.config.timeout>.3):
+            raise ValueError('Physical monitoring cannot loosen the 300 ms freshness limit')
         self.clock=clock
         self.lock=threading.RLock()
         self.session=None
@@ -81,10 +101,16 @@ class SensorManager:
         self.touch={}
         self.rejected=0
         self.last_received=None
+        self.last_transport_age=0.0
+        self.rejection_reasons={}
+        self.recent_batches=deque(maxlen=32)
+        self.last_fault=None
+        self.fault_events=deque(maxlen=8)
+        self.was_fault=False
 
     @property
     def registry(self):
-        return {**{k:"range" for k in RANGE_IDS},**{"touch_"+k:"touch" for k in TOUCH_IDS[:self.config.touch_count]},
+        return {**{k:"range" for k in RANGE_IDS},**{"touch_"+k:"touch" for k in self.config.touch_ids},
                 **{k:"clearance" for k in CLEARANCE_IDS}}
 
     def reset(self,session=None):
@@ -95,6 +121,7 @@ class SensorManager:
             self.events.clear()
             self.touch.clear()
             self.last_received=None
+            self.was_fault=False
 
     def ingest(self,batch,*,session="fixture",transport_age=0.0):
         now=self.clock()
@@ -126,27 +153,44 @@ class SensorManager:
                     valid=False
                     error="Acquisition timeout"
                 if not valid: value=None
+                source_seq=record.get('sampleSeq')
+                sampled_at=record.get('sampledAtMonotonic')
+                if source_seq is not None and (type(source_seq) is not int or source_seq<0): raise ValueError('Sensor sample sequence')
+                if sampled_at is not None and not number(sampled_at,0,1e12): raise ValueError('Sensor source clock')
                 parsed[identity]=SensorObservation(identity,kind,now-age-transport_age,value,
-                    "m" if kind=="range" else "boolean",valid,error)
+                    "m" if kind=="range" else "boolean",valid,error,age,source_seq,sampled_at)
             with self.lock:
                 if session!=self.session: self.reset(session)
                 if seq<=self.seq: raise ValueError("Duplicate/out-of-order telemetry")
                 self.seq=seq
                 self.last_received=now
+                self.last_transport_age=transport_age
                 # Missing records replace the batch and therefore cannot keep old evidence alive.
                 self.observations=parsed
                 self._update_touches(now)
+                self.recent_batches.append(dict(session=session,seq=seq,receivedAtMonotonic=now,
+                    transportAgeBoundS=transport_age,committedAtMonotonic=self.clock(),
+                    ranges={k:dict(senderAgeS=v.sender_age,valid=v.valid,value=v.measurement,
+                        sampleSeq=v.source_seq,sampledAtSenderMonotonic=v.source_sampled_at)
+                        for k,v in parsed.items() if k in RANGE_IDS}))
             return True
-        except (ValueError,TypeError,KeyError):
-            with self.lock: self.rejected+=1
+        except (ValueError,TypeError,KeyError) as error:
+            with self.lock:
+                self.rejected+=1
+                reason=str(error)[:80]
+                self.rejection_reasons[reason]=self.rejection_reasons.get(reason,0)+1
             return False
 
     def _event(self,identity,pressed,now):
         self.event_seq+=1
-        self.events.append(dict(seq=self.event_seq,id=identity,pressed=pressed,at=now))
+        event=dict(seq=self.event_seq,id=identity,pressed=pressed,at=now)
+        if self.config.touch_profile==TWO_TOUCH_PROFILE:
+            event.update(semantic='BACK_TOUCH' if identity=='touch_back' else 'FRONT_BOTTOM_TOUCH',
+                         gestureRequest='REAR_LOWER' if identity=='touch_back' else 'FRONT_LOWER')
+        self.events.append(event)
 
     def _update_touches(self,now):
-        for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
+        for identity in ("touch_"+k for k in self.config.touch_ids):
             obs=self.observations.get(identity)
             if not obs or not obs.valid or now-obs.observed_at>self.config.expiration:
                 self.touch.pop(identity,None)
@@ -164,28 +208,50 @@ class SensorManager:
                 self._event(identity,value,now)
 
     def snapshot(self):
-        now=self.clock()
         with self.lock:
+            # Clock and observations must belong to the same locked snapshot.
+            # Reading time first lets a concurrent newer sample appear future-dated,
+            # or lets a reader delayed on this lock hide genuine expiration.
+            now=self.clock()
             records={k:v.snapshot(now,self.config.expiration) for k,v in self.observations.items()}
+            for record in records.values(): record['virtual']=self.source!='physical_uno'
             touches={}
-            for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
+            for identity in ("touch_"+k for k in self.config.touch_ids):
                 record=records.get(identity)
                 state=self.touch.get(identity)
                 pressed=bool(state and state["pressed"])
                 stuck=bool(pressed and now-state["held_since"]>=self.config.stuck_seconds)
                 if stuck and record: record.update(valid=False,health="STUCK",error="Touch held beyond limit")
                 touches[identity]=dict(pressed=pressed,stuck=stuck,valid=bool(record and record["valid"]))
-            ranges=[records.get(k) for k in RANGE_IDS]
+            required_ranges=('urm37',) if self.source=='physical_uno' else RANGE_IDS
+            ranges=[records.get(k) for k in required_ranges]
             fault=None
             if not all(r and r["valid"] for r in ranges): fault="Missing, invalid or stale front range"
-            elif abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
+            elif len(ranges)==2 and abs(ranges[0]["measurement"]-ranges[1]["measurement"])>self.config.conflict_m:
                 fault="Conflicting front range observations"
             if not all(t["valid"] for t in touches.values()): fault=fault or "Missing, stale or stuck touch input"
+            if fault:
+                self.last_fault=dict(atMonotonic=now,session=self.session,seq=self.seq,reason=fault,
+                    receivedAgeS=None if self.last_received is None else now-self.last_received,
+                    transportAgeBoundS=self.last_transport_age,
+                    observations={k:dict(v) for k,v in records.items()})
+                if not self.was_fault: self.fault_events.append(self.last_fault)
+            self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
-            return dict(virtual=True,session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
+            return dict(virtual=self.source!='physical_uno',source=self.source,
+                        configuredTouchCount=self.config.touch_count,touchProfile=self.config.touch_profile,
+                        touchMapping=[dict(bit=i,pin=(6,7,9,10,11)[i],id='touch_'+name) for i,name in enumerate(self.config.touch_ids)],
+                        monitoringOnly=self.source=='physical_uno',
+                        safetyInhibits=([fault] if fault else []) +
+                            (['Physical monitoring: unmeasured HC-SR04 and swept clearance; navigation inhibited'] if self.source=='physical_uno' else []),
+                        session=self.session,seq=self.seq,config=asdict(self.config),observations=records,touches=touches,
                         events=fresh_events,front_m=min(r["measurement"] for r in ranges) if not fault else None,
                         fault=fault,rejected=self.rejected,
-                        receivedAge=None if self.last_received is None else now-self.last_received)
+                        receivedAge=None if self.last_received is None else now-self.last_received,
+                        diagnostics=dict(clockDomain='receiver monotonic; source timestamps diagnostic only',
+                            snapshotAtMonotonic=now,lastReceivedAtMonotonic=self.last_received,
+                            lastTransportAgeBoundS=self.last_transport_age,rejectionReasons=dict(self.rejection_reasons),
+                            lastFault=self.last_fault,faultEvents=list(self.fault_events),recentBatches=list(self.recent_batches)))
 
 
 def fixture_batch(seq=0,*,distance=2.0,touches=None,clearance=True,age=0.0,touch_count=5):

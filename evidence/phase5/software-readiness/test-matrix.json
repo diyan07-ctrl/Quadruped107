@@ -1,0 +1,81 @@
+{
+  "sourceCommit": "b84f48577c0e915384dcc335adc97a4e1b7fe29c",
+  "baselineCommit": "e5ac1be32c1b8211924b830fb4a148db5c568792",
+  "cleanSourceWorktree": true,
+  "physicalVerification": false,
+  "baseline": {
+    "pythonTests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "checksPassed": 14
+  },
+  "final": {
+    "pythonTests": 215,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "checksPassed": 14,
+    "nativeExecutablesPassed": 8,
+    "avrBuildsPassed": 6,
+    "firmwareRunnerChecksPassed": 8
+  },
+  "resources": [
+    {
+      "variant": "sensor-default",
+      "flashBytes": 5276,
+      "globalSramBytes": 410,
+      "stackAndLocalsHeadroomBytes": 1638,
+      "measuredStackHighWater": null
+    },
+    {
+      "variant": "sensor-configured",
+      "flashBytes": 7240,
+      "globalSramBytes": 510,
+      "stackAndLocalsHeadroomBytes": 1538,
+      "measuredStackHighWater": null
+    },
+    {
+      "variant": "sensor-three-low",
+      "flashBytes": 7240,
+      "globalSramBytes": 510,
+      "stackAndLocalsHeadroomBytes": 1538,
+      "measuredStackHighWater": null
+    },
+    {
+      "variant": "calibration",
+      "flashBytes": 5012,
+      "globalSramBytes": 459,
+      "stackAndLocalsHeadroomBytes": 1589,
+      "measuredStackHighWater": null
+    },
+    {
+      "variant": "production",
+      "flashBytes": 10430,
+      "globalSramBytes": 1120,
+      "stackAndLocalsHeadroomBytes": 928,
+      "measuredStackHighWater": null
+    },
+    {
+      "variant": "virtual",
+      "flashBytes": 7002,
+      "globalSramBytes": 927,
+      "stackAndLocalsHeadroomBytes": 1121,
+      "measuredStackHighWater": null
+    }
+  ],
+  "pending": [
+    "Actual module revisions/interfaces/voltages and calibrated physical distances",
+    "Electrical touch presence/bias, noise and boot-held behavior on real boards",
+    "OLED controller identity, supply/pull-ups, I2C reconnection and real screens",
+    "AVR stack high-water >=400 bytes margin and actual ISR/timing/bootloader watchdog reset behavior",
+    "Electrical OE/independent physical STOP, power and mechanical commissioning",
+    "Real closed-loop target pursuit and inherited Phase 4 controlled vision/GUI evidence"
+  ],
+  "historicalCiFailure": {
+    "run": 43050835744,
+    "commit": "6c585637d6a9da6b40c3303439bd8e5d0c1faabc",
+    "reason": "Preservation checker still hashed the evolving active sketch.yaml; corrected to retain strict gait/asset preservation"
+  },
+  "qualification": "PARTIAL: compile/mock/CI software passes; physical timing/resource/commissioning gates pending"
+}

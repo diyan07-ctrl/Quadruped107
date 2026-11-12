@@ -2,6 +2,10 @@
 
 An eight-joint quadruped for ENR107 Digital Electronics, with Raspberry Pi 4 vision and an Arduino Uno R3 motion controller.
 
+Phase 6 current hardware profile: **exactly two touches**, D6 BACK and D7 FRONT_BOTTOM, with [commissioning gates and commands](docs/PHASE6_SENSOR_COMMISSIONING.md). Use `deploy/sensors.two.json`, physical Uno sensing and explicit virtual actuators, with displays off. **SENSOR COMMISSIONING PARTIAL** until actual electrical, upload and sensor observations pass. Prior release results below retain their historical scope.
+
+12 November release candidate: **SOFTWARE READINESS PARTIAL**. See the [executed release report](docs/SENSOR_COMMISSIONING_RELEASE.md), [sensor-only bench procedure](docs/SENSOR_BENCH.md) and [frozen evidence](evidence/release-2026-11-12/README.md). PRs #6/#7 are merged into Phase 3; [draft integration PR #8](https://github.com/diyan07-ctrl/Quadruped107/pull/8) reconciles that history with main. Physical actuation remains disabled.
+
 Phase 3 adds stable blue/yellow target tracking, persisted dashboard preferences, explainable virtual decisions and bounded interactions. [Run the integrated laptop demonstration](docs/PHASE3.md); no Raspberry Pi access is required.
 
 This branch develops software before physical locomotion. It supports USB webcam capture, blue/yellow-target detection, browser control, a virtual Uno and an eight-joint CAD-mesh PyBullet fixture. Physical ARM is inhibited. The suspected damaged PCA9685 must remain disconnected and all servos unpowered.
@@ -58,7 +62,7 @@ Physical sensor drivers, qualified stopping and walking remain pending. The opti
 
 Primary: Pi 4 Model B (2 GB), mandatory Uno R3, eight MG996R/MG995-family servos and PCA9685. The functional USB2.0 PC CAMERA is the current camera candidate; CSI/Picamera2 remains optional. URM37, HC-SR04, touch sensors, three 7.4 V/1800 mAh packs and a power bank await module/power qualification. Pi 5, pan servo and OLED remain optional.
 
-Automated software and simulated integration evidence is in [VALIDATION](docs/VALIDATION.md). SSH access was blocked before authentication, so no new Pi performance or physical camera results are claimed. The articulated model uses original mesh surfaces with provisional pivots, masses and calibration; it does not establish physical walking feasibility.
+Automated software evidence is in [VALIDATION](docs/VALIDATION.md). The [current Phase 4 report](docs/PHASE4_VALIDATION.md) records authenticated Pi access, real USB-camera measurements and real LAN virtual-actuator testing. Phase 4 is **PARTIALLY VERIFIED**: yellow tracking and sustained freshness/endurance remain acceptance blockers. The articulated model uses original mesh surfaces with provisional pivots, masses and calibration; it does not establish physical walking feasibility.
 
 [Architecture](docs/ARCHITECTURE.md) · [Software](docs/SOFTWARE.md) · [Protocol](docs/PROTOCOL.md) · [Safety](docs/SAFETY.md) · [Calibration](docs/CALIBRATION.md) · [Hardware verification](docs/HARDWARE_VERIFICATION.md) · [Roadmap](docs/ROADMAP.md) · [Design decisions](docs/DECISIONS.md)
 

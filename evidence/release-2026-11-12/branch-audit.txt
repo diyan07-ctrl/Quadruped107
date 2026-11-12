@@ -1,0 +1,10 @@
+refs/remotes/origin/HEAD f62525024bd7322caa98ef5a32cef0bd4d453400
+refs/remotes/origin/main f62525024bd7322caa98ef5a32cef0bd4d453400
+refs/remotes/origin/phase0.1/architecture-power 5d35cb9cde69b4b775f58574742629e8e8dd072a
+refs/remotes/origin/phase0/architecture-foundation 05e5b1eb661ea4d720ec7c9dd76f2e06c3ab9815
+refs/remotes/origin/phase1/software-vision-digital-twin fa1588c28afb93a0f680c452ca957c3ed80d25be
+refs/remotes/origin/phase2/autonomy-sensors-simulation 4e031888b4041d6383beb1ca42a80848d4785063
+refs/remotes/origin/phase3/vision-recording-readiness 6e0d5781d870e654d17c9c3de153cb3d9a3fe58f
+refs/remotes/origin/phase4/pi-hil-qualification cb05e92b2fee2079757aba176b429f5d92780326
+refs/remotes/origin/phase5/software-hardware-readiness edf08ebabb04f6489606841795159258372c6dcf
+refs/remotes/origin/release/sensor-commissioning 1246f7af4be6d87fc5132ab323aa269ffdd2d223

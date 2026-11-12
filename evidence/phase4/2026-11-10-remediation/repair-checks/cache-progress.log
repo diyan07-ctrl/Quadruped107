@@ -1,0 +1,22 @@
+{"started_utc": "2026-11-10T12:12:54.695636+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\cache-progress.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import json
+from pathlib import Path
+p=Path('build/phase4-remediation/cache-smoke/result.json')
+if p.exists():
+ r=json.loads(p.read_text());s=(r.get('failure') or {}).get('state',{});print(json.dumps(dict(result=r['result'],durationS=r['durationS'],failureElapsed=(r.get('failure') or {}).get('elapsedS'),motion=s.get('motion'),bridge=s.get('bridge'),sensorsFault=s.get('sensors',{}).get('fault'),renewalError=(r.get('failure') or {}).get('renewalError')),indent=2))
+else: print(Path('build/phase4-remediation/cache-smoke/console.log').read_text()[-1200:])
+PY
+
+--- OBSERVED OUTPUT ---
+{
+  "result": "FAIL",
+  "durationS": 0,
+  "failureElapsed": null,
+  "motion": null,
+  "bridge": null,
+  "sensorsFault": null,
+  "renewalError": null
+}

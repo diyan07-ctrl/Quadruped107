@@ -1,0 +1,23 @@
+./build/phase4-toolchain/python311/python.exe : pybullet build time: Oct 21 2025 11:46:21
+At line:2 char:1
++ ./build/phase4-toolchain/python311/python.exe tools/phase4-hil.py twi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (pybullet build ...1 2025 11:46:21:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Traceback (most recent call last):
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tools\phase4-hil.py", line 245, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tools\phase4-hil.py", line 244, in main
+    {'twin':twin,'pi':pi,'run':run}[args.role](args)
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tools\phase4-hil.py", line 101, in twin
+    atomic(args.output/'latest.json',dict(utc=utc(),receiver=frame,actualJointRad=list(positions)))
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\tools\phase4-hil.py", line 27, in atomic
+    temp=path.with_suffix('.tmp');temp.write_text(json.dumps(value),encoding='utf-8');temp.replace(path)
+                                                                                      ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase4-toolchain\python311\Lib\pathlib.py", 
+line 1188, in replace
+    os.replace(self, target)
+PermissionError: [WinError 5] Access is denied: 'build\\phase4-remediation\\twin-cache\\latest.tmp' -> 
+'build\\phase4-remediation\\twin-cache\\latest.json'

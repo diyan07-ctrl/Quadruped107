@@ -1,0 +1,9 @@
+test_background_only_distractors_from_recording (test_recorded_vision.RecordedYellowTests.test_background_only_distractors_from_recording) ... ok
+test_clipped_low_saturation_recordings_remain_rejected (test_recorded_vision.RecordedYellowTests.test_clipped_low_saturation_recordings_remain_rejected) ... ok
+test_diagnostic_work_is_bounded (test_recorded_vision.RecordedYellowTests.test_diagnostic_work_is_bounded) ... ok
+test_switch_and_loss_do_not_invent_identity (test_recorded_vision.RecordedYellowTests.test_switch_and_loss_do_not_invent_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.100s
+
+OK

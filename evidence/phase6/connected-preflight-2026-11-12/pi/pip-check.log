@@ -1,0 +1,5 @@
+apt-listchanges 4.8 requires debconf, which is not installed.
+types-flask-migrate 4.0 requires flask-sqlalchemy, which is not installed.
+types-seaborn 0.13.2 requires matplotlib, which is not installed.
+types-seaborn 0.13.2 requires pandas-stubs, which is not installed.
+types-tree-sitter-languages 1.10 requires tree-sitter, which is not installed.

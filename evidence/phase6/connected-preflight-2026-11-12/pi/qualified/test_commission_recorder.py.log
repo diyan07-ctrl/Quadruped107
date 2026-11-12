@@ -1,0 +1,9 @@
+test_corruption_is_failed_evidence_and_never_fabricates_samples (test_commission_recorder.RecorderTests.test_corruption_is_failed_evidence_and_never_fabricates_samples) ... ok
+test_exact_t2_records_real_parser_semantics_and_closes_with_stop (test_commission_recorder.RecorderTests.test_exact_t2_records_real_parser_semantics_and_closes_with_stop) ... ok
+test_missing_gate_or_hash_mismatch_never_opens_port (test_commission_recorder.RecorderTests.test_missing_gate_or_hash_mismatch_never_opens_port) ... ok
+test_unknown_firmware_never_receives_arm_probe (test_commission_recorder.RecorderTests.test_unknown_firmware_never_receives_arm_probe) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.024s
+
+OK

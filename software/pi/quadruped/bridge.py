@@ -28,7 +28,7 @@ def decode(raw):
 
 
 class TraceReceiver:
-    def __init__(self,*,clock=time.monotonic):
+    def __init__(self,*,clock=time.perf_counter):
         self.clock=clock
         self.invalid=0
         self.reset()
@@ -68,8 +68,13 @@ class TraceReceiver:
             if kind=="hello":
                 if self.peer is None: self.peer_since=self.clock()
                 self.peer,self.client=address,client
-                nonce=secrets.token_hex(16)
-                self.challenge=(nonce,self.clock())
+                # A retry must not invalidate an in-flight trace or extend the
+                # original challenge lifetime. Consumed/expired nonces are replaced.
+                if self.challenge is not None and 0<=self.clock()-self.challenge[1]<=CHALLENGE_TTL:
+                    nonce=self.challenge[0]
+                else:
+                    nonce=secrets.token_hex(16)
+                    self.challenge=(nonce,self.clock())
                 return encode(dict(v=1,type="challenge",server=self.session,nonce=nonce))
             if self.peer is None or data.get("server")!=self.session: raise ValueError("Session mismatch")
             seq=data.get("seq")
@@ -137,6 +142,9 @@ class TraceServer:
         for _ in range(8):
             try: raw,address=self.socket.recvfrom(MAX_PACKET+1)
             except BlockingIOError: break
+            except ConnectionResetError:
+                # A previously addressed UDP client may have closed its port.
+                continue
             reply=self.receiver.handle(raw,address)
             if reply is not None:
                 try:
@@ -170,11 +178,15 @@ class TraceClient:
         self.seq=0
         self.last_ack=0.0
         self.pending=None
+        self.pending_packet=None
         self.epoch=0
         self.fault=None
         self.ready=False
         self.disarmed_stop_epoch=None
         self.errors=0
+        self.last_rtt=None
+        self.max_rtt=0.0
+        self.last_sensor_callback_ms=0.0
         self.thread=threading.Thread(target=self._run,name="simulation-bridge",daemon=True)
 
     def start(self): self.thread.start()
@@ -185,6 +197,7 @@ class TraceClient:
             age=time.monotonic()-self.last_ack if self.last_ack else None
             return dict(connected=age is not None and age<=LEASE,ackAge=age,
                         readyToArm=self.ready and not source["armed"] and source.get("stopEpoch")==self.disarmed_stop_epoch,fault=self.fault,epoch=self.epoch,errors=self.errors,
+                        roundTripS=self.last_rtt,maxRoundTripS=self.max_rtt,sensorCallbackMs=self.last_sensor_callback_ms,
                         transport="UDP challenge/lease",physical=False)
 
     def prepare_arm(self):
@@ -200,7 +213,6 @@ class TraceClient:
         sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         sock.settimeout(.02)
         last_hello=0.0
-        awaiting=False
         was_armed=False
         try:
             while not self.stop_event.is_set():
@@ -212,12 +224,15 @@ class TraceClient:
                     self.seq+=1
                     sock.sendto(encode(dict(v=1,type="stop",client=self.client,server=self.session,seq=self.seq)),self.address)
                 was_armed=armed
-                if now-last_hello>=.05 and (not awaiting or now-last_hello>CHALLENGE_TTL):
+                if now-last_hello>=.05:
                     sock.sendto(encode(dict(v=1,type="hello",client=self.client)),self.address)
                     last_hello=now
-                    awaiting=True
                 try: raw,peer=sock.recvfrom(MAX_PACKET+1)
                 except socket.timeout: continue
+                except ConnectionResetError:
+                    # Winsock reports an earlier UDP send to a closed port here.
+                    # Keep probing; only a fresh ACK can renew the motion lease.
+                    continue
                 if peer!=self.address: continue
                 now=time.monotonic()  # receipt time, including time blocked in recvfrom
                 try:
@@ -232,27 +247,51 @@ class TraceClient:
                                 self.ready=False
                                 self.epoch+=1
                             self.session=server
+                        state=self.source()
+                        if was_armed and not state['armed']:
+                            # STOP can occur while recvfrom is blocked. Send it
+                            # before any disarmed handshake; a delayed STOP after
+                            # that handshake would invalidate a new explicit ARM.
+                            with self.lock: self.ready=False
+                            self.seq+=1
+                            sock.sendto(encode(dict(v=1,type='stop',client=self.client,server=server,seq=self.seq)),self.address)
+                            was_armed=False
+                            self.pending=self.pending_packet=None
+                            continue
+                        was_armed=bool(state['armed'])
+                        if self.pending and self.pending_packet:
+                            old_nonce,old_seq,born,sent_armed,sent_stop_epoch=self.pending
+                            if (nonce==old_nonce and now-born<=CHALLENGE_TTL and
+                                bool(state['armed'])==sent_armed and state.get('stopEpoch')==sent_stop_epoch):
+                                # Re-send the same bounded trace. Neither its
+                                # sequence nor its birth time is refreshed.
+                                sock.sendto(self.pending_packet,self.address)
+                                continue
                         self.seq+=1
                         if self.seq>=2**31: raise RuntimeError("Simulation sequence exhausted")
-                        state=self.source()
                         message=dict(v=1,type="trace",client=self.client,server=server,nonce=nonce,seq=self.seq,
                                      virtual=True,armed=bool(state["armed"]),activeMask=state["activeMask"],targets=state["targets"],
                                      activeMotion=state.get("activeMotion"),behavior=state.get("behavior"))
                         self.pending=(nonce,self.seq,now,bool(state["armed"]),state.get("stopEpoch"))
-                        sock.sendto(encode(message),self.address)
+                        self.pending_packet=encode(message)
+                        sock.sendto(self.pending_packet,self.address)
                     elif data.get("type")=="ack" and self.pending:
                         nonce,seq,born,sent_armed,sent_stop_epoch=self.pending
                         if data.get("server")!=self.session or data.get("nonce")!=nonce or data.get("seq")!=seq or now-born>LEASE:
                             raise ValueError("Stale acknowledgment")
                         if self.on_sensors and "sensors" in data:
+                            callback_started=time.monotonic()
                             self.on_sensors(data["sensors"],session=self.session,transport_age=max(0,now-born))
+                            self.last_sensor_callback_ms=1000*(time.monotonic()-callback_started)
                         with self.lock:
+                            self.last_rtt=now-born
+                            self.max_rtt=max(self.max_rtt,self.last_rtt)
                             self.last_ack=now
                             self.ready=data.get("ready") is True and not sent_armed
                             if self.ready: self.disarmed_stop_epoch=sent_stop_epoch
                             if data.get("fault"): self.fault=str(data["fault"])[:160]
                         self.pending=None
-                        awaiting=False
+                        self.pending_packet=None
                 except (ValueError,TypeError,KeyError):
                     with self.lock: self.errors+=1
         except (OSError, RuntimeError):

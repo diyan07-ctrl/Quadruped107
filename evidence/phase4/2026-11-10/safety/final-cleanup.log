@@ -1,0 +1,32 @@
+{"started_utc": "2026-11-10T08:22:08.807557+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-cleanup.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+~/Quadruped107/.venv-pi-virtual/bin/python - <<'PYCLEAN'
+import json,time,urllib.request
+from pathlib import Path
+opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+time.sleep(2)
+with opener.open('http://127.0.0.1:7000/api/state',timeout=4) as response: state=json.load(response)
+assert not state['motion']['enabled'] and not state['link']['armed'] and state['link']['activeMask']==0
+assert state['physicalActuationAllowed'] is False
+print('SIMULATOR_PROCESS_RESTART_REMAINED_DISARMED')
+request=urllib.request.Request('http://127.0.0.1:7000/api/stop',data=b'{}',headers={'Content-Type':'application/json'})
+with opener.open(request,timeout=4) as response: print(response.read().decode())
+with opener.open('http://127.0.0.1:7000/api/state',timeout=4) as response: state=json.load(response)
+Path('build/hil-retest/final-safe-state.json').write_text(json.dumps(state,indent=2)+'\n')
+print(json.dumps({key:state[key] for key in ('motion','link','bridge','camera','physicalActuationAllowed')}))
+path=Path('build/hil-retest/control.json')
+temporary=path.with_suffix('.tmp');temporary.write_text(json.dumps(dict(action_id=999999,shutdown=True)));temporary.replace(path)
+PYCLEAN
+sleep 4
+ss -ltnp | sed -n '1p;/:7000 /p'
+pgrep -af 'build/hil-retest/app-probe.py' || true
+vcgencmd get_throttled
+
+--- OBSERVED OUTPUT ---
+SIMULATOR_PROCESS_RESTART_REMAINED_DISARMED
+{"ok":true,"state":{"appMode":"manual","busy":false,"currentMotion":"none","desiredMotion":"none","enabled":false,"executedGeneration":53,"fault":"Missing, invalid or stale front range","generation":53,"lastError":null,"lastRequest":{"generation":36,"motion":"greeting","reason":"Awaiting serial dispatch","status":"intent_accepted"},"lastResult":"Stopped; servos disabled","session":9,"stopping":false}}
+
+{"motion": {"appMode": "manual", "busy": false, "currentMotion": "none", "desiredMotion": "none", "enabled": false, "executedGeneration": 53, "fault": "Missing, invalid or stale front range", "generation": 53, "lastError": null, "lastRequest": {"generation": 36, "motion": "greeting", "reason": "Awaiting serial dispatch", "status": "intent_accepted"}, "lastResult": "Stopped; servos disabled", "session": 9, "stopping": false}, "link": {"activeMask": 0, "activeMotion": null, "armed": false, "connected": true, "epoch": 1, "error": null, "kind": "virtual-uno", "port": "virtual://uno", "queued": 0, "samples": 128, "stopping": false, "targets": [329, 110, 326, 410, 295, 410, 229, 110], "telemetry": {"age": null, "errors": 0, "receiveFresh": false, "record": null, "supported": false}, "virtual": true, "virtualFault": null}, "bridge": {"ackAge": 0.049740786000256776, "connected": true, "epoch": 8, "errors": 2, "fault": "Simulator reset; explicit re-arm required", "physical": false, "readyToArm": false, "transport": "UDP challenge/lease"}, "camera": {"actualFps": 8.28, "available": true, "backend": "usb", "captureMs": 122.4, "device": "/dev/video0", "errors": 0, "frameAge": 0.1924982340005954, "height": 240, "lastError": null, "mjpegEndpoint": "/video-feed", "ownerAlive": true, "reconnects": 1, "requestedFps": 30, "snapshotEndpoint": "/api/camera-frame", "status": "usb camera connected", "syntheticTarget": null, "unchangedFor": 0.0701172580011189, "width": 320}, "physicalActuationAllowed": false}
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+throttled=0x0

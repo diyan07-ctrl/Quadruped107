@@ -1,0 +1,323 @@
+{
+  "source_commit": "d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e",
+  "classification": "REAL PI USB / REAL LAN / VIRTUAL OUTPUTS",
+  "full_log": {
+    "samples": 3158,
+    "first_utc": "2026-11-10T06:27:50.914925+00:00",
+    "last_utc": "2026-11-10T07:20:38.312311+00:00",
+    "duration_s": 3167.3973623780003
+  },
+  "longest_healthy_segment_s": 560.806735356,
+  "endurance_window": {
+    "first_utc": "2026-11-10T06:37:34.730235+00:00",
+    "last_utc": "2026-11-10T06:46:55.536966+00:00",
+    "duration_s": 560.806735356,
+    "samples": 560,
+    "enabled_samples": 0,
+    "note": "Mostly disarmed integration observation with short deliberate manual command intervals; not sustained autonomous pursuit.",
+    "camera_reported_ema_fps": {
+      "n": 560,
+      "mean": 9.548,
+      "minimum": 8.28,
+      "maximum": 16.68
+    },
+    "vision_reported_fps": {
+      "n": 560,
+      "mean": 9.552589285714285,
+      "minimum": 8.02,
+      "maximum": 17.2
+    },
+    "cpu_percent_one_core": {
+      "n": 560,
+      "mean": 34.279267857142855,
+      "minimum": 18.68,
+      "maximum": 51.55
+    },
+    "rss_bytes": {
+      "n": 560,
+      "mean": 173734714.5142857,
+      "minimum": 173682688,
+      "maximum": 173805568
+    },
+    "frame_age_s": {
+      "n": 560,
+      "mean": 0.16676456109823254,
+      "minimum": 0.06006482100019639,
+      "maximum": 0.2413220469998123
+    },
+    "camera_error_count": 0,
+    "udp_error_count": 0,
+    "max_sensor_rejected_count": 3960
+  },
+  "actual_joint_movement": [
+    {
+      "channel": 0,
+      "actual_min_rad": -0.273684210633606,
+      "actual_max_rad": 0.1900621118012421,
+      "actual_range_rad": 0.4637463224348481,
+      "requested_min_ticks": 226,
+      "requested_max_ticks": 329
+    },
+    {
+      "channel": 1,
+      "actual_min_rad": -0.0003481146237637549,
+      "actual_max_rad": 0.20558527626047096,
+      "actual_range_rad": 0.2059333908842347,
+      "requested_min_ticks": 110,
+      "requested_max_ticks": 300
+    },
+    {
+      "channel": 2,
+      "actual_min_rad": -0.24604316671701085,
+      "actual_max_rad": 0.24704358701684168,
+      "actual_range_rad": 0.4930867537338525,
+      "requested_min_ticks": 271,
+      "requested_max_ticks": 384
+    },
+    {
+      "channel": 3,
+      "actual_min_rad": -0.23998116022504515,
+      "actual_max_rad": 0.00010698627376036578,
+      "actual_range_rad": 0.24008814649880553,
+      "requested_min_ticks": 300,
+      "requested_max_ticks": 500
+    },
+    {
+      "channel": 4,
+      "actual_min_rad": -0.20755400747356859,
+      "actual_max_rad": 0.21639536147385047,
+      "actual_range_rad": 0.4239493689474191,
+      "requested_min_ticks": 295,
+      "requested_max_ticks": 350
+    },
+    {
+      "channel": 5,
+      "actual_min_rad": -0.229199453834071,
+      "actual_max_rad": 0.00010698627376490737,
+      "actual_range_rad": 0.2293064401078359,
+      "requested_min_ticks": 300,
+      "requested_max_ticks": 495
+    },
+    {
+      "channel": 6,
+      "actual_min_rad": -0.2781174018890943,
+      "actual_max_rad": 0.20064199524236434,
+      "actual_range_rad": 0.47875939713145865,
+      "requested_min_ticks": 229,
+      "requested_max_ticks": 336
+    },
+    {
+      "channel": 7,
+      "actual_min_rad": -0.0007864916162887512,
+      "actual_max_rad": 0.204579718271035,
+      "actual_range_rad": 0.20536620988732374,
+      "requested_min_ticks": 110,
+      "requested_max_ticks": 300
+    }
+  ],
+  "colors": {
+    "blue": {
+      "samples": 901,
+      "detected_samples": 767,
+      "positions": {
+        "left": [
+          {
+            "utc": "2026-11-10T07:09:35.021499+00:00",
+            "x": 131,
+            "y": 160,
+            "offset": -0.33174065359907123,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 68
+          },
+          {
+            "utc": "2026-11-10T07:11:45.492694+00:00",
+            "x": 85,
+            "y": 76,
+            "offset": -0.40396506205035587,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 57
+          },
+          {
+            "utc": "2026-11-10T07:19:28.082312+00:00",
+            "x": 37,
+            "y": 36,
+            "offset": -0.76875,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 13
+          },
+          {
+            "utc": "2026-11-10T07:19:29.085961+00:00",
+            "x": 81,
+            "y": 67,
+            "offset": -0.49375,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 13
+          }
+        ],
+        "center": [
+          {
+            "utc": "2026-11-10T07:07:13.525323+00:00",
+            "x": 165,
+            "y": 167,
+            "offset": 0.032365664062499994,
+            "lock": "locked",
+            "revision": 4,
+            "radius": 56
+          },
+          {
+            "utc": "2026-11-10T07:07:14.528282+00:00",
+            "x": 165,
+            "y": 167,
+            "offset": 0.03128555005664441,
+            "lock": "locked",
+            "revision": 4,
+            "radius": 56
+          },
+          {
+            "utc": "2026-11-10T07:07:15.531365+00:00",
+            "x": 165,
+            "y": 166,
+            "offset": 0.03125113278411477,
+            "lock": "locked",
+            "revision": 4,
+            "radius": 57
+          },
+          {
+            "utc": "2026-11-10T07:07:16.534473+00:00",
+            "x": 165,
+            "y": 167,
+            "offset": 0.03125002346212585,
+            "lock": "locked",
+            "revision": 4,
+            "radius": 57
+          }
+        ],
+        "right": [
+          {
+            "utc": "2026-11-10T07:09:34.018595+00:00",
+            "x": 226,
+            "y": 145,
+            "offset": 0.49672019531249995,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 66
+          },
+          {
+            "utc": "2026-11-10T07:11:54.521631+00:00",
+            "x": 200,
+            "y": 94,
+            "offset": 0.4002434410861233,
+            "lock": "locked",
+            "revision": 5,
+            "radius": 61
+          }
+        ]
+      },
+      "missing_samples": 134,
+      "lock_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        17,
+        19,
+        20,
+        21,
+        29
+      ]
+    },
+    "yellow": {
+      "samples": 2257,
+      "detected_samples": 143,
+      "positions": {
+        "left": [
+          {
+            "utc": "2026-11-10T06:30:38.395978+00:00",
+            "x": 7,
+            "y": 108,
+            "offset": -0.9237936718749999,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 11
+          },
+          {
+            "utc": "2026-11-10T06:30:50.429851+00:00",
+            "x": 9,
+            "y": 108,
+            "offset": -0.9437499999999999,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 10
+          }
+        ],
+        "center": [
+          {
+            "utc": "2026-11-10T06:38:56.986375+00:00",
+            "x": 167,
+            "y": 172,
+            "offset": 0.044652389858398436,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 56
+          },
+          {
+            "utc": "2026-11-10T06:39:07.020642+00:00",
+            "x": 167,
+            "y": 172,
+            "offset": 0.04375,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 56
+          },
+          {
+            "utc": "2026-11-10T06:46:50.520965+00:00",
+            "x": 168,
+            "y": 172,
+            "offset": 0.05,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 57
+          },
+          {
+            "utc": "2026-11-10T06:51:51.479368+00:00",
+            "x": 167,
+            "y": 170,
+            "offset": 0.051875000000000004,
+            "lock": "locked",
+            "revision": 2,
+            "radius": 57
+          }
+        ],
+        "right": []
+      },
+      "missing_samples": 2114,
+      "lock_ids": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    }
+  },
+  "rejected_udp_records": 271,
+  "world_fault_samples": 0
+}

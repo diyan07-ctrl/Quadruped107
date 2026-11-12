@@ -1,0 +1,29 @@
+{"started_utc": "2026-11-10T11:42:20.954413+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\deploy-v4.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+printf '{"action_id":"cache-upgrade","shutdown":true}' > build/phase4-remediation/pi-v3/control.tmp
+mv build/phase4-remediation/pi-v3/control.tmp build/phase4-remediation/pi-v3/control.json
+sleep 3
+test -z "$(git status --porcelain --untracked-files=no)"
+git fetch origin phase4/pi-hil-qualification
+git merge --ff-only origin/phase4/pi-hil-qualification
+mkdir -p build/phase4-remediation/pi-v4
+cp build/phase4-remediation/pi-v2/vision.json build/phase4-remediation/pi-v4/vision.json
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi-v4 --control build/phase4-remediation/pi-v4/control.json > build/phase4-remediation/pi-v4/console.log 2>&1 < /dev/null &
+echo APP_PID=$!
+git rev-parse HEAD
+/usr/sbin/iw dev wlan0 get power_save
+
+--- OBSERVED OUTPUT ---
+From https://github.com/diyan07-ctrl/Quadruped107
+ * branch            phase4/pi-hil-qualification -> FETCH_HEAD
+   379a7ad..e20acdd  phase4/pi-hil-qualification -> origin/phase4/pi-hil-qualification
+Updating 379a7ad..e20acdd
+Fast-forward
+ simulation/environment.py        |  9 ++++++--
+ software/pi/quadruped/bridge.py  | 11 ++++++++++
+ tests/test_phase4_remediation.py | 46 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+), 2 deletions(-)
+APP_PID=17158
+e20acdd670bcc46eac7774767c2043096c6607bc
+Power save: off

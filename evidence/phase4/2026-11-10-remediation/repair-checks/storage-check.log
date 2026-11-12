@@ -1,0 +1,16 @@
+{"started_utc": "2026-11-10T14:32:38.584096+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\storage-check.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+ls -lh build/phase4-remediation/pi*/state.jsonl
+df -h /
+pgrep -af 'tools/phase4-hil.py' || true
+
+--- OBSERVED OUTPUT ---
+-rw-rw-r-- 1 diyan07 diyan07 474M Nov 10 16:20 build/phase4-remediation/pi/state.jsonl
+-rw-rw-r-- 1 diyan07 diyan07 355M Nov 10 16:39 build/phase4-remediation/pi-v2/state.jsonl
+-rw-rw-r-- 1 diyan07 diyan07 626M Nov 10 17:12 build/phase4-remediation/pi-v3/state.jsonl
+-rw-rw-r-- 1 diyan07 diyan07 2.7G Nov 10 19:39 build/phase4-remediation/pi-v4/state.jsonl
+-rw-rw-r-- 1 diyan07 diyan07 191M Nov 10 20:02 build/phase4-remediation/pi-v5/state.jsonl
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G   12G   16G  44% /
+29393 /home/diyan07/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi-v5 --control build/phase4-remediation/pi-v5/control.json

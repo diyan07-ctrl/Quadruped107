@@ -1,0 +1,99 @@
+{"started_utc": "2026-11-12T07:49:29.343746+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\release\\pi-session.sh"}
+set -eu
+candidate=$(mktemp -d /tmp/quadruped107-release.XXXXXX)
+PY=/home/diyan07/Quadruped107/.venv-pi-virtual/bin/python
+"$PY" -m zipfile -e /tmp/quadruped107-release-candidate.zip "$candidate"
+cd "$candidate"
+printf '%s\n' "$candidate" > /tmp/quadruped107-release-session-path
+git -C /home/diyan07/Quadruped107 diff --binary HEAD | sha256sum > operator-before.sha256
+git -C /home/diyan07/Quadruped107 status --porcelain > operator-before.status
+export PYTHONPATH="$candidate/software/pi"
+"$PY" --version
+"$PY" tools/pi-preflight.py --output preflight.json
+for test in test_vision_readiness.py test_telemetry.py test_readiness.py test_pi_preflight.py test_runtime.py test_recorded_vision.py; do
+  "$PY" -m unittest discover -s tests -p "$test" -v > "$test.log" 2>&1 && echo "$test PASS" || echo "$test FAIL"
+done
+printf '%s\n' '{"target_color":"yellow"}' > yellow.json
+nohup "$PY" -m quadruped.main --camera-backend usb --camera-device /dev/video0 --width 640 --height 480 --fps 8 --actuator-backend virtual --sensor-source none --vision-config "$candidate/yellow.json" --oled mock --host 127.0.0.1 --port 7001 > app.log 2>&1 < /dev/null &
+echo $! > app.pid
+printf 'CANDIDATE=%s\n' "$candidate"
+git -C /home/diyan07/Quadruped107 diff --binary HEAD | sha256sum > operator-after.sha256
+git -C /home/diyan07/Quadruped107 status --porcelain > operator-after.status
+cmp operator-before.sha256 operator-after.sha256
+cmp operator-before.status operator-after.status
+
+--- OBSERVED OUTPUT ---
+Python 3.13.5
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-12T07:49:37.777374+00:00",
+  "python": "3.13.5",
+  "architecture": "aarch64",
+  "platform": "Linux",
+  "camera_device": "/dev/video0",
+  "camera": {
+    "exists": true,
+    "readable": true
+  },
+  "imports_available": {
+    "cv2": true,
+    "numpy": true,
+    "flask": true,
+    "serial": true,
+    "quadruped": true
+  },
+  "import_execution": {
+    "cv2": {
+      "ok": true,
+      "error": null
+    },
+    "numpy": {
+      "ok": true,
+      "error": null
+    },
+    "flask": {
+      "ok": true,
+      "error": null
+    },
+    "serial": {
+      "ok": true,
+      "error": null
+    },
+    "quadruped": {
+      "ok": true,
+      "error": null
+    }
+  },
+  "package_versions": {
+    "numpy": "2.2.4",
+    "opencv-python-headless": null,
+    "Flask": "3.1.2",
+    "pyserial": "3.5",
+    "smbus2": "0.4.3",
+    "Pillow": "11.1.0"
+  },
+  "serial": {
+    "selected": false
+  },
+  "serial_by_id_candidates": [],
+  "oled": {
+    "selected": false
+  },
+  "physical_actuation_allowed": false,
+  "dashboard_tcp": {
+    "port": 7000,
+    "state": "free"
+  },
+  "checkout_present": true,
+  "git_available": true,
+  "qualification": "READ_ONLY_PREFLIGHT_NOT_CAMERA_ACCEPTANCE",
+  "physical_actuation_tested": false,
+  "camera_frames_captured": 0
+}
+test_vision_readiness.py PASS
+test_telemetry.py PASS
+test_readiness.py PASS
+test_pi_preflight.py PASS
+test_runtime.py PASS
+test_recorded_vision.py PASS
+CANDIDATE=/tmp/quadruped107-release.7S0kKt

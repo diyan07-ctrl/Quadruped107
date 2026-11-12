@@ -1,0 +1,9 @@
+{"started_utc": "2026-11-10T10:18:23.185046+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\remediation-smoke.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+mkdir -p build/phase4-remediation/smoke
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py run --seconds 90 --output build/phase4-remediation/smoke > build/phase4-remediation/smoke/console.log 2>&1 < /dev/null &
+echo PI_SMOKE_PID=$!
+
+--- OBSERVED OUTPUT ---
+PI_SMOKE_PID=16423

@@ -1,0 +1,20 @@
+{"started_utc": "2026-11-10T08:31:50.118561+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4\\pi-source-provenance.sh"}
+set -eu
+cd ~/Quadruped107
+git rev-parse HEAD
+git rev-parse :software/pi/quadruped/vision.py
+git rev-parse origin/phase4/pi-hil-qualification:software/pi/quadruped/vision.py
+git diff --cached --binary | sha256sum
+git diff --binary | sha256sum
+cd ~/Quadruped107-phase4-qualification
+git rev-parse HEAD
+git status --short --branch
+
+--- OBSERVED OUTPUT ---
+a15c39775a4063b396c3cd844f66324cd250021c
+110ffb83241941b63006b24477a378f9f3a583d6
+110ffb83241941b63006b24477a378f9f3a583d6
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  -
+d29dfdbfc42f6f49c0e96837cc53d816bbf8a47e
+## HEAD (no branch)

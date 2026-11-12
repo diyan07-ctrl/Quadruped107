@@ -1,0 +1,25 @@
+{"started_utc": "2026-11-10T14:09:26.336447+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase4-remediation\\pi-subset-freeze.sh"}
+set -eu
+cd ~/Quadruped107-phase4-qualification
+PYTHONPATH=software/pi:tests ~/Quadruped107/.venv-pi-virtual/bin/python -m unittest test_pi_preflight test_telemetry test_phase4_remediation test_vision_readiness -v > build/phase4-remediation/final/pi-subset.log 2>&1
+tail -n 8 build/phase4-remediation/final/pi-subset.log
+printf '{"action_id":"freeze-ff382","shutdown":true}' > build/phase4-remediation/pi-v4/control.tmp
+mv build/phase4-remediation/pi-v4/control.tmp build/phase4-remediation/pi-v4/control.json
+sleep 3
+mkdir -p build/phase4-remediation/pi-v5
+cp build/phase4-remediation/pi-v4/vision.json build/phase4-remediation/pi-v5/vision.json
+nohup ~/Quadruped107/.venv-pi-virtual/bin/python -u tools/phase4-hil.py pi --host 192.168.1.43 --port 7002 --seconds 14400 --output build/phase4-remediation/pi-v5 --control build/phase4-remediation/pi-v5/control.json > build/phase4-remediation/pi-v5/console.log 2>&1 < /dev/null &
+echo APP_PID=$!
+git rev-parse HEAD
+
+--- OBSERVED OUTPUT ---
+test_live_synthetic_circle_uses_camera_owner_and_color_detector (test_vision_readiness.SyntheticOperatorTests.test_live_synthetic_circle_uses_camera_owner_and_color_detector) ... ok
+test_other_browser_cannot_change_enabled_synthetic_scene (test_vision_readiness.SyntheticOperatorTests.test_other_browser_cannot_change_enabled_synthetic_scene) ... ok
+test_real_camera_cannot_be_replaced_by_fixture (test_vision_readiness.SyntheticOperatorTests.test_real_camera_cannot_be_replaced_by_fixture) ... ok
+
+----------------------------------------------------------------------
+Ran 41 tests in 3.813s
+
+OK (skipped=2)
+APP_PID=29393
+ff3827690b635510198d16516237dc77d98013e3
