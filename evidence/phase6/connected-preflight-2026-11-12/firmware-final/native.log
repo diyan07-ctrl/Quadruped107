@@ -1,0 +1,116 @@
+driver/policy: timeout, invalid, recovery, wrap, debounce, stuck, uncalibrated, direction, limits, rate, lease, STOP PASS
+policy PASS
+WIRE_RECORD=TEL 2 0 640 -1 0 16 0 640 0 42 1
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 0 16 0 999 0 46 1
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-default C++ wire -> Pi SensorManager PASS
+sensor-default C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-default PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_TOUCH_RECORD=TEL 2 1 840 400 1 19 1 237 160 43 0
+WIRE_TOUCH_RECORD=TEL 2 2 1040 -1 1 18 1 0 190 44 2
+WIRE_INVALID_RECORD=TEL 2 4 1450 -1 1 18 1 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+mock touch -> real C++ telemetry -> Pi interaction event; actuation inhibited PASS
+sensor-configured C++ wire -> Pi SensorManager PASS
+sensor-configured C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-configured PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 7 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 7 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-active-low C++ wire -> Pi SensorManager PASS
+sensor-active-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-active-low PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 18 0 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-four-high C++ wire -> Pi SensorManager PASS
+sensor-four-high C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-four-high PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 15 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 15 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-four-low C++ wire -> Pi SensorManager PASS
+sensor-four-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-four-low PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 18 0 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-three-high C++ wire -> Pi SensorManager PASS
+sensor-three-high C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-three-high PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 31 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 31 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-five-low C++ wire -> Pi SensorManager PASS
+sensor-five-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-five-low PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-high real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-high PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-low real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-low PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-mixed-a real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-mixed-a PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-mixed-b real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-mixed-b PASS
+direct calibration: boot disabled, unknown endpoints, no signal, STOP, reset PASS
+calibration-disabled PASS
+direct calibration: boot disabled, unknown endpoints, no signal, STOP, reset PASS
+calibration-reviewed-unknown PASS
+production: watchdog boot, PCA presence/absence, gated ARM, no PWM, OE commanded off, STOP status PASS
+production-present PASS
+production: watchdog boot, PCA presence/absence, gated ARM, no PWM, OE commanded off, STOP status PASS
+production-absent PASS
+16 firmware mock executables PASS

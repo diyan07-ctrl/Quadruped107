@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-12",
+  "electricalChecks": "operator general attestation; no independent measurements supplied",
+  "urm37": "operator reports V5 D4 D2 5V GND; actual supported mode still needs concrete confirmation",
+  "touchModules": "operator reports two TTP223B, D6 back and D7 front-bottom",
+  "touchPolarityAndMomentaryMode": "UNKNOWN, explicitly reported by operator",
+  "availableVerification": "operator reports neither meter nor pad-identification method available",
+  "physicalActuatorIsolation": "operator general electrical/isolation attestation; no independent physical observation",
+  "uploadAuthorization": "NOT REQUESTED: selected touch profile/device/hash review not complete",
+  "gate": "BLOCKED: do not infer polarity/mode from model label"
+}

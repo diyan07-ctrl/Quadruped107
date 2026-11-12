@@ -1,0 +1,369 @@
+[
+  {
+    "id": "ENV-WIN",
+    "date_utc": "2026-11-12T13:38:17.416171+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "git",
+      "status",
+      "--short",
+      "--branch"
+    ],
+    "objective": "ENV-WIN",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.032,
+    "exit_code": 0,
+    "log": "environment\\ENV-WIN.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "ENV-DEPS",
+    "date_utc": "2026-11-12T13:38:17.447221+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-c",
+      "import sys,platform,json,cv2,numpy,flask,serial,pybullet; from importlib.metadata import version; print(json.dumps(dict(python=sys.version,platform=platform.platform(),executable=sys.executable,opencv=cv2.__version__,packages={k:version(k) for k in [\"numpy\",\"Flask\",\"pyserial\",\"pybullet\"]}),indent=2))"
+    ],
+    "objective": "ENV-DEPS",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.422,
+    "exit_code": 0,
+    "log": "environment\\ENV-DEPS.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-PIP",
+    "date_utc": "2026-11-12T13:38:17.863312+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "objective": "REG-PIP",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.328,
+    "exit_code": 0,
+    "log": "environment\\REG-PIP.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-PY",
+    "date_utc": "2026-11-12T13:38:18.189121+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "objective": "REG-PY",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 92.812,
+    "exit_code": 0,
+    "log": "reports\\REG-PY.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-CAD",
+    "date_utc": "2026-11-12T13:39:51.007346+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "simulation/build_model.py",
+      "--check"
+    ],
+    "objective": "REG-CAD",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.281,
+    "exit_code": 0,
+    "log": "pybullet\\REG-CAD.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-MOTION",
+    "date_utc": "2026-11-12T13:39:51.288952+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/generate-motion-data.py",
+      "--check"
+    ],
+    "objective": "REG-MOTION",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.063,
+    "exit_code": 0,
+    "log": "autonomy\\REG-MOTION.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-POWER",
+    "date_utc": "2026-11-12T13:39:51.353469+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "hardware/Power/power_budget.py",
+      "--check"
+    ],
+    "objective": "REG-POWER",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.062,
+    "exit_code": 0,
+    "log": "safety\\REG-POWER.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-SIM",
+    "date_utc": "2026-11-12T13:39:51.413474+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-m",
+      "simulation.validate"
+    ],
+    "objective": "REG-SIM",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 2.266,
+    "exit_code": 0,
+    "log": "pybullet\\REG-SIM.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-MODEL",
+    "date_utc": "2026-11-12T13:39:53.675553+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-m",
+      "simulation.model_study"
+    ],
+    "objective": "REG-MODEL",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 2.453,
+    "exit_code": 0,
+    "log": "pybullet\\REG-MODEL.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-PROXY",
+    "date_utc": "2026-11-12T13:39:56.128842+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "-m",
+      "simulation.proxy_probe"
+    ],
+    "objective": "REG-PROXY",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.485,
+    "exit_code": 0,
+    "log": "autonomy\\REG-PROXY.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-JS",
+    "date_utc": "2026-11-12T13:39:56.614901+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "node",
+      "--check",
+      "software/pi/quadruped/web/app.js"
+    ],
+    "objective": "REG-JS",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.031,
+    "exit_code": 0,
+    "log": "reports\\REG-JS.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-DOM",
+    "date_utc": "2026-11-12T13:39:56.651954+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "node",
+      "tools/check-dashboard.mjs"
+    ],
+    "objective": "REG-DOM",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 0.609,
+    "exit_code": 0,
+    "log": "reports\\REG-DOM.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-REPO",
+    "date_utc": "2026-11-12T13:39:57.258132+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "node",
+      "tools/check-repository.mjs"
+    ],
+    "objective": "REG-REPO",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 1.703,
+    "exit_code": 0,
+    "log": "reports\\REG-REPO.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  },
+  {
+    "id": "REG-DIAGRAM",
+    "date_utc": "2026-11-12T13:39:58.952559+00:00",
+    "commit": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+    "dirtyPathsAtStart": [
+      "?? evidence/phase6/connected-preflight-2026-11-12/"
+    ],
+    "command": [
+      "node",
+      "tools/check-mermaid.mjs"
+    ],
+    "objective": "REG-DIAGRAM",
+    "preconditions": "Windows software environment; physical outputs unused",
+    "expected": "Exit 0",
+    "actual": "Exit 0",
+    "result": "PASS",
+    "duration_s": 1.094,
+    "exit_code": 0,
+    "log": "reports\\REG-DIAGRAM.log",
+    "classification": "SOFTWARE / SIMULATED ONLY",
+    "hardware_validation": false,
+    "recordings": [],
+    "issues": [],
+    "fixes": []
+  }
+]

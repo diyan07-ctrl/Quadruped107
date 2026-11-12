@@ -2,32 +2,32 @@
 
 **SENSOR COMMISSIONING PARTIAL. Physical actuators disabled.**
 
-Baseline: PR #8 head `b18e897e13baefc452606b37a1804ca9e672d2a5`. Work is isolated on `phase6/two-touch-commissioning`; prior evidence, CAD, calibration tables, authorship and all original checkouts are preserved. This report separates implemented/mock-tested software from actual hardware observations. The operator reports connected hardware; electrical identification has not passed. No serial port was opened and no firmware was uploaded during the blocked preflight.
+Baseline: PR #8 head `b18e897e13baefc452606b37a1804ca9e672d2a5`. Work is isolated on `phase6/two-touch-commissioning`; prior evidence, CAD, calibration tables and authorship are preserved. Original operator work was not reset, stashed or restored; the connected audit below records an unexplained new deletion rather than claiming an unchanged checkout. This report separates implemented/mock-tested software from actual hardware observations. Electrical identification has not passed. No serial port was opened and no firmware was uploaded during the blocked preflight.
 
 Qualified implementation: `07acf1f7cda9678bcf60c991419157b04e2dea65`; [draft PR #9](https://github.com/diyan07-ctrl/Quadruped107/pull/9). **PASS:** 248 Python tests, all 14 established checks, 16 native mocks, 15 AVR variants and push/PR CI including the new Python 3.13 tests. [Frozen logs, flags, resources, hashes and provenance](../evidence/phase6/two-touch-commissioning/README.md). This is software evidence only.
 
-Latest operator report identifies URM37 V5, D4/D2/5V/GND connections, TTP223B touch modules, Uno-to-Pi USB and login user `diyan07`. Supply measurements, TTL/PWM mode, touch output configuration/polarity and explicit actuator isolation remain unverified. The address `192.168.1.42` still times out before login; current `hostname -I` output is requested. These facts do not authorize serial access or upload.
+Latest connected preflight (12 November 2026): SSH now works as `diyan07@192.168.1.42`. [Superseding connected-Pi evidence and results](../evidence/phase6/connected-preflight-2026-11-12/README.md) records the actual dirty operator checkout, isolated candidate/environment, USB metadata and Pi tests/builds. The operator attests electrical checks and actuator isolation, but explicitly reports both TTP223B polarity/momentary settings unknown and no meter or pad-identification method available. Normal firmware selection and serial/upload gates remain blocked. No Uno port has been opened or firmware uploaded. The earlier frozen timeout reports remain unchanged.
 
 ## A–P commissioning record
 
 | Item | Status | Result / evidence boundary |
 | --- | --- | --- |
-| A. GitHub / Pi state | PASS / BLOCKED | PR #8 is OPEN/DRAFT at the stated baseline. SSH to the previously verified `192.168.1.42` timed out; historical hostname `diyan07.local` did not resolve. Pi checkout/services/environment/current USB ownership cannot yet be audited. No remote mutation occurred |
+| A. GitHub / Pi state | PASS audit / FAIL preservation comparison | Draft PR #9 targets PR #8 release branch. Pi original HEAD `a15c397` has staged operator work, preserved in place. A new unstaged deletion of `hardware/Power/power_budget.py` appeared during the session; actor/cause unestablished. HEAD and staged patch hash unchanged. No restoration attempted; see connected evidence |
 | B. Firmware adaptation | PASS, source/mock scope | Mask 3 is supported; CAPS reports `caps_sensor2_t2`; only D6/D7 enabled. Existing 0/7/15/31 profiles remain. No Servo/Wire/PCA/gait imports in sensor-only target |
 | C. Semantic mapping | PASS, mock scope | Explicit `back_front_bottom_v1`: bit 0/D6 → `touch_back` / BACK_TOUCH / REAR_LOWER; bit 1/D7 → `touch_front_bottom` / FRONT_BOTTOM_TOUCH / FRONT_LOWER. Virtual legacy ordering is unchanged |
 | D. Regression | See frozen evidence | Full Python/local/DOM checks and new recorder/touch tests have reproducible logs; native programs consume the real sketch with fake UART/pins/time. Mock observations are not physical readings |
 | E. AVR / binary identity | PASS, compile scope | Two-touch active-high, active-low, both mixed polarities, and unconfigured URM profile compiled alongside the existing matrix. Exact commands, source, sizes and HEX SHA-256 are in the evidence matrix |
-| F. Electrical preflight | BLOCKED | Actual URM37 revision/mode/supply/levels, touch model/supply/polarity/output type/bias, ground/power arrangement and actuator isolation require operator verification |
-| G. Actual serial device | BLOCKED | No current stable device path/VID/PID/serial identity obtained; Pi unreachable. Do not substitute `/dev/ttyACM0` by assumption |
+| F. Electrical preflight | BLOCKED | Operator attests supply/wiring/isolation checks, but actual touch polarity and momentary/toggle settings remain explicitly unknown. Model name alone does not identify board options. No automatic polarity fallback |
+| G. Actual serial device | PASS metadata / BLOCKED board association | CH340 `1a86:7523`, `/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0`, USB path `0:1.1:1.0`, no unique serial. Confirm association with intended Uno before upload. No port opened |
 | H. Upload | BLOCKED | Not authorized or executed. No upload log or flash verification exists |
 | I. Real URM37 measurements | BLOCKED | No physical ruler distances or range records collected |
 | J. Real D6/D7 observations | BLOCKED | No measured polarity or genuine physical touch records collected |
 | K. Actual Pi SensorManager integration | BLOCKED | Native/replay → actual Python provider tests pass independently; live hardware path remains untested |
 | L. Dashboard / virtual gestures | PASS in mocks / BLOCKED live | Exact count, mapping, full capability, semantic request and calibration-pending status shown. Virtual controller dispatch tested; no measured sit/bow pose is claimed |
 | M. Fault / STOP / reconnect | PASS in mocks / BLOCKED physical | Invalid/stale packets, no echo, simultaneous touch, stuck/boot-held inputs, STOP, takeover and epochs fail closed; recovery remains disarmed |
-| N. Remaining blockers | BLOCKED | Pi connectivity, electrical facts, selected polarity/binary, separate upload authorization and real measurement matrix |
+| N. Remaining blockers | BLOCKED | Touch output/mode evidence, selected binary, intended-board association, separate concrete upload authorization and actual measurement/fault matrix. Original-checkout preservation comparison failed on an unexplained deletion, left untouched |
 | O. Source / firmware revisions | See evidence | Qualified source revision, dirty paths, flags, tool versions and each HEX hash are retained; never infer flashed identity from a compile |
-| P. Next safe hardware phase | BLOCKED at electrical gate | Restore read-only Pi access, verify electrical prerequisites, review a concrete binary/device, then obtain separate upload authorization. No physical servo phase is authorized |
+| P. Next safe hardware phase | BLOCKED at touch-configuration gate | Identify actual module option settings/output behavior, review selected binary/device and obtain separate upload approval. Pi software environment and uploader are ready in an isolated session. No physical servo phase authorized |
 
 ## Software behavior and authority
 
@@ -75,12 +75,14 @@ Retain the actual upload/verification log. Never substitute production or D12 ca
 
 ## Raw serial acquisition before Flask
 
-Use a clean isolated checkout, preserve the original Pi checkout and use its existing qualified Python environment or a separately prepared environment. Check `fuser`/permissions and ensure no terminal/dashboard owns the Uno. Set `PYTHONPATH` to the candidate's `software/pi` when reusing an existing environment, so an old editable installation cannot override candidate imports.
+Use a clean isolated checkout, preserve the original Pi checkout and use the separately prepared isolated environment. The old environment has pre-existing unrelated `pip check` failures and was left untouched. Check `fuser`/permissions and ensure no terminal/dashboard owns the Uno. Set `PYTHONPATH` to the candidate's `software/pi` when reusing an existing environment, so an old editable installation cannot override candidate imports.
 
 The recorder below does **not upload**. Its explicit flags are operator attestations, not proof. Execute only after this session's electrical review and separate upload authorization/verification have passed:
 
 ```sh
-PY=/home/diyan07/Quadruped107/.venv-pi-virtual/bin/python
+SESSION=/home/diyan07/Quadruped107-phase6-session.r7D1jJ
+cd "$SESSION/candidate"
+PY="$SESSION/venv/bin/python"
 export PYTHONPATH="$PWD/software/pi"
 UNO=/dev/serial/by-id/VERIFIED_UNO
 HEX=build/phase6/reviewed-two/sensor_only.ino.hex
