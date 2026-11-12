@@ -6,6 +6,8 @@ import json
 import os
 import subprocess
 import tempfile
+import io
+import urllib.error
 import unittest
 from unittest.mock import patch, Mock
 import cv2
@@ -19,6 +21,17 @@ from quadruped.telemetry import TelemetryStream
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_live_trial_rejection_preserves_stage_and_reason(self):
+        sys.path.insert(0,str(ROOT/'tools'))
+        spec=importlib.util.spec_from_file_location('release_hil',ROOT/'tools/phase4-hil.py')
+        module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        client=module.Client('http://127.0.0.1:7000')
+        failure=urllib.error.HTTPError('http://127.0.0.1:7000/api/arm',409,'Conflict',{},
+                                      io.BytesIO(b'{"error":"stale sensing"}'))
+        with patch.object(client.opener,'open',side_effect=failure):
+            with self.assertRaisesRegex(RuntimeError,'HTTP 409 at api/arm; server rejection: .*stale sensing'):
+                client.call('api/arm',{})
+
     def test_recording_preserves_measured_samples_and_disarms_at_exit(self):
         with tempfile.TemporaryDirectory() as directory:
             base=Path(directory)

@@ -178,7 +178,11 @@ class Client:
         self.opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),urllib.request.HTTPCookieProcessor(self.jar))
     def call(self,path,data=None,timeout=3):
         request=urllib.request.Request(self.url+'/'+path,data=None if data is None else json.dumps(data).encode(),headers={'Content-Type':'application/json'})
-        with self.opener.open(request,timeout=timeout) as reply: return json.load(reply)
+        try:
+            with self.opener.open(request,timeout=timeout) as reply: return json.load(reply)
+        except urllib.error.HTTPError as error:
+            detail=error.read(512).decode('utf-8',errors='replace')
+            raise RuntimeError(f'HTTP {error.code} at {path}; server rejection: {detail}') from error
     def renewer(self):
         # Immutable cookie header; diagnostic reads and cookie disk I/O cannot block renewal.
         request=urllib.request.Request(self.url+'/api/heartbeat');self.jar.add_cookie_header(request)
