@@ -285,17 +285,22 @@ class DisplayTests(unittest.TestCase):
         self.assertIn('I2C transfer',service.snapshot()['error'])
 
     def test_blocked_oled_thread_does_not_block_stop(self):
-        entered=threading.Event(); release=threading.Event()
+        entered=threading.Event(); release=threading.Event(); finished=threading.Event()
         class Blocked(MockDisplay):
-            def show(self,frame): entered.set(); release.wait(2)
+            def show(self,frame):
+                entered.set(); release.wait(2); finished.set()
         runtime=Runtime(simulate=True,display_backend=Blocked())
+        # HTTP setup precedes runtime workers in the real entry point. Measure
+        # the STOP request, not cold Flask/Werkzeug test-client construction.
+        client=create_app(runtime).test_client()
         runtime.display.start()
         try:
             self.assertTrue(entered.wait(1))
             started=time.monotonic()
-            response=create_app(runtime).test_client().post('/api/stop',json={})
+            response=client.post('/api/stop',json={})
             self.assertEqual(response.status_code,200)
             self.assertLess(time.monotonic()-started,.5)
+            self.assertFalse(finished.is_set(), 'Display must still be blocked when STOP completes')
         finally:
             release.set(); runtime.close()
 
