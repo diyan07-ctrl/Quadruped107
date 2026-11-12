@@ -1,0 +1,46 @@
+test_acquisition_age_plus_full_rtt (test_readiness.AgeTests.test_acquisition_age_plus_full_rtt) ... ok
+test_age_quantization_guard_and_invalid_last_acquisition (test_readiness.AgeTests.test_age_quantization_guard_and_invalid_last_acquisition) ... ok
+test_expired_poll_and_unsolicited (test_readiness.AgeTests.test_expired_poll_and_unsolicited) ... ok
+test_local_faults_override_validity (test_readiness.AgeTests.test_local_faults_override_validity) ... ok
+test_malformed_bounds (test_readiness.AgeTests.test_malformed_bounds) ... ok
+test_replay_poll_consumed (test_readiness.AgeTests.test_replay_poll_consumed) ... ok
+test_sequence_drop_wrap_and_reset (test_readiness.AgeTests.test_sequence_drop_wrap_and_reset) ... ok
+test_timeout_and_no_qualification (test_readiness.AgeTests.test_timeout_and_no_qualification) ... ok
+test_worst_case_line_budget (test_readiness.AgeTests.test_worst_case_line_budget) ... ok
+test_blocked_oled_thread_does_not_block_stop (test_readiness.DisplayTests.test_blocked_oled_thread_does_not_block_stop) ... FAIL
+test_failure_recovery_and_stop_independence (test_readiness.DisplayTests.test_failure_recovery_and_stop_independence) ... ok
+test_rate_limit_and_bounded_mock (test_readiness.DisplayTests.test_rate_limit_and_bounded_mock) ... ok
+test_screens (test_readiness.DisplayTests.test_screens) ... ok
+test_ssd1306_address_validation (test_readiness.DisplayTests.test_ssd1306_address_validation) ... ok
+test_ssd1306_i2c_exception_and_reconnect (test_readiness.DisplayTests.test_ssd1306_i2c_exception_and_reconnect) ... ok
+test_real_worker_mock_usb_and_legacy (test_readiness.NegotiationTests.test_real_worker_mock_usb_and_legacy) ... ok
+test_boot_press_not_event_release_then_debounced_press (test_readiness.ProviderTests.test_boot_press_not_event_release_then_debounced_press) ... ok
+test_conflicting_sensor_sources_rejected (test_readiness.ProviderTests.test_conflicting_sensor_sources_rejected) ... ok
+test_disconnect_clears_state_and_reconnect_disarms (test_readiness.ProviderTests.test_disconnect_clears_state_and_reconnect_disarms) ... ok
+test_exhausted_id_zero_stop_still_acknowledges (test_readiness.ProviderTests.test_exhausted_id_zero_stop_still_acknowledges) ... ok
+test_explicit_manual_virtual_output_then_invalid_sensor_stops (test_readiness.ProviderTests.test_explicit_manual_virtual_output_then_invalid_sensor_stops) ... ok
+test_invalid_range_never_healthy (test_readiness.ProviderTests.test_invalid_range_never_healthy) ... ok
+test_legacy_cannot_masquerade (test_readiness.ProviderTests.test_legacy_cannot_masquerade) ... ok
+test_negotiation_does_not_complete_motion (test_readiness.ProviderTests.test_negotiation_does_not_complete_motion) ... ok
+test_no_retimestamp_of_same_record (test_readiness.ProviderTests.test_no_retimestamp_of_same_record) ... ok
+test_physical_configuration_cannot_loosen_freshness (test_readiness.ProviderTests.test_physical_configuration_cannot_loosen_freshness) ... ok
+test_physical_sensors_virtual_output_dashboard_stop (test_readiness.ProviderTests.test_physical_sensors_virtual_output_dashboard_stop) ... ok
+test_pybullet_bridge_cannot_replace_physical_sensor_source (test_readiness.ProviderTests.test_pybullet_bridge_cannot_replace_physical_sensor_source) ... ok
+test_range_metres_and_missing_clearance (test_readiness.ProviderTests.test_range_metres_and_missing_clearance) ... ok
+test_sensor_link_never_arms_even_before_negotiation (test_readiness.ProviderTests.test_sensor_link_never_arms_even_before_negotiation) ... ok
+test_three_configured_touches_do_not_fabricate_five_inputs (test_readiness.ProviderTests.test_three_configured_touches_do_not_fabricate_five_inputs) ... ok
+test_unknown_capability_does_not_enable_telemetry (test_readiness.ProviderTests.test_unknown_capability_does_not_enable_telemetry) ... ok
+
+======================================================================
+FAIL: test_blocked_oled_thread_does_not_block_stop (test_readiness.DisplayTests.test_blocked_oled_thread_does_not_block_stop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/diyan07/Quadruped107-phase6-session.r7D1jJ/candidate/tests/test_readiness.py", line 298, in test_blocked_oled_thread_does_not_block_stop
+    self.assertLess(time.monotonic()-started,.5)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2.3895291430000043 not less than 0.5
+
+----------------------------------------------------------------------
+Ran 32 tests in 10.755s
+
+FAILED (failures=1)

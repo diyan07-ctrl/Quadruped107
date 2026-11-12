@@ -1,0 +1,32 @@
+{"started_utc": "2026-11-12T13:38:49.344277+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase6\\pi-final-tests.sh"}
+set -eu
+export PYTHONDONTWRITEBYTECODE=1
+s=$(cat /tmp/quadruped107-phase6-session-path)
+c="$s/candidate"
+test -z "$(git -C "$c" status --porcelain)"
+git -C "$c" fetch --no-tags origin phase6/two-touch-commissioning
+git -C "$c" switch --detach 7f4768e
+cd "$c"
+export PYTHONPATH="$c/software/pi"
+mkdir -p "$s/final-tests"
+git rev-parse HEAD > "$s/final-tests/source.txt"
+"$s/venv/bin/python" -m pip check > "$s/final-tests/pip-check.log" 2>&1
+for name in test_telemetry.py test_readiness.py test_two_touch.py test_commission_recorder.py test_runtime.py test_pi_preflight.py; do
+  "$s/venv/bin/python" -m unittest discover -s tests -p "$name" -v > "$s/final-tests/$name.log" 2>&1
+  echo "$name PASS"
+done
+git status --porcelain
+echo 'Software mocks only; no physical serial port opened.'
+
+--- OBSERVED OUTPUT ---
+From https://github.com/diyan07-ctrl/Quadruped107
+ * branch            phase6/two-touch-commissioning -> FETCH_HEAD
+Previous HEAD position was 01f0bb9 Measure STOP request independently of cold HTTP test setup
+HEAD is now at 7f4768e Wait for observed touch release before replay re-enable
+test_telemetry.py PASS
+test_readiness.py PASS
+test_two_touch.py PASS
+test_commission_recorder.py PASS
+test_runtime.py PASS
+test_pi_preflight.py PASS
+Software mocks only; no physical serial port opened.

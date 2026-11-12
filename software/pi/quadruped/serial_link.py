@@ -63,6 +63,7 @@ class SerialLink:
                         stopping=self.stop_pending is not None, epoch=self.epoch,
                         queued=self.outgoing.qsize(), port=self.selected_port,telemetry=self.telemetry.snapshot(),
                         firmwareIdentity=self.capability,telemetryRate=self.telemetry_rate,
+                        firmwareCapability=f'caps_sensor2_t{self.sensor_touch_count}' if self.capability=='caps_sensor2' else None,
                         sensorTouchCount=self.sensor_touch_count,
                         sensorOnly=self.capability=='caps_sensor2',physicalActuationAllowed=False)
 
@@ -166,7 +167,7 @@ class SerialLink:
             return
         fields = line.split(maxsplit=2)
         if len(fields)==3 and fields[1]=='0' and 0 not in self.pending:
-            if fields[0]=='DONE' and fields[2] in {'caps_sensor2_t0','caps_sensor2_t3','caps_sensor2_t4','caps_sensor2_t5'}:
+            if fields[0]=='DONE' and fields[2] in {'caps_sensor2_t0','caps_sensor2_t2','caps_sensor2_t3','caps_sensor2_t4','caps_sensor2_t5'}:
                 self.capability='caps_sensor2'
                 self.sensor_touch_count=int(fields[2][-1])
             elif fields[0]=='DONE' and fields[2]=='telemetry' and self.capability=='caps_sensor2':

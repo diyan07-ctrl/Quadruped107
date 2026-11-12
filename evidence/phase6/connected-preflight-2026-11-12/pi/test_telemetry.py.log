@@ -1,0 +1,11 @@
+test_duplicate_out_of_order_expiration_and_wrap (test_telemetry.TelemetryTests.test_duplicate_out_of_order_expiration_and_wrap) ... ok
+test_fields_and_unknown_output_enable (test_telemetry.TelemetryTests.test_fields_and_unknown_output_enable) ... ok
+test_history_is_bounded_and_records_actual_outcomes (test_telemetry.TelemetryTests.test_history_is_bounded_and_records_actual_outcomes) ... ok
+test_invalid_and_reserved_fields (test_telemetry.TelemetryTests.test_invalid_and_reserved_fields) ... ok
+test_reset_requires_new_session (test_telemetry.TelemetryTests.test_reset_requires_new_session) ... ok
+test_tel_cannot_complete_motion_or_arm (test_telemetry.TelemetryTests.test_tel_cannot_complete_motion_or_arm) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.009s
+
+OK

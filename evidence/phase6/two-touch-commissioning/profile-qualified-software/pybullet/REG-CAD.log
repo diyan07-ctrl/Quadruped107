@@ -1,0 +1,2 @@
+{"id": "REG-CAD", "started_utc": "2026-11-12T12:34:52.447159+00:00", "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65", "dirtyPathsAtStart": [" M .gitattributes", " M docs/PHASE6_SENSOR_COMMISSIONING.md", "?? evidence/phase6/"], "argv": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "simulation/build_model.py", "--check"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6"}
+CAD-derived provisional model matches source.

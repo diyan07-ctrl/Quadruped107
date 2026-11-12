@@ -1,0 +1,12 @@
+{
+  "scope": "192.168.1.0/24",
+  "durationS": 3.610000000000582,
+  "knownPiMac": "dc-a6-32-52-27-d8",
+  "matchingNeighbors": [],
+  "icmpReplies": [
+    "192.168.1.1",
+    "192.168.1.35"
+  ],
+  "configurationChanged": false,
+  "authenticatedToDevices": false
+}

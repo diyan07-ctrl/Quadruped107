@@ -1,0 +1,99 @@
+{"started_utc": "2026-11-12T13:37:24.121690+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase6\\pi-final-readonly.sh"}
+set -eu
+export PYTHONDONTWRITEBYTECODE=1
+s=$(cat /tmp/quadruped107-phase6-session-path)
+original=/home/diyan07/Quadruped107
+date -u
+echo 'Original checkout status delta; no restoration attempted'
+diff -u "$s/operator-before.status" "$s/qualified/operator-after.status" || true
+echo 'Original HEAD before / after'
+cat "$s/operator-before.head" "$s/qualified/operator-after.head"
+echo 'Original diff HEAD before / after; current staged diff'
+cat "$s/operator-before.sha256" "$s/qualified/operator-after.sha256"
+git -C "$original" diff --cached --binary | sha256sum
+echo 'Candidate status / HEAD'
+git -C "$s/candidate" status --porcelain
+git -C "$s/candidate" rev-parse HEAD
+echo 'Device metadata only; no port open'
+ls -l /dev/serial/by-id /dev/serial/by-path
+udevadm info --query=property --name=/dev/ttyUSB0
+fuser /dev/ttyUSB0 /dev/video0 2>/dev/null || true
+df -h / /tmp
+"$s/venv/bin/python" -c 'import sys,cv2,numpy,serial,json;print(json.dumps(dict(python=sys.version,opencv=cv2.__version__,numpy=numpy.__version__,serial=serial.__version__)))'
+"$s/venv/bin/python" -m pip check
+echo 'No serial open, upload, GPIO, I2C, service or network changes.'
+
+--- OBSERVED OUTPUT ---
+Thu 12 Nov 13:37:24 UTC 2026
+Original checkout status delta; no restoration attempted
+--- /home/diyan07/Quadruped107-phase6-session.r7D1jJ/operator-before.status	2026-11-12 18:49:22.942094438 +0530
++++ /home/diyan07/Quadruped107-phase6-session.r7D1jJ/qualified/operator-after.status	2026-11-12 19:06:02.663240889 +0530
+@@ -26,6 +26,7 @@
+ A  docs/evidence/PHASE2_NAVIGATION.json
+ A  docs/evidence/PHASE3_INTEGRATION.json
+ A  docs/evidence/PHASE3_MODEL_STUDY.json
++ D hardware/Power/power_budget.py
+ A  simulation/PHASE2.md
+ M  simulation/README.md
+ A  simulation/environment.py
+Original HEAD before / after
+a15c39775a4063b396c3cd844f66324cd250021c
+a15c39775a4063b396c3cd844f66324cd250021c
+Original diff HEAD before / after; current staged diff
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+8b63fef61ca744073766cb08f4d1beb919dbcaa05c170c3d6ff00c93c0eca32e  -
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+Candidate status / HEAD
+01f0bb9ba40fb90d944578ceedb8c1ab5bfc59ff
+Device metadata only; no port open
+/dev/serial/by-id:
+total 0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 usb-1a86_USB_Serial-if00-port0 -> ../../ttyUSB0
+
+/dev/serial/by-path:
+total 0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0-port0 -> ../../ttyUSB0
+DEVPATH=/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.1/1-1.1:1.0/ttyUSB0/tty/ttyUSB0
+DEVNAME=/dev/ttyUSB0
+MAJOR=188
+MINOR=0
+SUBSYSTEM=tty
+USEC_INITIALIZED=7326440
+ID_BUS=usb
+ID_MODEL=USB_Serial
+ID_MODEL_ENC=USB\x20Serial
+ID_MODEL_ID=7523
+ID_SERIAL=1a86_USB_Serial
+ID_VENDOR=1a86
+ID_VENDOR_ENC=1a86
+ID_VENDOR_ID=1a86
+ID_REVISION=0264
+ID_TYPE=generic
+ID_USB_MODEL=USB_Serial
+ID_USB_MODEL_ENC=USB\x20Serial
+ID_USB_MODEL_ID=7523
+ID_USB_SERIAL=1a86_USB_Serial
+ID_USB_VENDOR=1a86
+ID_USB_VENDOR_ENC=1a86
+ID_USB_VENDOR_ID=1a86
+ID_USB_REVISION=0264
+ID_USB_TYPE=generic
+ID_USB_INTERFACES=:ff0102:
+ID_USB_INTERFACE_NUM=00
+ID_USB_DRIVER=ch341
+ID_USB_CLASS_FROM_DATABASE=Vendor Specific Class
+ID_VENDOR_FROM_DATABASE=QinHeng Electronics
+ID_MODEL_FROM_DATABASE=CH340 serial converter
+ID_PATH_WITH_USB_REVISION=platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0
+ID_PATH=platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0
+ID_PATH_TAG=platform-fd500000_pcie-pci-0000_01_00_0-usb-0_1_1_1_0
+DEVLINKS=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 /dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0-port0 /dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0-port0
+TAGS=:systemd:
+CURRENT_TAGS=:systemd:
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G   16G   12G  58% /
+tmpfs           923M  8.0K  923M   1% /tmp
+{"python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]", "opencv": "4.11.0", "numpy": "2.5.4", "serial": "3.5"}
+No broken requirements found.
+No serial open, upload, GPIO, I2C, service or network changes.

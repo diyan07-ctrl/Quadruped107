@@ -1,0 +1,32 @@
+[
+  {
+    "variant": "sensor-two-high",
+    "forbiddenSymbols": [],
+    "classification": "COMPILED ELF ONLY",
+    "physicalPinMeasured": false
+  },
+  {
+    "variant": "sensor-two-low",
+    "forbiddenSymbols": [],
+    "classification": "COMPILED ELF ONLY",
+    "physicalPinMeasured": false
+  },
+  {
+    "variant": "sensor-two-mixed-a",
+    "forbiddenSymbols": [],
+    "classification": "COMPILED ELF ONLY",
+    "physicalPinMeasured": false
+  },
+  {
+    "variant": "sensor-two-mixed-b",
+    "forbiddenSymbols": [],
+    "classification": "COMPILED ELF ONLY",
+    "physicalPinMeasured": false
+  },
+  {
+    "variant": "sensor-two-unconfigured",
+    "forbiddenSymbols": [],
+    "classification": "COMPILED ELF ONLY",
+    "physicalPinMeasured": false
+  }
+]

@@ -1,0 +1,441 @@
+{"started_utc": "2026-11-12T13:17:04.796802+00:00", "command": ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "diyan07@192.168.1.42", "bash -s"], "script": "build\\phase6\\pi-audit.sh"}
+set -eu
+export PYTHONDONTWRITEBYTECODE=1
+date -u
+uname -a
+df -h / /tmp
+for checkout in /home/diyan07/Quadruped107 /home/diyan07/Quadruped107-phase4-qualification; do
+  echo "CHECKOUT $checkout"
+  git -C "$checkout" status --porcelain
+  git -C "$checkout" branch --show-current
+  git -C "$checkout" rev-parse HEAD
+  git -C "$checkout" diff --stat
+  git -C "$checkout" diff --cached --stat
+  git -C "$checkout" diff --binary HEAD | sha256sum
+done
+systemctl list-units --type=service --state=running --no-pager --no-legend
+ps -eo pid,comm
+fuser /dev/video0 /dev/ttyACM0 /dev/ttyUSB0 2>/dev/null || true
+ls -l /dev/serial/by-id /dev/serial/by-path /dev/ttyACM* /dev/ttyUSB* 2>/dev/null || true
+for device in /dev/ttyACM* /dev/ttyUSB*; do
+  [ -e "$device" ] || continue
+  udevadm info --query=property --name="$device"
+done
+/home/diyan07/Quadruped107/.venv-pi-virtual/bin/python - <<'PY'
+import sys,cv2,numpy,flask,serial,json
+print(json.dumps(dict(python=sys.version,executable=sys.executable,opencv=cv2.__version__,numpy=numpy.__version__,serial=serial.__version__)))
+PY
+echo 'READ-ONLY AUDIT: no serial open, firmware upload, GPIO, I2C or service modification.'
+
+--- OBSERVED OUTPUT ---
+Thu 12 Nov 13:17:05 UTC 2026
+Linux diyan07 6.18.60+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.18.60-1+rpt1 (2026-11-03) aarch64 GNU/Linux
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G   15G   13G  55% /
+tmpfs           923M  4.0K  923M   1% /tmp
+CHECKOUT /home/diyan07/Quadruped107
+M  .github/workflows/validate.yml
+M  .gitignore
+M  README.md
+A  deploy/navigation.example.json
+A  deploy/sensors.example.json
+M  deploy/vision.example.json
+A  deploy/vision.yellow.json
+M  docs/ARCHITECTURE.md
+M  docs/DECISIONS.md
+M  docs/EXTENSIONS.md
+M  docs/HARDWARE.md
+M  docs/HARDWARE_VERIFICATION.md
+A  docs/MODEL_STUDY.md
+A  docs/PHASE2.md
+A  docs/PHASE3.md
+A  docs/PHASE4.md
+M  docs/PROJECT.md
+M  docs/PROTOCOL.md
+M  docs/ROADMAP.md
+M  docs/SAFETY.md
+A  docs/SENSORS.md
+M  docs/SOFTWARE.md
+M  docs/VALIDATION.md
+M  docs/WIRING.md
+A  docs/evidence/PHASE2_MODEL_STUDY.json
+A  docs/evidence/PHASE2_NAVIGATION.json
+A  docs/evidence/PHASE3_INTEGRATION.json
+A  docs/evidence/PHASE3_MODEL_STUDY.json
+A  simulation/PHASE2.md
+M  simulation/README.md
+A  simulation/environment.py
+A  simulation/model_study.py
+A  simulation/proxy_probe.py
+M  simulation/twin.py
+M  software/pi/README.md
+M  software/pi/quadruped/autonomy.py
+M  software/pi/quadruped/bridge.py
+M  software/pi/quadruped/camera.py
+M  software/pi/quadruped/controller.py
+A  software/pi/quadruped/explain.py
+M  software/pi/quadruped/main.py
+A  software/pi/quadruped/navigation.py
+A  software/pi/quadruped/sensors.py
+M  software/pi/quadruped/serial_link.py
+A  software/pi/quadruped/telemetry.py
+M  software/pi/quadruped/virtual_uno.py
+M  software/pi/quadruped/vision.py
+A  software/pi/quadruped/vision_config.py
+M  software/pi/quadruped/web/app.js
+M  software/pi/quadruped/web/index.html
+M  software/pi/quadruped/web/styles.css
+A  tests/test_demonstration.py
+A  tests/test_phase2.py
+A  tests/test_phase3.py
+A  tests/test_pi_preflight.py
+M  tests/test_simulation.py
+A  tests/test_telemetry.py
+A  tests/test_vision_readiness.py
+A  tools/check-dashboard.mjs
+M  tools/check-installed.py
+A  tools/generate-blue-video.py
+A  tools/pi-preflight.py
+A  tools/qualify-demo.py
+A  tools/record-usb-camera.py
+phase1/software-vision-digital-twin
+a15c39775a4063b396c3cd844f66324cd250021c
+ .github/workflows/validate.yml         |   42 +-
+ .gitignore                             |    3 +
+ README.md                              |    9 +-
+ deploy/navigation.example.json         |   10 +
+ deploy/sensors.example.json            |   11 +
+ deploy/vision.example.json             |    3 +-
+ deploy/vision.yellow.json              |   11 +
+ docs/ARCHITECTURE.md                   |   25 +
+ docs/DECISIONS.md                      |   14 +
+ docs/EXTENSIONS.md                     |    2 +-
+ docs/HARDWARE.md                       |    5 +
+ docs/HARDWARE_VERIFICATION.md          |   18 +
+ docs/MODEL_STUDY.md                    |   57 ++
+ docs/PHASE2.md                         |   80 ++
+ docs/PHASE3.md                         |   97 ++
+ docs/PHASE4.md                         |   24 +
+ docs/PROJECT.md                        |    2 +-
+ docs/PROTOCOL.md                       |   13 +
+ docs/ROADMAP.md                        |   13 +
+ docs/SAFETY.md                         |   15 +
+ docs/SENSORS.md                        |   53 ++
+ docs/SOFTWARE.md                       |   17 +
+ docs/VALIDATION.md                     |  129 +++
+ docs/WIRING.md                         |    5 +
+ docs/evidence/PHASE2_MODEL_STUDY.json  |  924 ++++++++++++++++++
+ docs/evidence/PHASE2_NAVIGATION.json   |   17 +
+ docs/evidence/PHASE3_INTEGRATION.json  |   27 +
+ docs/evidence/PHASE3_MODEL_STUDY.json  | 1600 ++++++++++++++++++++++++++++++++
+ simulation/PHASE2.md                   |   70 ++
+ simulation/README.md                   |    2 +
+ simulation/environment.py              |  228 +++++
+ simulation/model_study.py              |   73 ++
+ simulation/proxy_probe.py              |   27 +
+ simulation/twin.py                     |  154 ++-
+ software/pi/README.md                  |    2 +
+ software/pi/quadruped/autonomy.py      |   55 +-
+ software/pi/quadruped/bridge.py        |   51 +-
+ software/pi/quadruped/camera.py        |   18 +-
+ software/pi/quadruped/controller.py    |   75 +-
+ software/pi/quadruped/explain.py       |   26 +
+ software/pi/quadruped/main.py          |  259 +++++-
+ software/pi/quadruped/navigation.py    |  184 ++++
+ software/pi/quadruped/sensors.py       |  197 ++++
+ software/pi/quadruped/serial_link.py   |    8 +-
+ software/pi/quadruped/telemetry.py     |   70 ++
+ software/pi/quadruped/virtual_uno.py   |    4 +-
+ software/pi/quadruped/vision.py        |   90 +-
+ software/pi/quadruped/vision_config.py |   31 +
+ software/pi/quadruped/web/app.js       |  108 ++-
+ software/pi/quadruped/web/index.html   |   44 +-
+ software/pi/quadruped/web/styles.css   |   11 +
+ tests/test_demonstration.py            |  207 +++++
+ tests/test_phase2.py                   |  624 +++++++++++++
+ tests/test_phase3.py                   |   55 ++
+ tests/test_pi_preflight.py             |   28 +
+ tests/test_simulation.py               |   11 +-
+ tests/test_telemetry.py                |   59 ++
+ tests/test_vision_readiness.py         |  196 ++++
+ tools/check-dashboard.mjs              |   69 ++
+ tools/check-installed.py               |    9 +
+ tools/generate-blue-video.py           |   26 +
+ tools/pi-preflight.py                  |   62 ++
+ tools/qualify-demo.py                  |   55 ++
+ tools/record-usb-camera.py             |   61 ++
+ 64 files changed, 6374 insertions(+), 101 deletions(-)
+aafbf94f210114bfc4d53e52f9437fdb0931e9617436ec89c3ce968f0b787357  -
+CHECKOUT /home/diyan07/Quadruped107-phase4-qualification
+ff3827690b635510198d16516237dc77d98013e3
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  -
+  accounts-daemon.service   loaded active running Accounts Service
+  avahi-daemon.service      loaded active running Avahi mDNS/DNS-SD Stack
+  bluetooth.service         loaded active running Bluetooth service
+  cron.service              loaded active running Regular background program processing daemon
+  dbus.service              loaded active running D-Bus System Message Bus
+  getty@tty1.service        loaded active running Getty on tty1
+  lightdm.service           loaded active running Light Display Manager
+  NetworkManager.service    loaded active running Network Manager
+  nfs-blkmap.service        loaded active running pNFS block layout mapping daemon
+  packagekit.service        loaded active running PackageKit Daemon
+  polkit.service            loaded active running Authorization Manager
+  rpcbind.service           loaded active running RPC bind portmap service
+  ssh.service               loaded active running OpenBSD Secure Shell server
+  systemd-journald.service  loaded active running Journal Service
+  systemd-logind.service    loaded active running User Login Management
+  systemd-timesyncd.service loaded active running Network Time Synchronization
+  systemd-udevd.service     loaded active running Rule-based Manager for Device Events and Files
+  udisks2.service           loaded active running Disk Manager
+  user@1000.service         loaded active running User Manager for UID 1000
+  wpa_supplicant.service    loaded active running WPA supplicant
+    PID COMMAND
+      1 systemd
+      2 kthreadd
+      3 pool_workqueue_release
+      4 kworker/R-rcu_gp
+      5 kworker/R-sync_wq
+      6 kworker/R-kvfree_rcu_reclaim
+      7 kworker/R-slub_flushwq
+      8 kworker/R-netns
+      9 kworker/0:0-rcu_gp
+     10 kworker/0:0H-events_highpri
+     11 kworker/0:1-events
+     12 kworker/u16:0-ext4-rsv-conversion
+     13 kworker/R-mm_percpu_wq
+     14 ksoftirqd/0
+     15 rcu_preempt
+     16 rcu_exp_par_gp_kthread_worker/0
+     17 rcu_exp_gp_kthread_worker
+     18 migration/0
+     19 cpuhp/0
+     20 cpuhp/1
+     21 migration/1
+     22 ksoftirqd/1
+     23 kworker/1:0-events
+     24 kworker/1:0H-events_highpri
+     25 cpuhp/2
+     26 migration/2
+     27 ksoftirqd/2
+     28 kworker/2:0-events
+     29 kworker/2:0H-events_highpri
+     30 cpuhp/3
+     31 migration/3
+     32 ksoftirqd/3
+     33 kworker/3:0-events
+     34 kworker/3:0H-events_highpri
+     35 kdevtmpfs
+     36 kworker/R-inet_frag_wq
+     37 rcu_tasks_kthread
+     38 rcu_tasks_rude_kthread
+     39 rcu_tasks_trace_kthread
+     40 kauditd
+     41 khungtaskd
+     42 oom_reaper
+     43 kworker/u16:1-kvfree_rcu_reclaim
+     44 kworker/R-writeback
+     45 kcompactd0
+     46 kworker/R-kblockd
+     47 kworker/R-blkcg_punt_bio
+     48 kworker/R-kintegrityd
+     49 kworker/u16:2-kvfree_rcu_reclaim
+     50 kworker/u16:3-async
+     51 watchdogd
+     52 kworker/1:1-rcu_gp
+     53 kworker/R-quota_events_unbound
+     54 kworker/1:1H-kblockd
+     55 kworker/R-rpciod
+     56 kworker/R-xprtiod
+     57 kworker/3:1-rcu_gp
+     58 kswapd0
+     59 kworker/R-nfsiod
+     60 kworker/R-kthrotld
+     61 kworker/1:2-mm_percpu_wq
+     62 kworker/1:3-rcu_gp
+     63 kworker/u17:0-brcmf_wq/mmc1:0001:1
+     65 kworker/2:1-events
+     67 kworker/2:1H-kblockd
+     69 kworker/0:1H-mmc_complete
+     70 irq/28-aerdrv
+     71 kworker/2:2-events
+     72 kworker/2:3-rcu_gp
+     73 hwrng
+     74 kworker/R-iscsi_conn_cleanup
+     75 kworker/R-nvme-wq
+     76 kworker/R-nvme-reset-wq
+     77 kworker/R-nvme-delete-wq
+     79 kworker/R-DWC Notification WorkQ
+     80 kworker/R-uas
+     81 vchiq-slot/0
+     82 vchiq-recy/0
+     83 vchiq-sync/0
+     84 kworker/R-kstrp
+     86 kworker/u16:4
+     87 kworker/R-sdhci
+     88 irq/41-mmc0
+     90 kworker/3:1H-kblockd
+    106 kworker/2:4-events
+    118 kworker/R-mmc_complete
+    135 kworker/3:2H
+    136 kworker/R-v3d_bin
+    137 kworker/R-v3d_render
+    138 kworker/R-v3d_tfu
+    139 kworker/R-v3d_csd
+    140 kworker/R-v3d_cache_clean
+    141 kworker/R-v3d_cpu
+    142 irq/45-vc4 hdmi hpd connected
+    143 irq/46-vc4 hdmi hpd disconnected
+    144 cec-vc4-hdmi-0
+    145 irq/47-vc4 hdmi cec rx
+    146 irq/48-vc4 hdmi cec tx
+    147 irq/49-vc4 hdmi hpd connected
+    148 irq/50-vc4 hdmi hpd disconnected
+    149 cec-vc4-hdmi-1
+    150 irq/51-vc4 hdmi cec rx
+    151 irq/52-vc4 hdmi cec tx
+    152 card1-crtc0
+    153 card1-crtc1
+    154 card1-crtc2
+    155 card1-crtc3
+    156 card1-crtc4
+    157 card1-crtc5
+    158 kworker/0:2-events
+    187 kworker/0:2H-kblockd
+    188 kworker/2:2H-kblockd
+    190 jbd2/mmcblk0p2-8
+    191 kworker/R-ext4-rsv-conversion
+    210 kworker/R-mld
+    211 kworker/R-ipv6_addrconf
+    224 kworker/1:2H
+    300 kworker/3:2-events
+    315 systemd-journal
+    344 systemd-timesyn
+    372 systemd-udevd
+    447 vchiq-keep/0
+    457 SMIO
+    463 irq/58-feb00000.codec
+    466 kworker/R-mmal-vchiq
+    467 kworker/R-mmal-vchiq
+    471 kworker/R-mmal-vchiq
+    474 kworker/R-mmal-vchiq
+    475 kworker/R-mmal-vchiq
+    478 kworker/R-cfg80211
+    479 kworker/R-mmal-vchiq
+    483 kworker/R-mmal-vchiq
+    523 kworker/3:3-events
+    524 kworker/u17:1-hci0
+    525 kworker/u17:2-hci0
+    548 kworker/R-brcmf_wq/mmc1:0001:1
+    550 kworker/0:3-cgroup_free
+    555 brcmf_wdog/mmc1:0001:1
+    557 kworker/0:4
+    582 rpcbind
+    614 blkmapd
+    670 accounts-daemon
+    672 avahi-daemon
+    673 bluetoothd
+    674 cron
+    676 dbus-daemon
+    682 avahi-daemon
+    685 systemd-logind
+    686 udisksd
+    779 NetworkManager
+    781 wpa_supplicant
+    797 polkitd
+    823 krfcommd
+   1256 lightdm
+   1261 sshd
+   1276 login
+   1277 lightdm
+   1285 systemd
+   1287 (sd-pam)
+   1307 dbus-daemon
+   1308 pipewire
+   1309 pipewire
+   1310 labwc
+   1313 wireplumber
+   1316 pipewire-pulse
+   1322 mpris-proxy
+   1368 ssh-agent
+   1419 xdg-permission-
+   1436 lwrespawn
+   1437 lwrespawn
+   1438 kanshi
+   1460 systemd-inhibit
+   1470 polkit-mate-aut
+   1477 rpi-gui-nop
+   1487 pcmanfm-pi
+   1489 wf-panel-pi
+   1491 pcmanfm
+   1509 bash
+   1520 gvfsd
+   1539 gvfsd-fuse
+   1558 xdg-desktop-por
+   1566 xdg-document-po
+   1572 fusermount3
+   1577 xdg-desktop-por
+   1578 gvfs-udisks2-vo
+   1589 gvfs-mtp-volume
+   1597 gvfs-gphoto2-vo
+   1603 gvfs-goa-volume
+   1610 gvfs-afc-volume
+   1612 xdg-desktop-por
+   1621 gvfsd-trash
+   1630 menu-cached
+   1770 packagekitd
+   1806 sshd-session
+   1814 sshd-session
+   1815 bash
+   1829 sshd-session
+   1837 sshd-session
+   1838 bash
+   1857 ps
+crw-rw---- 1 root dialout 188, 0 Nov 12 15:49 /dev/ttyUSB0
+
+/dev/serial/by-id:
+total 0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 usb-1a86_USB_Serial-if00-port0 -> ../../ttyUSB0
+
+/dev/serial/by-path:
+total 0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+lrwxrwxrwx 1 root root 13 Nov 12 15:49 platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0-port0 -> ../../ttyUSB0
+DEVPATH=/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.1/1-1.1:1.0/ttyUSB0/tty/ttyUSB0
+DEVNAME=/dev/ttyUSB0
+MAJOR=188
+MINOR=0
+SUBSYSTEM=tty
+USEC_INITIALIZED=7326440
+ID_BUS=usb
+ID_MODEL=USB_Serial
+ID_MODEL_ENC=USB\x20Serial
+ID_MODEL_ID=7523
+ID_SERIAL=1a86_USB_Serial
+ID_VENDOR=1a86
+ID_VENDOR_ENC=1a86
+ID_VENDOR_ID=1a86
+ID_REVISION=0264
+ID_TYPE=generic
+ID_USB_MODEL=USB_Serial
+ID_USB_MODEL_ENC=USB\x20Serial
+ID_USB_MODEL_ID=7523
+ID_USB_SERIAL=1a86_USB_Serial
+ID_USB_VENDOR=1a86
+ID_USB_VENDOR_ENC=1a86
+ID_USB_VENDOR_ID=1a86
+ID_USB_REVISION=0264
+ID_USB_TYPE=generic
+ID_USB_INTERFACES=:ff0102:
+ID_USB_INTERFACE_NUM=00
+ID_USB_DRIVER=ch341
+ID_USB_CLASS_FROM_DATABASE=Vendor Specific Class
+ID_VENDOR_FROM_DATABASE=QinHeng Electronics
+ID_MODEL_FROM_DATABASE=CH340 serial converter
+ID_PATH_WITH_USB_REVISION=platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0
+ID_PATH=platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0
+ID_PATH_TAG=platform-fd500000_pcie-pci-0000_01_00_0-usb-0_1_1_1_0
+DEVLINKS=/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usbv2-0:1.1:1.0-port0 /dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1:1.0-port0 /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+TAGS=:systemd:
+CURRENT_TAGS=:systemd:
+{"python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]", "executable": "/home/diyan07/Quadruped107/.venv-pi-virtual/bin/python", "opencv": "4.10.0", "numpy": "2.2.4", "serial": "3.5"}
+READ-ONLY AUDIT: no serial open, firmware upload, GPIO, I2C or service modification.

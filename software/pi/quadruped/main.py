@@ -182,7 +182,7 @@ class Runtime:
         return dict(ok=True, simulation=self.actuators_simulated, physicalActuationAllowed=False,
                     system=self.stats.snapshot(), obstacleVirtual=self.obstacle_blocked,
                     bridge=self.bridge.snapshot() if self.bridge else None, motion=self.motion.snapshot(),
-                    link=self.link.snapshot(), controlModes=sorted({'manual','idle','sensor_test'} if self.sensor_source=='physical_uno' else MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
+                    link=self.link.snapshot(), controlModes=sorted(self.physical_control_modes() if self.sensor_source=='physical_uno' else MODES-{"hand_gesture"} if self.sensors else MODES-{"explore","sensor_test","interaction"}-(set() if self.detector else {"hand_gesture"})), motionModes=sorted(MOTIONS),
                     sensors=self.sensors.snapshot() if self.sensors else None,
                     sensorSource=self.sensor_source,sensorLink=self.sensor_link.snapshot() if self.sensor_link else None,
                     oled=self.display.snapshot(),
@@ -354,14 +354,25 @@ class Runtime:
     def _sensor_inhibition(self,motion):
         from .navigation import motion_inhibition
         sensors=self.sensors.snapshot()
-        reason=motion_inhibition(sensors,motion,self.navigation.settings)
-        if reason: return reason
         state=self.motion.snapshot()
+        virtual_gesture='interaction' in self.physical_control_modes() and state['appMode']=='interaction'
+        if virtual_gesture and motion not in (None,'none','stand'):
+            return 'Physical touch gesture mode permits only virtual stand placeholders'
+        reason=motion_inhibition(sensors,motion,self.navigation.settings,virtual_touch_gesture=virtual_gesture)
+        if reason: return reason
         if (state["appMode"] in {"opencv","explore"} and motion in CONTINUOUS
             and sensors["front_m"]<=self.navigation.settings.caution_m
             and self.navigation_state()["state"]!="RECOVERY"):
             return "Obstacle override preempts autonomous motion"
         return None
+
+    def physical_control_modes(self):
+        from .sensors import TWO_TOUCH_PROFILE
+        modes={'manual','idle','sensor_test'}
+        if (self.sensor_source=='physical_uno' and self.actuators_simulated and self.sensors
+                and self.sensors.config.touch_profile==TWO_TOUCH_PROFILE):
+            modes.add('interaction')
+        return modes
 
     def _sensor_update(self,batch,*,notify=True,**metadata):
         if not self.sensors: return
@@ -484,7 +495,7 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
-        if runtime.sensor_source=='physical_uno' and mode not in {'manual','idle','sensor_test'}:
+        if runtime.sensor_source=='physical_uno' and mode not in runtime.physical_control_modes() | (MOTIONS-CONTINUOUS):
             raise RuntimeError('Physical monitoring only; navigation clearance unavailable')
         if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
@@ -554,6 +565,8 @@ def create_app(runtime):
     @app.post("/api/interaction")
     def interaction():
         data=body()
+        if runtime.sensor_source=='physical_uno':
+            raise RuntimeError('Physical gesture mode accepts qualified touch events only; no generic personality commands')
         generation=runtime.require_control(request.cookies.get("quadruped_control"))
         state=runtime.motion.snapshot()
         if not runtime.sensors or not runtime.actuators_simulated or state["appMode"]!="interaction" or not state["enabled"]:

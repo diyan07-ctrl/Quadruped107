@@ -1,0 +1,424 @@
+[
+  {
+    "id": "native",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/test-firmware.py",
+      "--zig",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase5\\native-tools\\ziglang\\zig.exe"
+    ],
+    "startedUtc": "2026-11-12T12:34:51.198533+00:00",
+    "durationS": 4.203,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "native.log"
+  },
+  {
+    "id": "virtual-generate",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe",
+      "tools/generate-virtual-firmware.py"
+    ],
+    "startedUtc": "2026-11-12T12:34:55.400027+00:00",
+    "durationS": 0.063,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual-generate.log"
+  },
+  {
+    "id": "sensor-default",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-default",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:55.458138+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-default.log"
+  },
+  {
+    "id": "sensor-two-high",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:56.126654+00:00",
+    "durationS": 0.688,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-two-high.log"
+  },
+  {
+    "id": "sensor-two-low",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:56.814252+00:00",
+    "durationS": 0.672,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-two-low.log"
+  },
+  {
+    "id": "sensor-two-mixed-a",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-mixed-a",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=1",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:57.486591+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-two-mixed-a.log"
+  },
+  {
+    "id": "sensor-two-mixed-b",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-mixed-b",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=2",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:58.144641+00:00",
+    "durationS": 0.688,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-two-mixed-b.log"
+  },
+  {
+    "id": "sensor-two-unconfigured",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-unconfigured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DTOUCH_ENABLED_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:58.841628+00:00",
+    "durationS": 0.734,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-two-unconfigured.log"
+  },
+  {
+    "id": "sensor-configured",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-configured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:34:59.575143+00:00",
+    "durationS": 0.672,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-configured.log"
+  },
+  {
+    "id": "sensor-three-low",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-three-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:35:00.242050+00:00",
+    "durationS": 0.688,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-three-low.log"
+  },
+  {
+    "id": "sensor-four-high",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-four-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:35:00.930444+00:00",
+    "durationS": 0.672,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-four-high.log"
+  },
+  {
+    "id": "sensor-four-low",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-four-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15 -DTOUCH_ACTIVE_LOW_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:35:01.611061+00:00",
+    "durationS": 0.671,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-four-low.log"
+  },
+  {
+    "id": "sensor-three-high",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-three-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:35:02.281033+00:00",
+    "durationS": 0.657,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-three-high.log"
+  },
+  {
+    "id": "sensor-five-low",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-five-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31 -DTOUCH_ACTIVE_LOW_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "startedUtc": "2026-11-12T12:35:02.933022+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "sensor-five-low.log"
+  },
+  {
+    "id": "calibration",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\calibration",
+      "firmware/uno/direct_calibration"
+    ],
+    "startedUtc": "2026-11-12T12:35:03.585495+00:00",
+    "durationS": 0.641,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "calibration.log"
+  },
+  {
+    "id": "production",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\production",
+      "firmware/uno/sketch"
+    ],
+    "startedUtc": "2026-11-12T12:35:04.235863+00:00",
+    "durationS": 0.781,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "production.log"
+  },
+  {
+    "id": "virtual",
+    "commit": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "dirtyPathsAtStart": [
+      " M .gitattributes",
+      " M docs/PHASE6_SENSOR_COMMISSIONING.md",
+      "?? evidence/phase6/"
+    ],
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\virtual",
+      "build/virtual/sketch"
+    ],
+    "startedUtc": "2026-11-12T12:35:05.017785+00:00",
+    "durationS": 0.656,
+    "result": "PASS",
+    "exitCode": 0,
+    "physicalVerification": false,
+    "log": "virtual.log"
+  }
+]

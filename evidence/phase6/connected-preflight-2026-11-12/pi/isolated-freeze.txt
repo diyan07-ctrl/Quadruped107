@@ -1,0 +1,11 @@
+blinker==1.9.0
+click==8.5.1
+Flask==3.1.2
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.4
+numpy==2.5.4
+opencv-python-headless==4.11.0.86
+pyserial==3.5
+-e git+https://github.com/diyan07-ctrl/Quadruped107.git@80de015063417d3579181198020501940f1624db#egg=quadruped107&subdirectory=../../../Quadruped107-phase6-session.r7D1jJ/candidate/software/pi
+Werkzeug==3.1.9

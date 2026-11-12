@@ -1,0 +1,2 @@
+{"id": "REG-CAD", "started_utc": "2026-11-12T13:37:35.798544+00:00", "commit": "01f0bb9ba40fb90d944578ceedb8c1ab5bfc59ff", "dirtyPathsAtStart": [], "argv": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "simulation/build_model.py", "--check"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6"}
+CAD-derived provisional model matches source.

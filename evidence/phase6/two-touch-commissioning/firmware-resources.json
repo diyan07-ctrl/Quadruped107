@@ -1,0 +1,309 @@
+[
+  {
+    "variant": "sensor-default",
+    "flashBytes": 5276,
+    "globalSramBytes": 410,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-default",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-two-high",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false,
+    "binarySha256": "77b27b39734c6d08cd539a9d65ae5c15619f13f5dcfe0d92072b2e5145b18aa0",
+    "localBinaryPath": "build\\phase5\\compiled\\sensor-two-high\\sensor_only.ino.hex",
+    "electricalProfileSelected": false
+  },
+  {
+    "variant": "sensor-two-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false,
+    "binarySha256": "ea54d4005e77303e6fadbaf7171f54f77c2387bf40197b21167919fb420b46c5",
+    "localBinaryPath": "build\\phase5\\compiled\\sensor-two-low\\sensor_only.ino.hex",
+    "electricalProfileSelected": false
+  },
+  {
+    "variant": "sensor-two-mixed-a",
+    "flashBytes": 7256,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-mixed-a",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=1",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false,
+    "binarySha256": "7d49cd537b5f49247e75f30c23930bf5682eb7bbb5567de58e0e5b0872d18cfb",
+    "localBinaryPath": "build\\phase5\\compiled\\sensor-two-mixed-a\\sensor_only.ino.hex",
+    "electricalProfileSelected": false
+  },
+  {
+    "variant": "sensor-two-mixed-b",
+    "flashBytes": 7272,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-mixed-b",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=2",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false,
+    "binarySha256": "3bd3a9e584aa8b282a41fe93b1c2a06ccdfe276496b0c84376594d6595cb8462",
+    "localBinaryPath": "build\\phase5\\compiled\\sensor-two-mixed-b\\sensor_only.ino.hex",
+    "electricalProfileSelected": false
+  },
+  {
+    "variant": "sensor-two-unconfigured",
+    "flashBytes": 6106,
+    "globalSramBytes": 483,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-two-unconfigured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DTOUCH_ENABLED_MASK=3",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false,
+    "binarySha256": "044b97e99df62d01a399604a22588576c72fdd4be75d3531f06bfb2ecbb50d2b",
+    "localBinaryPath": "build\\phase5\\compiled\\sensor-two-unconfigured\\sensor_only.ino.hex",
+    "electricalProfileSelected": false
+  },
+  {
+    "variant": "sensor-configured",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-configured",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-three-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-three-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-four-high",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-four-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-four-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-four-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15 -DTOUCH_ACTIVE_LOW_MASK=15",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-three-high",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-three-high",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "sensor-five-low",
+    "flashBytes": 7240,
+    "globalSramBytes": 510,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\sensor-five-low",
+      "--build-property",
+      "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31 -DTOUCH_ACTIVE_LOW_MASK=31",
+      "firmware/uno/sensor_only"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "calibration",
+    "flashBytes": 5012,
+    "globalSramBytes": 459,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\calibration",
+      "firmware/uno/direct_calibration"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "production",
+    "flashBytes": 10430,
+    "globalSramBytes": 1120,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\production",
+      "firmware/uno/sketch"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  },
+  {
+    "variant": "virtual",
+    "flashBytes": 7002,
+    "globalSramBytes": 927,
+    "measuredStackMargin": null,
+    "source": "07acf1f7cda9678bcf60c991419157b04e2dea65",
+    "command": [
+      "C:\\Users\\Diyan Patel\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
+      "compile",
+      "--profile",
+      "uno",
+      "--build-path",
+      "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6\\build\\phase5\\compiled\\virtual",
+      "build/virtual/sketch"
+    ],
+    "classification": "AVR COMPILE ONLY",
+    "uploaded": false
+  }
+]

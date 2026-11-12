@@ -6,13 +6,13 @@
 #if URM37_PROFILE != 0 && URM37_PROFILE != 1
 #error Unsupported URM37 revision/interface profile
 #endif
-// Bits select physically verified, connected digital touch boards (3-5 for use).
+// Bits select physically verified, connected digital touch boards (2-5 for use).
 #ifndef TOUCH_ENABLED_MASK
 #define TOUCH_ENABLED_MASK 0
 #endif
 #ifndef TOUCH_ACTIVE_LOW_MASK
 #define TOUCH_ACTIVE_LOW_MASK 0
 #endif
-static_assert(TOUCH_ENABLED_MASK==0 || TOUCH_ENABLED_MASK==7 ||
-              TOUCH_ENABLED_MASK==15 || TOUCH_ENABLED_MASK==31, "Select 3-5 contiguous touches");
+static_assert(TOUCH_ENABLED_MASK==0 || TOUCH_ENABLED_MASK==3 || TOUCH_ENABLED_MASK==7 ||
+              TOUCH_ENABLED_MASK==15 || TOUCH_ENABLED_MASK==31, "Select 2-5 contiguous touches");
 static_assert((TOUCH_ACTIVE_LOW_MASK & ~TOUCH_ENABLED_MASK)==0, "Polarity for absent touch");

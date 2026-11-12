@@ -1,0 +1,12 @@
+{
+  "qualifiedSource": "7f4768e97fd55d0f897fbe2e8b588b7b26f6a3d7",
+  "baseline": "b18e897e13baefc452606b37a1804ca9e672d2a5",
+  "branch": "phase6/two-touch-commissioning",
+  "runtimeFirmwareDeltaSince07acf1f": [],
+  "physicalSerialOpened": false,
+  "firmwareUploaded": false,
+  "physicalActuationAllowed": false,
+  "scope": "SOFTWARE / MOCKS / AVR COMPILE / READ-ONLY USB METADATA",
+  "piSession": "/home/diyan07/Quadruped107-phase6-session.r7D1jJ",
+  "originalPiPreservationComparison": "FAIL: unexplained new unstaged power_budget.py deletion; unchanged HEAD and staged patch; left untouched"
+}

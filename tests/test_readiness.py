@@ -285,24 +285,29 @@ class DisplayTests(unittest.TestCase):
         self.assertIn('I2C transfer',service.snapshot()['error'])
 
     def test_blocked_oled_thread_does_not_block_stop(self):
-        entered=threading.Event(); release=threading.Event()
+        entered=threading.Event(); release=threading.Event(); finished=threading.Event()
         class Blocked(MockDisplay):
-            def show(self,frame): entered.set(); release.wait(2)
+            def show(self,frame):
+                entered.set(); release.wait(2); finished.set()
         runtime=Runtime(simulate=True,display_backend=Blocked())
+        # HTTP setup precedes runtime workers in the real entry point. Measure
+        # the STOP request, not cold Flask/Werkzeug test-client construction.
+        client=create_app(runtime).test_client()
         runtime.display.start()
         try:
             self.assertTrue(entered.wait(1))
             started=time.monotonic()
-            response=create_app(runtime).test_client().post('/api/stop',json={})
+            response=client.post('/api/stop',json={})
             self.assertEqual(response.status_code,200)
             self.assertLess(time.monotonic()-started,.5)
+            self.assertFalse(finished.is_set(), 'Display must still be blocked when STOP completes')
         finally:
             release.set(); runtime.close()
 
 
 class NegotiationTests(unittest.TestCase):
     def test_real_worker_mock_usb_and_legacy(self):
-        for capability in ('caps_sensor2_t5','unknown_command'):
+        for capability in ('caps_sensor2_t5','caps_sensor2_t2','unknown_command'):
             with self.subTest(capability=capability):
                 class USB:
                     def __init__(self,**options): self.lines=queue.Queue(); self.writes=[]
@@ -310,7 +315,7 @@ class NegotiationTests(unittest.TestCase):
                     def write(self,data):
                         self.writes.append(data)
                         if data==b'HELLO\n': self.lines.put(b'READY Quadruped107 1\n')
-                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability=="caps_sensor2_t5" else "ERR"} 0 {capability}\n'.encode())
+                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability.startswith("caps_sensor2_t") else "ERR"} 0 {capability}\n'.encode())
                         elif data==b'TELEM 0 5 2\n': self.lines.put(b'DONE 0 telemetry\n')
                         elif data==b'PING\n': self.lines.put(b'PONG\n')
                         elif data.startswith(b'POLL '):
@@ -326,13 +331,15 @@ class NegotiationTests(unittest.TestCase):
                     deadline=time.monotonic()+4
                     while time.monotonic()<deadline:
                         snapshot=link.snapshot()
-                        if snapshot['connected'] and (capability!='caps_sensor2_t5' or snapshot['telemetry']['record']): break
+                        if snapshot['connected'] and (capability=='unknown_command' or snapshot['telemetry']['record']): break
                         time.sleep(.01)
                     self.assertTrue(snapshot['connected'])
                     self.assertFalse(link.armed)
                     self.assertFalse(any(data.startswith(b'ARM') for data in usb.writes))
-                    self.assertEqual(link.capability,'caps_sensor2' if capability=='caps_sensor2_t5' else None)
-                    if capability=='caps_sensor2_t5': self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
+                    self.assertEqual(link.capability,'caps_sensor2' if capability.startswith('caps_sensor2_t') else None)
+                    if capability.startswith('caps_sensor2_t'):
+                        self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
+                        self.assertEqual(snapshot['firmwareCapability'],capability)
                 finally: link.close()
 
 if __name__=='__main__': unittest.main()

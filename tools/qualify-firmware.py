@@ -25,6 +25,11 @@ def main():
     checks=[('native',native),('virtual-generate',[sys.executable,'tools/generate-virtual-firmware.py'])]
     for name,path,flags in (
         ('sensor-default','firmware/uno/sensor_only',[]),
+        ('sensor-two-high','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3']),
+        ('sensor-two-low','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=3']),
+        ('sensor-two-mixed-a','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=1']),
+        ('sensor-two-mixed-b','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=2']),
+        ('sensor-two-unconfigured','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DTOUCH_ENABLED_MASK=3']),
         ('sensor-configured','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=31']),
         ('sensor-three-low','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=7 -DTOUCH_ACTIVE_LOW_MASK=7']),
         ('sensor-four-high','firmware/uno/sensor_only',['--build-property','compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=15']),

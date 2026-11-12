@@ -1,0 +1,312 @@
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1.c:537:1: warning: redeclaration of '_Unwind_DeleteException' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:41:1: warning: redeclaration of '_Unwind_Resume_or_Rethrow' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  537 | _Unwind_DeleteException(_Unwind_Exception *exception_object) {
+      | ^
+   41 | _Unwind_Resume_or_Rethrow(_Unwind_Exception *exception_object) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:63:13: note: previous declaration is here
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:107:5: note: previous declaration is here
+     107 | 63 | exte    _Unwind_Resumern vo_or_Rethrow(_Uid _Unwind_DeleteException(_Unwind_Excenwind_Eption *exception_object);
+      |             ^
+xception *exception_object);
+      |     ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1.c:547:1: warning: redeclaration of '_Unwind_GetGR' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  547 | _Unwind_GetGR(struct _Unwind_Context *context, int index) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:66:18: note: previous declaration is here
+   66 | extern uintptr_t _Unwind_GetGR(struct _Unwind_Context *context, int index);
+      |                  ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:65:1: warning: redeclaration of '_Unwind_GetDataRelBase' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   65 | _Unwind_GetDataRelBase(struct _Unwind_Context *context) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:164:18: note: previous declaration is here
+  164 | extern uintptr_t _Unwind_GetDataRelBase(struct _Unwind_ContC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1.c:557:24: warning: redeclaration of '_Unwind_SetGR' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  557 | _LIext *conBUtext)NWIND
+      |                  ^
+_EXPORT void _Unwind_SetGR(struct _Unwind_Context *context, int index,
+      |                        ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:67:13: note: previous declaration is here
+   67 | extern void _Unwind_SetGR(struct _Unwind_Context *context, int index,
+      |             ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:78:1: warning: redeclaration of '_Unwind_GetTextRelBase' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   78 | _Unwind_GetTextRelBase(struct _Unwind_Context *context) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:166:18: note: previous declaration is here
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1.c:567:29: warning: redeclaration of '_Unwind_GetIP' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  166 | extern ui  567 | _LIBUNntpWIND_EXPORT tr_t uintptr_t _Unwind_GetIP(struct _Unwind_Con_Unwind_GetTextRelBase(stextructt *context)  _Unw{
+      |                             ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:ind_C69:18: note: previous declaration is here
+onte   69 | extern uintptr_t xt *context_Unwind_GetIP(struct _)
+      |                  ^
+Unwind_Context *context);
+      |                  ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:87:25: warning: redeclaration of '_Unwind_FindEnclosingFunction' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   87 | _LIBUNWIND_EXPORT void C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1.c:579:24: warning: redeclaration of '_Unwind_SetIP' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+*_Unwind  579 | _L_FindEnclosingFuncIBUNWIND_EXPORT void _tion(void *pc) {
+      |                         ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:160:Unwind_SetIP(struct _Unwind_C14: note: previous declaration is hereontex
+  160 | extt *coern void *_Unwindntext,
+      _Fi|                        ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:70:13: note: previous declaration is here
+ndEnclosingFunction(void *pc);
+   70 | extern void _Unw      |              ^
+ind_SetIP(struct _Unwind_Context *, uintptr_t new_value);
+      |             ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:133:1: warning: redeclaration of '_Unwind_Backtrace' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  133 | _Unwind_Backtrace(_Unwind_Trace_Fn callback, void *ref) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:115:28: note: previous declaration is here
+  115 | extern _Unwind_Reason_Code _Unwind_Backtrace(_Unwind_Trace_Fn, void *);
+      |                            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:212:31: warning: redeclaration of '_Unwind_Find_FDE' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  212 | _LIBUNWIND_EXPORT const void *_Unwind_Find_FDE(const void *pc,
+      |                               ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:152:20: note: previous declaration is here
+  152 | extern const void *_Unwind_Find_FDE(const void *pc, struct dwarf_eh_bases *);
+      |                    ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:233:29: warning: redeclaration of '_Unwind_GetCFA' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  233 | _LIBUNWIND_EXPORT uintptr_t _Unwind_GetCFA(struct _Unwind_Context *context) {
+      |                             ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:120:18: note: previous declaration is here
+  120 | extern uintptr_t _Unwind_GetCFA(struct _Unwind_Context *);
+      |                  ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\UnwindLevel1-gcc-ext.c:246:29: warning: redeclaration of '_Unwind_GetIPInfo' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  246 | _LIBUNWIND_EXPORT uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+      |                             ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:129:18: note: previous declaration is here
+  129 | extern uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+      |                  ^
+5 warnings generated.
+8 warnings generated.
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:59:1: warning: redeclaration of '_GCC_specific_handler' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   59 | _GCC_specific_handler(PEXCEPTION_RECORD ms_exc, PVOID frame, PCONTEXT ms_ctx,
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:197:30: note: previous declaration is here
+  197 | extern EXCEPTION_DISPOSITION _GCC_specific_handler(EXCEPTION_RECORD *exc,
+      |                              ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:38:36: warning: redeclaration of 'unw_local_addr_space' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   38 | _LIBUNWIND_EXPORT unw_addr_space_t unw_local_addr_space =
+      |                                    ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:134:25: note: previous declaration is here
+  134 | extern unw_addr_space_t unw_local_addr_space;
+      |                         ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:95:41: warning: redeclaration of 'unw_init_local' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+   95 | _LIBUNWIND_WEAK_ALIAS(__unw_init_local, unw_init_local)
+      |                                         ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:110:12: note: previous declaration is here
+  110 | extern int unw_init_local(unw_cursor_t *, unw_context_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:110:38: warning: redeclaration of 'unw_get_reg' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  110 | _LIBUNWIND_WEAK_ALIAS(__unw_get_reg, unw_get_reg)
+      |                                      ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:112:12: note: previous declaration is here
+  112 | extern int unw_get_reg(unw_cursor_t *, unw_regnum_t, unw_word_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:142:38: warning: redeclaration of 'unw_set_reg' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  142 | _LIBUNWIND_WEAK_ALIAS(__unw_set_reg, unw_set_reg)
+      |                                      ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:114:12: note: previous declaration is here
+  114 | extern int unw_set_reg(unw_cursor_t *, unw_regnum_t, unw_word_t) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:157:40: warning: redeclaration of 'unw_get_fpreg' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  157 | _LIBUNWIND_WEAK_ALIAS(__unw_get_fpreg, unw_get_fpreg)
+      |                                        ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:113:12: note: previous declaration is here
+  113 | extern int unw_get_fpreg(unw_cursor_t *, unw_regnum_t, unw_fpreg_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:176:40: warning: redeclaration of 'unw_set_fpreg' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  176 | _LIBUNWIND_WEAK_ALIAS(__unw_set_fpreg, unw_set_fpreg)
+      |                                        ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:115:12: note: previous declaration is here
+  115 | extern int unw_setC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:352:1: warning: redeclaration of '_Unwind_RaiseException' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+_fpreg(unw_cursor_t *, un  w352 | _Unwind_RaiseException(_Unwind_Exception *exception_object) {
+      | ^
+_regnum_t, unC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:60:5: note: previous declaration is here
+   60 |     _Unwind_RaiseException(_Unwind_Exception *exception_object);
+      |     ^
+w_fpreg_t)  LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:184:35: warning: redeclaration of 'unw_step' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:381  184 | _LIBUNWIND_WEA:1K_A: LIAS(__unw_warning: redeclaration of '_Unwind_Resume' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]step, un
+w_step)
+  381      |                                   ^
+ | _C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:111:12: note: Unprevious declaration is here
+wind_Resume(_Unwind_Exception *exception_object) {
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind_itanium.h:61:13: note: previous declaration is here
+  111 |    61extern int unw | extern void _Unwind_Resume(_Unwind_Exception *exception_object);
+      |             ^
+_step(unw_cursor_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:420:C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:206:44: warning: 1:redeclaration of 'unw_get_proc_info' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+ warning: redeclaration of '_Unwind_ForcedUnwind' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  206 | _LIBUNWI  420ND_WEAK_ | _ALIAS(__unw_get_prUnoc_info, unw_get_prowind_ForcedUnwind(_Unwind_Exception *exception_object,
+      | ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:85:5: note: previous declaration is here
+c_info)
+         85 |     _Unwind_ForcedUnwind(_Unwind|                                            ^
+_C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:128:12: note: previous declaration is here
+Exception *exception_object,
+      |     ^
+  128 | extern int unw_get_proc_info(unw_cursor_t *, unw_proc_info_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:438:1: warning: redeclaration of '_Unwind_GetLanguageSpecificData' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  438 | _Unwind_GetLanguageSpecificData(struct _Unwind_ContexC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:219:37: warning: redeclaration of 'unw_resume' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  219 | _LIBUNWIND_WEAK_ALIAS(__unw_resume, unw_resume)
+      |                                     ^
+t *context) {
+      | C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:116:12: note: previous declaration is here^
+  116 | extern int u
+nw_resume(unC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:78:5: note: previous declaration is here
+w_cursor_t    78 |     _Unwind_GetLanguageSpecificData(st*) LIBUNWIND_AVAIL;
+      |            ^
+ruct _Unwind_Context *context);
+      |     ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:232:44: warning: redeclaration of 'unw_get_proc_name' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  232 | _LIBUNWIND_WEAC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\Unwind-seh.cpp:450:1: warning: redeclaration of '_Unwind_GetRegionStart' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+K_ALIAS(__unw_g  et_proc_450 | name, _Unwind_GetRegionStart(struct _Unwind_Context *context) {
+      | ^
+uC:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/unwind.h:76:18: note: previous declaration is here
+nw_get_proc_n   76ame)
+      |                                            ^
+ | C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:131:12:extern uintptr_t _Unwind_GetRegionStart(struct _Unwind_Context *context);
+      |                  ^
+ note: previous declaration is here
+  131 | extern int unw_get_proc_name(unw_cursor_t *, char *, size_t, unw_word_t *) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:242:39: warning: redeclaration of 'unw_is_fpreg' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  242 | _LIBUNWIND_WEAK_ALIAS(__unw_is_fpreg, unw_is_fpreg)
+      |                                       ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:129:12: note: previous declaration is here
+  129 | extern int unw_is_fpreg(unw_cursor_t *, unw_regnum_t) LIBUNWIND_AVAIL;
+      |            ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:252:38: warning: redeclaration of 'unw_regname' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  252 | _LIBUNWIND_WEAK_ALIAS(__unw_regname, unw_regname)
+      |                                      ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:127:20: note: previous declaration is here
+  127 | extern const char *unw_regname(unw_cursor_t *, unw_regnum_t) LIBUNWIND_AVAIL;
+      |                    ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\src\libunwind.cpp:261:46: warning: redeclaration of 'unw_is_signal_frame' should not add 'dllexport' attribute [-Wdll-attribute-on-redeclaration]
+  261 | _LIBUNWIND_WEAK_ALIAS(__unw_is_signal_frame, unw_is_signal_frame)
+      |                                              ^
+C:\Users\Diyan Patel\Desktop\Quadrupled Robot\Quadruped107\build\phase5\native-tools\ziglang\lib\libunwind\include/libunwind.h:130:12: note: previous declaration is here
+  130 | extern int unw_is_signal_frame(unw_cursor_t *) LIBUNWIND_AVAIL;
+      |            ^
+13 warnings generated.
+6 warnings generated.
+driver/policy: timeout, invalid, recovery, wrap, debounce, stuck, uncalibrated, direction, limits, rate, lease, STOP PASS
+policy PASS
+WIRE_RECORD=TEL 2 0 640 -1 0 16 0 640 0 42 1
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 0 16 0 999 0 46 1
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-default C++ wire -> Pi SensorManager PASS
+sensor-default C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-default PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_TOUCH_RECORD=TEL 2 1 840 400 1 19 1 237 160 43 0
+WIRE_TOUCH_RECORD=TEL 2 2 1040 -1 1 18 1 0 190 44 2
+WIRE_INVALID_RECORD=TEL 2 4 1450 -1 1 18 1 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+mock touch -> real C++ telemetry -> Pi interaction event; actuation inhibited PASS
+sensor-configured C++ wire -> Pi SensorManager PASS
+sensor-configured C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-configured PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 7 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 7 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-active-low C++ wire -> Pi SensorManager PASS
+sensor-active-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-active-low PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 18 0 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-four-high C++ wire -> Pi SensorManager PASS
+sensor-four-high C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-four-high PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 15 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 15 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-four-low C++ wire -> Pi SensorManager PASS
+sensor-four-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-four-low PASS
+WIRE_RECORD=TEL 2 0 640 400 1 19 0 37 0 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 18 0 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-three-high C++ wire -> Pi SensorManager PASS
+sensor-three-high C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-three-high PASS
+WIRE_RECORD=TEL 2 0 640 400 1 17 31 37 40 42 0
+WIRE_INVALID_RECORD=TEL 2 2 1450 -1 1 16 31 0 0 46 2
+sensor firmware: identity, no actuation, configured acquisition, poll, drop, watchdog, reset, overflow PASS
+sensor-five-low C++ wire -> Pi SensorManager PASS
+sensor-five-low C++ no-echo -> Pi invalidation / ARM rejection / urgent STOP PASS
+sensor-five-low PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-high real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-high PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-low real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-low PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-mixed-a real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-mixed-a PASS
+WIRE_TWO=TEL 2 0 600 800 1 19 0 96 0 1 0
+WIRE_TWO=TEL 2 1 860 800 1 19 1 156 10 2 0
+WIRE_TWO=TEL 2 2 1070 800 1 19 1 166 200 3 0
+WIRE_TWO=TEL 2 3 1315 800 1 19 1 11 235 4 0
+WIRE_TWO=TEL 2 4 1525 800 1 19 0 21 5 5 0
+WIRE_TWO=TEL 2 5 1770 800 1 19 2 66 10 6 0
+WIRE_TWO=TEL 2 6 1980 800 1 19 2 76 200 7 0
+WIRE_TWO=TEL 2 7 2225 800 1 19 2 121 235 8 0
+WIRE_TWO=TEL 2 8 2435 800 1 19 0 131 5 9 0
+WIRE_TWO=TEL 2 9 2680 800 1 19 3 176 10 10 0
+WIRE_TWO=TEL 2 10 2890 800 1 19 3 186 200 11 0
+WIRE_TWO=TEL 2 11 5204 800 1 17 3 100 999 12 4
+two-touch real sketch: polarity, debounce, independent D6/D7, held, stuck, HELLO, STOP, no PWM PASS
+sensor-two-mixed-b real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS
+sensor-two-mixed-b PASS
+direct calibration: boot disabled, unknown endpoints, no signal, STOP, reset PASS
+calibration-disabled PASS
+direct calibration: boot disabled, unknown endpoints, no signal, STOP, reset PASS
+calibration-reviewed-unknown PASS
+production: watchdog boot, PCA presence/absence, gated ARM, no PWM, OE commanded off, STOP status PASS
+production-present PASS
+production: watchdog boot, PCA presence/absence, gated ARM, no PWM, OE commanded off, STOP status PASS
+production-absent PASS
+16 firmware mock executables PASS

@@ -23,6 +23,10 @@ def main():
               ('sensor-four-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=15','-DTOUCH_ACTIVE_LOW_MASK=15']),
               ('sensor-three-high','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=7']),
               ('sensor-five-low','firmware_sensor.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=31','-DTOUCH_ACTIVE_LOW_MASK=31']),
+              ('sensor-two-high','firmware_two_touch.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=3']),
+              ('sensor-two-low','firmware_two_touch.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=3','-DTOUCH_ACTIVE_LOW_MASK=3']),
+              ('sensor-two-mixed-a','firmware_two_touch.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=3','-DTOUCH_ACTIVE_LOW_MASK=1']),
+              ('sensor-two-mixed-b','firmware_two_touch.cpp',['-DURM37_PROFILE=1','-DTOUCH_ENABLED_MASK=3','-DTOUCH_ACTIVE_LOW_MASK=2']),
               ('calibration-disabled','firmware_calibration.cpp',[]),
               ('calibration-reviewed-unknown','firmware_calibration.cpp',['-DDIRECT_COMMISSIONING_REVIEWED=1']),
               ('production-present','firmware_production.cpp',[]),
@@ -39,7 +43,33 @@ def main():
         print(result.stdout,end='')
         if result.stderr: print(result.stderr,end='',file=sys.stderr)
         result.check_returncode()
-        if name.startswith('sensor-'):
+        if name.startswith('sensor-two-'):
+            sys.path.insert(0,str(ROOT/'software/pi'))
+            from quadruped.serial_link import SerialLink
+            from quadruped.telemetry import TelemetryStream,parse_tel2
+            from quadruped.sensors import SensorManager,SensorConfig
+            from quadruped.physical_sensors import PhysicalSensorProvider
+            now=[0.]
+            link=SerialLink('mock',sensor_only=True);link.connected=True
+            link._receive('DONE 0 caps_sensor2_t2')
+            link.telemetry=TelemetryStream(clock=lambda:now[0])
+            manager=SensorManager(SensorConfig(touch_count=2,touch_profile='back_front_bottom_v1'),source='physical_uno',clock=lambda:now[0])
+            provider=PhysicalSensorProvider(link,manager)
+            for row in result.stdout.splitlines():
+                if not row.startswith('WIRE_TWO='): continue
+                line=row.split('=',1)[1];record=parse_tel2(line)
+                now[0]=record.uptime_ms/1000
+                assert link.telemetry.poll()==record.token
+                assert link.telemetry.ingest(line),line
+                provider.update()
+                state=manager.snapshot()
+                assert set(state['touches'])=={'touch_back','touch_front_bottom'}
+                if record.token==3: assert any(e['pressed'] and e['id']=='touch_back' and e['gestureRequest']=='REAR_LOWER' for e in state['events'])
+                if record.token==7: assert any(e['pressed'] and e['id']=='touch_front_bottom' and e['gestureRequest']=='FRONT_LOWER' for e in state['events'])
+                if record.token==12: assert state['fault'] and not link.armed
+            assert not link.armed
+            print(name+' real sketch -> TEL2 -> exact two semantic Pi inputs; stuck invalidation PASS')
+        elif name.startswith('sensor-'):
             # Consume the actual C++ sketch's wire record in the Pi provider.
             sys.path.insert(0,str(ROOT/'software/pi'))
             from quadruped.serial_link import SerialLink
@@ -66,8 +96,8 @@ def main():
                 now=[1.]
                 link.telemetry.clock=manager.clock=lambda:now[0]
                 provider=PhysicalSensorProvider(link,manager)
-                provider.epoch=link.epoch
-                provider.last=(link.epoch,link.telemetry.record.seq)
+                provider.epoch=(link.epoch,manager.config.touch_profile,manager.config.touch_count,link.sensor_touch_count)
+                provider.last=(provider.epoch,link.telemetry.record.seq)
                 provider.batch_seq=manager.seq
                 for row in result.stdout.splitlines():
                     if not row.startswith('WIRE_TOUCH_RECORD='): continue

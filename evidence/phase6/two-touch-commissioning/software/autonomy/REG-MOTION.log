@@ -1,0 +1,2 @@
+{"id": "REG-MOTION", "started_utc": "2026-11-12T12:10:40.267714+00:00", "commit": "77a4be00fca8c54b16fd9160743e23850b4fde88", "dirtyPathsAtStart": [], "argv": ["C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107\\build\\phase4-toolchain\\python311\\python.exe", "tools/generate-motion-data.py", "--check"], "cwd": "C:\\Users\\Diyan Patel\\Desktop\\Quadrupled Robot\\Quadruped107-phase6"}
+Virtual target data matches preserved firmware tables.
