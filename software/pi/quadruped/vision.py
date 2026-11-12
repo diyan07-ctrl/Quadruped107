@@ -119,6 +119,10 @@ def detect_blue_ball(frame: Any, *, lower=BLUE_HSV_LOWER, upper=BLUE_HSV_UPPER,
             diagnostic['rejectionReason']='fill_ratio'
             continue
 
+        if diagnostic['touchesFrameEdge']:
+            diagnostic['rejectionReason']='frame_edge_clipped'
+            continue
+
         x, y = int(round(x_float)), int(round(y_float))
         candidates.append(
             {

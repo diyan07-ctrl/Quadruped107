@@ -70,6 +70,7 @@ def main():
         records.append(record)
         (out/'reports/local-checks.json').write_text(json.dumps(records,indent=2)+'\n',encoding='utf-8')
         print(ident,record['result'],record['duration_s'],flush=True)
+    return int(any(row['exit_code'] for row in records))
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())

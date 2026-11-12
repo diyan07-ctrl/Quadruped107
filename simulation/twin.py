@@ -26,6 +26,10 @@ class World:
         self.position_gain=position_gain
         self.p=p
         self.client=p.connect(p.GUI if gui else p.DIRECT)
+        if self.client < 0:
+            raise SimulationFault('PyBullet GUI connection unavailable' if gui else 'PyBullet DIRECT connection unavailable')
+        self.gui=gui
+        self.render_status=dict(renderer='TinyRenderer',guiRequested=gui,frames=0,error=None)
         self.fixed=not free_base
         self.parameters=json.loads(Path(parameters or MODEL/"parameters.json").read_text())
         self.frames=0
@@ -220,6 +224,7 @@ class World:
                     selfContactPairs=dict(self.contact_pairs),
                     baseMassKg=self.p.getDynamicsInfo(self.robot,-1,physicsClientId=self.client)[0],
                     fixtureConstraint=self.fixture_constraint is not None,
+                    rendering=dict(self.render_status),
                     fixturePositionErrorM=math.dist(position,self.fixture_position) if self.fixed else None)
 
     def render_bgr(self):
@@ -229,7 +234,14 @@ class World:
         projection=self.p.computeProjectionMatrixFOV(50,4/3,.01,10)
         _,_,rgba,_,_=self.p.getCameraImage(640,480,view,projection,renderer=self.p.ER_TINY_RENDERER,physicsClientId=self.client)
         image=np.array(rgba,dtype=np.uint8).reshape(480,640,4)
-        return cv2.cvtColor(image,cv2.COLOR_RGBA2BGR)
+        result=cv2.cvtColor(image,cv2.COLOR_RGBA2BGR)
+        try:
+            validate_render(result)
+        except SimulationFault as error:
+            self.render_status['error']=str(error)
+            raise
+        self.render_status.update(frames=self.render_status['frames']+1,error=None)
+        return result
 
     def capture(self,path):
         import cv2
@@ -238,6 +250,14 @@ class World:
 
     def close(self):
         if self.p.isConnected(self.client): self.p.disconnect(self.client)
+
+
+def validate_render(frame):
+    """Reject missing/black/flat capture; this does not qualify a visible GUI."""
+    import numpy as np
+    if (frame is None or frame.shape!=(480,640,3) or frame.dtype!=np.uint8 or
+            float(frame.max())<8 or float(frame.std())<1):
+        raise SimulationFault('Simulation capture unavailable, black or flat')
 
 
 def main():
@@ -272,6 +292,8 @@ def main():
     engine=None
     failed=False
     writer=None
+    joint_log=None
+    recorded_frames=0
     try:
         if args.record:
             import cv2
@@ -280,6 +302,7 @@ def main():
             path.parent.mkdir(parents=True,exist_ok=True)
             writer=cv2.VideoWriter(str(path),cv2.VideoWriter_fourcc(*"MJPG"),30,(640,480))
             if not writer.isOpened(): raise RuntimeError("Simulation video writer could not open")
+            joint_log=path.with_suffix('.joints.jsonl').open('w',encoding='utf-8')
         if args.scenario:
             from .environment import Scene
             from quadruped.sensors import SensorConfig
@@ -305,29 +328,45 @@ def main():
             else: frame=server.poll()
             if scene and not scene.advance(frame): raise SimulationFault("Navigation proxy collision guard")
             world.apply(frame)
-            world.step()
-            if writer and world.frames%8==0: writer.write(world.render_bgr())
+            measured=world.step()
+            if writer and world.frames%8==0:
+                writer.write(world.render_bgr())
+                joint_log.write(json.dumps(dict(step=world.frames,simulationTimeS=world.frames/240,
+                    measuredJointPositionsRad=measured,requestedTargetsRad=list(world.targets),
+                    motorTargetsRad=list(world.motor_targets),activeMask=world.active_mask))+'\n')
+                recorded_frames+=1
             if not args.headless and world.frames%24==0:
                 for i,index in enumerate(world.joints):
                     point=world.p.getLinkState(world.robot,index,physicsClientId=world.client)[0]
                     world.p.addUserDebugText(str(i),point,lifeTime=.12,physicsClientId=world.client)
             time.sleep(max(0,started+world.frames/240-time.perf_counter()))
     except KeyboardInterrupt: pass
-    except SimulationFault:
+    except SimulationFault as error:
+        world.fault=str(error)
         failed=True
     finally:
         if writer: writer.release()
+        if joint_log: joint_log.close()
+        if engine:
+            engine.feed(b'STOP 0\n')
+            world.apply(engine.snapshot())
         evidence=world.diagnostics()
-        if args.record: evidence["recording"]={"file":str(args.record),"format":"AVI MJPEG","fps":30,"frames":world.frames//8,"source":"PyBullet TinyRenderer; simulated only"}
+        if args.record: evidence["recording"]={"file":str(args.record),"format":"AVI MJPEG","fps":30,"frames":recorded_frames,"source":"PyBullet TinyRenderer; simulated only","measuredJointLog":str(Path(args.record).with_suffix('.joints.jsonl'))}
         if scene: evidence["environment"]=scene.diagnostics()
         if server: evidence["bridge"]=server.receiver.snapshot(); server.close()
         if engine: evidence["virtualUno"]=engine.snapshot()
-        if args.capture: world.capture(args.capture)
+        try:
+            if args.capture: world.capture(args.capture)
+        except Exception as error:
+            failed=True
+            evidence['captureError']=str(error)
+        finally:
+            evidence['rendering']=dict(world.render_status)
+            world.close()
         if args.report:
             Path(args.report).parent.mkdir(parents=True,exist_ok=True)
             Path(args.report).write_text(json.dumps(evidence,indent=2)+"\n")
         print(json.dumps(evidence,sort_keys=True))
-        world.close()
     if failed: raise SystemExit(2)
 
 
