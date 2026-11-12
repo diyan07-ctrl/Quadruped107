@@ -302,7 +302,7 @@ class DisplayTests(unittest.TestCase):
 
 class NegotiationTests(unittest.TestCase):
     def test_real_worker_mock_usb_and_legacy(self):
-        for capability in ('caps_sensor2_t5','unknown_command'):
+        for capability in ('caps_sensor2_t5','caps_sensor2_t2','unknown_command'):
             with self.subTest(capability=capability):
                 class USB:
                     def __init__(self,**options): self.lines=queue.Queue(); self.writes=[]
@@ -310,7 +310,7 @@ class NegotiationTests(unittest.TestCase):
                     def write(self,data):
                         self.writes.append(data)
                         if data==b'HELLO\n': self.lines.put(b'READY Quadruped107 1\n')
-                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability=="caps_sensor2_t5" else "ERR"} 0 {capability}\n'.encode())
+                        elif data==b'CAPS 0\n': self.lines.put(f'{"DONE" if capability.startswith("caps_sensor2_t") else "ERR"} 0 {capability}\n'.encode())
                         elif data==b'TELEM 0 5 2\n': self.lines.put(b'DONE 0 telemetry\n')
                         elif data==b'PING\n': self.lines.put(b'PONG\n')
                         elif data.startswith(b'POLL '):
@@ -326,13 +326,15 @@ class NegotiationTests(unittest.TestCase):
                     deadline=time.monotonic()+4
                     while time.monotonic()<deadline:
                         snapshot=link.snapshot()
-                        if snapshot['connected'] and (capability!='caps_sensor2_t5' or snapshot['telemetry']['record']): break
+                        if snapshot['connected'] and (capability=='unknown_command' or snapshot['telemetry']['record']): break
                         time.sleep(.01)
                     self.assertTrue(snapshot['connected'])
                     self.assertFalse(link.armed)
                     self.assertFalse(any(data.startswith(b'ARM') for data in usb.writes))
-                    self.assertEqual(link.capability,'caps_sensor2' if capability=='caps_sensor2_t5' else None)
-                    if capability=='caps_sensor2_t5': self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
+                    self.assertEqual(link.capability,'caps_sensor2' if capability.startswith('caps_sensor2_t') else None)
+                    if capability.startswith('caps_sensor2_t'):
+                        self.assertTrue(snapshot['telemetry']['acquisitionFreshnessKnown'])
+                        self.assertEqual(snapshot['firmwareCapability'],capability)
                 finally: link.close()
 
 if __name__=='__main__': unittest.main()

@@ -69,11 +69,15 @@ jobs:
       - name: Compile every supported touch count and polarity
         shell: bash
         run: |
-          for mask in 7 15 31; do
+          for mask in 3 7 15 31; do
             for polarity in 0 "$mask"; do
               arduino-cli compile --profile uno --build-property "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=$mask -DTOUCH_ACTIVE_LOW_MASK=$polarity" firmware/uno/sensor_only
             done
           done
+          for polarity in 1 2; do
+            arduino-cli compile --profile uno --build-property "compiler.cpp.extra_flags=-DURM37_PROFILE=1 -DTOUCH_ENABLED_MASK=3 -DTOUCH_ACTIVE_LOW_MASK=$polarity" firmware/uno/sensor_only
+          done
+          arduino-cli compile --profile uno --build-property "compiler.cpp.extra_flags=-DTOUCH_ENABLED_MASK=3" firmware/uno/sensor_only
       - run: arduino-cli compile --profile uno firmware/uno/direct_calibration
       - uses: actions/setup-python@v7.1.0
         with:

@@ -57,6 +57,8 @@ void command(char *line) {
     reply(F("DONE"),id,F("caps_sensor2_t4"));
 #elif TOUCH_ENABLED_MASK == 7
     reply(F("DONE"),id,F("caps_sensor2_t3"));
+#elif TOUCH_ENABLED_MASK == 3
+    reply(F("DONE"),id,F("caps_sensor2_t2"));
 #else
     reply(F("DONE"),id,F("caps_sensor2_t0"));
 #endif

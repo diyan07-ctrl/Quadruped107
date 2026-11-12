@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import json
 import logging
 from .autonomy import Behavior, VisionSettings
-from .sensors import number
+from .sensors import number, TWO_TOUCH_PROFILE
 
 
 @dataclass(frozen=True)
@@ -44,14 +44,24 @@ def clearance(snapshot,key):
     return bool(obs and obs["valid"] and obs["measurement"] is True)
 
 
-def motion_inhibition(snapshot,motion,settings):
+def physical_gesture_profile(snapshot):
+    return (snapshot.get('source')=='physical_uno' and snapshot.get('touchProfile')==TWO_TOUCH_PROFILE
+            and snapshot.get('configuredTouchCount')==2)
+
+
+def motion_inhibition(snapshot,motion,settings,*,virtual_touch_gesture=False):
     """Independent guard also used immediately before serial admission."""
     if snapshot["fault"]: return snapshot["fault"]
     touches=snapshot["touches"]
     pressed=[k for k,v in touches.items() if v["pressed"]]
     if len(pressed)>1: return "Simultaneous touch contacts"
     if any(k in pressed for k in ("touch_left","touch_right","touch_body")): return "Body safety contact"
+    if 'touch_front_bottom' in pressed and not (virtual_touch_gesture and physical_gesture_profile(snapshot)
+                                                and motion in (None,'none','stand')):
+        return 'Front-bottom protective contact; only explicit virtual gesture placeholders permit this input'
     distance=snapshot["front_m"]
+    if virtual_touch_gesture and physical_gesture_profile(snapshot) and distance<=settings.caution_m:
+        return 'Virtual placeholder clearance inhibited'
     if motion=="forward" and distance<=settings.caution_m: return "Forward clearance below caution threshold"
     if motion=="forward" and not clearance(snapshot,"sweep_forward"): return "No fresh forward footprint clearance evidence"
     if motion in ("turn_left","turn_right"):
@@ -80,6 +90,7 @@ class Navigation:
         self.started=0.0
         self.last_event=0
         self.pending_interaction=None
+        self.touch_gesture=None
 
     def request_interaction(self,name,session,generation):
         actions={"attention":"stand","greeting":"greeting","tail_wag":"tail_wag","neutral":"initial"}
@@ -89,6 +100,8 @@ class Navigation:
         self.pending_interaction=(session,generation,actions[name])
 
     def _result(self,state,now,motion=None,stop=False,reason=""):
+        if stop and self.touch_gesture and self.touch_gesture['status'] in ('virtual_placeholder_requested','virtual_placeholder_dispatched'):
+            self.touch_gesture={**self.touch_gesture,'status':'complete_disarmed_recovery_required' if 'action complete' in reason else 'cancelled_fault_or_stop'}
         if state!=self.state:
             logging.info("Virtual autonomy %s -> %s: %s",self.state,state,reason)
             self.transitions.append(dict(at=now,previous=self.state,state=state,reason=reason))
@@ -99,18 +112,24 @@ class Navigation:
         self.last_motion,self.last_request=motion,now
         self.tracker.accepted(motion,now)
         if motion==self.action: self.action_sent=True
+        if self.touch_gesture and motion==self.action:
+            self.touch_gesture={**self.touch_gesture,'status':'virtual_placeholder_dispatched'}
 
     def snapshot(self):
         return dict(virtual=True,state=self.state,obstacle=self.obstacle,reason=self.reason,
+                    touchGesture=self.touch_gesture,
                     lastRequestedMotion=self.last_motion,recoveryAttempts=self.attempts,
                     deadline=self.deadline,transitions=list(self.transitions))
 
     def step(self,mode,enabled,session,sensors,observation,now,*,busy=False,communication_ok=True,generation=None):
-        context=(mode,session)
+        two_touch=physical_gesture_profile(sensors)
+        context=(mode,session,sensors.get('session')) if two_touch else (mode,session)
         if context!=self.context:
             self.context=context
             self.deadline=self.action=None
             self.action_sent=False
+            if self.touch_gesture and self.touch_gesture['status'] in ('virtual_placeholder_requested','virtual_placeholder_dispatched'):
+                self.touch_gesture={**self.touch_gesture,'status':'cancelled_context_change'}
             self.started=now
             self.last_request=-1e9
             self.last_motion=None
@@ -122,8 +141,12 @@ class Navigation:
             return self._result("IDLE" if mode=="idle" else "EMERGENCY_STOP",now,reason="Disarmed; explicit enable required")
         if not communication_ok: return self._result("EMERGENCY_STOP",now,stop=True,reason="Simulator communication fault")
         if sensors["fault"]: return self._result("SENSOR_FAULT",now,stop=True,reason=sensors["fault"])
-        reason=motion_inhibition(sensors,"stand",self.settings)
-        if reason: return self._result("EMERGENCY_STOP",now,stop=True,reason=reason)
+        reason=motion_inhibition(sensors,"stand",self.settings,virtual_touch_gesture=two_touch and mode=='interaction')
+        if reason:
+            if two_touch and reason=='Simultaneous touch contacts':
+                self.last_event=max((e['seq'] for e in sensors['events']),default=self.last_event)
+                self.touch_gesture=dict(status='rejected_simultaneous',request=None,physicalCalibration='PENDING')
+            return self._result("EMERGENCY_STOP",now,stop=True,reason=reason)
         if mode=="manual": return self._result("MANUAL_OVERRIDE",now)
         if mode in ("idle","sensor_test"): return self._result("IDLE" if mode=="idle" else "READY",now,reason="Observation only")
         distance=sensors["front_m"]
@@ -132,7 +155,7 @@ class Navigation:
             self.obstacle="CAUTION"
         else: self.obstacle="CLEAR"
         if self.deadline is not None:
-            reason=motion_inhibition(sensors,self.action,self.settings)
+            reason=motion_inhibition(sensors,self.action,self.settings,virtual_touch_gesture=two_touch and mode=='interaction')
             if reason or self.obstacle!="CLEAR" and self.action in ("greeting","tail_wag"):
                 return self._result("OBSTACLE_BLOCKED",now,stop=True,reason=reason or "Obstacle during interaction")
             if now>=self.deadline:
@@ -152,6 +175,23 @@ class Navigation:
         if self.obstacle=="CAUTION":
             return self._result("OBSTACLE_CAUTION",now,stop=True,reason="Conservative caution policy inhibits navigation")
         if mode=="interaction":
+            if two_touch:
+                # No physical pose angles are known. Only the existing virtual
+                # stand routine is an explicit, bounded placeholder, never sit/bow qualification.
+                for event in sensors['events']:
+                    if event['seq']<=self.last_event: continue
+                    self.last_event=event['seq']
+                    if not event['pressed']: continue
+                    if event['id'] not in ('touch_back','touch_front_bottom'): continue
+                    request='REAR_LOWER' if event['id']=='touch_back' else 'FRONT_LOWER'
+                    self.touch_gesture=dict(sensor=event['id'],request=request,eventSeq=event['seq'],
+                        status='virtual_placeholder_requested',motion='stand',physicalCalibration='PENDING',
+                        note='Neutral virtual stand placeholder; does not implement measured sit or bow geometry')
+                    self.action='stand'
+                    self.deadline=now+self.settings.touch_seconds
+                    return self._result('TOUCH_GESTURE_PLACEHOLDER',now,'stand',
+                        reason=request+' request: bounded virtual stand placeholder; calibration pending')
+                return self._result('READY',now,reason='Two-touch virtual placeholders explicitly selected; no walking or physical output')
             if self.pending_interaction:
                 _,_,self.action=self.pending_interaction
                 self.pending_interaction=None

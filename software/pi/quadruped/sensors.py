@@ -9,6 +9,8 @@ import time
 from typing import Protocol
 
 TOUCH_IDS=("head","back","left","right","body")
+TWO_TOUCH_PROFILE='back_front_bottom_v1'
+TWO_TOUCH_IDS=('back','front_bottom')
 RANGE_IDS=("urm37","hcsr04")
 CLEARANCE_IDS=("sweep_forward","sweep_left","sweep_right","sweep_reverse")
 
@@ -28,14 +30,23 @@ class SensorConfig:
     stuck_seconds: float=2.0
     conflict_m: float=.2
     touch_count: int=5
+    touch_profile: str='legacy'
 
     def __post_init__(self):
         for key in ("min_m","max_m","rate_hz","timeout","expiration","debounce","stuck_seconds","conflict_m"):
             if not number(getattr(self,key),.001,120): raise ValueError("Invalid sensor "+key)
         if not self.min_m<self.max_m or not self.debounce<self.stuck_seconds:
             raise ValueError("Invalid sensor limits")
-        if type(self.touch_count) is not int or not 3<=self.touch_count<=5:
-            raise ValueError("Require three to five virtual touches")
+        if type(self.touch_count) is not int or not 2<=self.touch_count<=5:
+            raise ValueError("Require two to five touches")
+        if self.touch_profile not in ('legacy',TWO_TOUCH_PROFILE):
+            raise ValueError('Unknown touch profile')
+        if (self.touch_count==2)!=(self.touch_profile==TWO_TOUCH_PROFILE):
+            raise ValueError('Two physical touches require the explicit back/front-bottom profile')
+
+    @property
+    def touch_ids(self):
+        return TWO_TOUCH_IDS if self.touch_profile==TWO_TOUCH_PROFILE else TOUCH_IDS[:self.touch_count]
 
     @classmethod
     def load(cls,path):
@@ -76,6 +87,8 @@ class SensorManager:
         if source not in {'virtual','physical_uno','test'}: raise ValueError('Unknown sensor source')
         self.source=source
         self.config=config or SensorConfig()
+        if self.config.touch_profile==TWO_TOUCH_PROFILE and source!='physical_uno':
+            raise ValueError('Back/front-bottom wiring profile requires physical_uno source')
         if source=='physical_uno' and (self.config.expiration>.3 or self.config.timeout>.3):
             raise ValueError('Physical monitoring cannot loosen the 300 ms freshness limit')
         self.clock=clock
@@ -97,7 +110,7 @@ class SensorManager:
 
     @property
     def registry(self):
-        return {**{k:"range" for k in RANGE_IDS},**{"touch_"+k:"touch" for k in TOUCH_IDS[:self.config.touch_count]},
+        return {**{k:"range" for k in RANGE_IDS},**{"touch_"+k:"touch" for k in self.config.touch_ids},
                 **{k:"clearance" for k in CLEARANCE_IDS}}
 
     def reset(self,session=None):
@@ -170,10 +183,14 @@ class SensorManager:
 
     def _event(self,identity,pressed,now):
         self.event_seq+=1
-        self.events.append(dict(seq=self.event_seq,id=identity,pressed=pressed,at=now))
+        event=dict(seq=self.event_seq,id=identity,pressed=pressed,at=now)
+        if self.config.touch_profile==TWO_TOUCH_PROFILE:
+            event.update(semantic='BACK_TOUCH' if identity=='touch_back' else 'FRONT_BOTTOM_TOUCH',
+                         gestureRequest='REAR_LOWER' if identity=='touch_back' else 'FRONT_LOWER')
+        self.events.append(event)
 
     def _update_touches(self,now):
-        for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
+        for identity in ("touch_"+k for k in self.config.touch_ids):
             obs=self.observations.get(identity)
             if not obs or not obs.valid or now-obs.observed_at>self.config.expiration:
                 self.touch.pop(identity,None)
@@ -199,7 +216,7 @@ class SensorManager:
             records={k:v.snapshot(now,self.config.expiration) for k,v in self.observations.items()}
             for record in records.values(): record['virtual']=self.source!='physical_uno'
             touches={}
-            for identity in ("touch_"+k for k in TOUCH_IDS[:self.config.touch_count]):
+            for identity in ("touch_"+k for k in self.config.touch_ids):
                 record=records.get(identity)
                 state=self.touch.get(identity)
                 pressed=bool(state and state["pressed"])
@@ -222,6 +239,8 @@ class SensorManager:
             self.was_fault=bool(fault)
             fresh_events=[dict(e,age=now-e["at"]) for e in self.events if 0<=now-e["at"]<=self.config.expiration]
             return dict(virtual=self.source!='physical_uno',source=self.source,
+                        configuredTouchCount=self.config.touch_count,touchProfile=self.config.touch_profile,
+                        touchMapping=[dict(bit=i,pin=(6,7,9,10,11)[i],id='touch_'+name) for i,name in enumerate(self.config.touch_ids)],
                         monitoringOnly=self.source=='physical_uno',
                         safetyInhibits=([fault] if fault else []) +
                             (['Physical monitoring: unmeasured HC-SR04 and swept clearance; navigation inhibited'] if self.source=='physical_uno' else []),
