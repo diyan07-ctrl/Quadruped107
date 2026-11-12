@@ -1,6 +1,6 @@
 # Software readiness before hardware commissioning
 
-Status: **PARTIAL milestone; all applicable compile/mock/software checks PASS, physical timing/resource/commissioning verification PENDING.** PR [#7](https://github.com/diyan07-ctrl/Quadruped107/pull/7) remains unmerged. No hardware upload, PWM output, physical ARM, wiring change, Pi deployment or servo power operation is part of this qualification. See the [frozen evidence and resource matrix](../evidence/phase5/software-readiness/README.md).
+Current status (12 November 2026): **SOFTWARE READINESS PARTIAL**. PR [#7](https://github.com/diyan07-ctrl/Quadruped107/pull/7) is merged into Phase 3 at `6e0d578`; PR #6 is also merged. The isolated release candidate reconciles this history with main. See the [current release report](SENSOR_COMMISSIONING_RELEASE.md) and [bench instructions](SENSOR_BENCH.md). Physical ARM and PWM remain prohibited. The qualification below describes the historical Phase 5 source, not a new hardware PASS. See the unchanged [Phase 5 evidence](../evidence/phase5/software-readiness/README.md).
 
 ## Baseline and source audit
 

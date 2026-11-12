@@ -9,7 +9,7 @@ Independent sensor callbacks/admission/guard checks preempt motion; manual takeo
 
 ## Active software-integration architecture
 
-This branch builds on Phase 0.1 commit a629397. PRs #1/#2 remain unmerged; PR #3 is stacked on Phase 0.1. Physical ARM is prohibited even when a serial device exists. The diagram separates the active virtual path from future electrical connections:
+Historical Phase 1 baseline: Phase 0.1 commit a629397. PRs #1–#7 are now merged into their recorded stacked target branches; Phase 4/5 remain absent from main until the release PR is reviewed. The [current architecture and authority table](SENSOR_COMMISSIONING_RELEASE.md) supersedes these historical baseline descriptions. Physical ARM is prohibited even when a serial device exists. The diagram separates the virtual path from future electrical connections:
 
 ```mermaid
 flowchart TB
