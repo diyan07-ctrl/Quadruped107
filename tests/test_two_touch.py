@@ -222,7 +222,12 @@ class TwoTouchRuntimeTests(unittest.TestCase):
 
     def test_d6_back_and_d7_front_requests_reach_controller_without_physical_commands(self):
         for mask,request in ((1,'REAR_LOWER'),(2,'FRONT_LOWER')):
-            self.link.mask=0;time.sleep(.1);self.enable();self.link.mask=mask
+            self.link.mask=0
+            # Wait for the actual debounced release, not a scheduling assumption.
+            # ARM must continue rejecting a contact until the provider sees it released.
+            wait_for(lambda:all(t['valid'] and not t['pressed']
+                                for t in self.runtime.sensors.snapshot()['touches'].values()))
+            self.enable();self.link.mask=mask
             wait_for(lambda:(self.runtime.navigation_state().get('touchGesture') or {}).get('status')=='virtual_placeholder_dispatched')
             state=self.runtime.state()
             self.assertEqual(state['autonomy']['touchGesture']['request'],request)
