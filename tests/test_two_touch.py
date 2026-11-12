@@ -258,6 +258,8 @@ class TwoTouchRuntimeTests(unittest.TestCase):
         wait_for(lambda:self.runtime.link.snapshot()['connected'])
         self.assertEqual(self.client.post('/api/arm',json={}).status_code,200)
         self.assertEqual(self.client.post('/api/mode',json={'mode':'stand'}).status_code,200)
+        for motion in ('forward','backward','turn_left','turn_right'):
+            self.assertEqual(self.client.post('/api/mode',json={'mode':motion}).status_code,409)
         self.link.mask=2
         wait_for(lambda:not self.runtime.motion.snapshot()['enabled'])
         self.link.mask=0;time.sleep(.15)

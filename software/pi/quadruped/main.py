@@ -495,7 +495,7 @@ def create_app(runtime):
         mode = data.get("mode")
         if not isinstance(mode, str): raise ValueError("mode must be a string")
         mode = mode.strip().lower().replace("-", "_")
-        if runtime.sensor_source=='physical_uno' and mode not in runtime.physical_control_modes():
+        if runtime.sensor_source=='physical_uno' and mode not in runtime.physical_control_modes() | (MOTIONS-CONTINUOUS):
             raise RuntimeError('Physical monitoring only; navigation clearance unavailable')
         if mode in {"explore","sensor_test","interaction"} and runtime.sensors is None:
             raise RuntimeError("Explicit virtual sensors are required")
