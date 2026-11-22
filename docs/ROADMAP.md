@@ -1,5 +1,7 @@
 # Roadmap
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 ## Phase 2 software checkpoint and Phase 3 candidates
 
 Phase 2 implements virtual sensing, conservative exploration, touch fragments, tracking priority, bidirectional simulation telemetry and deterministic scenario tests. These are SIMULATED / AUTOMATED TESTED when supported by CI; they do not complete physical obstacle avoidance or interaction acceptance.

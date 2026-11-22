@@ -1,5 +1,7 @@
 # Hardware
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 ## Phase 2 simulated sensor status
 
 Two configurable front ray sensors and three to five virtual touch inputs are implemented. Extra swept-clearance flags are calculated from known simulation geometry, not attributed to the available ultrasonic modules. The damaged PCA9685, unqualified servo supply and all servos remain outside this software work. No real electronics or physical module placement is verified.

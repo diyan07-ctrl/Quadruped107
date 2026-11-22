@@ -1,5 +1,7 @@
 # Power engineering design freeze
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 **All installed batteries, converters, power-bank outputs and distribution hardware are NOT YET QUALIFIED. No electrical measurements were performed.** This study selects conditional architectures, not approved wiring or a shopping mandate.
 
 ## Decision
