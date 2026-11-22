@@ -1,5 +1,7 @@
 # Pi application
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 Phase 2 runs entirely on the laptop with --virtual-sensors and an explicit virtual actuator backend/simulator endpoint. See [launch guide](../../simulation/PHASE2.md), [states](../../docs/PHASE2.md) and [sensor protocol](../../docs/SENSORS.md). Pi deployment is postponed; no SSH/hardware connection is needed.
 
 One camera owner, one serial owner, latest-frame vision and Flask/MJPEG browser controls. See [software guide](../../docs/SOFTWARE.md) for dependencies, configuration, concurrency and current safety restrictions.

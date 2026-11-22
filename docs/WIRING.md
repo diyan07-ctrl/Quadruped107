@@ -1,5 +1,7 @@
 # Proposed wiring
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 ## Phase 2 virtual-only interfaces
 
 No sensor wiring is performed or validated. Virtual URM37/HC-SR04 identities describe configurable ray approximations, not known module revisions. Proposed physical assignments below remain unverified and must be checked against actual pin labels/mode/supply/logic levels before use. Real ultrasonic triggers must be scheduled to avoid acoustic crosstalk; simultaneous virtual rays do not qualify that behavior. See [sensor contract](SENSORS.md).

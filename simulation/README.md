@@ -1,5 +1,7 @@
 # CAD-visual articulated simulator
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 Current virtual sensing/exploration instructions: [Phase 2 simulation](PHASE2.md). The Phase 1 commands and provenance below remain valid without --virtual-sensors. Model-error investigation and the explicit fixture correction are in [MODEL_STUDY](../docs/MODEL_STUDY.md).
 
 This is a **provisional eight-joint test fixture**, using original CAD mesh surfaces. It exercises the real Python controller, v1 serial worker, host virtual Uno, original gait target sequences and network transport. Fixed-base articulation is the default. No physical walking, mass identification or servo calibration is claimed.

@@ -1,5 +1,7 @@
 # HARDWARE_VERIFICATION — sole physical qualification checklist
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 ## Phase 2 deferral
 
 PHYSICAL HARDWARE TESTED: none. Pi deployment, SSH access, real sensors, Uno/PCA connection, power switching and servo movement are deliberately postponed; no connection is attempted.

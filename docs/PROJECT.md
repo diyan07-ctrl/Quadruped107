@@ -1,5 +1,7 @@
 # Project
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 Quadruped107 is an autonomous-robotics course project for ENR107 Digital Electronics. It connects digital GPIO and serial interfaces, PWM generation, power distribution, embedded control, and computer vision in an assembled eight-joint walking platform.
 
 ## Inventory

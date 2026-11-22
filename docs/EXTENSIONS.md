@@ -1,5 +1,7 @@
 # Sensor and accessory extension contracts
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 Physical sensor drivers and TEL1 firmware emission/negotiation remain unimplemented. Phase 3 adds passive, diagnostic-only host TEL1 parsing; it sends no capability commands and does not qualify telemetry for motion. Phase 2 implements only [virtual sensing and behaviors](PHASE2.md); its [UDP observation schema](SENSORS.md) is separate from this reserved physical contract. Uno owns range/touch acquisition and local safety policy; Pi owns display, tracking, telemetry presentation and high-level scheduling. All future motion requests use the same controller; local inhibition outranks them.
 
 | Extension | Proposed ownership / wiring | Rate / freshness | Invalid/failure behavior |

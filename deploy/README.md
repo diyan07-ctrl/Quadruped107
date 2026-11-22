@@ -1,5 +1,7 @@
 # Virtual-actuator deployment
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 This branch deliberately inhibits physical ARM. Keep the Uno disconnected, all servos unpowered and the suspected damaged PCA9685 disconnected. No deployment command uploads firmware or switches power.
 
 On the Pi, review [software installation](../docs/SOFTWARE.md), then run `sh deploy/install-virtual-pi.sh` from the checkout. It creates a separate environment and does not change systemd, SSH, Telegram or existing services. It requires installed OS OpenCV/NumPy; the script prints the apt command if absent. No sudo commands execute automatically.

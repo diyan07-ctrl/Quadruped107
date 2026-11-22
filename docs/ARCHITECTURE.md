@@ -1,5 +1,7 @@
 # Architecture freeze — Phase 0.1
 
+> Historical experimental development record. ENR107 submission-phase development has concluded; further development is on hold. See [academic closure status](../PROJECT_STATUS.md) for the current scope. Pin assignments, power options and session-specific results below describe their original development context, not verified final academic wiring.
+
 ## Current Phase 2 virtual architecture
 
 [Phase 2](PHASE2.md) adds one SensorManager, a deterministic Navigation policy and additive UDP sensor acknowledgments to the existing controller/serial architecture. [Sensor contracts](SENSORS.md) define validity, freshness, touch debounce and extra simulated swept-clearance evidence. Exploration has no camera dependency; tracking retains the existing detector and stale-frame protections.
